@@ -38,9 +38,10 @@ class ResidualBlock(nn.Sequential):
         )
 
 
-
 class ConvolutionalLayer(nn.Sequential):
-
+    '''
+    Simple convolutional layer: input -> conv2d -> activation -> batch norm 2d
+    '''
     def __init__(
             self, in_channels, out_channels,
             kernel_size=3, stride=1, padding=0,
@@ -90,22 +91,22 @@ class ResizeConvolutionalLayer(nn.Module):
         upsampled = F.interpolate(input, size=(out_h, out_w), mode=self._mode)
         return self._modules["conv"](upsampled)
 
-# UNTESTED
 class DenseLayer(nn.Sequential):
-    def __init__(self, in_channels, growth_rate):
+    def __init__(self, in_channels, growth_rate, activation):
         super(DenseLayer, self).__init__()
 
         self.add_module(
             "main",
             nn.Sequential(
                 nn.BatchNorm2d(num_features = in_channels),
-                nn.ReLU(inplace = True),
+                activation(inplace = True),
                 ConvolutionalLayer(
                     in_channels = in_channels,
                     out_channels = growth_rate,
                     kernel_size = 1,
                     stride = 1,
-                    bias = False
+                    bias=False,
+                    activation=activation
                 ),
                 nn.Conv2d(
                     in_channels = growth_rate,
@@ -113,7 +114,7 @@ class DenseLayer(nn.Sequential):
                     kernel_size = 3,
                     stride = 1,
                     padding=1,
-                    bias = False
+                    bias=False
                 )
             )
         )
@@ -121,14 +122,17 @@ class DenseLayer(nn.Sequential):
     def forward(self, input):
         return torch.cat((input, super(DenseLayer, self).forward(input)), dim = 1)
 
-# UNTESTED
 class DenseBlock(nn.Sequential):
-    def __init__(self, in_channels, growth_rate, num_layers):
+    def __init__(self, in_channels, growth_rate, num_layers, activation=nn.ReLU):
         super(DenseBlock, self).__init__()
         for i in range(num_layers):
             self.add_module(
                 "DenseLayer_" + str(i),
-                DenseLayer(in_channels = in_channels + growth_rate * i, growth_rate = growth_rate)
+                DenseLayer(
+                    in_channels = in_channels + growth_rate * i,
+                    growth_rate = growth_rate,
+                    activation=activation
+                )
             )
 
 class Reshape(nn.Module):
@@ -175,7 +179,7 @@ class GlobalAveragePool(nn.Module):
 
 # based on https://github.com/chenyuntc/pytorch-book/blob/master/chapter8-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB(Neural%20Style)/PackedVGG.py
 class PretrainedModel(nn.Sequential):
-    def __init__(self, model = resnet18, embedding_size = 128, fine_tune = False):
+    def __init__(self, model=resnet18, embedding_size=128, fine_tune=False):
         super(PretrainedModel, self).__init__()
         model = model(pretrained = True)
         if not fine_tune:
@@ -195,4 +199,4 @@ class L2NormalizationLayer(nn.Module):
         super(L2NormalizationLayer, self).__init__()
 
     def forward(self, input):
-        return F.normalize(input, dim = -1, p = 2)
+        return F.normalize(input, dim=-1, p=2)

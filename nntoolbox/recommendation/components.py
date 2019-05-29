@@ -8,7 +8,7 @@ class CrossLayer(nn.Module):
     x_{l+1} = x_0 x^T_l w + b + x_l
     Based on: https://arxiv.org/pdf/1708.05123.pdf
     '''
-    def __init__(self, n_hidden, bias=True, return_first = False):
+    def __init__(self, n_hidden, bias=True, return_first=False):
         super(CrossLayer, self).__init__()
 
         self.weight = nn.Parameter(torch.Tensor(1, n_hidden))
