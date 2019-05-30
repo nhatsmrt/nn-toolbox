@@ -70,7 +70,7 @@ class Seq2SeqLearner:
         enc_outputs, hidden = encoder(X_batch, hidden)
 
 
-        decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]]))
+        decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
         hidden = enc_outputs.index_select(dim=0, index=lengths_X_batch - 1)
         # hidden = hidden.permute((1, 0, 2)).contiguous().view((hidden.shape[1], -1)).unsqueeze(0)
         outputs = []
