@@ -33,6 +33,7 @@ class GRUEncoder(Encoder):
             dropout=dropout,
             bidirectional=bidirectional
         )
+        self.to(device)
 
     def forward(self, input, hidden):
         embedded = self._embedding(input)

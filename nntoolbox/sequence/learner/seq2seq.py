@@ -8,12 +8,13 @@ import numpy as np
 
 
 class Seq2SeqLearner:
-    def __init__(self, teacher_forcing_ratio=1.0, pad_token=0, SOS_token=1, EOS_token=2):
+    def __init__(self, device, teacher_forcing_ratio=1.0, pad_token=0, SOS_token=1, EOS_token=2):
         self._teacher_forcing_ratio = teacher_forcing_ratio
         self._loss = nn.CrossEntropyLoss(ignore_index=pad_token)
         self._pad_token = pad_token
         self._SOS_token = SOS_token
         self._EOS_token = EOS_token
+        self._device = device
 
 
     def learn(self, encoder, decoder, X, Y, n_epoch, batch_size):
@@ -104,4 +105,4 @@ class Seq2SeqLearner:
 
         lengths = get_lengths(mask)
 
-        return mask, torch.from_numpy(lengths).long(), torch.from_numpy(X).long()
+        return mask, torch.from_numpy(lengths).long().to(self._device), torch.from_numpy(X).long().to(self._device)

@@ -53,6 +53,8 @@ class AttentionalDecoder(Decoder):
             nn.Linear(self._hidden_size, self._output_size),
             nn.Softmax(dim=-1)
         )
+        self.to(device)
+
 
     def forward(self, input, hidden, encoder_outputs=None, mask=None):
         '''
