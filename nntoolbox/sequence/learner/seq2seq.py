@@ -17,7 +17,7 @@ class Seq2SeqLearner:
         self._device = device
 
 
-    def learn(self, encoder, decoder, X, Y, n_epoch, batch_size):
+    def learn(self, encoder, decoder, X, Y, X_val, Y_val, n_epoch, batch_size, eval_every):
         '''
         :param encoder:
         :param decoder:
@@ -35,6 +35,9 @@ class Seq2SeqLearner:
 
         mask_X, lengths_X, X = self.prepare_input(X)
         mask_Y, lengths_Y, Y = self.prepare_input(Y)
+
+        mask_X_val, lengths_X_val, X_val = self.prepare_input(X_val)
+        mask_Y_val, lengths_Y_val, Y_val = self.prepare_input(Y_val)
 
         for e in range(n_epoch):
             print("Epoch " + str(e))
@@ -59,6 +62,55 @@ class Seq2SeqLearner:
                 )
 
 
+            if e % eval_every == 0:
+                encoder.eval()
+                decoder.eval()
+                self.evaluate(encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val)
+
+
+    def evaluate(self, encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val):
+        '''
+        :param encoder:
+        :param decoder:
+        :param X_val:
+        :param Y_val:
+        :param mask_X_val:
+        :param lengths_X_val:
+        :return:
+        '''
+        use_teacher_forcing = True if random.random() < self._teacher_forcing_ratio else False
+
+        batch_size = X_val.shape[1]
+        hidden = encoder.init_hidden(batch_size)
+        enc_outputs, hidden = encoder(X_val, hidden)
+
+
+        decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
+        hidden = enc_outputs.gather(
+            dim=0,
+            index=(lengths_X_val - 1).view(1, -1).unsqueeze(-1).repeat(1, 1, enc_outputs.shape[2])
+        )
+        # hidden = hidden.permute((1, 0, 2)).contiguous().view((hidden.shape[1], -1)).unsqueeze(0)
+        outputs = []
+        for t in range(X_val.shape[0]):
+            output, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_val)
+            outputs.append(output)
+            if use_teacher_forcing:
+                decoder_input = Y_val[t:t+1]
+            else:
+                decoder_input = torch.argmax(output, dim=-1)
+
+
+
+        outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
+        loss = self._loss(outputs, Y_val.permute(1, 0))
+        loss.backward()
+
+
+        print("Val loss: " + str(loss))
+
+
+
     def learn_one_iter(self, encoder, decoder, encoder_optimizer, decoder_optimizer, X_batch, Y_batch, mask_X_batch, lengths_X_batch):
         encoder_optimizer.zero_grad()
         decoder_optimizer.zero_grad()
@@ -71,7 +123,10 @@ class Seq2SeqLearner:
 
 
         decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
-        hidden = enc_outputs.index_select(dim=0, index=lengths_X_batch - 1)
+        hidden = enc_outputs.gather(
+            dim=0,
+            index=(lengths_X_batch - 1).view(1, -1).unsqueeze(-1).repeat(1, 1, enc_outputs.shape[2])
+        )
         # hidden = hidden.permute((1, 0, 2)).contiguous().view((hidden.shape[1], -1)).unsqueeze(0)
         outputs = []
         for t in range(X_batch.shape[0]):
