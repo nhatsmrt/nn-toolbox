@@ -2,7 +2,14 @@ import torch
 import numpy as np
 import copy
 
-
+def compute_num_batch(data_size, batch_size):
+    '''
+    Compute number of batches per epoch
+    :param data_size: number of datapoints
+    :param batch_size: number of datapoints per batch
+    :return:
+    '''
+    return int(np.ceil(data_size / float(batch_size)))
 
 def copy_model(model):
     '''
