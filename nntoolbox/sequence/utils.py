@@ -1,6 +1,7 @@
 from __future__ import unicode_literals, print_function, division
 import unicodedata
 import numpy as np
+import torch
 
 
 # Turn a Unicode string to plain ASCII, thanks to
@@ -17,12 +18,15 @@ def create_mask(inputs, pad_token):
     :param inputs: (seq_len, batch_size)
     :return: mask: (seq_len, batch_size)
     '''
-    return (inputs != pad_token)
+    return inputs != pad_token
 
-def get_lengths(mask):
+def get_lengths(mask, return_tensor=False):
     '''
     Return a 1D array indicating the length of each sequence in batch
     :param mask: binary mask indicating whether an element is pad token (seq_len, batch_size)
     :return: lengths (n_batch)
     '''
-    return np.sum(mask, axis=0).astype(np.uint8)
+    if return_tensor:
+        return torch.sum(mask, axis=0).int()
+    else:
+        return np.sum(mask, axis=0).astype(np.uint8)

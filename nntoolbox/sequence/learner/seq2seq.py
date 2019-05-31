@@ -63,11 +63,10 @@ class Seq2SeqLearner:
 
 
             if e % eval_every == 0:
-                encoder.eval()
-                decoder.eval()
                 self.evaluate(encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val)
 
 
+    @torch.no_grad()
     def evaluate(self, encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val):
         '''
         :param encoder:
@@ -78,6 +77,9 @@ class Seq2SeqLearner:
         :param lengths_X_val:
         :return:
         '''
+        encoder.eval()
+        decoder.eval()
+
         use_teacher_forcing = True if random.random() < self._teacher_forcing_ratio else False
 
         batch_size = X_val.shape[1]
@@ -104,9 +106,6 @@ class Seq2SeqLearner:
 
         outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
         loss = self._loss(outputs, Y_val.permute(1, 0))
-        loss.backward()
-
-
         print("Val loss: " + str(loss))
 
 
