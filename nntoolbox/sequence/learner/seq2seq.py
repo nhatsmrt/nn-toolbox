@@ -64,6 +64,7 @@ class Seq2SeqLearner:
                 )
 
                 if i % print_every == 0:
+                    print()
                     print(loss)
 
                 iter_cnt += 1
@@ -113,6 +114,7 @@ class Seq2SeqLearner:
         outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
         loss = self._loss(outputs, Y_val.permute(1, 0))
         print("Val loss: " + str(loss.item()))
+        print()
 
 
 
