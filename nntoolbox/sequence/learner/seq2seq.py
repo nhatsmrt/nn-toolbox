@@ -70,11 +70,11 @@ class Seq2SeqLearner:
                 iter_cnt += 1
 
             if e % eval_every == 0:
-                self.evaluate(encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val)
+                self.evaluate(encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val, mask_Y_val)
 
 
     @torch.no_grad()
-    def evaluate(self, encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val):
+    def evaluate(self, encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val, mask_Y_val):
         '''
         :param encoder:
         :param decoder:
@@ -87,7 +87,8 @@ class Seq2SeqLearner:
         encoder.eval()
         decoder.eval()
 
-        use_teacher_forcing = True if random.random() < self._teacher_forcing_ratio else False
+        # use_teacher_forcing = True if random.random() < self._teacher_forcing_ratio else False
+        use_teacher_forcing = False
 
         batch_size = X_val.shape[1]
         hidden = encoder.init_hidden(batch_size)
@@ -112,6 +113,16 @@ class Seq2SeqLearner:
 
         outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
         loss = self._loss(outputs, Y_val.permute(1, 0))
+
+        print()
+        print("A random example (output, Y, X):")
+        random_ind = np.random.choice(outputs.shape[0])
+        print(outputs[random_ind].argmax(dim=0))
+        print(Y_val.permute(1, 0)[random_ind])
+        print(X_val.permute(1, 0)[random_ind])
+        mask_Y_val = mask_Y_val.float().permute(1, 0)
+        acc = torch.sum((outputs.argmax(dim=1) == Y_val.permute(1, 0)).float() * mask_Y_val) / torch.sum(mask_Y_val)
+        print("Val acc: " + str(acc.item()))
         print("Val loss: " + str(loss.item()))
         print()
 
@@ -162,4 +173,4 @@ class Seq2SeqLearner:
 
         lengths = get_lengths(mask)
 
-        return mask, torch.from_numpy(lengths).long().to(self._device), torch.from_numpy(X).long().to(self._device)
+        return torch.from_numpy(mask).to(self._device), torch.from_numpy(lengths).long().to(self._device), torch.from_numpy(X).long().to(self._device)

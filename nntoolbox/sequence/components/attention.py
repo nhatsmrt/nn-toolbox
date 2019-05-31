@@ -40,7 +40,6 @@ class Attention(nn.Module):
         :return: The weights for each time step. Shape (seq_length, n_batch)
         '''
         scores = self.compute_scores(inputs, query)
-        mask = torch.from_numpy(mask)
         if mask is not None:
             scores[np.logical_not(mask)] = float('-inf')
 
