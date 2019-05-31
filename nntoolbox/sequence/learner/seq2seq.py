@@ -5,6 +5,7 @@ from nntoolbox.utils import compute_num_batch
 from nntoolbox.sequence.utils import create_mask, get_lengths
 import random
 import numpy as np
+from tqdm import trange
 
 
 class Seq2SeqLearner:
@@ -46,7 +47,7 @@ class Seq2SeqLearner:
             decoder.train()
 
             np.random.shuffle(indices)
-            for i in range(n_batch):
+            for i in trange(n_batch):
                 idx = indices[i * batch_size:(i + 1) * batch_size]
                 X_batch = X[:, idx]
                 Y_batch = Y[:, idx]
@@ -64,7 +65,7 @@ class Seq2SeqLearner:
 
                 if i % print_every == 0:
                     print(loss)
-                    
+
                 iter_cnt += 1
 
             if e % eval_every == 0:
