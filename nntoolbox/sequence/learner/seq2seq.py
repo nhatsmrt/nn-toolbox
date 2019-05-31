@@ -17,7 +17,7 @@ class Seq2SeqLearner:
         self._device = device
 
 
-    def learn(self, encoder, decoder, X, Y, X_val, Y_val, n_epoch, batch_size, eval_every):
+    def learn(self, encoder, decoder, X, Y, X_val, Y_val, n_epoch, batch_size, print_every, eval_every):
         '''
         :param encoder:
         :param decoder:
@@ -39,6 +39,7 @@ class Seq2SeqLearner:
         mask_X_val, lengths_X_val, X_val = self.prepare_input(X_val)
         mask_Y_val, lengths_Y_val, Y_val = self.prepare_input(Y_val)
 
+        iter_cnt = 0
         for e in range(n_epoch):
             print("Epoch " + str(e))
             encoder.train()
@@ -53,7 +54,7 @@ class Seq2SeqLearner:
                 lengths_X_batch = lengths_X[idx]
 
 
-                self.learn_one_iter(
+                loss = self.learn_one_iter(
                     encoder, decoder,
                     encoder_optimizer, decoder_optimizer,
                     X_batch, Y_batch,
@@ -61,6 +62,10 @@ class Seq2SeqLearner:
                     lengths_X_batch
                 )
 
+                if i % print_every == 0:
+                    print(loss)
+                    
+                iter_cnt += 1
 
             if e % eval_every == 0:
                 self.evaluate(encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val)
@@ -106,7 +111,7 @@ class Seq2SeqLearner:
 
         outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
         loss = self._loss(outputs, Y_val.permute(1, 0))
-        print("Val loss: " + str(loss))
+        print("Val loss: " + str(loss.item()))
 
 
 
@@ -145,9 +150,7 @@ class Seq2SeqLearner:
         encoder_optimizer.step()
         decoder_optimizer.step()
 
-        print(loss)
-
-        return loss
+        return loss.item()
 
 
     def prepare_input(self, X):
