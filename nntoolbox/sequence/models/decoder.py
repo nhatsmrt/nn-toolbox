@@ -58,8 +58,8 @@ class AttentionalDecoder(Decoder):
 
     def forward(self, input, hidden, encoder_outputs=None, mask=None):
         '''
-        :param input: current time step input: (n_batch, 1)
-        :param hidden: hidden state of decoder's previous timestep: (n_batch, 1, emb_dim)
+        :param input: current time step input: (seq_len, n_batch, 1)
+        :param hidden: hidden state of decoder's previous timestep: (seq_len, n_batch, emb_dim)
         :param encoder_outputs: outputs of encoder: (max_length, n_batch, enc_op_dim)
         :return: output
         '''

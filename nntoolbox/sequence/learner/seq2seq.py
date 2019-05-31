@@ -110,7 +110,6 @@ class Seq2SeqLearner:
                 decoder_input = torch.argmax(output, dim=-1)
 
 
-
         outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
         loss = self._loss(outputs, Y_val.permute(1, 0))
         print("Val loss: " + str(loss.item()))
@@ -143,8 +142,6 @@ class Seq2SeqLearner:
                 decoder_input = Y_batch[t:t+1]
             else:
                 decoder_input = torch.argmax(output, dim=-1)
-
-
 
         outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
         loss = self._loss(outputs, Y_batch.permute(1, 0))
