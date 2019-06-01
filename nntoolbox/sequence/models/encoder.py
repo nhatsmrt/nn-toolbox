@@ -3,7 +3,7 @@ from torch import nn
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_size, hidden_size, embedding_dim, num_layers, bidirectional, device):
+    def __init__(self, input_size, hidden_size, embedding_dim, num_layers, bidirectional, device, pad_token=0):
         super(Encoder, self).__init__()
         self._hidden_size = hidden_size
         self._input_size = input_size
@@ -12,7 +12,7 @@ class Encoder(nn.Module):
         self._bidirectional = bidirectional
         self._device = device
 
-        self._embedding = nn.Embedding(input_size, self._embedding_dim)
+        self._embedding = nn.Embedding(input_size, self._embedding_dim, padding_idx=pad_token)
 
     def forward(self, input, hidden):
         raise NotImplementedError
@@ -25,8 +25,8 @@ class Encoder(nn.Module):
 
 
 class GRUEncoder(Encoder):
-    def __init__(self, input_size, hidden_size, embedding_dim, device, bias=False, num_layers=1, dropout=0, bidirectional=False):
-        super(GRUEncoder, self).__init__(input_size, hidden_size, embedding_dim, num_layers, bidirectional, device)
+    def __init__(self, input_size, hidden_size, embedding_dim, device, bias=False, num_layers=1, dropout=0, bidirectional=False, pad_token=0):
+        super(GRUEncoder, self).__init__(input_size, hidden_size, embedding_dim, num_layers, bidirectional, device, pad_token)
         self._gru = nn.GRU(
             embedding_dim, hidden_size,
             bias=bias, num_layers=num_layers,

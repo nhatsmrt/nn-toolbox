@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 from torch.nn import functional as F
+from ...components import HighwayLayer
 
 
 class ConvolutionalLayer(nn.Sequential):
@@ -24,12 +25,27 @@ class ConvolutionalLayer(nn.Sequential):
                     padding=padding,
                     bias=bias
                 ),
-                activation(inplace=True),
+                activation(),
                 nn.BatchNorm2d(num_features=out_channels)
             )
         )
 
 
+class HighwayConvolutionalLayer(HighwayLayer):
+    '''
+    Highway layer (for images):
+    y = T(x) * H(x) + (1 - T(x)) * x
+    '''
+    def __init__(self, in_features, main):
+        '''
+        :param in_features: Number of features of each input
+        :param main: The main network H(x). Take input of with in_features and return output with in_features
+        '''
+        super(HighwayConvolutionalLayer, self).__init__(
+            in_features=in_features,
+            main=main,
+            gate=ConvolutionalLayer(in_features, in_features, 3, padding=1, activation=nn.Sigmoid)
+        )
 
 class Flatten(nn.Module):
     def forward(self, input):

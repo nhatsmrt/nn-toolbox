@@ -95,23 +95,29 @@ class Seq2SeqLearner:
         enc_outputs, hidden = encoder(X_val, hidden)
 
 
-        decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
         hidden = enc_outputs.gather(
             dim=0,
             index=(lengths_X_val - 1).view(1, -1).unsqueeze(-1).repeat(1, 1, enc_outputs.shape[2])
         )
-        # hidden = hidden.permute((1, 0, 2)).contiguous().view((hidden.shape[1], -1)).unsqueeze(0)
         outputs = []
-        for t in range(X_val.shape[0]):
-            output, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_val)
-            outputs.append(output)
-            if use_teacher_forcing:
-                decoder_input = Y_val[t:t+1]
-            else:
+        if use_teacher_forcing:
+            decoder_input = torch.cat(
+                (
+                    torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device),
+                    Y_val[:Y_val.shape[0] - 1]
+                ),
+                dim=0
+            )
+            outputs, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_val)
+            outputs = outputs.permute(1, 2, 0)
+        else:
+            decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
+            for t in range(X_val.shape[0]):
+                output, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_val)
+                outputs.append(output)
                 decoder_input = torch.argmax(output, dim=-1)
+            outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
 
-
-        outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
         loss = self._loss(outputs, Y_val.permute(1, 0))
 
         print()
@@ -139,22 +145,30 @@ class Seq2SeqLearner:
         enc_outputs, hidden = encoder(X_batch, hidden)
 
 
-        decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
         hidden = enc_outputs.gather(
             dim=0,
             index=(lengths_X_batch - 1).view(1, -1).unsqueeze(-1).repeat(1, 1, enc_outputs.shape[2])
         )
-        # hidden = hidden.permute((1, 0, 2)).contiguous().view((hidden.shape[1], -1)).unsqueeze(0)
         outputs = []
-        for t in range(X_batch.shape[0]):
-            output, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_batch)
-            outputs.append(output)
-            if use_teacher_forcing:
+        if use_teacher_forcing:
+            decoder_input = torch.cat(
+                (
+                    torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device),
+                    Y_batch[:Y_batch.shape[0] - 1]
+                ),
+                dim=0
+            )
+            outputs, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_batch)
+            outputs = outputs.permute(1, 2, 0)
+        else:
+            decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
+            for t in range(X_batch.shape[0]):
+                output, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_batch)
+                outputs.append(output)
+                # decoder_input = torch.argmax(output, dim=-1)
                 decoder_input = Y_batch[t:t+1]
-            else:
-                decoder_input = torch.argmax(output, dim=-1)
+            outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
 
-        outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
         loss = self._loss(outputs, Y_batch.permute(1, 0))
         loss.backward()
 
