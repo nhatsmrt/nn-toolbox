@@ -186,5 +186,9 @@ class Seq2SeqLearner:
         mask = create_mask(X, self._pad_token)
 
         lengths = get_lengths(mask)
-
-        return torch.from_numpy(mask).to(self._device), torch.from_numpy(lengths).long().to(self._device), torch.from_numpy(X).long().to(self._device)
+        outputs = (
+            torch.from_numpy(mask).to(self._device),
+            torch.from_numpy(lengths).long().to(self._device),
+            torch.from_numpy(X).long().to(self._device)
+        )
+        return outputs

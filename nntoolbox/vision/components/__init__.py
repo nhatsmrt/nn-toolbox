@@ -4,3 +4,4 @@ from .layers import *
 from .normalization import *
 from .pool import *
 from .pretrain import *
+from .se import *

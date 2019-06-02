@@ -36,15 +36,15 @@ class HighwayConvolutionalLayer(HighwayLayer):
     Highway layer (for images):
     y = T(x) * H(x) + (1 - T(x)) * x
     '''
-    def __init__(self, in_features, main):
+    def __init__(self, in_channels, main):
         '''
-        :param in_features: Number of features of each input
-        :param main: The main network H(x). Take input of with in_features and return output with in_features
+        :param in_channels: Number of channels of each input
+        :param main: The main network H(x). Return output of same number of channels and dimensions
         '''
         super(HighwayConvolutionalLayer, self).__init__(
-            in_features=in_features,
+            in_features=in_channels,
             main=main,
-            gate=ConvolutionalLayer(in_features, in_features, 3, padding=1, activation=nn.Sigmoid)
+            gate=ConvolutionalLayer(in_channels, in_channels, 3, padding=1, activation=nn.Sigmoid)
         )
 
 class Flatten(nn.Module):

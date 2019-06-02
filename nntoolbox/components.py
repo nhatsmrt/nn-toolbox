@@ -27,6 +27,7 @@ class HighwayLayer(nn.Module):
     '''
     Highway layer:
     y = T(x) * H(x) + (1 - T(x)) * x
+    https://arxiv.org/pdf/1505.00387.pdf
     '''
     def __init__(self, in_features, main, gate=None):
         '''
