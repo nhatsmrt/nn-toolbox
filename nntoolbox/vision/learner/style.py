@@ -1,4 +1,3 @@
-import torch
 from ..losses import FeatureLoss, StyleLoss, TotalVariationLoss
 from ...utils import compute_num_batch
 from torch.optim import Adam
@@ -52,10 +51,6 @@ class StyleTransferLearner:
         self._optimizer.zero_grad()
 
         outputs = self._model(images_batch)
-        # content_loss = self._content_weight * self._feature_loss(outputs, self._content_img)
-        # style_loss = self._style_weight * self._style_loss(outputs, self._style_img)
-        # total_variation_loss = self._total_variation_weight * self._total_variation_loss(outputs)
-
         content_loss = self._content_weight * self._feature_loss(outputs, self._content_img)
         style_loss = self._style_weight * self._style_loss(outputs, self._style_img)
         total_variation_loss = self._total_variation_weight * self._total_variation_loss(outputs)

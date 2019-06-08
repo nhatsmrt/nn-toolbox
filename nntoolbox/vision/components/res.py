@@ -1,11 +1,14 @@
 from torch import nn
-import numpy as np
 from nntoolbox.vision.components.layers import ConvolutionalLayer
-from nntoolbox.vision.components.regularization import ShakeShakeLayer
+from nntoolbox.vision.components.regularization import ShakeShake
 import torch
 
 
 class ResNeXtBlock(nn.Module):
+    '''
+    Implement a resnext block:
+    y = x + sum_i branch_i
+    '''
     def __init__(self, branches, use_shake_shake):
         super(ResNeXtBlock, self).__init__()
         self._use_shake_shake = use_shake_shake
@@ -13,7 +16,7 @@ class ResNeXtBlock(nn.Module):
         self._cardinality = len(self.branches)
 
         if use_shake_shake:
-            self._shake_shake = ShakeShakeLayer()
+            self._shake_shake = ShakeShake()
 
     def forward(self, input):
         branches_outputs = torch.stack([self.branches[i](input) for i in range(self._cardinality)], dim=0)
@@ -56,11 +59,6 @@ class ResidualBlock(nn.Sequential):
 
 
 class ResidualBlockPreActivation(ResNeXtBlock):
-
-    '''
-    Residual Block without the final Batch Normalization layer
-    '''
-
     def __init__(self, in_channels):
         super(ResidualBlockPreActivation, self).__init__(
             branches=nn.ModuleList(
