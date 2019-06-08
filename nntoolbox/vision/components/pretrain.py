@@ -24,9 +24,13 @@ class PretrainedModel(nn.Sequential):
 
 # based onhttps://github.com/chenyuntc/pytorch-book/blob/master/chapter8-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB(Neural%20Style)/PackedVGG.py
 class FeatureExtractor(nn.Module):
-    def __init__(self, model=vgg19_bn, last_layer=None, fine_tune=True):
+    def __init__(self, model=vgg19_bn, last_layer=None, fine_tune=True, device=None):
         super(FeatureExtractor, self).__init__()
         model = model(pretrained=True)
+
+        if device is not None:
+            model.to(device)
+
         if not fine_tune:
             for param in model.parameters():
                 param.requires_grad = False
@@ -34,6 +38,7 @@ class FeatureExtractor(nn.Module):
         self._features = list(model.features)
         if last_layer is not None:
             self._features = self._features[:last_layer]
+
 
     def forward(self, input, layers = None):
         op = []

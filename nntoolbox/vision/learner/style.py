@@ -12,9 +12,9 @@ class StyleTransferLearner:
             style_weight, content_weight, total_variation_weight, device
     ):
         self._model = model.to(device)
-        self._images = images
-        self._style_img = style_img
-        self._content_img = content_img
+        self._images = images.to(device)
+        self._style_img = style_img.to(device)
+        self._content_img = content_img.to(device)
         self._style_weight = style_weight
         self._content_weight = content_weight
         self._total_variation_weight = total_variation_weight
@@ -52,6 +52,10 @@ class StyleTransferLearner:
         self._optimizer.zero_grad()
 
         outputs = self._model(images_batch)
+        # content_loss = self._content_weight * self._feature_loss(outputs, self._content_img)
+        # style_loss = self._style_weight * self._style_loss(outputs, self._style_img)
+        # total_variation_loss = self._total_variation_weight * self._total_variation_loss(outputs)
+
         content_loss = self._content_weight * self._feature_loss(outputs, self._content_img)
         style_loss = self._style_weight * self._style_loss(outputs, self._style_img)
         total_variation_loss = self._total_variation_weight * self._total_variation_loss(outputs)
