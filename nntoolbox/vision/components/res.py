@@ -1,7 +1,29 @@
 from torch import nn
-from .layers import ConvolutionalLayer
+import numpy as np
+from nntoolbox.vision.components.layers import ConvolutionalLayer
+from nntoolbox.vision.components.regularization import ShakeShakeLayer
+import torch
 
-class _ResidualBlockNoBN(nn.Sequential):
+
+class ResNeXtBlock(nn.Module):
+    def __init__(self, branches, use_shake_shake):
+        super(ResNeXtBlock, self).__init__()
+        self._use_shake_shake = use_shake_shake
+        self.branches = branches
+        self._cardinality = len(self.branches)
+
+        if use_shake_shake:
+            self._shake_shake = ShakeShakeLayer()
+
+    def forward(self, input):
+        branches_outputs = torch.stack([self.branches[i](input) for i in range(self._cardinality)], dim=0)
+        if self._use_shake_shake:
+            return input + self._shake_shake(branches_outputs, self.training)
+        else:
+            return input + torch.sum(branches_outputs, dim=0)
+
+
+class _ResidualBlockNoBN(nn.Module):
     '''
     Residual Block without the final Batch Normalization layer
     '''
@@ -20,6 +42,7 @@ class _ResidualBlockNoBN(nn.Sequential):
     def forward(self, input):
         return self._main(input) + input
 
+
 class ResidualBlock(nn.Sequential):
     def __init__(self, in_channels):
         super(ResidualBlock, self).__init__()
@@ -30,3 +53,25 @@ class ResidualBlock(nn.Sequential):
                 nn.BatchNorm2d(in_channels)
             )
         )
+
+
+class ResidualBlockPreActivation(ResNeXtBlock):
+
+    '''
+    Residual Block without the final Batch Normalization layer
+    '''
+
+    def __init__(self, in_channels):
+        super(ResidualBlockPreActivation, self).__init__(
+            branches=nn.ModuleList(
+                [
+                    nn.Sequential(
+                        ConvolutionalLayer(in_channels, in_channels, 3, padding=1),
+                        ConvolutionalLayer(in_channels, in_channels, 3, padding=1)
+                    )
+                ]
+            ),
+            use_shake_shake=False
+        )
+
+

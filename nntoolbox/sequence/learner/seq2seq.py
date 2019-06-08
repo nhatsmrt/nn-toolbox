@@ -6,10 +6,26 @@ from nntoolbox.sequence.utils import create_mask, get_lengths
 import random
 import numpy as np
 from tqdm import trange
+from ..models import Encoder, Decoder
 
 
 class Seq2SeqLearner:
-    def __init__(self, device, teacher_forcing_ratio=1.0, pad_token=0, SOS_token=1, EOS_token=2):
+    def __init__(
+            self, encoder:Encoder, decoder:Decoder,
+            X, Y, X_val, Y_val, device,
+            teacher_forcing_ratio=1.0,
+            pad_token=0, SOS_token=1, EOS_token=2
+    ):
+        self._encoder = encoder
+        self._decoder = decoder
+        self._X = X
+        self._Y = Y
+        self._X_val = X_val
+        self._Y_val = Y_val
+
+        self._encoder_optimizer = Adam(self._encoder.parameters())
+        self._decoder_optimizer = Adam(self._decoder.parameters())
+
         self._teacher_forcing_ratio = teacher_forcing_ratio
         self._loss = nn.CrossEntropyLoss(ignore_index=pad_token)
         self._pad_token = pad_token
@@ -17,34 +33,28 @@ class Seq2SeqLearner:
         self._EOS_token = EOS_token
         self._device = device
 
-
-    def learn(self, encoder, decoder, X, Y, X_val, Y_val, n_epoch, batch_size, print_every, eval_every):
+    def learn(self, n_epoch, batch_size, print_every, eval_every):
         '''
-        :param encoder:
-        :param decoder:
-        :param X:
-        :param Y:
         :param n_epoch: number of epoch to train
         :param batch_size: size of each batch
+        :param print_every
+        :param eval_every
         :return:
         '''
+        indices = np.arange(self._X.shape[1])
+        n_batch = compute_num_batch(self._X.shape[1], batch_size)
 
-        encoder_optimizer = Adam(encoder.parameters())
-        decoder_optimizer = Adam(decoder.parameters())
-        indices = np.arange(X.shape[1])
-        n_batch = compute_num_batch(X.shape[1], batch_size)
+        mask_X, lengths_X, X = self.prepare_input(self._X)
+        mask_Y, lengths_Y, Y = self.prepare_input(self._Y)
 
-        mask_X, lengths_X, X = self.prepare_input(X)
-        mask_Y, lengths_Y, Y = self.prepare_input(Y)
-
-        mask_X_val, lengths_X_val, X_val = self.prepare_input(X_val)
-        mask_Y_val, lengths_Y_val, Y_val = self.prepare_input(Y_val)
+        mask_X_val, lengths_X_val, X_val = self.prepare_input(self._X_val)
+        mask_Y_val, lengths_Y_val, Y_val = self.prepare_input(self._Y_val)
 
         iter_cnt = 0
         for e in range(n_epoch):
             print("Epoch " + str(e))
-            encoder.train()
-            decoder.train()
+            self._encoder.train()
+            self._decoder.train()
 
             np.random.shuffle(indices)
             for i in trange(n_batch):
@@ -56,8 +66,6 @@ class Seq2SeqLearner:
 
 
                 loss = self.learn_one_iter(
-                    encoder, decoder,
-                    encoder_optimizer, decoder_optimizer,
                     X_batch, Y_batch,
                     mask_X_batch,
                     lengths_X_batch
@@ -70,30 +78,26 @@ class Seq2SeqLearner:
                 iter_cnt += 1
 
             if e % eval_every == 0:
-                self.evaluate(encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val, mask_Y_val)
-
+                self.evaluate(X_val, Y_val, mask_X_val, lengths_X_val, mask_Y_val)
 
     @torch.no_grad()
-    def evaluate(self, encoder, decoder, X_val, Y_val, mask_X_val, lengths_X_val, mask_Y_val):
+    def evaluate(self, X_val, Y_val, mask_X_val, lengths_X_val, mask_Y_val):
         '''
-        :param encoder:
-        :param decoder:
         :param X_val:
         :param Y_val:
         :param mask_X_val:
         :param lengths_X_val:
         :return:
         '''
-        encoder.eval()
-        decoder.eval()
+        self._encoder.eval()
+        self._decoder.eval()
 
         # use_teacher_forcing = True if random.random() < self._teacher_forcing_ratio else False
         use_teacher_forcing = False
 
         batch_size = X_val.shape[1]
-        hidden = encoder.init_hidden(batch_size)
-        enc_outputs, hidden = encoder(X_val, hidden)
-
+        hidden = self._encoder.init_hidden(batch_size)
+        enc_outputs, hidden = self._encoder(X_val, hidden)
 
         hidden = enc_outputs.gather(
             dim=0,
@@ -101,21 +105,21 @@ class Seq2SeqLearner:
         )
         outputs = []
         if use_teacher_forcing:
-            decoder_input = torch.cat(
+            self._decoder_input = torch.cat(
                 (
                     torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device),
                     Y_val[:Y_val.shape[0] - 1]
                 ),
                 dim=0
             )
-            outputs, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_val)
+            outputs, hidden = self._decoder(self._decoder_input, hidden, enc_outputs, mask=mask_X_val)
             outputs = outputs.permute(1, 2, 0)
         else:
-            decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
+            self._decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
             for t in range(X_val.shape[0]):
-                output, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_val)
+                output, hidden = self._decoder(self._decoder_input, hidden, enc_outputs, mask=mask_X_val)
                 outputs.append(output)
-                decoder_input = torch.argmax(output, dim=-1)
+                self._decoder_input = torch.argmax(output, dim=-1)
             outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
 
         loss = self._loss(outputs, Y_val.permute(1, 0))
@@ -132,17 +136,15 @@ class Seq2SeqLearner:
         print("Val loss: " + str(loss.item()))
         print()
 
-
-
-    def learn_one_iter(self, encoder, decoder, encoder_optimizer, decoder_optimizer, X_batch, Y_batch, mask_X_batch, lengths_X_batch):
-        encoder_optimizer.zero_grad()
-        decoder_optimizer.zero_grad()
+    def learn_one_iter(self, X_batch, Y_batch, mask_X_batch, lengths_X_batch):
+        self._encoder_optimizer.zero_grad()
+        self._decoder_optimizer.zero_grad()
 
         use_teacher_forcing = True if random.random() < self._teacher_forcing_ratio else False
 
         batch_size = X_batch.shape[1]
-        hidden = encoder.init_hidden(batch_size)
-        enc_outputs, hidden = encoder(X_batch, hidden)
+        hidden = self._encoder.init_hidden(batch_size)
+        enc_outputs, hidden = self._encoder(X_batch, hidden)
 
 
         hidden = enc_outputs.gather(
@@ -151,32 +153,31 @@ class Seq2SeqLearner:
         )
         outputs = []
         if use_teacher_forcing:
-            decoder_input = torch.cat(
+            self._decoder_input = torch.cat(
                 (
                     torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device),
                     Y_batch[:Y_batch.shape[0] - 1]
                 ),
                 dim=0
             )
-            outputs, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_batch)
+            outputs, hidden = self._decoder(self._decoder_input, hidden, enc_outputs, mask=mask_X_batch)
             outputs = outputs.permute(1, 2, 0)
         else:
-            decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
+            self._decoder_input = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]])).to(self._device)
             for t in range(X_batch.shape[0]):
-                output, hidden = decoder(decoder_input, hidden, enc_outputs, mask=mask_X_batch)
+                output, hidden = self._decoder(self._decoder_input, hidden, enc_outputs, mask=mask_X_batch)
                 outputs.append(output)
-                # decoder_input = torch.argmax(output, dim=-1)
-                decoder_input = Y_batch[t:t+1]
+                # self._decoder_input = torch.argmax(output, dim=-1)
+                self._decoder_input = Y_batch[t:t+1]
             outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
 
         loss = self._loss(outputs, Y_batch.permute(1, 0))
         loss.backward()
 
-        encoder_optimizer.step()
-        decoder_optimizer.step()
+        self._encoder_optimizer.step()
+        self._decoder_optimizer.step()
 
         return loss.item()
-
 
     def prepare_input(self, X):
         '''

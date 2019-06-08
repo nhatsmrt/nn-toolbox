@@ -3,7 +3,6 @@ from torch import nn
 from torch.nn import functional as F
 from ...components import HighwayLayer
 
-
 class ConvolutionalLayer(nn.Sequential):
     '''
     Simple convolutional layer: input -> conv2d -> activation -> batch norm 2d

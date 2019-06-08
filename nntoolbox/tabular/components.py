@@ -34,8 +34,7 @@ class CrossLayer(nn.Module):
         :param inputs: a tuple: first element is the orinal features, second element is the output of last layer
         :return:
         '''
-        input = inputs[0]
-        first = inputs[1]
+        input, first = inputs
 
         interaction = torch.bmm(
             first.view(first.shape[0], first.shape[1], 1),

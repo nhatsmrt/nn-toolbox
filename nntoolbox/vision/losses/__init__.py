@@ -1,2 +1,2 @@
-from .feature import FeatureLoss
+from .style import *
 from .metrics import *
