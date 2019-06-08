@@ -2,6 +2,7 @@ import torch
 import numpy as np
 import copy
 
+
 def compute_num_batch(data_size, batch_size):
     '''
     Compute number of batches per epoch
@@ -11,6 +12,7 @@ def compute_num_batch(data_size, batch_size):
     '''
     return int(np.ceil(data_size / float(batch_size)))
 
+
 def copy_model(model):
     '''
     Return an exact copy of the model (both architecture and initial weights, without tying the weights)
@@ -18,6 +20,7 @@ def copy_model(model):
     :return: a copy of the model
     '''
     return copy.deepcopy(model)
+
 
 def save_model(model, PATH):
     '''

@@ -30,6 +30,74 @@ class ConvolutionalLayer(nn.Sequential):
         )
 
 
+class CoordConv2D(nn.Conv2d):
+    '''
+    Implement CoordConv
+    https://arxiv.org/pdf/1807.03247.pdf
+    '''
+    def __init__(
+            self, in_channels, out_channels,
+            kernel_size, stride=1, padding=0,
+            dilation=1, groups=1, bias=True, padding_mode='zeros'
+    ):
+        super(CoordConv2D, self).__init__(
+            in_channels + 2, out_channels,
+            kernel_size, stride, padding,
+            dilation, groups, bias, padding_mode
+        )
+
+    def forward(self, input):
+        augmented_input = CoordConv2D.augment_input(input)
+        return super().forward(augmented_input)
+
+    @staticmethod
+    def augment_input(input):
+        '''
+        Add two coordinate channels to input
+        :param input: (N, C, H, W)
+        :return: (N, C + 2, H, W)
+        '''
+        batch_size = input.shape[0]
+        h = input.shape[2]
+        w = input.shape[3]
+
+        i = torch.arange(0, w).unsqueeze(0).unsqueeze(0).unsqueeze(0).repeat(batch_size, 1, h, 1).float()
+        if w > 1:
+            i = (i - (w - 1) / 2) / ((w - 1) / 2)
+
+        j = torch.arange(0, h).unsqueeze(-1).unsqueeze(0).unsqueeze(0).repeat(batch_size, 1, 1, w).float()
+        if h > 1:
+            j = (j - (h - 1) / 2) / ((h - 1) / 2)
+
+        return torch.cat((input, i, j), dim=1)
+
+
+class CoordConvolutionalLayer(nn.Sequential):
+    '''
+    Simple convolutional layer: input -> conv2d -> activation -> batch norm 2d
+    '''
+    def __init__(
+            self, in_channels, out_channels,
+            kernel_size=3, stride=1, padding=0,
+            bias=False, activation=nn.LeakyReLU
+    ):
+        super(CoordConvolutionalLayer, self).__init__()
+        self.add_module(
+            "main",
+            nn.Sequential(
+                CoordConv2D(
+                    in_channels=in_channels,
+                    out_channels=out_channels,
+                    kernel_size=kernel_size,
+                    stride=stride,
+                    padding=padding,
+                    bias=bias
+                ),
+                activation(),
+                nn.BatchNorm2d(num_features=out_channels)
+            )
+        )
+
 class HighwayConvolutionalLayer(HighwayLayer):
     '''
     Highway layer (for images):
