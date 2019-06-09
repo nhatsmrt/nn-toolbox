@@ -17,7 +17,7 @@ class FeatureLoss(nn.Module):
         for ind in range(len(output_features)):
             loss += self._base_loss(output_features[ind], target_features[ind])
 
-        return loss
+        return loss / len(self._layers)
 
     def compute_features(self, output, target):
         return self._model(output, self._layers),  self._model(target, self._layers)

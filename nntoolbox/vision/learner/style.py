@@ -10,7 +10,7 @@ from torch.nn import Module
 
 class StyleTransferLearner:
     def __init__(
-            self, images:DataLoader, images_val:DataLoader, style_img:torch.Tensor, content_img:torch.Tensor,
+            self, images:DataLoader, images_val:DataLoader, style_img:torch.Tensor,
             model:Module, feature_extractor:FeatureExtractor, feature_layers, style_layers,
             style_weight:float, content_weight:float, total_variation_weight:float, device:torch.device
     ):
@@ -18,7 +18,6 @@ class StyleTransferLearner:
         self._images = images
         self._images_val = images_val
         self._style_img = style_img.to(device)
-        self._content_img = content_img.to(device)
         self._style_weight = style_weight
         self._content_weight = content_weight
         self._total_variation_weight = total_variation_weight
@@ -65,6 +64,7 @@ class StyleTransferLearner:
     @torch.no_grad()
     def evaluate(self, draw:bool):
         self._model.eval()
+
         for batch_ndx, sample in enumerate(self._images_val):
             content_loss, style_loss, total_variation_loss = self.compute_losses(sample)
             print()
@@ -78,9 +78,11 @@ class StyleTransferLearner:
                 output = tensor_to_pil(self._model(sample[random_ind:random_ind+1].to(self._device)))
                 output.show()
 
+            break
+
     def compute_losses(self, images):
         outputs = self._model(images.to(self._device))
-        content_loss = self._content_weight * self._feature_loss(outputs, self._content_img)
+        content_loss = self._content_weight * self._feature_loss(outputs, images.to(self._device))
         style_loss = self._style_weight * self._style_loss(outputs, self._style_img)
         total_variation_loss = self._total_variation_weight * self._total_variation_loss(outputs)
 
