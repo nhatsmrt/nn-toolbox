@@ -11,7 +11,7 @@ from torch.nn import Module
 class StyleTransferLearner:
     def __init__(
             self, images:DataLoader, images_val:DataLoader, style_img:torch.Tensor,
-            model:Module, feature_extractor:FeatureExtractor, feature_layers, style_layers,
+            model:Module, feature_extractor:FeatureExtractor, content_layers, style_layers,
             style_weight:float, content_weight:float, total_variation_weight:float, device:torch.device
     ):
         self._model = model.to(device)
@@ -23,7 +23,7 @@ class StyleTransferLearner:
         self._total_variation_weight = total_variation_weight
         self._device = device
 
-        self._feature_loss = FeatureLoss(feature_extractor, feature_layers).to(device)
+        self._feature_loss = FeatureLoss(feature_extractor, content_layers).to(device)
         self._style_loss = StyleLoss(feature_extractor, style_layers).to(device)
         self._total_variation_loss = TotalVariationLoss().to(device)
         self._optimizer = Adam(model.parameters())
