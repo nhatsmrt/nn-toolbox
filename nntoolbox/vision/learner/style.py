@@ -5,6 +5,7 @@ from torch.optim import Adam
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
+from IPython.core.display import display # for display on notebook
 from torch.nn import Module
 
 
@@ -76,7 +77,8 @@ class StyleTransferLearner:
             if draw:
                 random_ind = np.random.choice(len(sample))
                 output = tensor_to_pil(self._model(sample[random_ind:random_ind+1].to(self._device)))
-                output.show()
+                # output.show()
+                display(output)
 
             break
 
