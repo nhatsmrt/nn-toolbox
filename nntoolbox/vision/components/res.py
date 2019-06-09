@@ -59,13 +59,19 @@ class ResidualBlock(nn.Sequential):
 
 
 class ResidualBlockPreActivation(ResNeXtBlock):
-    def __init__(self, in_channels):
+    def __init__(self, in_channels, activation=nn.ReLU, normalization=nn.BatchNorm2d):
         super(ResidualBlockPreActivation, self).__init__(
             branches=nn.ModuleList(
                 [
                     nn.Sequential(
-                        ConvolutionalLayer(in_channels, in_channels, 3, padding=1),
-                        ConvolutionalLayer(in_channels, in_channels, 3, padding=1)
+                        ConvolutionalLayer(
+                            in_channels, in_channels, 3, padding=1,
+                            activation=activation, normalization=normalization
+                        ),
+                        ConvolutionalLayer(
+                            in_channels, in_channels, 3, padding=1,
+                            activation=activation, normalization=normalization
+                        )
                     )
                 ]
             ),

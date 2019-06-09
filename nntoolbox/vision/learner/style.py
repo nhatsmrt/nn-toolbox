@@ -29,7 +29,7 @@ class StyleTransferLearner:
         self._total_variation_loss = TotalVariationLoss().to(device)
         self._optimizer = Adam(model.parameters())
 
-    def learn(self, n_epoch, print_every = 1, eval_every=1, draw=False):
+    def learn(self, n_epoch, print_every=1, eval_every=1, draw=False):
         iter_cnt = 0
         for e in range(n_epoch):
             self._model.train()

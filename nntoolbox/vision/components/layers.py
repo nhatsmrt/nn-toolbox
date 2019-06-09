@@ -5,12 +5,12 @@ from ...components import HighwayLayer
 
 class ConvolutionalLayer(nn.Sequential):
     '''
-    Simple convolutional layer: input -> conv2d -> activation -> batch norm 2d
+    Simple convolutional layer: input -> conv2d -> activation -> norm 2d
     '''
     def __init__(
             self, in_channels, out_channels,
             kernel_size=3, stride=1, padding=0,
-            bias=False, activation=nn.ReLU
+            bias=False, activation=nn.ReLU, normalization=nn.BatchNorm2d
     ):
         super(ConvolutionalLayer, self).__init__()
         self.add_module(
@@ -25,7 +25,7 @@ class ConvolutionalLayer(nn.Sequential):
                     bias=bias
                 ),
                 activation(),
-                nn.BatchNorm2d(num_features=out_channels)
+                normalization(num_features=out_channels)
             )
         )
 
