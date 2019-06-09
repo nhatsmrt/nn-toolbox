@@ -7,7 +7,7 @@ import os
 
 
 class UnlabelledImageDataset(Dataset):
-    def __init__(self, path, transform=None, device=None):
+    def __init__(self, path, transform=None, img_dim=None):
         '''
         :param path: path to folder of images
         :param transforms: A transform (possibly a composed one) taking in a PIL image and return a PIL image
@@ -17,21 +17,18 @@ class UnlabelledImageDataset(Dataset):
         for filename in os.listdir(path):
             if is_image(filename):
                 full_path = path + filename
-                self._images.append(Image.open(full_path))
+                image = Image.open(full_path)
+                if img_dim is not None:
+                    image = image.resize(img_dim)
+                self._images.append(image)
         self._transform = transform
         self._to_tensor = ToTensor()
-        self._device = device
 
     def __len__(self):
         return len(self._images)
 
     def __getitem__(self, i):
         if self._transform is not None:
-            output = self._to_tensor(self._transform(self._images[i]))
+            return self._to_tensor(self._transform(self._images[i]))
         else:
-            output = self._to_tensor(self._images[i])
-
-        if self._device is not None:
-            output.to(self._device)
-
-        return output
+            return self._to_tensor(self._images[i])

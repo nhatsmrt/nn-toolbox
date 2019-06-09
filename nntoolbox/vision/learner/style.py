@@ -1,15 +1,18 @@
 from ..losses import FeatureLoss, StyleLoss, TotalVariationLoss
-from ...utils import compute_num_batch
+from ..components import FeatureExtractor
+from ..utils import tensor_to_pil
 from torch.optim import Adam
 import numpy as np
-from tqdm import trange
 import torch
+from torch.utils.data import DataLoader
+from torch.nn import Module
+
 
 class StyleTransferLearner:
     def __init__(
-            self, images, images_val, style_img, content_img,
-            model, feature_extractor, feature_layers, style_layers,
-            style_weight, content_weight, total_variation_weight, device
+            self, images:DataLoader, images_val:DataLoader, style_img:torch.Tensor, content_img:torch.Tensor,
+            model:Module, feature_extractor:FeatureExtractor, feature_layers, style_layers,
+            style_weight:float, content_weight:float, total_variation_weight:float, device:torch.device
     ):
         self._model = model.to(device)
         self._images = images
@@ -26,24 +29,19 @@ class StyleTransferLearner:
         self._total_variation_loss = TotalVariationLoss().to(device)
         self._optimizer = Adam(model.parameters())
 
-    def learn(self, n_epoch, batch_size, print_every = 1, eval_every=1, draw=False):
-        n_batch = compute_num_batch(len(self._images), batch_size)
-        indices = np.arange(len(self._images))
-
+    def learn(self, n_epoch, print_every = 1, eval_every=1, draw=False):
         iter_cnt = 0
         for e in range(n_epoch):
             self._model.train()
             print("Epoch " + str(e))
-            np.random.shuffle(indices)
 
-            for i in trange(n_batch):
-                idx = indices[i * batch_size:(i + 1) * batch_size]
-                images_batch = self._images[idx]
-                content_loss, style_loss, total_variation_loss = self.learn_one_iter(images_batch)
+            for batch_ndx, sample in enumerate(self._images):
+                content_loss, style_loss, total_variation_loss = self.learn_one_iter(sample)
 
                 if iter_cnt % print_every == 0:
                     print()
                     print()
+                    print("Iter " + str(iter_cnt))
                     self.print_losses(content_loss, style_loss, total_variation_loss)
 
                 iter_cnt += 1
@@ -51,8 +49,7 @@ class StyleTransferLearner:
             if e % eval_every == 0 and self._images_val is not None:
                 self.evaluate(draw)
 
-
-    def learn_one_iter(self, images_batch):
+    def learn_one_iter(self, images_batch:torch.Tensor):
         '''
         :param images_batch: torch tensor, (N, C, H, W)
         :return: content loss, style loss, and total variation loss
@@ -68,18 +65,21 @@ class StyleTransferLearner:
     @torch.no_grad()
     def evaluate(self, draw:bool):
         self._model.eval()
-        content_loss, style_loss, total_variation_loss = self.compute_losses(self._images_val)
-        print()
-        print()
-        print()
-        print("Evaluate: ")
-        self.print_losses(content_loss, style_loss, total_variation_loss)
+        for batch_ndx, sample in enumerate(self._images_val):
+            content_loss, style_loss, total_variation_loss = self.compute_losses(sample)
+            print()
+            print()
+            print()
+            print("Evaluate: ")
+            self.print_losses(content_loss, style_loss, total_variation_loss)
 
-        if draw:
-            return
+            if draw:
+                random_ind = np.random.choice(len(sample))
+                output = tensor_to_pil(self._model(sample[random_ind:random_ind+1].to(self._device)))
+                output.show()
 
     def compute_losses(self, images):
-        outputs = self._model(images)
+        outputs = self._model(images.to(self._device))
         content_loss = self._content_weight * self._feature_loss(outputs, self._content_img)
         style_loss = self._style_weight * self._style_loss(outputs, self._style_img)
         total_variation_loss = self._total_variation_weight * self._total_variation_loss(outputs)

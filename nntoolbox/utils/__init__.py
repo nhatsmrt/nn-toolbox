@@ -39,3 +39,9 @@ def load_model(model, PATH):
     '''
     model.load_state_dict(torch.load(PATH))
     print("Model loaded")
+
+def get_device():
+    '''
+    :return: a torch device object (gpu if exists)
+    '''
+    return torch.device("cuda" if torch.cuda.is_available() else "cpu")

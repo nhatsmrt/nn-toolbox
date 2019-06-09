@@ -23,6 +23,29 @@ class ResidualLinearBlock(nn.Module):
         return input + self._modules["main"](input)
 
 
+class LinearlyAugmentedFF(nn.Module):
+    '''
+    Based on https://link.springer.com/chapter/10.1007/978-3-642-35289-8_13
+    '''
+
+    def __init__(self, in_features, out_features, activation = None):
+        super(LinearlyAugmentedFF, self).__init__()
+        self._fc = nn.Linear(in_features, out_features)
+        if activation is not None:
+            self._a = activation()
+        else:
+            self._a = None
+
+
+    def forward(self, x):
+        op = self._fc(x) + torch.sum(x, dim = -1, keepdim = True)
+
+        if self._a is not None:
+            op = self._a(op)
+
+        return op
+
+
 class HighwayLayer(nn.Module):
     '''
     Highway layer:
