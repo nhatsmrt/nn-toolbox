@@ -146,6 +146,7 @@ class Reshape(nn.Module):
     def forward(self, input, new_shape):
         return input.view(new_shape)
 
+
 class InputNormalization(nn.Module):
     '''
     Normalize input before feed into a network

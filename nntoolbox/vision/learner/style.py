@@ -1,6 +1,7 @@
 from ..losses import FeatureLoss, StyleLoss, TotalVariationLoss
 from ..components import FeatureExtractor
 from ..utils import tensor_to_pil
+from ...utils import save_model, load_model
 from torch.optim import Adam
 import numpy as np
 import torch
@@ -29,7 +30,10 @@ class StyleTransferLearner:
         self._total_variation_loss = TotalVariationLoss().to(device)
         self._optimizer = Adam(model.parameters())
 
-    def learn(self, n_epoch, print_every=1, eval_every=1, draw=False):
+    def learn(self, n_epoch, print_every=1, eval_every=1, draw=False, save_path=None, load_path=None):
+        if load_path is not None:
+            load_model(self._model, load_path)
+
         iter_cnt = 0
         for e in range(n_epoch):
             self._model.train()
@@ -48,6 +52,8 @@ class StyleTransferLearner:
 
             if e % eval_every == 0 and self._images_val is not None:
                 self.evaluate(draw)
+                if save_path is not None:
+                    save_model(self._model, save_path)
 
     def learn_one_iter(self, images_batch:torch.Tensor):
         '''
