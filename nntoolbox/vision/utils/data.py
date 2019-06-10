@@ -17,9 +17,7 @@ class UnlabelledImageDataset(Dataset):
         for filename in os.listdir(path):
             if is_image(filename):
                 full_path = path + filename
-                image = Image.open(full_path)
-                if len(image.mode) < 3:
-                    image = image.convert('RGB')
+                image = Image.open(full_path).convert('RGB')
                 if img_dim is not None:
                     image = image.resize(img_dim)
                 self._images.append(image)
