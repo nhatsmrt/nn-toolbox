@@ -164,7 +164,7 @@ class InputNormalization(nn.Module):
         # normalize img
         return (img - self._mean) / self._std
 
-    def to(self, device):
-        self._mean.to(device)
-        self._std.to(device)
-        super().to(device)
+    def to(self, *args, **kwargs):
+        self._mean = self._mean.to(*args, **kwargs)
+        self._std = self._std.to(*args, **kwargs)
+        super().to(*args, **kwargs)
