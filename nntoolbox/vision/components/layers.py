@@ -145,3 +145,21 @@ class ResizeConvolutionalLayer(nn.Module):
 class Reshape(nn.Module):
     def forward(self, input, new_shape):
         return input.view(new_shape)
+
+class Normalization(nn.Module):
+    '''
+    Normalize input before feed into a network
+    Adapt from https://pytorch.org/tutorials/advanced/neural_style_tutorial.html
+    '''
+
+    def __init__(self, mean, std):
+        super(Normalization, self).__init__()
+        # .view the mean and std to make them [C x 1 x 1] so that they can
+        # directly work with image Tensor of shape [B x C x H x W].
+        # B is batch size. C is number of channels. H is height and W is width.
+        self._mean = torch.tensor(mean).view(-1, 1, 1)
+        self._std = torch.tensor(std).view(-1, 1, 1)
+
+    def forward(self, img):
+        # normalize img
+        return (img - self._mean) / self._std
