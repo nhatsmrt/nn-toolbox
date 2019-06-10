@@ -12,6 +12,7 @@ class UnlabelledImageDataset(Dataset):
         :param path: path to folder of images
         :param transforms: A transform (possibly a composed one) taking in a PIL image and return a PIL image
         '''
+        print("Begin reading images and convert to RGB")
         super(UnlabelledImageDataset, self).__init__()
         self._images = []
         for filename in os.listdir(path):
