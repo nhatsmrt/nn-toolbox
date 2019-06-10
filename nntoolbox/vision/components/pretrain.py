@@ -1,5 +1,5 @@
 from torch import nn
-from .layers import Normalization
+from .layers import InputNormalization
 from torchvision.models import resnet18, vgg16_bn
 
 # # based on https://github.com/chenyuntc/pytorch-book/blob/master/chapter8-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB(Neural%20Style)/PackedVGG.py
@@ -28,7 +28,7 @@ class FeatureExtractor(nn.Module):
     def __init__(self, model, mean=None, std=None, last_layer=None, fine_tune=True, device=None):
         super(FeatureExtractor, self).__init__()
         if mean is not None and std is not None:
-            self._normalization = Normalization(mean=mean, std=std)
+            self._normalization = InputNormalization(mean=mean, std=std)
         else:
             self._normalization = None
         model = model(pretrained=True)
