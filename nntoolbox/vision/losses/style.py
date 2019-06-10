@@ -39,10 +39,10 @@ class StyleLoss(FeatureLoss):
         h = features.shape[2]
         w = features.shape [3]
         features = features.reshape(batch_size, n_channel, -1)
-        
-        return torch.mean(torch.bmm(
+
+        return torch.bmm(
             features, features.permute(0, 2, 1)
-        )) / h / w / math.sqrt(n_channel)
+        ) / h / w
 
 
 class TotalVariationLoss(nn.Module):
