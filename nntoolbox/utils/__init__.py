@@ -68,7 +68,6 @@ def accumulate_gradient(gradients, model, fn=lambda x:x):
         parameter.grad += fn(gradient) # Reset gradient accumulation
 
 
-
 def compute_gradient_norm(output, model):
     '''
     Compute the norm of the gradient of an output (e.g a loss) with respect to a model parameters

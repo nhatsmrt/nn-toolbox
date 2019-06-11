@@ -9,7 +9,6 @@ class FeatureLoss(nn.Module):
         self._model = model
         self._layers = layers
 
-
     def forward(self, output, target):
         output_features, target_features = self.compute_features(output, target)
 
@@ -26,7 +25,6 @@ class FeatureLoss(nn.Module):
 class StyleLoss(FeatureLoss):
     def __init__(self, model, layers, base_loss=nn.MSELoss):
         super(StyleLoss, self).__init__(model, layers, base_loss)
-
 
     def compute_features(self, output, target):
         output_features = [self.gram_mat(features) for features in self._model(output, self._layers)]

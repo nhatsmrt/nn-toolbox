@@ -1,14 +1,15 @@
 import torch
 from torch import nn
+from .layers import ConvolutionalLayer
 from .pool import GlobalAveragePool
-from .res import _ResidualBlockNoBN
+from .res import _ResidualBlockNoBN, ResNeXtBlock
 
 class SEBlock(nn.Module):
     '''
     Implement squeeze (global information embedding) and excitation (adaptive recalibration) mechanism
     https://arxiv.org/pdf/1709.01507.pdf
     '''
-    def __init__(self, in_channels, reduction_ratio):
+    def __init__(self, in_channels, reduction_ratio=16):
         super(SEBlock, self).__init__()
         # self._res = ResidualBlock()
         self._squeeze_excitation = nn.Sequential(
@@ -24,7 +25,7 @@ class SEBlock(nn.Module):
         return channel_weights.unsqueeze(-1).unsqueeze(-1) * input
 
 class _SEResidualBlockNoBN(_ResidualBlockNoBN):
-    def __init__(self, in_channels, reduction_ratio):
+    def __init__(self, in_channels, reduction_ratio=16):
         super(_SEResidualBlockNoBN, self).__init__(in_channels)
         self._se = SEBlock(in_channels, reduction_ratio)
 
@@ -32,7 +33,7 @@ class _SEResidualBlockNoBN(_ResidualBlockNoBN):
         return self._se(self._main(input)) + input
 
 class SEResidualBlock(nn.Sequential):
-    def __init__(self, in_channels, reduction_ratio):
+    def __init__(self, in_channels, reduction_ratio=16):
         super(SEResidualBlock, self).__init__()
         self.add_module(
             "main",
@@ -40,4 +41,25 @@ class SEResidualBlock(nn.Sequential):
                 _SEResidualBlockNoBN(in_channels, reduction_ratio),
                 nn.BatchNorm2d(in_channels)
             )
+        )
+
+class SEResidualBlockPreActivation(ResNeXtBlock):
+    def __init__(self, in_channels, reduction_ratio=16, activation=nn.ReLU, normalization=nn.BatchNorm2d):
+        super(SEResidualBlockPreActivation, self).__init__(
+            branches=nn.ModuleList(
+                [
+                    nn.Sequential(
+                        ConvolutionalLayer(
+                            in_channels, in_channels, 3, padding=1,
+                            activation=activation, normalization=normalization
+                        ),
+                        ConvolutionalLayer(
+                            in_channels, in_channels, 3, padding=1,
+                            activation=activation, normalization=normalization
+                        ),
+                        SEBlock(in_channels, reduction_ratio)
+                    )
+                ]
+            ),
+            use_shake_shake=False
         )
