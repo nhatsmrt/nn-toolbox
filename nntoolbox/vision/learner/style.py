@@ -98,5 +98,5 @@ class StyleTransferLearner:
 
     def print_losses(self, content_loss, style_loss, total_variation_loss):
         print("Content loss: " + str(content_loss))
-        print("Style loss loss: " + str(style_loss))
+        print("Style loss: " + str(style_loss))
         print("Total variation loss: " + str(total_variation_loss))

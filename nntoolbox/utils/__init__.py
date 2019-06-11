@@ -40,8 +40,47 @@ def load_model(model, PATH):
     model.load_state_dict(torch.load(PATH))
     print("Model loaded")
 
+
 def get_device():
     '''
     :return: a torch device object (gpu if exists)
     '''
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+def compute_gradient(output, model):
+    ret = []
+    output.backward(retain_graph=True)
+    for parameter in model.parameters():
+        ret.append(parameter.grad)
+        parameter.grad = None # Reset gradient accumulation
+
+    return ret
+
+
+def update_gradient(gradients, model, fn=lambda x:x):
+    for gradient, parameter in zip(gradients, model.parameters()):
+        parameter.grad = fn(gradient) # Reset gradient accumulation
+
+
+def accumulate_gradient(gradients, model, fn=lambda x:x):
+    for gradient, parameter in zip(gradients, model.parameters()):
+        parameter.grad += fn(gradient) # Reset gradient accumulation
+
+
+
+def compute_gradient_norm(output, model):
+    '''
+    Compute the norm of the gradient of an output (e.g a loss) with respect to a model parameters
+    :param output:
+    :param model:
+    :return:
+    '''
+    ret = 0
+    output.backward(retain_graph=True)
+    for parameter in model.parameters():
+        grad = parameter.grad
+        ret += grad.pow(2).sum().cpu().detach().numpy()
+        parameter.grad = None # Reset gradient accumulation
+
+    return ret
