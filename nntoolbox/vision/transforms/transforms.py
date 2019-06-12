@@ -56,6 +56,31 @@ class ElasticDeformation(object):
         return Image.fromarray(result)
 
 
+class Cutout(object):
+    '''
+    https://arxiv.org/pdf/1708.04552.pdf
+    '''
+    def __init__(self, n_holes, length):
+        self._n_holes = n_holes
+        self._length = length
+
+
+    def __call__(self, image:Image)->Image:
+        h, w = image.size
+        ret = np.array(image)
+
+        for _ in range(self._n_holes):
+            h1 = np.random.choice(h)
+            h2 = min(h, h1 + self._length)
+
+            w1 = np.random.choice(w)
+            w2 = min(w, w1 + self._length)
+
+            ret[h1:h2, w1:w2] = 0
+
+        return Image.fromarray(ret)
+
+
 def random_num_generator(config):
     if config[0] == 'uniform':
         ret = np.random.uniform(config[1], config[2], 1)[0]

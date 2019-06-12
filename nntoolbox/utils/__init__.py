@@ -22,22 +22,22 @@ def copy_model(model):
     return copy.deepcopy(model)
 
 
-def save_model(model, PATH):
+def save_model(model, path):
     '''
     :param model:
-    :param PATH: path to save model at
+    :param path: path to save model at
     '''
-    torch.save(model.state_dict(), PATH)
+    torch.save(model.state_dict(), path)
     print("Model saved")
 
 
-def load_model(model, PATH):
+def load_model(model, path):
     '''
     Load the model from path
     :param model
-    :param PATH: path of saved model
+    :param path: path of saved model
     '''
-    model.load_state_dict(torch.load(PATH))
+    model.load_state_dict(torch.load(path))
     print("Model loaded")
 
 

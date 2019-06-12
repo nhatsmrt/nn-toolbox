@@ -114,10 +114,10 @@ class HighwayConvolutionalLayer(HighwayLayer):
             gate=ConvolutionalLayer(in_channels, in_channels, 3, padding=1, activation=nn.Sigmoid)
         )
 
+
 class Flatten(nn.Module):
     def forward(self, input):
         return input.view(input.size(0), -1)
-
 
 
 class ResizeConvolutionalLayer(nn.Module):

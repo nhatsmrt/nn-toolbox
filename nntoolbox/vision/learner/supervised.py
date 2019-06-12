@@ -22,13 +22,16 @@ class SupervisedImageLearner:
         self._val_metric = val_metric
         self._device = device
         if use_scheduler:
-            self._lr_scheduler = ReduceLROnPlateau(self._optimizer)
+            self._lr_scheduler = ReduceLROnPlateau(self._optimizer, mode='max')
+        else:
+            self._lr_scheduler = None
 
-    def learn(self, n_epoch, print_every, eval_every=1, load_path=None, save_path=None):
+    def learn(self, n_epoch, print_every, eval_every=1, load_path=None, save_path=None, patience=None):
         if load_path is not None:
             load_model(self._model, load_path)
 
         iter_cnt = 0
+        p = 0
         val_metrics = []
         for e in range(n_epoch):
             print("Epoch " + str(e))
@@ -49,8 +52,17 @@ class SupervisedImageLearner:
                 if self._lr_scheduler is not None:
                     self._lr_scheduler.step(val_metric)
 
-                if self.is_best(val_metric, val_metrics) and save_path is not None:
-                    save_model(self._model, save_path)
+                if self.is_best(val_metric, val_metrics):
+                    p = 0
+                    if save_path is not None:
+                        save_model(self._model, save_path)
+                else:
+                    p += 1
+
+                if patience is not None and p > patience:
+                    print("Patience exceeded. Finish training.")
+
+        return max(val_metrics) if self._val_metric == 'accuracy' else min(val_metrics)
 
     def learn_one_iter(self, images, labels):
         self._optimizer.zero_grad()
