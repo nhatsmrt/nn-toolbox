@@ -34,12 +34,12 @@ model = Sequential(
     ConvolutionalLayer(in_channels=16, out_channels=32, kernel_size=2, stride=2),
     SEResidualBlockPreActivation(in_channels=32),
     ConvolutionalLayer(in_channels=32, out_channels=64, kernel_size=2, stride=2),
-    AdaptiveAvgPool2d((4, 4)),
-    Flatten(),
-    Linear(in_features=1024, out_features=120),
-    ReLU(),
-    Dropout(),
-    Linear(in_features=120, out_features=10)
+    FeedforwardBlock(
+        in_channels=64,
+        out_features=10,
+        pool_output_size=4,
+        hidden_layer_sizes=(256, 64)
+    )
 )
 
 criterion = CrossEntropyLoss()

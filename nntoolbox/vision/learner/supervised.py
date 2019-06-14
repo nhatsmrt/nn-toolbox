@@ -33,7 +33,10 @@ class SupervisedImageLearner:
         else:
             self._lr_scheduler = None
 
-    def learn(self, n_epoch, print_every, eval_every=1, load_path=None, save_path=None, patience=None, verbose=True):
+    def learn(
+            self, n_epoch:int, print_every:int, eval_every:int=1,
+            load_path=None, save_path=None, patience=None, verbose=True
+    ) -> float:
         if load_path is not None:
             load_model(self._model, load_path)
 
@@ -61,7 +64,7 @@ class SupervisedImageLearner:
             if e % eval_every == 0:
                 print("Evaluate: ")
                 val_metric = self.evaluate()
-                print(self._val_metric + ": "  + str(val_metric))
+                print(self._val_metric + ": " + str(val_metric))
                 val_metrics.append(val_metric)
                 if self._lr_scheduler is not None:
                     self._lr_scheduler.step(val_metric)
@@ -75,7 +78,7 @@ class SupervisedImageLearner:
 
                 if self._writer is not None:
                     self._writer.add_scalar(
-                        tag=self._val_metric,
+                        tag="Val " + self._val_metric,
                         scalar_value=val_metric,
                         global_step=e
                     )
@@ -95,7 +98,7 @@ class SupervisedImageLearner:
         return loss
 
     @torch.no_grad()
-    def evaluate(self):
+    def evaluate(self) -> float:
         self._model.eval()
         vals = []
         total_data = 0
@@ -117,7 +120,7 @@ class SupervisedImageLearner:
         return self._criterion(self._model(images), labels)
 
     @torch.no_grad()
-    def compute_accuracy(self, images, labels):
+    def compute_accuracy(self, images, labels) -> float:
         outputs = torch.argmax(self._model(images.to(self._device)), dim=1).cpu().detach().numpy()
         labels = labels.cpu().numpy()
         return accuracy_score(
@@ -125,7 +128,7 @@ class SupervisedImageLearner:
             y_pred=outputs
         )
 
-    def is_best(self, val, vals):
+    def is_best(self, val, vals) -> bool:
         if self._val_metric == 'loss':
             return val == np.min(vals)
         elif self._val_metric == 'accuracy':
