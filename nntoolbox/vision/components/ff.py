@@ -6,8 +6,9 @@ from typing import Sequence
 
 class FeedforwardBlock(nn.Sequential):
     def __init__(
-            self, in_channels:int, hidden_layer_sizes:Sequence, out_features:int,
-            pool_output_size:int, activation:nn.Module=nn.ReLU, drop_p=0.0
+            self, in_channels:int, out_features:int, pool_output_size:int,
+            hidden_layer_sizes:Sequence=(512,), activation:nn.Module=nn.ReLU,
+            bn_final:bool=False, drop_p=0.5
     ):
         layers = [AdaptiveConcatPool2d(sz=pool_output_size), Flatten()]
         for i in range(len(hidden_layer_sizes)):
@@ -15,13 +16,17 @@ class FeedforwardBlock(nn.Sequential):
                 in_features = in_channels * 2 * pool_output_size * pool_output_size
             else:
                 in_features = hidden_layer_sizes[i - 1]
-            layers.append(nn.BatchNorm1d(num_features=in_features, momentum=0.01)) # follows fastai
-            layers.append(nn.Dropout(p=drop_p))
+            layers.append(nn.BatchNorm1d(num_features=in_features))
+            if drop_p != 0:
+                layers.append(nn.Dropout(p=drop_p / 2))
             layers.append(nn.Linear(
                 in_features=in_features,
                 out_features=hidden_layer_sizes[i]
             ))
             layers.append(activation())
-
+        if bn_final:
+            layers.append(nn.BatchNorm1d(num_features=hidden_layer_sizes[-1], momentum=0.001)) #follows fast ai
+        if drop_p != 0:
+            layers.append(nn.Dropout(p=drop_p))
         layers.append(nn.Linear(in_features=hidden_layer_sizes[-1], out_features=out_features))
         super(FeedforwardBlock, self).__init__(*layers)
