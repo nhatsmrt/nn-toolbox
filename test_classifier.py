@@ -50,7 +50,8 @@ learner = SupervisedImageLearner(
     criterion=criterion,
     optimizer=Adam(model.parameters()),
     use_scheduler=True,
-    val_metric='accuracy'
+    val_metric='accuracy',
+    use_tb=True
 )
 
 learner.learn(n_epoch=500, print_every=1000, save_path="weights/model.pt")
