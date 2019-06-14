@@ -82,7 +82,9 @@ class SupervisedImageLearner:
 
                 if patience is not None and p > patience:
                     print("Patience exceeded. Finish training.")
+                    break
 
+        self._writer.close()
         return max(val_metrics) if self._val_metric == 'accuracy' else min(val_metrics)
 
     def learn_one_iter(self, images, labels):
