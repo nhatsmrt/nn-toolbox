@@ -38,7 +38,7 @@ model = Sequential(
         in_channels=64,
         out_features=10,
         pool_output_size=4,
-        hidden_layer_sizes=(256, 64)
+        hidden_layer_sizes=(512,)
     )
 )
 
