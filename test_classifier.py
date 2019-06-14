@@ -3,6 +3,7 @@ import torch
 from torch.nn import *
 from torchvision.transforms import ToTensor
 from torch.optim import *
+from nntoolbox.optim import AdamW
 
 from nntoolbox.vision.components import *
 from nntoolbox.vision.learner import SupervisedImageLearner
@@ -21,13 +22,6 @@ val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=Tru
 test_dataset = torchvision.datasets.CIFAR10('data/', train=False, download=True, transform=ToTensor())
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=True)
 
-# Conv2d(1, 16, 5, stride=1, padding=2),
-# ReLU(),
-# MaxPool2d(kernel_size=2, stride=2),
-# Conv2d(16, 32, 5, stride=1, padding=2),
-# ReLU(),
-# MaxPool2d(kernel_size=2, stride=2),
-
 model = Sequential(
     ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3),
     SEResidualBlockPreActivation(in_channels=16),
@@ -42,13 +36,12 @@ model = Sequential(
     )
 )
 
-criterion = CrossEntropyLoss()
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
     model=model,
-    criterion=criterion,
-    optimizer=Adam(model.parameters()),
+    criterion=CrossEntropyLoss(),
+    optimizer=AdamW(model.parameters()),
     use_scheduler=True,
     val_metric='accuracy',
     use_tb=True
@@ -72,12 +65,4 @@ for images, labels in test_loader:
     accs += acc * len(images)
 
 print(accs / total)
-
-
-
-# for images, labels in val_loader:
-#     print(labels.shape)
-#     print(model(images).shape)
-#     break
-
 
