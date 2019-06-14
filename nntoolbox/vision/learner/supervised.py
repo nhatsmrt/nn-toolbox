@@ -6,13 +6,14 @@ from ...utils import save_model, load_model, get_device
 from sklearn.metrics import accuracy_score
 import torch
 import numpy as np
+from torch.utils.tensorboard import SummaryWriter
 
 
 class SupervisedImageLearner:
 
     def __init__(
             self, train_data:DataLoader, val_data:DataLoader, model:Module, criterion:Module,
-            optimizer:Optimizer, val_metric=None, use_scheduler=False, device=get_device()
+            optimizer:Optimizer, val_metric=None, use_scheduler=False, use_tb=False, device=get_device()
     ):
         self._train_data = train_data
         self._val_data = val_data
@@ -21,12 +22,18 @@ class SupervisedImageLearner:
         self._optimizer = optimizer
         self._val_metric = val_metric
         self._device = device
+
+        if use_tb:
+            self._writer = SummaryWriter()
+        else:
+            self._writer = None
+
         if use_scheduler:
             self._lr_scheduler = ReduceLROnPlateau(self._optimizer, mode='max')
         else:
             self._lr_scheduler = None
 
-    def learn(self, n_epoch, print_every, eval_every=1, load_path=None, save_path=None, patience=None):
+    def learn(self, n_epoch, print_every, eval_every=1, load_path=None, save_path=None, patience=None, verbose=True):
         if load_path is not None:
             load_model(self._model, load_path)
 
@@ -39,8 +46,15 @@ class SupervisedImageLearner:
 
             for images, labels in self._train_data:
                 loss = self.learn_one_iter(images, labels)
-                if iter_cnt % print_every == 0:
+                if iter_cnt % print_every == 0 and verbose:
                     print(loss)
+
+                if self._writer is not None:
+                    self._writer.add_scalar(
+                        tag="Training loss",
+                        scalar_value=loss.item(),
+                        global_step=iter_cnt
+                    )
 
                 iter_cnt += 1
 
@@ -58,6 +72,13 @@ class SupervisedImageLearner:
                         save_model(self._model, save_path)
                 else:
                     p += 1
+
+                if self._writer is not None:
+                    self._writer.add_scalar(
+                        tag=self._val_metric,
+                        scalar_value=val_metric,
+                        global_step=e
+                    )
 
                 if patience is not None and p > patience:
                     print("Patience exceeded. Finish training.")

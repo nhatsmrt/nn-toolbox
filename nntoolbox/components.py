@@ -43,7 +43,7 @@ class LinearlyAugmentedFF(nn.Module):
         if self._a is not None:
             op = self._a(op)
 
-        return op
+        return opW
 
 
 class HighwayLayer(nn.Module):
