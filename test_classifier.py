@@ -28,11 +28,14 @@ model = Sequential(
     ConvolutionalLayer(in_channels=16, out_channels=32, kernel_size=2, stride=2),
     SEResidualBlockPreActivation(in_channels=32),
     ConvolutionalLayer(in_channels=32, out_channels=64, kernel_size=2, stride=2),
+    SEResidualBlockPreActivation(in_channels=64),
+    ConvolutionalLayer(in_channels=64, out_channels=128, kernel_size=2, stride=2),
+    SEResidualBlockPreActivation(in_channels=128),
     FeedforwardBlock(
-        in_channels=64,
+        in_channels=128,
         out_features=10,
-        pool_output_size=4,
-        hidden_layer_sizes=(512,)
+        pool_output_size=2,
+        hidden_layer_sizes=(256,)
     )
 )
 
@@ -41,7 +44,7 @@ learner = SupervisedImageLearner(
     val_data=val_loader,
     model=model,
     criterion=CrossEntropyLoss(),
-    optimizer=AdamW(model.parameters()),
+    optimizer=Adam(model.parameters()),
     use_scheduler=True,
     val_metric='accuracy',
     use_tb=True
