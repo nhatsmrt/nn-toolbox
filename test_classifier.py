@@ -31,13 +31,13 @@ model = Sequential(
     SEResidualBlockPreActivation(in_channels=32),
     ConvolutionalLayer(in_channels=32, out_channels=64, kernel_size=2, stride=2),
     SEResidualBlockPreActivation(in_channels=64),
-    ConvolutionalLayer(in_channels=64, out_channels=128, kernel_size=2, stride=2),
-    SEResidualBlockPreActivation(in_channels=128),
+    # ConvolutionalLayer(in_channels=64, out_channels=128, kernel_size=2, stride=2),
+    # SEResidualBlockPreActivation(in_channels=128),
     FeedforwardBlock(
-        in_channels=128,
+        in_channels=64,
         out_features=10,
         pool_output_size=2,
-        hidden_layer_sizes=(256,)
+        hidden_layer_sizes=(512,)
     )
 )
 
