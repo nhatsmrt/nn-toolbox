@@ -48,26 +48,25 @@ learner = SupervisedImageLearner(
     model=model,
     criterion=CrossEntropyLoss(),
     optimizer=optimizer,
-    use_scheduler=True,
-    val_metric='accuracy',
 )
 
 callbacks = [
     Tensorboard(),
-    ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=5),
+    ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
 ]
 metrics = {
     "accuracy": Accuracy(),
-    "loss": Loss()
+    "loss": Loss(),
 }
-learner.learn(
+final = learner.learn(
     n_epoch=500,
     callbacks=callbacks,
-    metrics=metrics
+    metrics=metrics,
+    final_metric='accuracy'
 )
-
+print(final)
 load_model(model=model, path="weights/model.pt")
 
 total = 0

@@ -1,7 +1,6 @@
 from torch.utils.data import DataLoader
 from torch.nn import Module
-from torch.optim import Optimizer, Adam
-from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.optim import Optimizer
 from ...utils import load_model, get_device
 import torch
 from typing import Iterable, Dict
@@ -12,32 +11,25 @@ from ...metrics import Metric
 class SupervisedImageLearner:
 
     def __init__(
-            self, train_data: DataLoader, val_data: DataLoader, model: Module, criterion: Module,
-            optimizer: Optimizer, val_metric=None, use_scheduler=False, device=get_device()
+            self, train_data: DataLoader, val_data: DataLoader, model: Module,
+            criterion: Module, optimizer: Optimizer, device=get_device()
     ):
         self._train_data = train_data
         self._val_data = val_data
         self._model = model.to(device)
         self._criterion = criterion.to(device)
         self._optimizer = optimizer
-        self._val_metric = val_metric
         self._device = device
-
-        if use_scheduler:
-            self._lr_scheduler = ReduceLROnPlateau(self._optimizer, mode='max')
-        else:
-            self._lr_scheduler = None
 
     def learn(
             self,
             n_epoch: int, callbacks: Iterable[Callback]=None,
-            metrics: Dict[str, Metric]=None, load_path=None
+            metrics: Dict[str, Metric]=None, final_metric: str='accuracy', load_path=None
     ) -> float:
         if load_path is not None:
             load_model(self._model, load_path)
 
-        self._cb_handler = CallbackHandler(callbacks, metrics)
-        val_metrics = []
+        self._cb_handler = CallbackHandler(callbacks, metrics, final_metric)
         for e in range(n_epoch):
             print("Epoch " + str(e))
             self._model.train()
@@ -51,7 +43,7 @@ class SupervisedImageLearner:
                 print("Patience exceeded. Training finished.")
                 break
 
-        return max(val_metrics) if self._val_metric == 'accuracy' else min(val_metrics)
+        return self._cb_handler.on_train_end()
 
     def learn_one_iter(self, images, labels):
         self._optimizer.zero_grad()

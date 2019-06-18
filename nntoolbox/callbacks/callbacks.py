@@ -16,13 +16,20 @@ class Callback:
 
     def on_batch_end(self, logs: Dict[str, Any]): pass
 
-    def on_train_end(self): pass
+    # def on_train_end(self): pass
 
 
 class CallbackHandler:
-    def __init__(self, callbacks: Iterable[Callback]=None, metrics: Dict[str, Metric]=None):
+    def __init__(
+            self, callbacks: Iterable[Callback]=None,
+            metrics: Dict[str, Metric]=None, final_metric: str='accuracy'
+    ):
+        if metrics is not None:
+            assert final_metric in metrics
+
         self._callbacks = callbacks
         self._metrics = metrics
+        self._final_metric = final_metric
         self._iter_cnt = 0
         self._epoch = 0
 
@@ -52,6 +59,12 @@ class CallbackHandler:
         self._epoch += 1
         return stop_training
 
+    def on_train_end(self) -> float:
+        if self._metrics is None:
+            return 0.0
+        else:
+            return self._metrics[self._final_metric].get_best()
+
 
 class ModelCheckpoint(Callback):
     def __init__(
@@ -80,7 +93,7 @@ class ModelCheckpoint(Callback):
         return False
 
 
-class EarlyStoppingCallback(Callback):
+class EarlyStoppingCB(Callback):
     def __init__(self, monitor='val_loss', min_delta: int=0, patience: int=0, mode: str='min', baseline=None):
         self._monitor = monitor
         self._min_delta = min_delta

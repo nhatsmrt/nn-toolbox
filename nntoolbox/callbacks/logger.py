@@ -3,7 +3,6 @@ from .callbacks import Callback
 
 
 class Tensorboard(Callback):
-
     def __init__(self):
         self._writer = SummaryWriter()
 
