@@ -94,7 +94,7 @@ class ModelCheckpoint(Callback):
 
 
 class EarlyStoppingCB(Callback):
-    def __init__(self, monitor='val_loss', min_delta: int=0, patience: int=0, mode: str='min', baseline=None):
+    def __init__(self, monitor='loss', min_delta: int=0, patience: int=0, mode: str='min', baseline=None):
         self._monitor = monitor
         self._min_delta = min_delta
         self._patience = patience
@@ -123,8 +123,3 @@ class EarlyStoppingCB(Callback):
                 self._cur_p += 1
 
         return self._cur_p > self._patience
-
-
-
-
-

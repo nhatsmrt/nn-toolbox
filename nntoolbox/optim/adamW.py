@@ -74,6 +74,5 @@ class AdamW(Adam):
                     p.data.add_(-group['lr'] * group['weight_decay'] * p.data)
 
                 p.data.addcdiv_(-step_size, exp_avg, denom)
-                print(p.data)
 
         return loss

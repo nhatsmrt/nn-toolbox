@@ -36,12 +36,12 @@ model = Sequential(
     FeedforwardBlock(
         in_channels=64,
         out_features=10,
-        pool_output_size=4,
+        pool_output_size=2,
         hidden_layer_sizes=(512,)
     )
 )
 
-optimizer = AdamW(model.parameters(), weight_decay=0.0004)
+optimizer = Adam(model.parameters(), weight_decay=0.0004)
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
