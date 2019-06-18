@@ -6,13 +6,14 @@ import torch
 from typing import Iterable, Dict
 from ...callbacks import CallbackHandler, Callback
 from ...metrics import Metric
+from ...transforms import MixupTransformer
 
 
 class SupervisedImageLearner:
 
     def __init__(
             self, train_data: DataLoader, val_data: DataLoader, model: Module,
-            criterion: Module, optimizer: Optimizer, device=get_device()
+            criterion: Module, optimizer: Optimizer, mixup=False, mixup_alpha=0.4, device=get_device()
     ):
         self._train_data = train_data
         self._val_data = val_data
@@ -20,6 +21,9 @@ class SupervisedImageLearner:
         self._criterion = criterion.to(device)
         self._optimizer = optimizer
         self._device = device
+        self._mixup = mixup
+        if mixup:
+            self._mixup_transformer = MixupTransformer(alpha=mixup_alpha)
 
     def learn(
             self,
@@ -35,6 +39,9 @@ class SupervisedImageLearner:
             self._model.train()
 
             for images, labels in self._train_data:
+                if self._mixup:
+                    images, labels = self._mixup_transformer.transform_data(images, labels)
+
                 # images, labels = self._cb_handler.on_batch_begin(images, labels)
                 self.learn_one_iter(images, labels)
 
@@ -76,4 +83,9 @@ class SupervisedImageLearner:
         return self._cb_handler.on_epoch_end(logs)
 
     def compute_loss(self, images, labels) -> torch.Tensor:
-        return self._criterion(self._model(images), labels)
+        if self._mixup:
+            criterion = self._mixup_transformer.transform_loss(self._criterion)
+        else:
+            criterion = self._criterion
+
+        return criterion(self._model(images), labels)

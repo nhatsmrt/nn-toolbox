@@ -1,12 +1,13 @@
-from typing import Iterable, Dict, Any
+from typing import Iterable, Dict, Any, Tuple
 from ..utils import save_model
 from ..metrics import Metric
+from torch import Tensor
 
 
 class Callback:
     def on_train_begin(self): pass
 
-    def on_batch_begin(self): pass
+    def on_batch_begin(self, images, labels, train) -> Tuple[Tensor, Tensor]: pass
 
     def on_phase_begin(self): pass
 

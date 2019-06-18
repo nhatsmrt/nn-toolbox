@@ -48,6 +48,7 @@ learner = SupervisedImageLearner(
     model=model,
     criterion=CrossEntropyLoss(),
     optimizer=optimizer,
+    mixup=True
 )
 
 callbacks = [
