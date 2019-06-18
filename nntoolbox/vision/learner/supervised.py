@@ -39,10 +39,6 @@ class SupervisedImageLearner:
             self._model.train()
 
             for images, labels in self._train_data:
-                if self._mixup:
-                    images, labels = self._mixup_transformer.transform_data(images, labels)
-
-                # images, labels = self._cb_handler.on_batch_begin(images, labels)
                 self.learn_one_iter(images, labels)
 
             stop_training = self.evaluate()
@@ -53,8 +49,14 @@ class SupervisedImageLearner:
         return self._cb_handler.on_train_end()
 
     def learn_one_iter(self, images, labels):
+        images = images.to(self._device)
+        labels = labels.to(self._device)
+
+        if self._mixup:
+            images, labels = self._mixup_transformer.transform_data(images, labels)
+
         self._optimizer.zero_grad()
-        loss = self.compute_loss(images.to(self._device), labels.to(self._device))
+        loss = self.compute_loss(images, labels)
         loss.backward()
         self._optimizer.step()
         self._cb_handler.on_batch_end({"loss": loss})
