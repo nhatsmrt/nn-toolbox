@@ -100,3 +100,14 @@ class StyleTransferLearner:
         print("Content loss: " + str(content_loss))
         print("Style loss: " + str(style_loss))
         print("Total variation loss: " + str(total_variation_loss))
+
+
+class MultipleStylesTransferLearner(StyleTransferLearner):
+    def __init__(
+            self, images:DataLoader, images_val:DataLoader, style_imgs:DataLoader,
+            model:Module, feature_extractor:FeatureExtractor, content_layers, style_layers,
+            style_weight:float, content_weight:float, total_variation_weight:float, device:torch.device
+    ):
+        super(MultipleStylesTransferLearner, self).__init__(images, images_val, style_imgs,
+            model, feature_extractor, content_layers, style_layers,
+            style_weight, content_weight, total_variation_weight, device)

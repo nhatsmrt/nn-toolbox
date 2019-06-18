@@ -8,6 +8,8 @@ from nntoolbox.optim import AdamW
 from nntoolbox.vision.components import *
 from nntoolbox.vision.learner import SupervisedImageLearner
 from nntoolbox.utils import load_model, get_device
+from nntoolbox.callbacks import Tensorboard, LossLogger, ModelCheckpoint, ReduceLROnPlateauCB
+from nntoolbox.metrics import Accuracy, Loss
 
 from sklearn.metrics import accuracy_score
 
@@ -29,28 +31,42 @@ model = Sequential(
     SEResidualBlockPreActivation(in_channels=32),
     ConvolutionalLayer(in_channels=32, out_channels=64, kernel_size=2, stride=2),
     SEResidualBlockPreActivation(in_channels=64),
-    ConvolutionalLayer(in_channels=64, out_channels=128, kernel_size=2, stride=2),
-    SEResidualBlockPreActivation(in_channels=128),
+    # ConvolutionalLayer(in_channels=64, out_channels=128, kernel_size=2, stride=2),
+    # SEResidualBlockPreActivation(in_channels=128),
     FeedforwardBlock(
-        in_channels=128,
+        in_channels=64,
         out_features=10,
         pool_output_size=2,
-        hidden_layer_sizes=(256,)
+        hidden_layer_sizes=(512,)
     )
 )
 
+optimizer = Adam(model.parameters())
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
     model=model,
     criterion=CrossEntropyLoss(),
-    optimizer=Adam(model.parameters()),
-    use_scheduler=True,
-    val_metric='accuracy',
-    use_tb=True
+    optimizer=optimizer,
 )
 
-learner.learn(n_epoch=500, print_every=1000, save_path="weights/model.pt")
+callbacks = [
+    Tensorboard(),
+    ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
+    LossLogger(),
+    ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
+]
+metrics = {
+    "accuracy": Accuracy(),
+    "loss": Loss(),
+}
+final = learner.learn(
+    n_epoch=500,
+    callbacks=callbacks,
+    metrics=metrics,
+    final_metric='accuracy'
+)
+print(final)
 load_model(model=model, path="weights/model.pt")
 
 total = 0
