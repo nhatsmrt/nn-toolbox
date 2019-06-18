@@ -8,6 +8,8 @@ from nntoolbox.optim import AdamW
 from nntoolbox.vision.components import *
 from nntoolbox.vision.learner import SupervisedImageLearner
 from nntoolbox.utils import load_model, get_device
+from nntoolbox.callbacks import Tensorboard, LossLogger, ModelCheckpoint, ReduceLROnPlateauCB
+from nntoolbox.metrics import Accuracy, Loss
 
 from sklearn.metrics import accuracy_score
 
@@ -39,18 +41,33 @@ model = Sequential(
     )
 )
 
+optimizer = Adam(model.parameters())
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
     model=model,
     criterion=CrossEntropyLoss(),
-    optimizer=Adam(model.parameters()),
+    optimizer=optimizer,
     use_scheduler=True,
     val_metric='accuracy',
-    use_tb=True
 )
 
-learner.learn(n_epoch=500, print_every=1000, save_path="weights/model.pt")
+callbacks = [
+    Tensorboard(),
+    ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=5),
+    LossLogger(),
+    ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
+]
+metrics = {
+    "accuracy": Accuracy(),
+    "loss": Loss()
+}
+learner.learn(
+    n_epoch=500,
+    callbacks=callbacks,
+    metrics=metrics
+)
+
 load_model(model=model, path="weights/model.pt")
 
 total = 0
