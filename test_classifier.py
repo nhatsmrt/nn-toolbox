@@ -8,7 +8,7 @@ from nntoolbox.optim import AdamW
 from nntoolbox.vision.components import *
 from nntoolbox.vision.learner import SupervisedImageLearner
 from nntoolbox.utils import load_model, get_device
-from nntoolbox.callbacks import Tensorboard, LossLogger, ModelCheckpoint, ReduceLROnPlateauCB
+from nntoolbox.callbacks import Tensorboard, LossLogger, ModelCheckpoint, ReduceLROnPlateauCB, EarlyStoppingCB
 from nntoolbox.metrics import Accuracy, Loss
 
 from sklearn.metrics import accuracy_score
@@ -36,12 +36,12 @@ model = Sequential(
     FeedforwardBlock(
         in_channels=64,
         out_features=10,
-        pool_output_size=2,
+        pool_output_size=4,
         hidden_layer_sizes=(512,)
     )
 )
 
-optimizer = Adam(model.parameters())
+optimizer = AdamW(model.parameters(), weight_decay=0.0004)
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
@@ -55,10 +55,11 @@ callbacks = [
     ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
+    EarlyStoppingCB(monitor='accuracy', mode='max', patience=15)
 ]
 metrics = {
     "accuracy": Accuracy(),
-    "loss": Loss(),
+    "loss": Loss()
 }
 final = learner.learn(
     n_epoch=500,
