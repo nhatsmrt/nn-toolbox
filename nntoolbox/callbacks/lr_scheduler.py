@@ -1,7 +1,7 @@
 from torch.optim.lr_scheduler import _LRScheduler, ReduceLROnPlateau
-from fastai.callbacks import Callback
+from .callbacks import Callback
 from torch.optim import Optimizer
-from typing import Any
+from typing import Dict, Any
 
 
 class ReduceLROnPlateauCB(Callback):
@@ -13,7 +13,7 @@ class ReduceLROnPlateauCB(Callback):
             threshold, threshold_mode, cooldown, min_lr, eps)
         self._monitor = monitor
 
-    def on_epoch_end(self, logs:Any) -> bool:
+    def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         assert self._monitor in logs["epoch_metrics"]
         self._scheduler.step(logs["epoch_metrics"][self._monitor])
         return False

@@ -14,7 +14,7 @@ class Callback:
 
     def on_phase_end(self): pass
 
-    def on_batch_end(self, logs): pass
+    def on_batch_end(self, logs: Dict[str, Any]): pass
 
     def on_train_end(self): pass
 
