@@ -14,6 +14,14 @@ class Tensorboard(Callback):
             global_step=logs["iter_cnt"]
         )
 
+    def on_epoch_end(self, logs):
+        for metric in logs["epoch_metrics"]:
+            self._writer.add_scalar(
+                tag= "Validation " + metric,
+                scalar_value=logs["epoch_metrics"][metric],
+                global_step=logs["epoch"]
+            )
+
 
 class LossLogger(Callback):
     def __init__(self, print_every=1000):

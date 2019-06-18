@@ -36,6 +36,7 @@ class CallbackHandler:
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         print("Evaluate for epoch " + str(self._epoch) + ": ")
+        logs["epoch"] = self._epoch
         stop_training = False
         if self._metrics is not None:
             epoch_metrics = dict()
