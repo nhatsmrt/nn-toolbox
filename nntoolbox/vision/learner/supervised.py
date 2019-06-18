@@ -84,7 +84,7 @@ class SupervisedImageLearner:
 
     def compute_loss(self, images, labels) -> torch.Tensor:
         if self._mixup:
-            criterion = self._mixup_transformer.transform_loss(self._criterion)
+            criterion = self._mixup_transformer.transform_loss(self._criterion, self._model.training)
         else:
             criterion = self._criterion
 
