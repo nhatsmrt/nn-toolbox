@@ -1,5 +1,4 @@
 import torchvision
-import torch
 from torch.nn import *
 from torchvision.transforms import ToTensor
 from torch.optim import *
@@ -25,14 +24,14 @@ val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=Tru
 
 test_dataset = torchvision.datasets.CIFAR10('data/', train=False, download=True, transform=ToTensor())
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=True)
-kernel = partial(PolynomialKernel, 3, 2.0)
+kernel = partial(PolynomialKernel, dp=3, cp=2.0)
 
 model = Sequential(
-    KervolutionalLayer(in_channels=3, out_channels=16, kernel=kernel, kernel_size=3),
-    SEResidualBlockPreActivationKer(in_channels=16, kernel=kernel),
+    KervolutionalLayer(in_channels=3, out_channels=16, kernel=kernel, kernel_size=3, activation=nn.Identity),
+    SEResidualBlockPreActivationKer(in_channels=16, kernel=kernel, activation=nn.Identity),
     KervolutionalLayer(
         in_channels=16, out_channels=32,
-        kernel=kernel,
+        kernel=kernel, activation=nn.Identity,
         kernel_size=2, stride=2
     ),
     SEResidualBlockPreActivation(in_channels=32),
