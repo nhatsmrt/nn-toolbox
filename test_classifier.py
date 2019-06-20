@@ -35,12 +35,12 @@ model = Sequential(
         kernel=kernel,
         kernel_size=2, stride=2
     ),
-    SEResidualBlockPreActivationKer(in_channels=32, kernel=kernel),
-    KervolutionalLayer(
+    SEResidualBlockPreActivation(in_channels=32),
+    ConvolutionalLayer(
         in_channels=32, out_channels=64,
-        kernel=kernel, kernel_size=2, stride=2
+        kernel_size=2, stride=2
     ),
-    SEResidualBlockPreActivationKer(in_channels=64, kernel=kernel),
+    SEResidualBlockPreActivation(in_channels=64),
     FeedforwardBlock(
         in_channels=64,
         out_features=10,
@@ -56,7 +56,7 @@ learner = SupervisedImageLearner(
     model=model,
     criterion=CrossEntropyLoss(),
     optimizer=optimizer,
-    mixup=False
+    mixup=True
 )
 
 callbacks = [
