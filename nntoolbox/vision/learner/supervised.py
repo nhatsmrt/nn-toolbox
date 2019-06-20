@@ -90,4 +90,11 @@ class SupervisedImageLearner:
         else:
             criterion = self._criterion
 
-        return criterion(self._model(images), labels)
+        loss = criterion(self._model(images), labels)
+        if torch.isnan(loss).sum() > 0:
+            print("Found")
+            print(self._model.training)
+            print(torch.isnan(self._model(images)).sum())
+
+        # return criterion(self._model(images), labels)
+        return loss

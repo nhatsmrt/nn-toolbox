@@ -11,33 +11,36 @@ from nntoolbox.utils import load_model, get_device
 from nntoolbox.callbacks import Tensorboard, LossLogger, ModelCheckpoint, ReduceLROnPlateauCB, EarlyStoppingCB
 from nntoolbox.metrics import Accuracy, Loss
 
+from functools import partial
+
 from sklearn.metrics import accuracy_score
 
 
-data = torchvision.datasets.CIFAR10('data/', train=True, download=True, transform=ToTensor())
+data = torchvision.datasets.MNIST('data/', train=True, download=True, transform=ToTensor())
 train_size = int(0.8 * len(data))
 val_size = len(data) - train_size
 train_dataset, val_dataset = torch.utils.data.random_split(data, [train_size, val_size])
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
 val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=True)
 
-test_dataset = torchvision.datasets.CIFAR10('data/', train=False, download=True, transform=ToTensor())
+test_dataset = torchvision.datasets.MNIST('data/', train=False, download=True, transform=ToTensor())
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=True)
+kernel = partial(PolynomialKernel, 3, 2.0)
 
 model = Sequential(
-    KervolutionalLayer(in_channels=3, out_channels=16, kernel=GaussianKernel(), kernel_size=3),
-    SEResidualBlockPreActivationKer(in_channels=16, kernel=GaussianKernel()),
+    KervolutionalLayer(in_channels=1, out_channels=16, kernel=kernel, kernel_size=3),
+    SEResidualBlockPreActivationKer(in_channels=16, kernel=kernel),
     KervolutionalLayer(
         in_channels=16, out_channels=32,
-        kernel=GaussianKernel(),
+        kernel=kernel,
         kernel_size=2, stride=2
     ),
-    SEResidualBlockPreActivationKer(in_channels=32, kernel=GaussianKernel()),
+    SEResidualBlockPreActivationKer(in_channels=32, kernel=kernel),
     KervolutionalLayer(
         in_channels=32, out_channels=64,
-        kernel=GaussianKernel(), kernel_size=2, stride=2
+        kernel=kernel, kernel_size=2, stride=2
     ),
-    SEResidualBlockPreActivationKer(in_channels=64, kernel=GaussianKernel()),
+    SEResidualBlockPreActivationKer(in_channels=64, kernel=kernel),
     FeedforwardBlock(
         in_channels=64,
         out_features=10,
@@ -53,7 +56,7 @@ learner = SupervisedImageLearner(
     model=model,
     criterion=CrossEntropyLoss(),
     optimizer=optimizer,
-    mixup=True
+    mixup=False
 )
 
 callbacks = [

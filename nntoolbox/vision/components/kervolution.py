@@ -24,7 +24,7 @@ class LinearKernel(nn.Module):
 
 
 class PolynomialKernel(LinearKernel):
-    def __init__(self, dp: int=3, cp: float=1.0, trainable=True):
+    def __init__(self, dp: int=3, cp: float=2.0, trainable=True):
         super(PolynomialKernel, self).__init__(cp, trainable)
         self._dp = dp
 
@@ -47,7 +47,7 @@ class GaussianKernel(nn.Module):
         input = input.unsqueeze(-2)
         weight = weight.view(weight.shape[0], -1).t().unsqueeze(0).unsqueeze(-1)
         output = torch.exp(-torch.exp(self.log_bandwidth) * (input - weight).pow(2).sum(1))
-        return output  + bias.unsqueeze(0).unsqueeze(-1) if bias is not None else output
+        return output + bias.unsqueeze(0).unsqueeze(-1) if bias is not None else output
 
 
 class Kervolution2D(nn.Conv2d):
@@ -61,7 +61,7 @@ class Kervolution2D(nn.Conv2d):
             padding, dilation, 1,
             bias, padding_mode
         )
-        self.kernel = kernel
+        self.kernel = kernel()
 
     def compute_output_shape(self, height, width):
         def compute_shape_helper(inp_dim, padding, kernel_size, dilation, stride):

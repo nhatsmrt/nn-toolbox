@@ -76,11 +76,11 @@ class SEResidualBlockPreActivationKer(ResNeXtBlock):
                 [
                     nn.Sequential(
                         KervolutionalLayer(
-                            in_channels, in_channels, copy_model(kernel), 3, padding=1,
+                            in_channels, in_channels, kernel, 3, padding=1,
                             activation=activation, normalization=normalization
                         ),
                         KervolutionalLayer(
-                            in_channels, in_channels, copy_model(kernel), 3, padding=1,
+                            in_channels, in_channels, kernel, 3, padding=1,
                             activation=activation, normalization=normalization
                         ),
                         SEBlock(in_channels, reduction_ratio)

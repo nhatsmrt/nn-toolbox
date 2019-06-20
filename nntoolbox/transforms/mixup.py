@@ -33,9 +33,11 @@ class MixupTransformer:
     def transform_loss(self, criterion, train):
         if train:
             setattr(criterion, 'reduction', 'none')
+
             def transformed_loss(outputs, labels):
                 loss1, loss2 = criterion(outputs, labels[:, 0].long()), criterion(outputs, labels[:, 1].long())
                 return (loss1 * labels[:, 2] + loss2 * (1 - labels[:, 2])).mean()
+
             return transformed_loss
         else:
             setattr(criterion, 'reduction', 'mean')
