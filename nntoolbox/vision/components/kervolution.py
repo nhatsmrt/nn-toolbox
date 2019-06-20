@@ -87,7 +87,11 @@ class Kervolution2D(nn.Conv2d):
             input, kernel_size=self.kernel_size, dilation=self.dilation,
             padding=padding, stride=self.stride
         )
-        output = self.kernel(input, self.weight, self.bias)
+        output = torch.clamp(
+            self.kernel(input, self.weight, self.bias),
+            min=-1.0,
+            max=1.0
+        )
         return output.view(-1, self.out_channels, output_h, output_w)
 
 
@@ -98,7 +102,7 @@ class KervolutionalLayer(nn.Sequential):
     def __init__(
             self, in_channels, out_channels, kernel,
             kernel_size=3, stride=1, padding=0,
-            bias=False, activation=nn.Identity, normalization=nn.BatchNorm2d
+            bias=False, activation=nn.ReLU, normalization=nn.BatchNorm2d
     ):
         super(KervolutionalLayer, self).__init__()
         self.add_module(
