@@ -89,8 +89,8 @@ class Kervolution2D(nn.Conv2d):
         )
         output = torch.clamp(
             self.kernel(input, self.weight, self.bias),
-            min=-1.0,
-            max=1.0
+            min=-10.0,
+            max=10.0
         )
         return output.view(-1, self.out_channels, output_h, output_w)
 
