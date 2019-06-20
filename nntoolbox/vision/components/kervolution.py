@@ -4,6 +4,11 @@ from torch import nn
 import torch.nn.functional as F
 import numpy as np
 
+"""
+Implement kervolution (kernel convolution) layers
+https://arxiv.org/pdf/1904.03955.pdf
+"""
+
 
 class LinearKernel(nn.Module):
     def __init__(self, cp: float=1.0, trainable=True):
@@ -11,10 +16,11 @@ class LinearKernel(nn.Module):
         super(LinearKernel, self).__init__()
         self.log_cp = nn.Parameter(torch.tensor(np.log(cp), requires_grad=trainable))
 
-    def forward(self, input: Tensor, weight: Tensor):
+    def forward(self, input: Tensor, weight: Tensor, bias: Tensor):
         weight = weight.view(weight.shape[0], -1).t()
         output = input.permute(0, 2, 1).matmul(weight).permute(0, 2, 1) + torch.exp(self.log_cp)
-        return output
+
+        return output + bias.unsqueeze(0).unsqueeze(-1) if bias is not None else output
 
 
 class PolynomialKernel(LinearKernel):
@@ -22,8 +28,8 @@ class PolynomialKernel(LinearKernel):
         super(PolynomialKernel, self).__init__(cp, trainable)
         self._dp = dp
 
-    def forward(self, input: Tensor, weight: Tensor):
-        return super().forward(input, weight).pow(self._dp)
+    def forward(self, input: Tensor, weight: Tensor, bias: Tensor):
+        return super().forward(input, weight, bias).pow(self._dp)
 
 
 class GaussianKernel(nn.Module):
@@ -32,7 +38,7 @@ class GaussianKernel(nn.Module):
         super(GaussianKernel, self).__init__()
         self.log_bandwidth = nn.Parameter(torch.tensor(np.log(bandwidth)), requires_grad=trainable)
 
-    def forward(self, input: Tensor, weight: Tensor):
+    def forward(self, input: Tensor, weight: Tensor, bias: Tensor):
         '''
         :param input: (batch_size, patch_size, n_patches)
         :param weight: (out_channels, in_channels, kernel_height, kernel_width)
@@ -40,7 +46,8 @@ class GaussianKernel(nn.Module):
         '''
         input = input.unsqueeze(-2)
         weight = weight.view(weight.shape[0], -1).t().unsqueeze(0).unsqueeze(-1)
-        return torch.exp(-torch.exp(self.log_bandwidth) * (input - weight).pow(2).sum(1))
+        output = torch.exp(-torch.exp(self.log_bandwidth) * (input - weight).pow(2).sum(1))
+        return output  + bias.unsqueeze(0).unsqueeze(-1) if bias is not None else output
 
 
 class Kervolution2D(nn.Conv2d):
@@ -80,7 +87,7 @@ class Kervolution2D(nn.Conv2d):
             input, kernel_size=self.kernel_size, dilation=self.dilation,
             padding=padding, stride=self.stride
         )
-        output = self.kernel(input, self.weight)
+        output = self.kernel(input, self.weight, self.bias)
         return output.view(-1, self.out_channels, output_h, output_w)
 
 
@@ -110,10 +117,3 @@ class KervolutionalLayer(nn.Sequential):
                 normalization(num_features=out_channels)
             )
         )
-
-
-# input = torch.randn(16, 9, 17, 12)
-# layer = Kervolution2D(in_channels=9, out_channels=4, kernel=GaussianKernel(), kernel_size=3, stride=2)
-# print(layer(input).shape)
-# conv2d = nn.Conv2d(in_channels=9, out_channels=4, kernel_size=3, stride=2)
-# print(conv2d(input).shape)
