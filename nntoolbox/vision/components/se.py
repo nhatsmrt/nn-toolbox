@@ -1,8 +1,10 @@
-import torch
+from ...utils import copy_model
 from torch import nn
 from .layers import ConvolutionalLayer
 from .pool import GlobalAveragePool
 from .res import _ResidualBlockNoBN, ResNeXtBlock
+from .kervolution import KervolutionalLayer
+
 
 class SEBlock(nn.Module):
     '''
@@ -24,6 +26,7 @@ class SEBlock(nn.Module):
         channel_weights = self._squeeze_excitation(input)
         return channel_weights.unsqueeze(-1).unsqueeze(-1) * input
 
+
 class _SEResidualBlockNoBN(_ResidualBlockNoBN):
     def __init__(self, in_channels, reduction_ratio=16):
         super(_SEResidualBlockNoBN, self).__init__(in_channels)
@@ -31,6 +34,7 @@ class _SEResidualBlockNoBN(_ResidualBlockNoBN):
 
     def forward(self, input):
         return self._se(self._main(input)) + input
+
 
 class SEResidualBlock(nn.Sequential):
     def __init__(self, in_channels, reduction_ratio=16):
@@ -55,6 +59,28 @@ class SEResidualBlockPreActivation(ResNeXtBlock):
                         ),
                         ConvolutionalLayer(
                             in_channels, in_channels, 3, padding=1,
+                            activation=activation, normalization=normalization
+                        ),
+                        SEBlock(in_channels, reduction_ratio)
+                    )
+                ]
+            ),
+            use_shake_shake=False
+        )
+
+
+class SEResidualBlockPreActivationKer(ResNeXtBlock):
+    def __init__(self, in_channels, kernel, reduction_ratio=16, activation=nn.ReLU, normalization=nn.BatchNorm2d):
+        super(SEResidualBlockPreActivationKer, self).__init__(
+            branches=nn.ModuleList(
+                [
+                    nn.Sequential(
+                        KervolutionalLayer(
+                            in_channels, in_channels, copy_model(kernel), 3, padding=1,
+                            activation=activation, normalization=normalization
+                        ),
+                        KervolutionalLayer(
+                            in_channels, in_channels, copy_model(kernel), 3, padding=1,
                             activation=activation, normalization=normalization
                         ),
                         SEBlock(in_channels, reduction_ratio)

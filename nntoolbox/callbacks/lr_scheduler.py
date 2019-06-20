@@ -4,6 +4,14 @@ from torch.optim import Optimizer
 from typing import Dict, Any
 
 
+class LRSchedulerCB(Callback):
+    def __init__(self, scheduler):
+        self._scheduler = scheduler
+
+    def on_batch_end(self, logs: Dict[str, Any]):
+        self._scheduler.step()
+
+
 class ReduceLROnPlateauCB(Callback):
     def __init__(
             self, optimizer: Optimizer, monitor: str='accuracy', mode: str='max', factor=0.1, patience=10,

@@ -25,12 +25,19 @@ test_dataset = torchvision.datasets.CIFAR10('data/', train=False, download=True,
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=True)
 
 model = Sequential(
-    ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3),
-    SEResidualBlockPreActivation(in_channels=16),
-    ConvolutionalLayer(in_channels=16, out_channels=32, kernel_size=2, stride=2),
-    SEResidualBlockPreActivation(in_channels=32),
-    ConvolutionalLayer(in_channels=32, out_channels=64, kernel_size=2, stride=2),
-    SEResidualBlockPreActivation(in_channels=64),
+    KervolutionalLayer(in_channels=3, out_channels=16, kernel=PolynomialKernel(), kernel_size=3),
+    SEResidualBlockPreActivationKer(in_channels=16, kernel=PolynomialKernel()),
+    KervolutionalLayer(
+        in_channels=16, out_channels=32,
+        kernel=PolynomialKernel(),
+        kernel_size=2, stride=2
+    ),
+    SEResidualBlockPreActivationKer(in_channels=32, kernel=PolynomialKernel()),
+    KervolutionalLayer(
+        in_channels=32, out_channels=64,
+        kernel=PolynomialKernel(), kernel_size=2, stride=2
+    ),
+    SEResidualBlockPreActivationKer(in_channels=64, kernel=PolynomialKernel()),
     FeedforwardBlock(
         in_channels=64,
         out_features=10,
