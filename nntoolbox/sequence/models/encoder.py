@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+from ..components import ResidualRNN
 
 
 class Encoder(nn.Module):
@@ -34,6 +35,11 @@ class GRUEncoder(Encoder):
             dropout=dropout,
             bidirectional=bidirectional
         )
+        # self._gru = ResidualRNN(
+        #     nn.GRU, input_size=hidden_size,
+        #     bias=bias, num_layers=num_layers,
+        #     dropout=dropout,
+        # )
         self.to(device)
 
     def forward(self, input, hidden):
