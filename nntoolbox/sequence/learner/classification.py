@@ -25,6 +25,8 @@ class SequenceClassifierLearner:
             self._model.train()
             for batch in self._train_iterator:
                 self.learn_one_iter(batch)
+                torch.cuda.empty_cache()
+                print(torch.cuda.memory_allocated())
 
             stop_training = self.evaluate()
             if stop_training:
@@ -59,8 +61,8 @@ class SequenceClassifierLearner:
 
             # predictions = (torch.sigmoid(self._model(texts, text_lengths)) > 0.5).to(torch.int)
             outputs = self._model(texts, text_lengths)
-            all_outputs.append(outputs)
-            all_labels.append(batch.label.unsqueeze(-1))
+            all_outputs.append(outputs.cpu())
+            all_labels.append(batch.label.unsqueeze(-1).cpu())
             loss += self.compute_loss(texts, text_lengths, batch.label).cpu().item() * len(outputs)
             total_data += len(outputs)
 
