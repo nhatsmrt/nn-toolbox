@@ -50,9 +50,10 @@ class SequenceFeatureExtractor(nn.Module):
         self._pool = pool()
         self._attention = SelfAttention(
             base_attention=AdditiveAttention,
-            in_features=200, key_dim=100, value_dim=200, query_dim=100,
+            in_features=200, key_dim=200, value_dim=200, query_dim=100,
             return_summary=True,
-            hidden_dim=100
+            hidden_dim=100,
+            value_as_key=True
         )
 
     def forward(self, input, sequence_lengths):

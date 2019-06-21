@@ -100,10 +100,17 @@ class MultiplicativeAttention(Attention):
 
 
 class SelfAttention(nn.Module):
-    def __init__(self, base_attention, in_features: int, key_dim: int, query_dim: int, value_dim: int, **kwargs):
+    def __init__(
+            self, base_attention, in_features: int,
+            key_dim: int, query_dim: int, value_dim: int, value_as_key: bool=False,
+            **kwargs):
         super(SelfAttention, self).__init__()
         self._base_attention = base_attention(key_dim=key_dim, query_dim=query_dim, value_dim=value_dim, **kwargs)
-        self._key_linear = nn.Linear(in_features=in_features, out_features=key_dim)
+        if not value_as_key:
+            self._key_linear = nn.Linear(in_features=in_features, out_features=key_dim)
+        else:
+            assert key_dim == value_dim
+        self._value_as_key = value_as_key
         self._query_linear = nn.Linear(in_features=in_features, out_features=query_dim)
         self._value_linear = nn.Linear(in_features=in_features, out_features=value_dim)
 
@@ -114,9 +121,13 @@ class SelfAttention(nn.Module):
         :return: (seq_length, batch_size, input_dim) and mask (seq_len, batch_size)
         '''
         mask = create_mask_from_lengths(inputs, lengths)
+        values = self._value_linear(inputs)
+        keys = values if self._value_as_key else self._key_linear(inputs)
+        queries = self._query_linear(inputs)
+
         return self._base_attention(
-            keys=self._key_linear(inputs),
-            queries=self._query_linear(inputs),
-            values=self._value_linear(inputs),
+            keys=keys,
+            queries=queries,
+            values=values,
             mask=mask
         )
