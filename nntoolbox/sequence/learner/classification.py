@@ -44,11 +44,12 @@ class SequenceClassifierLearner:
         self._optimizer.step()
         # del texts, text_lengths
         # torch.cuda.empty_cache()
-        if self._device.type == 'cuda':
-            mem = torch.cuda.memory_allocated(self._device)
-            self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})
-        else:
-            self._cb_handler.on_batch_end({"loss": loss.cpu()})
+        # if self._device.type == 'cuda':
+        #     mem = torch.cuda.memory_allocated(self._device)
+        #     self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})
+        # else:
+        #     self._cb_handler.on_batch_end({"loss": loss.cpu()})
+        self._cb_handler.on_batch_end({"loss": loss.cpu()})
 
     @torch.no_grad()
     def evaluate(self):
