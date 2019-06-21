@@ -12,7 +12,7 @@ from functools import partial
 
 
 MAX_VOCAB_SIZE = 25000
-BATCH_SIZE = 32
+BATCH_SIZE = 8
 
 TEXT = data.Field(tokenize='spacy', include_lengths=True)
 LABEL = data.LabelField(dtype=torch.float)
