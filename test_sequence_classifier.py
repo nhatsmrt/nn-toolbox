@@ -95,7 +95,7 @@ class RNNClassifier(nn.Module):
             bidirectional=bidirectional, dropout=0.5
         )
         in_features = embedding_dim * 2 if bidirectional else hidden_size
-        self._op = MLP(in_features=in_features * 3, out_features=output_dim)
+        self._op = MLP(in_features=in_features * 2, out_features=output_dim)
 
         self._dropout = nn.Dropout()
 
