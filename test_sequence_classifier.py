@@ -38,7 +38,7 @@ LABEL.build_vocab(train_data)
 INPUT_DIM = len(TEXT.vocab)
 EMBEDDING_DIM = 100
 HIDDEN_SIZE = 256
-OUTPUT_DIM = 3
+OUTPUT_DIM = 2
 NUM_LAYERS = 2
 BIDIRECTIONAL = True
 PADDING_IDX = TEXT.vocab.stoi[TEXT.pad_token]
