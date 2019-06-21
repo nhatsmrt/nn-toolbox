@@ -2,31 +2,49 @@ from __future__ import unicode_literals, print_function, division
 import unicodedata
 import numpy as np
 import torch
+from torch import Tensor
 
 
 # Turn a Unicode string to plain ASCII, thanks to
 # https://stackoverflow.com/a/518232/2809427
-def unicode_to_ascii(s):
+def unicode_to_ascii(s: str):
     return ''.join(
         c for c in unicodedata.normalize('NFD', s)
         if unicodedata.category(c) != 'Mn'
     )
 
+
 def create_mask(inputs, pad_token):
     '''
     Create a binary mask to indicate whether a token is pad or not
     :param inputs: (seq_len, batch_size)
+    :param pad_token: token for padding
     :return: mask: (seq_len, batch_size)
     '''
     return inputs != pad_token
 
-def get_lengths(mask, return_tensor=False):
+
+def get_lengths(mask, return_tensor: bool=False):
     '''
     Return a 1D array indicating the length of each sequence in batch
     :param mask: binary mask indicating whether an element is pad token (seq_len, batch_size)
+    :param return_tensor: whether to return as a pytorch tensor
     :return: lengths (n_batch)
     '''
     if return_tensor:
         return torch.sum(mask, axis=0).int()
     else:
         return np.sum(mask, axis=0).astype(np.uint8)
+
+
+def extract_last(sequences: Tensor, sequence_lengths: Tensor):
+    '''
+    :param sequences: (seq_length, batch_size, n_features)
+    :param sequence_lengths: (batch_size)
+    :return: (batch_size, n_features)
+    '''
+    return sequences.gather(
+        dim=0,
+        index=(sequence_lengths - 1).view(1, -1).unsqueeze(-1).repeat(1, 1, sequences.shape[2])
+    ).squeeze(0)
+

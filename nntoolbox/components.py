@@ -1,5 +1,7 @@
 import torch
 from torch import nn
+from typing import Sequence
+
 
 class ResidualLinearBlock(nn.Module):
     '''
@@ -75,3 +77,31 @@ class HighwayLayer(nn.Module):
         '''
         gate = self._gate(input)
         return gate * self._main(input) + (1 - gate) * input
+
+
+class MLP(nn.Sequential):
+    def __init__(
+            self, in_features: int, out_features:int, hidden_layer_sizes:Sequence=(512,),
+            activation:nn.Module=nn.ReLU, bn_final:bool=False, drop_ps=(0.5, 0.5)
+    ):
+        layers = []
+        for i in range(len(hidden_layer_sizes)):
+            if i == 0:
+                in_features = in_features
+            else:
+                in_features = hidden_layer_sizes[i - 1]
+            layers.append(nn.BatchNorm1d(num_features=in_features))
+            drop_p = drop_ps[i]
+            if drop_p != 0:
+                layers.append(nn.Dropout(p=drop_p))
+            layers.append(nn.Linear(
+                in_features=in_features,
+                out_features=hidden_layer_sizes[i]
+            ))
+            layers.append(activation())
+        if bn_final:
+            layers.append(nn.BatchNorm1d(num_features=hidden_layer_sizes[-1], momentum=0.001)) #follows fast ai
+        if drop_ps[-1] != 0:
+            layers.append(nn.Dropout(p=drop_ps[-1]))
+        layers.append(nn.Linear(in_features=hidden_layer_sizes[-1], out_features=out_features))
+        super(MLP, self).__init__(*layers)

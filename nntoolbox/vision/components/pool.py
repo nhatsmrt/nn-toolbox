@@ -1,8 +1,14 @@
 import torch
 from torch import nn
 
-# Input: N * C * H * W
+
 def spatial_pyramid_pool(input, op_sizes, pool_layer=nn.MaxPool2d):
+    '''
+    :param input: (batch_size, C, H, W)
+    :param op_sizes:
+    :param pool_layer:
+    :return:
+    '''
     ops = []
     batch_size = input.shape[0]
     inp_h = input.shape[2]
@@ -20,6 +26,7 @@ def spatial_pyramid_pool(input, op_sizes, pool_layer=nn.MaxPool2d):
     #     print(op.shape)
     return torch.cat(ops, dim = -1)
 
+
 class SpatialPyramidPool(nn.Module):
     def __init__(self, op_sizes, pool_layer = nn.MaxPool2d):
         super(SpatialPyramidPool, self).__init__()
@@ -28,7 +35,6 @@ class SpatialPyramidPool(nn.Module):
 
     def forward(self, input):
         return spatial_pyramid_pool(input, self._op_sizes, self._pool_layer)
-
 
 
 class GlobalAveragePool(nn.Module):

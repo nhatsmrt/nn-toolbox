@@ -4,6 +4,7 @@ from fastai.layers import AdaptiveConcatPool2d
 from .layers import Flatten
 from typing import Sequence
 
+
 class FeedforwardBlock(nn.Sequential):
     def __init__(
             self, in_channels:int, out_features:int, pool_output_size:int,
