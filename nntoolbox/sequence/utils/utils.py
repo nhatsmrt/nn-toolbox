@@ -24,6 +24,19 @@ def create_mask(inputs, pad_token):
     return inputs != pad_token
 
 
+def create_mask_from_lengths(inputs: Tensor, lengths: Tensor) -> Tensor:
+    '''
+    Create a binary mask to indicate whether a token is pad or not
+    :param inputs: (seq_len, batch_size)
+    :param lengths: lengths of each sequence. (batch size)
+    :return: mask: (seq_len, batch_size)
+    '''
+    mask = torch.ones(size=(inputs.shape[0], inputs.shape[1])).int()
+    for i in range(len(lengths)):
+        mask[lengths[i]:, i] = 0
+    return mask == 1
+
+
 def get_lengths(mask, return_tensor: bool=False):
     '''
     Return a 1D array indicating the length of each sequence in batch
@@ -32,7 +45,7 @@ def get_lengths(mask, return_tensor: bool=False):
     :return: lengths (n_batch)
     '''
     if return_tensor:
-        return torch.sum(mask, axis=0).int()
+        return torch.sum(mask, dim=0).int()
     else:
         return np.sum(mask, axis=0).astype(np.uint8)
 

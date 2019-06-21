@@ -5,7 +5,8 @@ from nntoolbox.utils import get_device, get_trainable_parameters
 from nntoolbox.callbacks import *
 from nntoolbox.metrics import *
 from nntoolbox.sequence.learner import SequenceClassifierLearner
-from nntoolbox.sequence.components import AdditiveContextEmbedding, AdditiveAttention, ResidualRNN
+from nntoolbox.sequence.components import AdditiveContextEmbedding, AdditiveAttention, ResidualRNN, SelfAttention
+from nntoolbox.sequence.utils import extract_last
 from nntoolbox.components import MLP, ConcatPool
 from functools import partial
 
@@ -47,15 +48,30 @@ class SequenceFeatureExtractor(nn.Module):
     def __init__(self, pool):
         super(SequenceFeatureExtractor, self).__init__()
         self._pool = pool()
+        self._attention = SelfAttention(
+            base_attention=AdditiveAttention,
+            in_features=200, key_dim=200, value_dim=200, query_dim=200,
+            return_summary=True,
+            hidden_dim=256
+        )
 
     def forward(self, input, sequence_lengths):
         '''
         :param input: (seq_length, batch_size, n_features)
         :param sequence_lengths: (batch size)
-        :return: (batch_size, n_features)
+        :return: (batch_size, n_total_features = n_features * 2)
         '''
         batch_size = len(sequence_lengths)
-        features = [self._pool(input[:sequence_lengths[i], i:i + 1, :]) for i in range(batch_size)]
+        # features = [self._pool(input[:sequence_lengths[i], i:i + 1, :]) for i in range(batch_size)]
+        # attention = self._attention(input, sequence_lengths)[0]
+        # attention_features = extract_last(attention, sequence_lengths) # (batch_size, n_features)
+        # return torch.cat(
+        #     (torch.cat(features, dim=0), attention_features),
+        #     dim=-1
+        # )
+
+        attended = self._attention(input, sequence_lengths)[0]
+        features = [self._pool(attended[:sequence_lengths[i], i:i + 1, :]) for i in range(batch_size)]
         return torch.cat(features, dim=0)
 
 
@@ -79,7 +95,7 @@ class RNNClassifier(nn.Module):
             bidirectional=bidirectional, dropout=0.5
         )
         in_features = embedding_dim * 2 if bidirectional else hidden_size
-        self._op = MLP(in_features=in_features * 2, out_features=output_dim)
+        self._op = MLP(in_features=in_features * 3, out_features=output_dim)
 
         self._dropout = nn.Dropout()
 
