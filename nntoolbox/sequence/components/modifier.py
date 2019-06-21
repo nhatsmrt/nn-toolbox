@@ -52,7 +52,7 @@ class ResidualRNN(ModifiedStackedRNN):
         if h_0 is None:
             h_0 = torch.zeros(
                 size=(self._num_layers, self._num_directions, input_unpacked.shape[1], input_unpacked.shape[2])
-            )
+            ).to(input_unpacked.device)
         hiddens = []
         for l in range(len(self._layers)):
             if l > 0:
