@@ -101,18 +101,25 @@ class MultiplicativeAttention(Attention):
 
 class SelfAttention(nn.Module):
     def __init__(
-            self, base_attention, in_features: int,
-            key_dim: int, query_dim: int, value_dim: int, value_as_key: bool=False,
-            **kwargs):
+            self, base_attention, in_features: int, key_dim: int, query_dim: int, value_dim: int,
+            value_as_key: bool=False, transform: bool=True, **kwargs
+    ):
         super(SelfAttention, self).__init__()
         self._base_attention = base_attention(key_dim=key_dim, query_dim=query_dim, value_dim=value_dim, **kwargs)
-        if not value_as_key:
-            self._key_linear = nn.Linear(in_features=in_features, out_features=key_dim)
+        self._transform = transform
+
+        if transform:
+            if not value_as_key:
+                self._key_linear = nn.Linear(in_features=in_features, out_features=key_dim)
+            else:
+                assert key_dim == value_dim
+            self._value_as_key = value_as_key
+            self._query_linear = nn.Linear(in_features=in_features, out_features=query_dim)
+            self._value_linear = nn.Linear(in_features=in_features, out_features=value_dim)
         else:
-            assert key_dim == value_dim
-        self._value_as_key = value_as_key
-        self._query_linear = nn.Linear(in_features=in_features, out_features=query_dim)
-        self._value_linear = nn.Linear(in_features=in_features, out_features=value_dim)
+            assert in_features == key_dim
+            assert in_features == query_dim
+            assert in_features == value_dim
 
     def forward(self, inputs: Tensor, lengths: Tensor) -> Tuple[Tensor, Any]:
         '''
@@ -121,9 +128,13 @@ class SelfAttention(nn.Module):
         :return: (seq_length, batch_size, input_dim) and mask (seq_len, batch_size)
         '''
         mask = create_mask_from_lengths(inputs, lengths)
-        values = self._value_linear(inputs)
-        keys = values if self._value_as_key else self._key_linear(inputs)
-        queries = self._query_linear(inputs)
+
+        if self._transform:
+            values = self._value_linear(inputs)
+            keys = values if self._value_as_key else self._key_linear(inputs)
+            queries = self._query_linear(inputs)
+        else:
+            values = keys = queries = inputs
 
         return self._base_attention(
             keys=keys,
