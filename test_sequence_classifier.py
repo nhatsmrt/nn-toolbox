@@ -5,7 +5,7 @@ from nntoolbox.utils import get_device, get_trainable_parameters
 from nntoolbox.callbacks import *
 from nntoolbox.metrics import *
 from nntoolbox.sequence.learner import SequenceClassifierLearner
-from nntoolbox.sequence.components import AdditiveContextEmbedding, AdditiveAttention, ResidualRNN, SelfAttention
+from nntoolbox.sequence.components import *
 from nntoolbox.sequence.utils import extract_last
 from nntoolbox.components import MLP, ConcatPool
 from functools import partial
@@ -49,10 +49,9 @@ class SequenceFeatureExtractor(nn.Module):
         super(SequenceFeatureExtractor, self).__init__()
         self._pool = pool()
         self._attention = SelfAttention(
-            base_attention=AdditiveAttention,
+            base_attention=ScaledDotProductAttention,
             in_features=200, key_dim=200, value_dim=200, query_dim=200,
             return_summary=True,
-            hidden_dim=100,
             transform=False
         )
 

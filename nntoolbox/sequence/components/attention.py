@@ -99,6 +99,20 @@ class MultiplicativeAttention(Attention):
         )
 
 
+class ScaledDotProductAttention(Attention):
+    def __init__(self, key_dim, query_dim, value_dim, return_summary):
+        assert key_dim == query_dim
+        super(ScaledDotProductAttention, self).__init__(key_dim, key_dim, value_dim, return_summary)
+
+    def compute_scores(self, keys, queries):
+        '''
+        Compute the attention scores
+        :param keys: a set of vectors with values' info, to compute attention weights. (seq_length, batch_size, key_dim)
+        :param queries: query vectors. Shape (n_query, batch_size, query_dim = key_dim)
+        :return: The score for each time step. Shape (n_query, seq_length, n_batch, 1)
+        '''
+        return queries.permute(1, 0, 2).bmm(keys.permute(1, 2, 0)).permute(1, 2, 0).unsqueeze(-1) / (self._key_dim ** 0.5)
+
 class SelfAttention(nn.Module):
     def __init__(
             self, base_attention, in_features: int, key_dim: int, query_dim: int, value_dim: int,

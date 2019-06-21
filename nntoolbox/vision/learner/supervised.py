@@ -59,7 +59,11 @@ class SupervisedImageLearner:
         loss = self.compute_loss(images, labels)
         loss.backward()
         self._optimizer.step()
-        self._cb_handler.on_batch_end({"loss": loss})
+        if self._device.type == 'cuda':
+            mem = torch.cuda.memory_allocated(self._device)
+            self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})
+        else:
+            self._cb_handler.on_batch_end({"loss": loss.cpu()})
 
     @torch.no_grad()
     def evaluate(self) -> float:
@@ -90,11 +94,5 @@ class SupervisedImageLearner:
         else:
             criterion = self._criterion
 
-        loss = criterion(self._model(images), labels)
-        if torch.isnan(loss).sum() > 0:
-            print("Found")
-            print(self._model.training)
-            print(torch.isnan(self._model(images)).sum())
+        return criterion(self._model(images), labels)
 
-        # return criterion(self._model(images), labels)
-        return loss
