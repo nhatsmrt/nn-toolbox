@@ -42,7 +42,7 @@ class SequenceClassifierLearner:
         loss = self.compute_loss(texts, text_lengths, batch.label)
         loss.backward()
         self._optimizer.step()
-        self._cb_handler.on_batch_end({"loss": loss.cpu().detach().item()})
+        self._cb_handler.on_batch_end({"loss": loss.cpu().detach()})
 
     @torch.no_grad()
     def evaluate(self):
