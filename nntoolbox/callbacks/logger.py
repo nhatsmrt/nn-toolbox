@@ -12,6 +12,12 @@ class Tensorboard(Callback):
             scalar_value=logs["loss"].item(),
             global_step=logs["iter_cnt"]
         )
+        if "allocated_memory" in logs:
+            self._writer.add_scalar(
+                tag="Allocated memory",
+                scalar_value=logs["allocated_memory"],
+                global_step=logs["iter_cnt"]
+            )
 
     def on_epoch_end(self, logs):
         for metric in logs["epoch_metrics"]:

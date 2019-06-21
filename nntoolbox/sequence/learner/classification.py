@@ -25,8 +25,6 @@ class SequenceClassifierLearner:
             self._model.train()
             for batch in self._train_iterator:
                 self.learn_one_iter(batch)
-                # torch.cuda.empty_cache()
-                print(torch.cuda.memory_allocated())
 
             stop_training = self.evaluate()
             if stop_training:
@@ -45,7 +43,9 @@ class SequenceClassifierLearner:
         loss.backward()
         self._optimizer.step()
         del texts, text_lengths
-        self._cb_handler.on_batch_end({"loss": loss.cpu()})
+        torch.cuda.empty_cache()
+        mem = torch.cuda.memory_allocated(self._device)
+        self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})
 
     @torch.no_grad()
     def evaluate(self):
