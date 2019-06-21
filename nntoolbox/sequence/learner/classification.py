@@ -44,8 +44,8 @@ class SequenceClassifierLearner:
         loss = self.compute_loss(texts, text_lengths, batch.label)
         loss.backward()
         self._optimizer.step()
-        # del texts, text_lengths
-        self._cb_handler.on_batch_end({"loss": float(loss)})
+        del texts, text_lengths
+        self._cb_handler.on_batch_end({"loss": loss.cpu()})
 
     @torch.no_grad()
     def evaluate(self):
@@ -62,8 +62,8 @@ class SequenceClassifierLearner:
 
             # predictions = (torch.sigmoid(self._model(texts, text_lengths)) > 0.5).to(torch.int)
             outputs = self._model(texts, text_lengths)
-            all_outputs.append(outputs.cpu())
-            all_labels.append(batch.label.unsqueeze(-1).cpu())
+            all_outputs.append(outputs.cpu().detach())
+            all_labels.append(batch.label.unsqueeze(-1).cpu().detach())
             loss += float(self.compute_loss(texts, text_lengths, batch.label)) * len(outputs)
             total_data += len(outputs)
 
