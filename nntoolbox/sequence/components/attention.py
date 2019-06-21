@@ -106,12 +106,14 @@ class ScaledDotProductAttention(Attention):
 
     def compute_scores(self, keys, queries):
         '''
-        Compute the attention scores
+        Compute the attention scores:
+        score(K, Q) = KQ^T / sqrt(d_k)
         :param keys: a set of vectors with values' info, to compute attention weights. (seq_length, batch_size, key_dim)
         :param queries: query vectors. Shape (n_query, batch_size, query_dim = key_dim)
         :return: The score for each time step. Shape (n_query, seq_length, n_batch, 1)
         '''
         return queries.permute(1, 0, 2).bmm(keys.permute(1, 2, 0)).permute(1, 2, 0).unsqueeze(-1) / (self._key_dim ** 0.5)
+
 
 class SelfAttention(nn.Module):
     def __init__(

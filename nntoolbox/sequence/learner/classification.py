@@ -42,8 +42,8 @@ class SequenceClassifierLearner:
         loss = self.compute_loss(texts, text_lengths, batch.label)
         loss.backward()
         self._optimizer.step()
-        del texts, text_lengths
-        torch.cuda.empty_cache()
+        # del texts, text_lengths
+        # torch.cuda.empty_cache()
         if self._device.type == 'cuda':
             mem = torch.cuda.memory_allocated(self._device)
             self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})
@@ -63,10 +63,9 @@ class SequenceClassifierLearner:
             texts = texts.to(self._device)
             text_lengths = text_lengths.to(self._device)
 
-            # predictions = (torch.sigmoid(self._model(texts, text_lengths)) > 0.5).to(torch.int)
             outputs = self._model(texts, text_lengths)
-            all_outputs.append(outputs.cpu().detach())
-            all_labels.append(batch.label.unsqueeze(-1).cpu().detach())
+            all_outputs.append(outputs)
+            all_labels.append(batch.label.unsqueeze(-1))
             loss += float(self.compute_loss(texts, text_lengths, batch.label)) * len(outputs)
             total_data += len(outputs)
 
