@@ -48,12 +48,12 @@ class SequenceFeatureExtractor(nn.Module):
     def __init__(self, pool):
         super(SequenceFeatureExtractor, self).__init__()
         self._pool = pool()
-        self._attention = SelfAttention(
-            base_attention=ScaledDotProductAttention,
-            in_features=200, key_dim=200, value_dim=200, query_dim=200,
-            return_summary=True,
-            transform=False
-        )
+        # self._attention = SelfAttention(
+        #     base_attention=ScaledDotProductAttention,
+        #     in_features=200, key_dim=200, value_dim=200, query_dim=200,
+        #     return_summary=True,
+        #     transform=False
+        # )
 
     def forward(self, input, sequence_lengths):
         '''
@@ -70,8 +70,8 @@ class SequenceFeatureExtractor(nn.Module):
         #     dim=-1
         # )
 
-        attended = self._attention(input, sequence_lengths)[0]
-        features = [self._pool(attended[:sequence_lengths[i], i:i + 1, :]) for i in range(batch_size)]
+        # attended = self._attention(input, sequence_lengths)[0]
+        features = [self._pool(input[:sequence_lengths[i], i:i + 1, :]) for i in range(batch_size)]
         return torch.cat(features, dim=0)
 
 
