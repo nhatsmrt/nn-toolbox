@@ -6,7 +6,7 @@ from nntoolbox.callbacks import *
 from nntoolbox.metrics import *
 from nntoolbox.sequence.learner import SequenceClassifierLearner
 from nntoolbox.sequence.components import AdditiveContextEmbedding, AdditiveAttention, ResidualRNN
-from nntoolbox.components import MLP
+from nntoolbox.components import MLP, ConcatPool
 from functools import partial
 
 
@@ -15,11 +15,14 @@ BATCH_SIZE = 32
 
 TEXT = data.Field(tokenize='spacy', include_lengths=True)
 LABEL = data.LabelField(dtype=torch.float)
-train_data, val_data, test_data = SST.splits(
-    text_field=TEXT,
-    label_field=LABEL
+# train_data, val_data, test_data = SST.splits(
+#     text_field=TEXT,
+#     label_field=LABEL
+#
+# )
 
-)
+train_val_data, test_data = IMDB.splits(TEXT, LABEL)
+train_data, val_data = train_val_data.split(split_ratio=0.8)
 
 train_iterator, val_iterator, test_iterator = data.BucketIterator.splits(
     (train_data, val_data, test_data),
@@ -54,36 +57,6 @@ class SequenceFeatureExtractor(nn.Module):
         batch_size = len(sequence_lengths)
         features = [self._pool(input[:sequence_lengths[i], i:i + 1, :]) for i in range(batch_size)]
         return torch.cat(features, dim=0)
-
-
-class AveragePool(nn.Module):
-    def __init__(self, dim):
-        super(AveragePool, self).__init__()
-        self._dim = dim
-
-    def forward(self, input):
-        return torch.mean(input, dim=self._dim)
-
-
-class MaxPool(nn.Module):
-    def __init__(self, dim):
-        super(MaxPool, self).__init__()
-        self._dim = dim
-
-    def forward(self, input):
-        return torch.max(input, dim=self._dim).values()
-
-
-class ConcatPool(nn.Module):
-    def __init__(self, pool_dim, concat_dim):
-        super(ConcatPool, self).__init__()
-        self._pool_dim = pool_dim
-        self._concat_dim = concat_dim - 1 if pool_dim < concat_dim and concat_dim > 0 else concat_dim
-
-    def forward(self, input):
-        max = torch.max(input, dim=self._pool_dim).values
-        avg = torch.mean(input, dim=self._pool_dim)
-        return torch.cat([max, avg], dim=self._concat_dim)
 
 
 class RNNClassifier(nn.Module):
