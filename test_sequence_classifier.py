@@ -12,7 +12,7 @@ from functools import partial
 
 
 MAX_VOCAB_SIZE = 25000
-BATCH_SIZE = 32
+BATCH_SIZE = 16
 
 TEXT = data.Field(tokenize='spacy', include_lengths=True, fix_length=500)
 LABEL = data.LabelField(dtype=torch.float)
@@ -86,7 +86,7 @@ class SequenceFeatureExtractor(nn.Module):
 class RNNClassifier(nn.Module):
     def __init__(self, input_dim, embedding_dim, hidden_size, output_dim, num_layers, bidirectional, padding_idx):
         super(RNNClassifier, self).__init__()
-        self._embedding = AdditiveContextEmbedding(
+        self._embedding = nn.Embedding(
             num_embeddings=input_dim,
             embedding_dim=embedding_dim,
             padding_idx=padding_idx
