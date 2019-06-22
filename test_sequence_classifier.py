@@ -12,18 +12,17 @@ from functools import partial
 
 
 MAX_VOCAB_SIZE = 25000
-BATCH_SIZE = 8
+BATCH_SIZE = 32
 
 TEXT = data.Field(tokenize='spacy', include_lengths=True)
 LABEL = data.LabelField(dtype=torch.float)
-# train_data, val_data, test_data = SST.splits(
-#     text_field=TEXT,
-#     label_field=LABEL
-#
-# )
+train_data, val_data, test_data = SST.splits(
+    text_field=TEXT,
+    label_field=LABEL
+)
 
-train_val_data, test_data = IMDB.splits(TEXT, LABEL)
-train_data, val_data = train_val_data.split(split_ratio=0.8)
+# train_val_data, test_data = IMDB.splits(TEXT, LABEL)
+# train_data, val_data = train_val_data.split(split_ratio=0.8)
 
 train_iterator, val_iterator, test_iterator = data.BucketIterator.splits(
     (train_data, val_data, test_data),
@@ -35,10 +34,18 @@ train_iterator, val_iterator, test_iterator = data.BucketIterator.splits(
 TEXT.build_vocab(train_data, max_size=MAX_VOCAB_SIZE, vectors="glove.6B.100d")
 LABEL.build_vocab(train_data)
 
+# max_length = 0
+# for batch in train_iterator:
+#     texts, text_lengths = batch.text
+#     if len(texts) > max_length:
+#         max_length = len(texts)
+#
+# print(max_length)
+
 INPUT_DIM = len(TEXT.vocab)
 EMBEDDING_DIM = 100
 HIDDEN_SIZE = 256
-OUTPUT_DIM = 2
+OUTPUT_DIM = 3
 NUM_LAYERS = 2
 BIDIRECTIONAL = True
 PADDING_IDX = TEXT.vocab.stoi[TEXT.pad_token]
@@ -48,12 +55,12 @@ class SequenceFeatureExtractor(nn.Module):
     def __init__(self, pool):
         super(SequenceFeatureExtractor, self).__init__()
         self._pool = pool()
-        # self._attention = SelfAttention(
-        #     base_attention=ScaledDotProductAttention,
-        #     in_features=200, key_dim=200, value_dim=200, query_dim=200,
-        #     return_summary=True,
-        #     transform=False
-        # )
+        self._attention = SelfAttention(
+            base_attention=ScaledDotProductAttention,
+            in_features=200, key_dim=200, value_dim=200, query_dim=200,
+            return_summary=True,
+            transform=False
+        )
 
     def forward(self, input, sequence_lengths):
         '''
@@ -70,8 +77,9 @@ class SequenceFeatureExtractor(nn.Module):
         #     dim=-1
         # )
 
-        # attended = self._attention(input, sequence_lengths)[0]
-        features = [self._pool(input[:sequence_lengths[i], i:i + 1, :]) for i in range(batch_size)]
+        attended = self._attention(input, sequence_lengths)[0]
+        features = [self._pool(attended[:sequence_lengths[i], i:i + 1, :]) for i in range(batch_size)]
+        # features = [self._pool(input[:sequence_lengths[i], i:i + 1, :]) for i in range(batch_size)]
         return torch.cat(features, dim=0)
 
 
@@ -101,18 +109,14 @@ class RNNClassifier(nn.Module):
 
         self._embedding.weight.data.copy_(TEXT.vocab.vectors)
         self._embedding.weight.data[padding_idx] = torch.zeros(embedding_dim)
-        self._feature_extactor = SequenceFeatureExtractor(partial(ConcatPool, 0, -1))
+        self._feature_extractor = SequenceFeatureExtractor(partial(ConcatPool, 0, -1))
 
     def forward(self, input, text_lengths):
         embedded = self._dropout(self._embedding(input))
         packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, text_lengths)
         packed_output, hidden = self._rnn(packed_embedded)
         output, output_lengths = nn.utils.rnn.pad_packed_sequence(packed_output)
-        # output = output.gather(
-        #     dim=0,
-        #     index=(text_lengths - 1).view(1, -1).unsqueeze(-1).repeat(1, 1, output.shape[2])
-        # ).squeeze(0)
-        output_features = self._feature_extactor(output, output_lengths)
+        output_features = self._feature_extractor(output, output_lengths)
         return self._op(output_features)
 
 

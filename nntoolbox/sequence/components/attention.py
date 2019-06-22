@@ -1,7 +1,6 @@
 import torch
 from torch import nn
-from nntoolbox.sequence.utils import get_lengths, create_mask_from_lengths
-import torch.nn.functional as F
+from nntoolbox.sequence.utils import create_mask_from_lengths
 import numpy as np
 from torch import Tensor
 from typing import Tuple, Any
@@ -139,7 +138,7 @@ class SelfAttention(nn.Module):
 
     def forward(self, inputs: Tensor, lengths: Tensor) -> Tuple[Tensor, Any]:
         '''
-        :param input: (seq_length, batch_size, input_dim)
+        :param inputs: (seq_length, batch_size, input_dim)
         :param lengths: (batch_size)
         :return: (seq_length, batch_size, input_dim) and mask (seq_len, batch_size)
         '''

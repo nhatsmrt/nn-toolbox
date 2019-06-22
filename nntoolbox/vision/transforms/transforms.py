@@ -28,7 +28,7 @@ class ElasticDeformation(object):
         return ElasticDeformation.elastic_deform(image, alpha=alpha, sigma=sigma)
 
     @staticmethod
-    def elastic_deform(image:Image, alpha=1000, sigma=30, spline_order=1, mode='nearest')->Image:
+    def elastic_deform(image:Image, alpha=1000, sigma=30, spline_order=1, mode='nearest') -> Image:
         """Elastic deformation of image as described in [Simard2003]_.
         .. [Simard2003] Simard, Steinkraus and Platt, "Best Practices for
            Convolutional Neural Networks applied to Visual Document Analysis", in
@@ -37,6 +37,8 @@ class ElasticDeformation(object):
            :param image: The image to be deformed
            :param alpha:  scaling factor that controls the intensity of the deformation
            :param sigma: the std of gaussian filters. Smaller sigma implies more random deformation field
+           :param spline_order
+           :param mode: interpolation mode
         """
 
         image = np.array(image)
@@ -64,8 +66,7 @@ class Cutout(object):
         self._n_holes = n_holes
         self._length = length
 
-
-    def __call__(self, image:Image)->Image:
+    def __call__(self, image: Image) -> Image:
         h, w = image.size
         ret = np.array(image)
 

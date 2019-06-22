@@ -18,7 +18,7 @@ class ModifiedStackedRNN(nn.Module):
         self._num_layers = num_layers
         self._num_directions = 2 if bidirectional else 1
 
-    def forward(self, input, h_0=None, lengths=None):pass
+    def forward(self, input, h_0=None, lengths=None): pass
 
 
 class ResidualRNN(ModifiedStackedRNN):
