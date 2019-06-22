@@ -14,15 +14,15 @@ from functools import partial
 MAX_VOCAB_SIZE = 25000
 BATCH_SIZE = 32
 
-TEXT = data.Field(tokenize='spacy', include_lengths=True)
+TEXT = data.Field(tokenize='spacy', include_lengths=True, fix_length=500)
 LABEL = data.LabelField(dtype=torch.float)
-train_data, val_data, test_data = SST.splits(
-    text_field=TEXT,
-    label_field=LABEL
-)
+# train_data, val_data, test_data = SST.splits(
+#     text_field=TEXT,
+#     label_field=LABEL
+# )
 
-# train_val_data, test_data = IMDB.splits(TEXT, LABEL)
-# train_data, val_data = train_val_data.split(split_ratio=0.8)
+train_val_data, test_data = IMDB.splits(TEXT, LABEL)
+train_data, val_data = train_val_data.split(split_ratio=0.8)
 
 train_iterator, val_iterator, test_iterator = data.BucketIterator.splits(
     (train_data, val_data, test_data),
