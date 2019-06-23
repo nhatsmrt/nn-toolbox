@@ -63,13 +63,8 @@ model = Sequential(
         kernel_size=2, stride=2
     ),
     SEResNeXtShakeShake(in_channels=64),
-    ConvolutionalLayer(
-        in_channels=64, out_channels=128,
-        kernel_size=2, stride=2
-    ),
-    SEResNeXtShakeShake(in_channels=128),
     FeedforwardBlock(
-        in_channels=128,
+        in_channels=64,
         out_features=10,
         pool_output_size=4,
         hidden_layer_sizes=(512,)
@@ -77,7 +72,7 @@ model = Sequential(
 )
 
 
-optimizer = Adam(model.parameters(), weight_decay=0.0004)
+optimizer = AdamW(model.parameters(), weight_decay=0.0004)
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
