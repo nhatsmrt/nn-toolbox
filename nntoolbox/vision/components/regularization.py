@@ -30,21 +30,22 @@ class ShakeShakeFunction(torch.autograd.Function):
                       'shake': randomly choose new weights
         :return: weighted sum of all branches' outputs
         '''
-
-        branch_weights = ShakeShakeFunction.get_branch_weights(
-            len(branches), branches[0].shape[0], training
-        ).to(branches.device)
-        output = branch_weights.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1) * branches
-
         if training:
+            branch_weights = ShakeShakeFunction.get_branch_weights(
+                len(branches), branches[0].shape[0]
+            ).to(branches.device)
+            output = branch_weights.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1) * branches
+
             if mode == 'keep':
                 ctx.save_for_backward(torch.ones(1), branch_weights)
             elif training and mode == 'even':
                 ctx.save_for_backward(-torch.ones(1), len(branches) * torch.ones(1).int())
-            else: # shake mode
+            else:  # shake mode
                 ctx.save_for_backward(torch.zeros(1), len(branches) * torch.ones(1).int())
 
-        return torch.sum(output, dim=0)
+            return torch.sum(output, dim=0)
+        else:
+            return torch.mean(branches, dim=0)
 
     @staticmethod
     def backward(ctx, grad_output):
@@ -52,23 +53,19 @@ class ShakeShakeFunction(torch.autograd.Function):
             branch_weights = ctx.saved_tensors[1]
         elif ctx.saved_tensors[0] == -1: # even mode:
             cardinality = ctx.saved_tensors[1].item()
-            branch_weights = ShakeShakeFunction.get_branch_weights(
-                cardinality, grad_output.shape[0], False
-            ).to(grad_output.device)
+            branch_weights = 1.0 / cardinality * torch.ones(
+                size=(cardinality, grad_output.shape[0])
+            ).float().to(grad_output.device)
         else: # shake mode
             cardinality = ctx.saved_tensors[1].item()
             branch_weights = ShakeShakeFunction.get_branch_weights(
-                cardinality, grad_output.shape[0], True
+                cardinality, grad_output.shape[0]
             ).to(grad_output.device)
 
         return branch_weights.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1) * grad_output, None, None
 
     @staticmethod
-    def get_branch_weights(cardinality, batch_size, training):
-        if training:
-            branch_weights = torch.rand(size=(cardinality, batch_size))
-            branch_weights /= torch.sum(branch_weights, dim=0, keepdim=True)
-        else:
-            branch_weights = 1.0 / cardinality * torch.ones(size=(cardinality, batch_size)).float()
-
+    def get_branch_weights(cardinality, batch_size):
+        branch_weights = torch.rand(size=(cardinality, batch_size))
+        branch_weights /= torch.sum(branch_weights, dim=0, keepdim=True)
         return branch_weights
