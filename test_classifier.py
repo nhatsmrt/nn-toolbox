@@ -45,7 +45,7 @@ class SEResNeXtShakeShake(ResNeXtBlock):
                     ) for _ in range(2)
                 ]
             ),
-            use_shake_shake=True
+            use_shake_shake=False
         )
 
 
