@@ -82,15 +82,19 @@ class HighwayLayer(nn.Module):
 class MLP(nn.Sequential):
     def __init__(
             self, in_features: int, out_features:int, hidden_layer_sizes:Sequence=(512,),
-            activation:nn.Module=nn.ReLU, bn_final:bool=False, drop_ps=(0.5, 0.5)
+            activation:nn.Module=nn.ReLU, bn_final:bool=False, drop_ps=(0.5, 0.5), use_batch_norm=True
     ):
         layers = []
+        if isinstance(drop_ps, float):
+            drop_ps = [drop_ps for _ in range(len(hidden_layer_sizes) + 1)]
+
         for i in range(len(hidden_layer_sizes)):
             if i == 0:
                 in_features = in_features
             else:
                 in_features = hidden_layer_sizes[i - 1]
-            layers.append(nn.BatchNorm1d(num_features=in_features))
+            if use_batch_norm:
+                layers.append(nn.BatchNorm1d(num_features=in_features))
             drop_p = drop_ps[i]
             if drop_p != 0:
                 layers.append(nn.Dropout(p=drop_p))
@@ -99,7 +103,8 @@ class MLP(nn.Sequential):
                 out_features=hidden_layer_sizes[i]
             ))
             layers.append(activation())
-        if bn_final:
+
+        if bn_final and use_batch_norm:
             layers.append(nn.BatchNorm1d(num_features=hidden_layer_sizes[-1], momentum=0.001)) #follows fast ai
         if drop_ps[-1] != 0:
             layers.append(nn.Dropout(p=drop_ps[-1]))

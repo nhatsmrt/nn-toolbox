@@ -31,7 +31,7 @@ class Attention(nn.Module):
         else:
             return attn_weights * values.unsqueeze(0), mask
 
-    def compute_attn_weights(self, keys, queries, mask=None):
+    def compute_attn_weights(self, keys: Tensor, queries: Tensor, mask=None) -> Tensor:
         '''
         Compute the attention weights
         :param keys: a set of vectors with values' info, to compute attention weights. (seq_length, n_batch, keys_dim)
@@ -46,7 +46,7 @@ class Attention(nn.Module):
         weights = self._softmax(scores)
         return weights
 
-    def compute_scores(self, keys, queries):
+    def compute_scores(self, keys: Tensor, queries: Tensor) -> Tensor:
         '''
         Compute the attention scores
         :param keys: a set of vectors with values' info, to compute attention weights. (seq_length, n_batch, keys_dim)

@@ -24,22 +24,45 @@ val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=Tru
 
 test_dataset = torchvision.datasets.CIFAR10('data/', train=False, download=True, transform=ToTensor())
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=True)
-kernel = partial(PolynomialKernel, dp=3, cp=2.0)
+# kernel = partial(PolynomialKernel, dp=3, cp=2.0)
+
+
+class SEResNeXtShakeShake(ResNeXtBlock):
+    def __init__(self, in_channels, reduction_ratio=16, activation=nn.ReLU, normalization=nn.BatchNorm2d):
+        super(SEResNeXtShakeShake, self).__init__(
+            branches=nn.ModuleList(
+                [
+                    nn.Sequential(
+                        ConvolutionalLayer(
+                            in_channels, in_channels, 3, padding=1,
+                            activation=activation, normalization=normalization
+                        ),
+                        ConvolutionalLayer(
+                            in_channels, in_channels, 3, padding=1,
+                            activation=activation, normalization=normalization
+                        ),
+                        SEBlock(in_channels, reduction_ratio)
+                    ) for _ in range(2)
+                ]
+            ),
+            use_shake_shake=True
+        )
+
 
 model = Sequential(
-    KervolutionalLayer(in_channels=3, out_channels=16, kernel=kernel, kernel_size=3, activation=nn.Identity),
-    SEResidualBlockPreActivationKer(in_channels=16, kernel=kernel, activation=nn.Identity),
-    KervolutionalLayer(
+    ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU),
+    SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU),
+    ConvolutionalLayer(
         in_channels=16, out_channels=32,
-        kernel=kernel, activation=nn.Identity,
+        activation=nn.Identity,
         kernel_size=2, stride=2
     ),
-    SEResidualBlockPreActivation(in_channels=32),
+    SEResNeXtShakeShake(in_channels=32),
     ConvolutionalLayer(
         in_channels=32, out_channels=64,
         kernel_size=2, stride=2
     ),
-    SEResidualBlockPreActivation(in_channels=64),
+    SEResNeXtShakeShake(in_channels=64),
     FeedforwardBlock(
         in_channels=64,
         out_features=10,
@@ -47,6 +70,7 @@ model = Sequential(
         hidden_layer_sizes=(512,)
     )
 )
+
 
 optimizer = Adam(model.parameters(), weight_decay=0.0004)
 learner = SupervisedImageLearner(

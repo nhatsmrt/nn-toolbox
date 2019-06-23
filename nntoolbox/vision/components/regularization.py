@@ -30,7 +30,6 @@ class ShakeShakeFunction(torch.autograd.Function):
                       'shake': randomly choose new weights
         :return: weighted sum of all branches' outputs
         '''
-        print(branches.shape)
 
         branch_weights = ShakeShakeFunction.get_branch_weights(len(branches), branches[0].shape[0], training)
         output = branch_weights.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1) * branches

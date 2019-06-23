@@ -47,6 +47,7 @@ class SEResidualBlock(nn.Sequential):
             )
         )
 
+
 class SEResidualBlockPreActivation(ResNeXtBlock):
     def __init__(self, in_channels, reduction_ratio=16, activation=nn.ReLU, normalization=nn.BatchNorm2d):
         super(SEResidualBlockPreActivation, self).__init__(
