@@ -28,7 +28,7 @@ test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=T
 
 
 class SEResNeXtShakeShake(ResNeXtBlock):
-    def __init__(self, in_channels, reduction_ratio=16, activation=nn.ReLU, normalization=nn.BatchNorm2d):
+    def __init__(self, in_channels, reduction_ratio=16, cardinality=2, activation=nn.ReLU, normalization=nn.BatchNorm2d):
         super(SEResNeXtShakeShake, self).__init__(
             branches=nn.ModuleList(
                 [
@@ -42,10 +42,10 @@ class SEResNeXtShakeShake(ResNeXtBlock):
                             activation=activation, normalization=normalization
                         ),
                         SEBlock(in_channels, reduction_ratio)
-                    ) for _ in range(2)
+                    ) for _ in range(cardinality)
                 ]
             ),
-            use_shake_shake=False
+            use_shake_shake=True
         )
 
 
@@ -63,8 +63,13 @@ model = Sequential(
         kernel_size=2, stride=2
     ),
     SEResNeXtShakeShake(in_channels=64),
+    ConvolutionalLayer(
+        in_channels=64, out_channels=128,
+        kernel_size=2, stride=2
+    ),
+    SEResNeXtShakeShake(in_channels=128),
     FeedforwardBlock(
-        in_channels=64,
+        in_channels=128,
         out_features=10,
         pool_output_size=4,
         hidden_layer_sizes=(512,)
