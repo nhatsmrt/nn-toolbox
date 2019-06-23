@@ -63,10 +63,15 @@ model = Sequential(
         kernel_size=2, stride=2
     ),
     SEResNeXtShakeShake(in_channels=64),
+    ConvolutionalLayer(
+        in_channels=64, out_channels=128,
+        kernel_size=2, stride=2
+    ),
+    SEResNeXtShakeShake(in_channels=128),
     FeedforwardBlock(
-        in_channels=64,
+        in_channels=128,
         out_features=10,
-        pool_output_size=4,
+        pool_output_size=2,
         hidden_layer_sizes=(512,)
     )
 )
