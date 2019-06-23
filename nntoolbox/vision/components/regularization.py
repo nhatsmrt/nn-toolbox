@@ -21,7 +21,7 @@ class ShakeShake(nn.Module):
 
 class ShakeShakeFunction(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, branches, training, mode):
+    def forward(ctx, branches: torch.Tensor, training: bool, mode: str):
         '''
         :param ctx: context (to save info for backward pass)
         :param branches: outputs of all branches concatenated (cardinality, batch_size, n_channel, h, w)
@@ -31,7 +31,9 @@ class ShakeShakeFunction(torch.autograd.Function):
         :return: weighted sum of all branches' outputs
         '''
 
-        branch_weights = ShakeShakeFunction.get_branch_weights(len(branches), branches[0].shape[0], training)
+        branch_weights = ShakeShakeFunction.get_branch_weights(
+            len(branches), branches[0].shape[0], training
+        ).to(branches.device)
         output = branch_weights.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1) * branches
 
         if training:
@@ -50,10 +52,14 @@ class ShakeShakeFunction(torch.autograd.Function):
             branch_weights = ctx.saved_tensors[1]
         elif ctx.saved_tensors[0] == -1: # even mode:
             cardinality = ctx.saved_tensors[1].item()
-            branch_weights = ShakeShakeFunction.get_branch_weights(cardinality, grad_output.shape[0], False)
+            branch_weights = ShakeShakeFunction.get_branch_weights(
+                cardinality, grad_output.shape[0], False
+            ).to(grad_output.device)
         else: # shake mode
             cardinality = ctx.saved_tensors[1].item()
-            branch_weights = ShakeShakeFunction.get_branch_weights(cardinality, grad_output.shape[0], True)
+            branch_weights = ShakeShakeFunction.get_branch_weights(
+                cardinality, grad_output.shape[0], True
+            ).to(grad_output.device)
 
         return branch_weights.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1) * grad_output, None, None
 
