@@ -3,7 +3,7 @@ from torch.nn import *
 from torchvision.transforms import *
 from torch.optim import *
 from nntoolbox.optim import AdamW
-from adabound import AdaBound
+# from adabound import AdaBound
 
 from nntoolbox.vision.components import *
 from nntoolbox.vision.learner import SupervisedImageLearner
@@ -57,14 +57,14 @@ class SEResNeXtShakeShake(ResNeXtBlock):
             use_shake_shake=True
         )
 
-layer_1 = ManifoldMixupModule(ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU))
-block_1 = ManifoldMixupModule(SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU))
+# layer_1 = ManifoldMixupModule(ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU))
+# block_1 = ManifoldMixupModule(SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU))
 
 model = Sequential(
-    # ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU),
-    # SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU),
-    layer_1,
-    block_1,
+    ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU),
+    SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU),
+    # layer_1,
+    # block_1,
     ConvolutionalLayer(
         in_channels=16, out_channels=32,
         activation=nn.Identity,
@@ -88,21 +88,22 @@ model = Sequential(
         hidden_layer_sizes=(512, 256)
     )
 )
-print(model)
+# print(model)
 
 
 optimizer = AdamW(model.parameters(), weight_decay=0.0004)
+# optimizer = Adam(model.parameters())
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
     model=model,
     criterion=CrossEntropyLoss(),
     optimizer=optimizer,
-    mixup=False
+    mixup=True
 )
 
 callbacks = [
-    ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
+    # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LossLogger(),
