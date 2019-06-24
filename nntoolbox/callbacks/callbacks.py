@@ -7,7 +7,7 @@ from torch import Tensor
 class Callback:
     def on_train_begin(self): pass
 
-    def on_batch_begin(self, images, labels, train) -> Tuple[Tensor, Tensor]: pass
+    def on_batch_begin(self, data, train) -> Tuple: return data
 
     def on_phase_begin(self): pass
 
@@ -33,6 +33,12 @@ class CallbackHandler:
         self._final_metric = final_metric
         self._iter_cnt = 0
         self._epoch = 0
+
+    def on_batch_begin(self, data, train):
+        if self._callbacks is not None:
+            for callback in self._callbacks:
+                data = callback.on_batch_begin(data, train)
+        return data
 
     def on_batch_end(self, logs: Dict[str, Any]):
         logs["iter_cnt"] = self._iter_cnt

@@ -129,7 +129,7 @@ class ResizeConvolutionalLayer(nn.Module):
         self._mode = mode
         self.add_module(
             "conv",
-            nn.Conv2d(
+            ConvolutionalLayer(
                 in_channels=in_channels,
                 out_channels=out_channels,
                 kernel_size=3,
