@@ -8,29 +8,32 @@ class Tensorboard(Callback):
         self._writer = SummaryWriter()
 
     def on_batch_end(self, logs):
-        self._writer.add_scalar(
-            tag="Training loss",
-            scalar_value=logs["loss"].item(),
-            global_step=logs["iter_cnt"]
-        )
+        if "loss" in logs:
+            self._writer.add_scalar(
+                tag="Training loss",
+                scalar_value=logs["loss"].item(),
+                global_step=logs["iter_cnt"]
+            )
         if "allocated_memory" in logs:
             self._writer.add_scalar(
                 tag="Allocated memory",
                 scalar_value=logs["allocated_memory"],
                 global_step=logs["iter_cnt"]
             )
+
+    def on_epoch_end(self, logs):
+        if "epoch_metrics" in logs:
+            for metric in logs["epoch_metrics"]:
+                self._writer.add_scalar(
+                    tag= "Validation " + metric,
+                    scalar_value=logs["epoch_metrics"][metric],
+                    global_step=logs["epoch"]
+                )
         if "draw" in logs and "tag" in logs:
+            print(logs["tag"])
             self._writer.add_image(
                 tag=logs["tag"],
                 img_tensor=logs["draw"]
-            )
-
-    def on_epoch_end(self, logs):
-        for metric in logs["epoch_metrics"]:
-            self._writer.add_scalar(
-                tag= "Validation " + metric,
-                scalar_value=logs["epoch_metrics"][metric],
-                global_step=logs["epoch"]
             )
 
 
