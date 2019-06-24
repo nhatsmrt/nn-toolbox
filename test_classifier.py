@@ -1,6 +1,6 @@
 import torchvision
 from torch.nn import *
-from torchvision.transforms import ToTensor
+from torchvision.transforms import *
 from torch.optim import *
 from nntoolbox.optim import AdamW
 
@@ -19,6 +19,12 @@ data = torchvision.datasets.CIFAR10('data/', train=True, download=True, transfor
 train_size = int(0.8 * len(data))
 val_size = len(data) - train_size
 train_dataset, val_dataset = torch.utils.data.random_split(data, [train_size, val_size])
+# train_dataset.dataset.transform = Compose(
+#     [
+#         RandomHorizontalFlip(),
+#         ToTensor()
+#     ]
+# )
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
 val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=True)
 
