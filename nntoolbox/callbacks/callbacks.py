@@ -7,17 +7,17 @@ from torch import Tensor
 class Callback:
     def on_train_begin(self): pass
 
-    def on_batch_begin(self, data, train) -> Tuple: return data
+    def on_batch_begin(self, data: Dict[str, Tensor], train) -> Dict[str, Tensor]: return data
 
     def on_phase_begin(self): pass
 
-    def on_epoch_end(self, logs) -> bool: return False
+    def on_epoch_end(self, logs: Dict[str, Any]) -> bool: return False
 
     def on_phase_end(self): pass
 
     def on_batch_end(self, logs: Dict[str, Any]): pass
 
-    # def on_train_end(self): pass
+    def on_train_end(self): pass
 
 
 class CallbackHandler:
@@ -34,7 +34,7 @@ class CallbackHandler:
         self._iter_cnt = 0
         self._epoch = 0
 
-    def on_batch_begin(self, data, train):
+    def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         if self._callbacks is not None:
             for callback in self._callbacks:
                 data = callback.on_batch_begin(data, train)
@@ -67,6 +67,10 @@ class CallbackHandler:
         return stop_training
 
     def on_train_end(self) -> float:
+        if self._callbacks is not None:
+            for callback in self._callbacks:
+                callback.on_train_end()
+
         if self._metrics is None:
             return 0.0
         else:
@@ -75,7 +79,8 @@ class CallbackHandler:
 
 class ModelCheckpoint(Callback):
     def __init__(
-            self, learner, filepath: str, monitor: str='loss', save_best_only=True, mode: str='min', period: int=1
+            self, learner, filepath: str, monitor: str='loss',
+            save_best_only: bool=True, mode: str='min', period: int=1
     ):
         self._learner = learner
         self._filepath = filepath
@@ -105,7 +110,7 @@ class ModelCheckpoint(Callback):
 
 
 class EarlyStoppingCB(Callback):
-    def __init__(self, monitor='loss', min_delta: int=0, patience: int=0, mode: str='min', baseline=None):
+    def __init__(self, monitor='loss', min_delta: int=0, patience: int=0, mode: str='min', baseline: float=None):
         self._monitor = monitor
         self._min_delta = min_delta
         self._patience = patience

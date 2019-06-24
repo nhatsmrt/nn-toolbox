@@ -3,12 +3,14 @@ from torch.nn import *
 from torchvision.transforms import *
 from torch.optim import *
 from nntoolbox.optim import AdamW
+from adabound import AdaBound
 
 from nntoolbox.vision.components import *
 from nntoolbox.vision.learner import SupervisedImageLearner
 from nntoolbox.utils import load_model, get_device
-from nntoolbox.callbacks import Tensorboard, LossLogger, ModelCheckpoint, ReduceLROnPlateauCB, EarlyStoppingCB
+from nntoolbox.callbacks import *
 from nntoolbox.metrics import Accuracy, Loss
+from nntoolbox.vision.transforms import Cutout
 
 from functools import partial
 
@@ -19,12 +21,13 @@ data = torchvision.datasets.CIFAR10('data/', train=True, download=True, transfor
 train_size = int(0.8 * len(data))
 val_size = len(data) - train_size
 train_dataset, val_dataset = torch.utils.data.random_split(data, [train_size, val_size])
-# train_dataset.dataset.transform = Compose(
-#     [
-#         RandomHorizontalFlip(),
-#         ToTensor()
-#     ]
-# )
+train_dataset.dataset.transform = Compose(
+    [
+        RandomHorizontalFlip(),
+        Cutout(length=16, n_holes=1),
+        ToTensor()
+    ]
+)
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
 val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=True)
 
@@ -54,10 +57,14 @@ class SEResNeXtShakeShake(ResNeXtBlock):
             use_shake_shake=True
         )
 
+layer_1 = ManifoldMixupModule(ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU))
+block_1 = ManifoldMixupModule(SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU))
 
 model = Sequential(
-    ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU),
-    SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU),
+    # ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU),
+    # SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU),
+    layer_1,
+    block_1,
     ConvolutionalLayer(
         in_channels=16, out_channels=32,
         activation=nn.Identity,
@@ -78,9 +85,10 @@ model = Sequential(
         in_channels=128,
         out_features=10,
         pool_output_size=2,
-        hidden_layer_sizes=(512,)
+        hidden_layer_sizes=(512, 256)
     )
 )
+print(model)
 
 
 optimizer = AdamW(model.parameters(), weight_decay=0.0004)
@@ -90,10 +98,11 @@ learner = SupervisedImageLearner(
     model=model,
     criterion=CrossEntropyLoss(),
     optimizer=optimizer,
-    mixup=True
+    mixup=False
 )
 
 callbacks = [
+    ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LossLogger(),

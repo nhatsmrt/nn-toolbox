@@ -22,14 +22,14 @@ class UnlabelledImageDataset(Dataset):
                 if img_dim is not None:
                     image = image.resize(img_dim)
                 self._images.append(image)
-        self._transform = transform
+        self.transform = transform
         self._to_tensor = ToTensor()
 
     def __len__(self):
         return len(self._images)
 
     def __getitem__(self, i):
-        if self._transform is not None:
-            return self._to_tensor(self._transform(self._images[i]))
+        if self.transform is not None:
+            return self._to_tensor(self.transform(self._images[i]))
         else:
             return self._to_tensor(self._images[i])

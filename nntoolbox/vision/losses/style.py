@@ -1,6 +1,8 @@
 from torch import nn
 import math
 import torch
+from ..components import AdaIN
+
 
 class FeatureLoss(nn.Module):
     def __init__(self, model, layers, base_loss=nn.MSELoss):
@@ -41,6 +43,31 @@ class StyleLoss(FeatureLoss):
         return torch.bmm(
             features, features.permute(0, 2, 1)
         ) / h / w
+
+
+class INStatisticsMatchingStyleLoss(FeatureLoss):
+    '''
+    As suggested by https://arxiv.org/pdf/1703.06868.pdf
+    '''
+    def __init__(self, model, layers, base_loss=nn.MSELoss):
+        super(INStatisticsMatchingStyleLoss, self).__init__(model, layers, base_loss)
+
+    def compute_features(self, output, target):
+        output_features = []
+        target_features = []
+
+        for feature in self._model(output, self._layers):
+            mean, std = AdaIN.compute_mean_std(feature)
+            output_features.append(mean)
+            output_features.append(std)
+
+        for feature in self._model(target, self._layers):
+            mean, std = AdaIN.compute_mean_std(feature)
+            target_features.append(mean)
+            target_features.append(std)
+
+        return output_features, target_features
+
 
 
 class TotalVariationLoss(nn.Module):
