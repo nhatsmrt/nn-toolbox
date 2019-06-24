@@ -30,11 +30,12 @@ class Tensorboard(Callback):
                     global_step=logs["epoch"]
                 )
         if "draw" in logs and "tag" in logs:
-            print(logs["tag"])
-            self._writer.add_image(
-                tag=logs["tag"],
-                img_tensor=logs["draw"]
-            )
+            for i in range(len(logs["tag"])):
+                self._writer.add_image(
+                    tag=logs["tag"][i],
+                    img_tensor=logs["draw"][i],
+                    global_step=logs["epoch"]
+                )
 
 
 class LossLogger(Callback):
