@@ -86,7 +86,7 @@ class SequenceFeatureExtractor(nn.Module):
 class RNNClassifier(nn.Module):
     def __init__(self, input_dim, embedding_dim, hidden_size, output_dim, num_layers, bidirectional, padding_idx):
         super(RNNClassifier, self).__init__()
-        self._embedding = nn.Embedding(
+        self._embedding = AdditiveContextEmbedding(
             num_embeddings=input_dim,
             embedding_dim=embedding_dim,
             padding_idx=padding_idx
