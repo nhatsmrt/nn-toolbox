@@ -31,7 +31,8 @@ class FeatureExtractor(nn.Module):
             self._normalization = InputNormalization(mean=mean, std=std)
         else:
             self._normalization = None
-        model = model(pretrained=True)
+        if not isinstance(model, nn.Module):
+            model = model(pretrained=True)
 
         if device is not None:
             model.to(device)

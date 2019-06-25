@@ -1,14 +1,17 @@
 from torch.optim import Adam
 import math
 import torch
+from typing import Tuple
 
 
 class AdamW(Adam):
     '''
     Implement decoupled weight decay for Adam
     '''
-    def __init__(self, params, lr=1e-3, betas=(0.9, 0.999), eps=1e-8,
-                 weight_decay=0.0001, amsgrad=False):
+    def __init__(
+            self, params, lr: float=1e-3, betas: Tuple[float, float]=(0.9, 0.999),
+            eps: float=1e-8,weight_decay: float=0.0001, amsgrad: bool=False
+    ):
         if not 0.0 < weight_decay:
             raise ValueError("Invalid weight decay: {}".format(weight_decay))
         super(AdamW, self).__init__(params, lr, betas, eps, weight_decay, amsgrad)

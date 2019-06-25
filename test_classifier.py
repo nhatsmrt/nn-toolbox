@@ -11,6 +11,7 @@ from nntoolbox.utils import load_model, get_device
 from nntoolbox.callbacks import *
 from nntoolbox.metrics import Accuracy, Loss
 from nntoolbox.vision.transforms import Cutout
+from nntoolbox.vision.models import ImageClassifier
 
 from functools import partial
 
@@ -24,6 +25,7 @@ train_dataset, val_dataset = torch.utils.data.random_split(data, [train_size, va
 train_dataset.dataset.transform = Compose(
     [
         RandomHorizontalFlip(),
+        RandomResizedCrop(size=32),
         Cutout(length=16, n_holes=1),
         ToTensor()
     ]
@@ -121,7 +123,14 @@ final = learner.learn(
     final_metric='accuracy'
 )
 print(final)
-load_model(model=model, path="weights/model.pt")
+# load_model(model=model, path="weights/model.pt")
+# classifier = ImageClassifier(model, tta_transform=Compose([
+#     ToPILImage(),
+#     RandomHorizontalFlip(),
+#     RandomResizedCrop(size=32, scale=(0.8, 1.0)),
+#     ToTensor()
+# ]))
+# print(classifier.evaluate(test_loader))
 
 total = 0
 accs = 0

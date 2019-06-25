@@ -22,6 +22,7 @@ class ReduceLROnPlateauCB(Callback):
         self._monitor = monitor
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
-        assert self._monitor in logs["epoch_metrics"]
-        self._scheduler.step(logs["epoch_metrics"][self._monitor])
+        if "epoch_metrics" in logs:
+            assert self._monitor in logs["epoch_metrics"]
+            self._scheduler.step(logs["epoch_metrics"][self._monitor])
         return False

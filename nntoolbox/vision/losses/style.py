@@ -2,6 +2,7 @@ from torch import nn
 import math
 import torch
 from ..components import AdaIN
+from ...losses import RMSELoss
 
 
 class FeatureLoss(nn.Module):
@@ -49,7 +50,7 @@ class INStatisticsMatchingStyleLoss(FeatureLoss):
     '''
     As suggested by https://arxiv.org/pdf/1703.06868.pdf
     '''
-    def __init__(self, model, layers, base_loss=nn.MSELoss):
+    def __init__(self, model, layers, base_loss=RMSELoss):
         super(INStatisticsMatchingStyleLoss, self).__init__(model, layers, base_loss)
 
     def compute_features(self, output, target):

@@ -124,7 +124,7 @@ class ResizeConvolutionalLayer(nn.Module):
     '''
     Upsample the image (using an interpolation algorithm), then pass to a conv layer
     '''
-    def __init__(self, in_channels, out_channels, activation=nn.ReLU, mode='bilinear'):
+    def __init__(self, in_channels, out_channels, activation=nn.ReLU, normalization=nn.BatchNorm2d, mode='bilinear'):
         super(ResizeConvolutionalLayer, self).__init__()
         self._mode = mode
         self.add_module(
@@ -134,7 +134,8 @@ class ResizeConvolutionalLayer(nn.Module):
                 out_channels=out_channels,
                 kernel_size=3,
                 padding=1,
-                activation=activation
+                activation=activation,
+                normalization=normalization
             )
         )
 

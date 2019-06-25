@@ -7,7 +7,7 @@ from typing import Tuple, Any
 
 
 class Attention(nn.Module):
-    def __init__(self, key_dim, query_dim, value_dim, return_summary):
+    def __init__(self, key_dim: int, query_dim: int, value_dim: int, return_summary: bool):
         super(Attention, self).__init__()
         self._value_dim = value_dim
         self._query_dim = query_dim
@@ -57,7 +57,7 @@ class Attention(nn.Module):
 
 
 class AdditiveAttention(Attention):
-    def __init__(self, key_dim, query_dim, value_dim, hidden_dim, return_summary):
+    def __init__(self, key_dim: int, query_dim: int, value_dim: int, hidden_dim: int, return_summary: bool):
         super(AdditiveAttention, self).__init__(key_dim, query_dim, value_dim, return_summary)
         self._key_linear = nn.Linear(self._key_dim, hidden_dim, bias=False)
         self._query_linear = nn.Linear(self._query_dim, hidden_dim, bias=False)
