@@ -2,6 +2,7 @@ import torchvision
 from torch.nn import *
 from torchvision.transforms import *
 from torch.optim import *
+from torch.optim.lr_scheduler import CosineAnnealingLR
 from nntoolbox.optim import AdamW
 # from adabound import AdaBound
 
@@ -107,7 +108,8 @@ learner = SupervisedImageLearner(
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
-    ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
+    # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, 50)),
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
     EarlyStoppingCB(monitor='accuracy', mode='max', patience=15)
@@ -123,28 +125,28 @@ final = learner.learn(
     final_metric='accuracy'
 )
 print(final)
-# load_model(model=model, path="weights/model.pt")
-# classifier = ImageClassifier(model, tta_transform=Compose([
-#     ToPILImage(),
-#     RandomHorizontalFlip(),
-#     RandomResizedCrop(size=32, scale=(0.8, 1.0)),
-#     ToTensor()
-# ]))
-# print(classifier.evaluate(test_loader))
+load_model(model=model, path="weights/model.pt")
+classifier = ImageClassifier(model, tta_transform=Compose([
+    ToPILImage(),
+    RandomHorizontalFlip(),
+    RandomResizedCrop(size=32, scale=(0.8, 1.0)),
+    ToTensor()
+]))
+print(classifier.evaluate(test_loader))
 
-total = 0
-accs = 0
-for images, labels in test_loader:
-    model.eval()
-    outputs = torch.argmax(model(images.to(get_device())), dim=1).cpu().detach().numpy()
-    labels = labels.cpu().numpy()
-    acc = accuracy_score(
-        y_true=labels,
-        y_pred=outputs
-    )
-
-    total += len(images)
-    accs += acc * len(images)
-
-print(accs / total)
+# total = 0
+# accs = 0
+# for images, labels in test_loader:
+#     model.eval()
+#     outputs = torch.argmax(model(images.to(get_device())), dim=1).cpu().detach().numpy()
+#     labels = labels.cpu().numpy()
+#     acc = accuracy_score(
+#         y_true=labels,
+#         y_pred=outputs
+#     )
+#
+#     total += len(images)
+#     accs += acc * len(images)
+#
+# print(accs / total)
 
