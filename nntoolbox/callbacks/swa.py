@@ -4,11 +4,11 @@ from typing import Dict, Any
 
 
 class StochasticWeightAveraging(Callback):
-    def __init__(self, model, update_every=1, average_after=20):
+    def __init__(self, model, average_after, update_every=1):
         '''
         :param model: the model currently being trained
+        :param average_after: the first epoch to start averaging
         :param update_every: how many epochs between each average update
-        :param update_after: the first epoch to start averaging
         '''
         self._model = model
         self.model_swa = copy_model(model)
