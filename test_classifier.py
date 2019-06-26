@@ -105,12 +105,13 @@ learner = SupervisedImageLearner(
     mixup=True
 )
 
+swa = StochasticWeightAveraging(model, average_after=50, update_every=100)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LRSchedulerCB(CosineAnnealingLR(optimizer, 50)),
-    StochasticWeightAveraging(model, average_after=50, update_every=100),
+    swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
     EarlyStoppingCB(monitor='accuracy', mode='max', patience=20)
@@ -127,6 +128,15 @@ final = learner.learn(
 )
 print(final)
 load_model(model=model, path="weights/model.pt")
+classifier = ImageClassifier(model, tta_transform=Compose([
+    ToPILImage(),
+    RandomHorizontalFlip(),
+    RandomResizedCrop(size=32, scale=(0.8, 1.0)),
+    ToTensor()
+]))
+print(classifier.evaluate(test_loader))
+print("Test SWA:")
+model = swa.get_averaged_model()
 classifier = ImageClassifier(model, tta_transform=Compose([
     ToPILImage(),
     RandomHorizontalFlip(),
