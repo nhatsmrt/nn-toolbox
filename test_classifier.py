@@ -27,7 +27,7 @@ train_dataset.dataset.transform = Compose(
     [
         RandomHorizontalFlip(),
         RandomResizedCrop(size=32),
-        Cutout(length=16, n_holes=1),
+        # Cutout(length=16, n_holes=1),
         ToTensor()
     ]
 )
