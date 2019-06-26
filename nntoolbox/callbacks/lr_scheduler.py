@@ -8,8 +8,9 @@ class LRSchedulerCB(Callback):
     def __init__(self, scheduler):
         self._scheduler = scheduler
 
-    def on_batch_end(self, logs: Dict[str, Any]):
+    def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         self._scheduler.step()
+        return False
 
 
 class ReduceLROnPlateauCB(Callback):
