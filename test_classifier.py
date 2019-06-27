@@ -109,13 +109,13 @@ learner = SupervisedImageLearner(
 # lr_finder = LRFinder(model=model, train_data=train_loader, criterion=CrossEntropyLoss(), optimizer=partial(AdamW, weight_decay=0.0004), device=get_device())
 # lr_finder.find_lr(warmup=25)
 
-# swa = StochasticWeightAveraging(model, average_after=4800, update_every=3200)
+swa = StochasticWeightAveraging(model, average_after=4800, update_every=3200)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.00033, T_max=1600)),
-    # swa,
+    swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
     EarlyStoppingCB(monitor='accuracy', mode='max', patience=20)
@@ -140,7 +140,7 @@ classifier = ImageClassifier(model, tta_transform=Compose([
 ]))
 print(classifier.evaluate(test_loader))
 # print("Test SWA:")
-# model = swa.get_averaged_model()
+model = swa.get_averaged_model()
 classifier = ImageClassifier(model, tta_transform=Compose([
     ToPILImage(),
     RandomHorizontalFlip(),
