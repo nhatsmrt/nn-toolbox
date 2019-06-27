@@ -8,7 +8,7 @@ from nntoolbox.optim import AdamW
 
 from nntoolbox.vision.components import *
 from nntoolbox.vision.learner import SupervisedImageLearner
-from nntoolbox.utils import load_model, get_device
+from nntoolbox.utils import load_model, get_device, LRFinder
 from nntoolbox.callbacks import *
 from nntoolbox.metrics import Accuracy, Loss
 from nntoolbox.vision.transforms import Cutout
@@ -31,7 +31,8 @@ train_dataset, val_dataset = torch.utils.data.random_split(data, [train_size, va
 #         ToTensor()
 #     ]
 # )
-train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True)
+# print(len(train_loader))
 val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=True)
 
 test_dataset = torchvision.datasets.CIFAR10('data/', train=False, download=True, transform=ToTensor())
@@ -94,7 +95,7 @@ model = Sequential(
 # print(model)
 
 
-optimizer = AdamW(model.parameters(), weight_decay=0.0004)
+optimizer = AdamW(model.parameters(), weight_decay=0.0013, lr=0.014)
 # optimizer = Adam(model.parameters())
 learner = SupervisedImageLearner(
     train_data=train_loader,
@@ -105,13 +106,16 @@ learner = SupervisedImageLearner(
     mixup=True
 )
 
-swa = StochasticWeightAveraging(model, average_after=50, update_every=100)
+# lr_finder = LRFinder(model=model, train_data=train_loader, criterion=CrossEntropyLoss(), optimizer=partial(AdamW, weight_decay=0.0004), device=get_device())
+# lr_finder.find_lr(warmup=25)
+
+swa = StochasticWeightAveraging(model, average_after=4800, update_every=3200)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
-    ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    # LRSchedulerCB(CosineAnnealingLR(optimizer, 50)),
-    # swa,
+    # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.00033, T_max=1600)),
+    swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
     EarlyStoppingCB(monitor='accuracy', mode='max', patience=20)
@@ -144,20 +148,3 @@ classifier = ImageClassifier(model, tta_transform=Compose([
     ToTensor()
 ]))
 print(classifier.evaluate(test_loader))
-
-# total = 0
-# accs = 0
-# for images, labels in test_loader:
-#     model.eval()
-#     outputs = torch.argmax(model(images.to(get_device())), dim=1).cpu().detach().numpy()
-#     labels = labels.cpu().numpy()
-#     acc = accuracy_score(
-#         y_true=labels,
-#         y_pred=outputs
-#     )
-#
-#     total += len(images)
-#     accs += acc * len(images)
-#
-# print(accs / total)
-

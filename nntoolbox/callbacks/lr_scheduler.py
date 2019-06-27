@@ -5,18 +5,27 @@ from typing import Dict, Any
 
 
 class LRSchedulerCB(Callback):
-    def __init__(self, scheduler):
+    def __init__(self, scheduler, timescale: str="iter"):
+        assert timescale == "epoch" or timescale == "iter"
         self._scheduler = scheduler
+        self._timescale = timescale
+
+    def on_batch_end(self, logs: Dict[str, Any]):
+        if self._timescale == "iter":
+            self._scheduler.step()
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
-        self._scheduler.step()
+        if self._timescale == "epoch":
+            self._scheduler.step()
         return False
 
 
 class ReduceLROnPlateauCB(Callback):
     def __init__(
-            self, optimizer: Optimizer, monitor: str='accuracy', mode: str='max', factor=0.1, patience=10,
-            verbose=True, threshold=0.0001, threshold_mode='rel', cooldown=0, min_lr=0, eps=1e-08
+            self, optimizer: Optimizer, monitor: str='accuracy',
+            mode: str='max', factor: float=0.1, patience: int=10,
+            verbose: bool=True, threshold: float=0.0001, threshold_mode: str='rel',
+            cooldown: int=0, min_lr: float=0, eps: float=1e-08
     ):
         self._scheduler = ReduceLROnPlateau(optimizer, mode, factor, patience, verbose,
             threshold, threshold_mode, cooldown, min_lr, eps)
