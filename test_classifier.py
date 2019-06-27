@@ -23,14 +23,14 @@ data = torchvision.datasets.CIFAR10('data/', train=True, download=True, transfor
 train_size = int(0.8 * len(data))
 val_size = len(data) - train_size
 train_dataset, val_dataset = torch.utils.data.random_split(data, [train_size, val_size])
-train_dataset.dataset.transform = Compose(
-    [
-        RandomHorizontalFlip(),
-        RandomResizedCrop(size=32),
-        # Cutout(length=16, n_holes=1),
-        ToTensor()
-    ]
-)
+# train_dataset.dataset.transform = Compose(
+#     [
+#         RandomHorizontalFlip(),
+#         RandomResizedCrop(size=32),
+#         Cutout(length=16, n_holes=1),
+#         ToTensor()
+#     ]
+# )
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=16, shuffle=True)
 val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=True)
 
@@ -70,7 +70,7 @@ model = Sequential(
     # block_1,
     ConvolutionalLayer(
         in_channels=16, out_channels=32,
-        activation=nn.Identity,
+        activation=nn.ReLU,
         kernel_size=2, stride=2
     ),
     SEResNeXtShakeShake(in_channels=32),
