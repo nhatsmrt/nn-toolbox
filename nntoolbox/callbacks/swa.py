@@ -29,6 +29,7 @@ class StochasticWeightAveraging(Callback):
                 for name1, param1 in w1:
                     if name1 in dict_params2:
                         dict_params2[name1].data.copy_((param1.data + n_model * dict_params2[name1].data) / (n_model + 1))
+                print("Update averaged model")
 
                 self.model_swa.load_state_dict(dict_params2)
         return False
@@ -46,6 +47,7 @@ class StochasticWeightAveraging(Callback):
                         dict_params2[name1].data.copy_(
                             (param1.data + n_model * dict_params2[name1].data) / (n_model + 1)
                         )
+                print("Update averaged model")
 
                 self.model_swa.load_state_dict(dict_params2, strict=False)
 
