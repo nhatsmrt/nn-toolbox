@@ -5,6 +5,9 @@ import numpy as np
 import collections
 
 
+__all__ = ['ElasticDeformation', 'Cutout']
+
+
 class ElasticDeformation(object):
     """
     Apply elastic deformation on a PIL image (H x W x C)

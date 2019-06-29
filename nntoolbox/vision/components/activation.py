@@ -7,7 +7,7 @@ class Swish(nn.Module):
     Swish activation function:
     f(x) = x * sigmoid(\beta x)
     '''
-    def __init__(self, beta_init=1.0, trainable=True):
+    def __init__(self, beta_init: float=1.0, trainable: bool=True):
         super(Swish, self).__init__()
         if trainable:
             self._beta = nn.Parameter(torch.ones(1) * beta_init)

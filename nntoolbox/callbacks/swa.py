@@ -41,7 +41,6 @@ class StochasticWeightAveraging(Callback):
                 w2 = self.model_swa.named_parameters()
 
                 dict_params2 = dict(w2)
-                # print(dict_params2)
                 for name1, param1 in w1:
                     if name1 in dict_params2:
                         dict_params2[name1].data.copy_(
