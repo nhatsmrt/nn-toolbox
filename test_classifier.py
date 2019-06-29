@@ -23,20 +23,20 @@ data = torchvision.datasets.CIFAR10('data/', train=True, download=True, transfor
 train_size = int(0.8 * len(data))
 val_size = len(data) - train_size
 train_dataset, val_dataset = torch.utils.data.random_split(data, [train_size, val_size])
-# train_dataset.dataset.transform = Compose(
-#     [
-#         RandomHorizontalFlip(),
-#         RandomResizedCrop(size=32),
-#         Cutout(length=16, n_holes=1),
-#         ToTensor()
-#     ]
-# )
+train_dataset.dataset.transform = Compose(
+    [
+        RandomHorizontalFlip(),
+        RandomResizedCrop(size=32, scale=(0.95, 1.0)),
+        # Cutout(length=16, n_holes=1),
+        ToTensor()
+    ]
+)
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True)
 # print(len(train_loader))
-val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=16, shuffle=True)
+val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=512, shuffle=True)
 
 test_dataset = torchvision.datasets.CIFAR10('data/', train=False, download=True, transform=ToTensor())
-test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=16, shuffle=True)
+test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=512, shuffle=True)
 # kernel = partial(PolynomialKernel, dp=3, cp=2.0)
 
 
@@ -95,7 +95,7 @@ model = Sequential(
 # print(model)
 
 
-optimizer = AdamW(model.parameters(), weight_decay=0.0013, lr=0.014)
+optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.06, momentum=0.9)
 # optimizer = Adam(model.parameters())
 learner = SupervisedImageLearner(
     train_data=train_loader,
@@ -106,19 +106,25 @@ learner = SupervisedImageLearner(
     mixup=True
 )
 
-# lr_finder = LRFinder(model=model, train_data=train_loader, criterion=CrossEntropyLoss(), optimizer=partial(AdamW, weight_decay=0.0004), device=get_device())
-# lr_finder.find_lr(warmup=25)
+# lr_finder = LRFinder(
+#     model=model,
+#     train_data=train_loader,
+#     criterion=CrossEntropyLoss(),
+#     optimizer=partial(SGD, lr=0.074, weight_decay=0.0001, momentum=0.9),
+#     device=get_device()
+# )
+# lr_finder.find_lr(warmup=100)
 
 swa = StochasticWeightAveraging(model, average_after=4800, update_every=3200)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.00033, T_max=1600)),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.02, T_max=1600)),
     swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
-    EarlyStoppingCB(monitor='accuracy', mode='max', patience=20)
+    # EarlyStoppingCB(monitor='accuracy', mode='max', patience=20)
 ]
 metrics = {
     "accuracy": Accuracy(),
@@ -135,7 +141,7 @@ load_model(model=model, path="weights/model.pt")
 classifier = ImageClassifier(model, tta_transform=Compose([
     ToPILImage(),
     RandomHorizontalFlip(),
-    RandomResizedCrop(size=32, scale=(0.8, 1.0)),
+    RandomResizedCrop(size=32, scale=(0.95, 1.0)),
     ToTensor()
 ]))
 print(classifier.evaluate(test_loader))
@@ -144,7 +150,7 @@ model = swa.get_averaged_model()
 classifier = ImageClassifier(model, tta_transform=Compose([
     ToPILImage(),
     RandomHorizontalFlip(),
-    RandomResizedCrop(size=32, scale=(0.8, 1.0)),
+    RandomResizedCrop(size=32, scale=(0.95, 1.0)),
     ToTensor()
 ]))
 print(classifier.evaluate(test_loader))
