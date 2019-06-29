@@ -20,7 +20,7 @@ class StochasticWeightAveraging(Callback):
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         if self._timescale == "epoch":
-            if logs["epoch"] >= self._average_after and logs["epoch"] % self._update_every == 0:
+            if logs["epoch"] >= self._average_after and (logs["epoch"] - self._average_after) % self._update_every == 0:
                 n_model = (logs["epoch"] - self._average_after) // self._update_every
                 w1 = self._model.named_parameters()
                 w2 = self.model_swa.named_parameters()
@@ -35,7 +35,7 @@ class StochasticWeightAveraging(Callback):
 
     def on_batch_end(self, logs: Dict[str, Any]):
         if self._timescale == "iter":
-            if logs["iter_cnt"] >= self._average_after and logs["iter_cnt"] % self._update_every == 0:
+            if logs["iter_cnt"] >= self._average_after and (logs["iter_cnt"] - self._average_after) % self._update_every == 0:
                 n_model = (logs["iter_cnt"] - self._average_after) // self._update_every
                 w1 = self._model.named_parameters()
                 w2 = self.model_swa.named_parameters()
