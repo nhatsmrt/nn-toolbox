@@ -1,7 +1,21 @@
 import torch
-from torch import nn
+from torch import nn, Tensor
 from torch.nn import functional as F
 from ...components import HighwayLayer
+from typing import Callable
+
+
+class LambdaLayer(nn.Module):
+    '''
+    Implement a quick layer wrapper for a function
+    '''
+    def __init__(self, fn: Callable[[Tensor], Tensor]):
+        super(LambdaLayer, self).__init__()
+        self.fn = fn
+
+    def forward(self, input):
+        return self.fn(input)
+
 
 class ConvolutionalLayer(nn.Sequential):
     '''

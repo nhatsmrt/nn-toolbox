@@ -9,7 +9,7 @@ __all__ = ['FastGeometricEnsembling']
 
 # UNTESTED
 class FastGeometricEnsembling(Callback):
-    def __init__(self, model: Module, average_after: int, save_every: int=1, timescale: str="iter"):
+    def __init__(self, model: Module, save_after: int, save_every: int=1, timescale: str="iter"):
         '''
         :param model: the model currently being trained
         :param average_after: the first epoch to start averaging
@@ -19,18 +19,18 @@ class FastGeometricEnsembling(Callback):
         self._model = model
         self.models = []
         self._save_every = save_every
-        self._average_after = average_after
+        self._save_after = save_after
         self._timescale = timescale
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         if self._timescale == "epoch":
-            if logs["epoch"] >= self._average_after and logs["epoch"] % self._save_every == 0:
+            if logs["epoch"] >= self._save_after and (logs["epoch"] - self._save_after) % self._save_every == 0:
                 self.models.append(copy_model(self._model))
         return False
 
     def on_batch_end(self, logs: Dict[str, Any]):
         if self._timescale == "iter":
-            if logs["iter_cnt"] >= self._average_after and logs["iter_cnt"] % self._save_every == 0:
+            if logs["iter_cnt"] >= self._save_after and (logs["iter_cnt"] - self._save_after) % self._save_every == 0:
                 self.models.append(copy_model(self._model))
 
     def get_models(self) -> List[Module]:

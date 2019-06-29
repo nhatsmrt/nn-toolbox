@@ -2,7 +2,6 @@ import torch
 import numpy as np
 import copy
 from torch.nn import Module
-from torch import Tensor
 
 
 def compute_num_batch(data_size: int, batch_size: int):
@@ -48,42 +47,6 @@ def get_device():
     :return: a torch device object (gpu if exists)
     '''
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-def compute_gradient(output: Tensor, model: Module):
-    ret = []
-    output.backward(retain_graph=True)
-    for parameter in model.parameters():
-        ret.append(parameter.grad)
-        parameter.grad = None # Reset gradient accumulation
-    return ret
-
-
-def update_gradient(gradients, model: Module, fn=lambda x:x):
-    for gradient, parameter in zip(gradients, model.parameters()):
-        parameter.grad = fn(gradient) # Reset gradient accumulation
-
-
-def accumulate_gradient(gradients, model, fn=lambda x:x):
-    for gradient, parameter in zip(gradients, model.parameters()):
-        parameter.grad += fn(gradient) # Reset gradient accumulation
-
-
-def compute_gradient_norm(output: Tensor, model: Module):
-    '''
-    Compute the norm of the gradient of an output (e.g a loss) with respect to a model parameters
-    :param output:
-    :param model:
-    :return:
-    '''
-    ret = 0
-    output.backward(retain_graph=True)
-    for parameter in model.parameters():
-        grad = parameter.grad
-        ret += grad.pow(2).sum().cpu().detach().numpy()
-        parameter.grad = None # Reset gradient accumulation
-
-    return ret
 
 
 def get_trainable_parameters(model: Module):

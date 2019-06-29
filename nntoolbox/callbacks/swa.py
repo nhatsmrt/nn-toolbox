@@ -4,6 +4,7 @@ from typing import Dict, Any
 from torch.nn import Module
 
 
+# NOT FINISHED!
 class StochasticWeightAveraging(Callback):
     def __init__(self, model: Module, average_after: int, update_every: int=1, timescale: str="iter"):
         '''
@@ -29,9 +30,9 @@ class StochasticWeightAveraging(Callback):
                 for name1, param1 in w1:
                     if name1 in dict_params2:
                         dict_params2[name1].data.copy_((param1.data + n_model * dict_params2[name1].data) / (n_model + 1))
-                print("Update averaged model")
+                print("Update averaged model after epoch " + str(logs["epoch"]))
 
-                self.model_swa.load_state_dict(dict_params2)
+                self.model_swa.load_state_dict(dict_params2, strict=False)
         return False
 
     def on_batch_end(self, logs: Dict[str, Any]):
@@ -47,7 +48,7 @@ class StochasticWeightAveraging(Callback):
                         dict_params2[name1].data.copy_(
                             (param1.data + n_model * dict_params2[name1].data) / (n_model + 1)
                         )
-                print("Update averaged model")
+                print("Update averaged model after iteration " + str(logs["iter_cnt"]))
 
                 self.model_swa.load_state_dict(dict_params2, strict=False)
 
