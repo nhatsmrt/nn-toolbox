@@ -37,6 +37,8 @@ class FastGeometricEnsembling(Callback):
         if self._timescale == "iter":
             if logs["iter_cnt"] >= self._save_after and (logs["iter_cnt"] - self._save_after) % self._save_every == 0:
                 self.models.append(copy_model(self._model))
+                if len(self.models) > self._max_n_model:
+                    self.models.pop()
                 print("Save model after iteration " + str(logs["iter_cnt"]))
 
     def get_models(self) -> List[Module]:
