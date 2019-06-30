@@ -2,6 +2,7 @@ from .callbacks import Callback
 from ..utils import copy_model
 from typing import Dict, Any, List
 from torch.nn import Module
+from collections import deque
 
 
 __all__ = ['FastGeometricEnsembling']
@@ -9,7 +10,7 @@ __all__ = ['FastGeometricEnsembling']
 
 # UNTESTED
 class FastGeometricEnsembling(Callback):
-    def __init__(self, model: Module, save_after: int, save_every: int=1, timescale: str="iter"):
+    def __init__(self, model: Module, max_n_model: int, save_after: int, save_every: int=1, timescale: str="iter"):
         '''
         :param model: the model currently being trained
         :param average_after: the first epoch to start averaging
@@ -17,15 +18,18 @@ class FastGeometricEnsembling(Callback):
         '''
         assert timescale == "epoch" or timescale == "iter"
         self._model = model
-        self.models = []
+        self.models = deque()
         self._save_every = save_every
         self._save_after = save_after
         self._timescale = timescale
+        self._max_n_model = max_n_model
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         if self._timescale == "epoch":
             if logs["epoch"] >= self._save_after and (logs["epoch"] - self._save_after) % self._save_every == 0:
                 self.models.append(copy_model(self._model))
+                if len(self.models) > self._max_n_model:
+                    self.models.pop()
                 print("Save model after epoch " + str(logs["epoch"]))
         return False
 

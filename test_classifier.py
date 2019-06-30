@@ -116,7 +116,7 @@ learner = SupervisedImageLearner(
 # lr_finder.find_lr(warmup=100)
 
 # swa = StochasticWeightAveraging(model, average_after=4800, update_every=3200)
-fge = FastGeometricEnsembling(model, save_every=3200, save_after=8000)
+fge = FastGeometricEnsembling(model, max_n_model=5, save_every=3200, save_after=8000)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
@@ -147,7 +147,7 @@ classifier = ImageClassifier(model, tta_transform=Compose([
     ToTensor()
 ]))
 print(classifier.evaluate(test_loader))
-print("Test FGE :")
+print("Test FGE:")
 models = fge.get_models()
 models = [
     ImageClassifier(model, tta_transform=Compose([
