@@ -10,8 +10,12 @@ __all__ = ['SmoothedCrossEntropy']
 
 class SmoothedCrossEntropy(Module):
     '''
-    A smooth cross entropy loss. Based on:
+    Drop-in replacement for cross entropy loss with label smoothing:
+    loss(y_hat, y) = -sum_c p_c * log y_hat_c
+    where p_c = 1 - epsilon if c = y and epsilon / (C - 1) otherwise
+    Based on:
     http://openaccess.thecvf.com/content_CVPR_2019/papers/He_Bag_of_Tricks_for_Image_Classification_with_Convolutional_Neural_Networks_CVPR_2019_paper.pdf
+    Note that deprecated arguments of CrossEntropyLoss are not included
     '''
     def __init__(self, weight: Optional[Tensor]=None, reduction: str='mean', eps: float=0.1):
         assert reduction == 'mean' or reduction =='sum' or reduction == 'none'
