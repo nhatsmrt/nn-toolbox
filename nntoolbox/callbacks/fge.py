@@ -46,4 +46,4 @@ class FastGeometricEnsembling(Callback):
         Return the post-training average model
         :return: the averaged model
         '''
-        return self.models
+        return list(self.models)
