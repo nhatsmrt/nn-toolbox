@@ -12,7 +12,7 @@ from nntoolbox.utils import load_model, get_device, LRFinder
 from nntoolbox.callbacks import *
 from nntoolbox.metrics import Accuracy, Loss
 from nntoolbox.vision.transforms import Cutout
-from nntoolbox.vision.models import ImageClassifier
+from nntoolbox.vision.models import ImageClassifier, EnsembleImageClassifier
 from nntoolbox.losses import SmoothedCrossEntropy
 
 from functools import partial
@@ -33,7 +33,6 @@ train_dataset.dataset.transform = Compose(
     ]
 )
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True)
-# print(len(train_loader))
 val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=512, shuffle=True)
 
 test_dataset = torchvision.datasets.CIFAR10('data/', train=False, download=True, transform=ToTensor())
@@ -116,13 +115,15 @@ learner = SupervisedImageLearner(
 # )
 # lr_finder.find_lr(warmup=100)
 
-swa = StochasticWeightAveraging(model, average_after=4800, update_every=3200)
+# swa = StochasticWeightAveraging(model, average_after=4800, update_every=3200)
+fge = FastGeometricEnsembling(model, save_every=3200, save_after=8000)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.024, T_max=1600)),
-    swa,
+    # swa,
+    fge,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
     # EarlyStoppingCB(monitor='accuracy', mode='max', patience=20)
@@ -132,7 +133,7 @@ metrics = {
     "loss": Loss()
 }
 final = learner.learn(
-    n_epoch=500,
+    n_epoch=100,
     callbacks=callbacks,
     metrics=metrics,
     final_metric='accuracy'
@@ -146,12 +147,24 @@ classifier = ImageClassifier(model, tta_transform=Compose([
     ToTensor()
 ]))
 print(classifier.evaluate(test_loader))
-print("Test SWA:")
-model = swa.get_averaged_model()
-classifier = ImageClassifier(model, tta_transform=Compose([
-    ToPILImage(),
-    RandomHorizontalFlip(),
-    RandomResizedCrop(size=32, scale=(0.95, 1.0)),
-    ToTensor()
-]))
-print(classifier.evaluate(test_loader))
+print("Test FGE :")
+models = fge.get_models()
+models = [
+    ImageClassifier(model, tta_transform=Compose([
+        ToPILImage(),
+        RandomHorizontalFlip(),
+        RandomResizedCrop(size=32, scale=(0.95, 1.0)),
+        ToTensor()
+    ])) for model in models
+]
+ensemble_classifier = EnsembleImageClassifier(models)
+print(ensemble_classifier.evaluate(test_loader))
+
+# model = swa.get_averaged_model()
+# classifier = ImageClassifier(model, tta_transform=Compose([
+#     ToPILImage(),
+#     RandomHorizontalFlip(),
+#     RandomResizedCrop(size=32, scale=(0.95, 1.0)),
+#     ToTensor()
+# ]))
+# print(classifier.evaluate(test_loader))

@@ -26,12 +26,14 @@ class FastGeometricEnsembling(Callback):
         if self._timescale == "epoch":
             if logs["epoch"] >= self._save_after and (logs["epoch"] - self._save_after) % self._save_every == 0:
                 self.models.append(copy_model(self._model))
+                print("Save model after epoch " + str(logs["epoch"]))
         return False
 
     def on_batch_end(self, logs: Dict[str, Any]):
         if self._timescale == "iter":
             if logs["iter_cnt"] >= self._save_after and (logs["iter_cnt"] - self._save_after) % self._save_every == 0:
                 self.models.append(copy_model(self._model))
+                print("Save model after iteration " + str(logs["iter_cnt"]))
 
     def get_models(self) -> List[Module]:
         '''

@@ -1,12 +1,18 @@
 from .callbacks import Callback
-from ..utils import copy_model
+from ..utils import copy_model, get_device
 from typing import Dict, Any
 from torch.nn import Module
 
 
+__all__ = ['StochasticWeightAveraging']
+
+
 # NOT FINISHED!
 class StochasticWeightAveraging(Callback):
-    def __init__(self, model: Module, average_after: int, update_every: int=1, timescale: str="iter"):
+    def __init__(
+            self, model: Module, average_after: int,
+            update_every: int=1, timescale: str="iter", device=get_device()
+    ):
         '''
         :param model: the model currently being trained
         :param average_after: the first epoch to start averaging
@@ -14,7 +20,7 @@ class StochasticWeightAveraging(Callback):
         '''
         assert timescale == "epoch" or timescale == "iter"
         self._model = model
-        self.model_swa = copy_model(model)
+        self.model_swa = copy_model(model).to(device)
         self._update_every = update_every
         self._average_after = average_after
         self._timescale = timescale
