@@ -1,9 +1,10 @@
 from torch.utils.data import Dataset
 from torchvision.transforms import ToTensor
+from torch import Tensor
 from .utils import is_image
 from PIL import Image
 import os
-from typing import Tuple, Any
+from typing import Tuple, Any, Optional
 
 
 class UnlabelledImageDataset(Dataset):
@@ -28,7 +29,7 @@ class UnlabelledImageDataset(Dataset):
     def __len__(self):
         return len(self._images)
 
-    def __getitem__(self, i):
+    def __getitem__(self, i) -> Tensor:
         if self.transform is not None:
             return self._to_tensor(self.transform(self._images[i]))
         else:
@@ -39,11 +40,13 @@ class UnsupervisedFromSupervisedDataset(Dataset):
     '''
     Convert a supervisded dataset to an unsupervised dataset
     '''
-    def __init__(self, dataset: Dataset):
+    def __init__(self, dataset: Dataset, transform=None):
         self._data = dataset
+        self.transform = transform
 
     def __getitem__(self, index):
-        return self._data.__getitem__(index)[0]
+        data = self._data.__getitem__(index)[0]
+        return self.transform(data) if self.transform is not None else data
 
     def __len__(self):
         return len(self._data)

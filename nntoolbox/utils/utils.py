@@ -2,6 +2,8 @@ import torch
 import numpy as np
 import copy
 from torch.nn import Module
+from torch import Tensor
+from typing import Optional
 
 
 def compute_num_batch(data_size: int, batch_size: int):
@@ -51,3 +53,19 @@ def get_device():
 
 def get_trainable_parameters(model: Module):
     return filter(lambda p: p.requires_grad, model.parameters())
+
+
+def to_onehot(label: Tensor, n_class: Optional[int]=None) -> Tensor:
+    '''
+    Return one hot encoding of label
+    :param label:
+    :param n_class:
+    :return:
+    '''
+    if n_class is None:
+        n_class = torch.max(label) + 1
+    label_oh = torch.zeros([label.shape[0], n_class] + list(label.shape)[1:])
+    label = label.unsqueeze(1)
+    label_oh.scatter_(dim=1, index=label, value=1)
+    return label_oh
+

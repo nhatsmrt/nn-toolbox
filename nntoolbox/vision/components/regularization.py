@@ -82,12 +82,13 @@ class DoubleBackpropagation(nn.Module):
     https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf
     http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf
     '''
-    def __init__(self, model: nn.Module):
+    def __init__(self, model: nn.Module, criterion: nn.Module):
         super(DoubleBackpropagation, self).__init__()
-        self.model = model
+        self.main = model
+        self.criterion = criterion
 
-    def forward(self, input: Tensor) -> Tensor:
+    def forward(self, input: Tensor, label: Tensor) -> Tensor:
         input.requires_grad = True
-        jacobian = compute_jacobian(input, self.model, True)
+        jacobian = compute_jacobian(input, lambda input: self.criterion(self.model(input), label), True)
         input.requires_grad = False
         return 0.5 * torch.sum(jacobian * jacobian)
