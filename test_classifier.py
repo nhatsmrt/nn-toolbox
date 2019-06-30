@@ -13,6 +13,7 @@ from nntoolbox.callbacks import *
 from nntoolbox.metrics import Accuracy, Loss
 from nntoolbox.vision.transforms import Cutout
 from nntoolbox.vision.models import ImageClassifier
+from nntoolbox.losses import SmoothedCrossEntropy
 
 from functools import partial
 
@@ -95,13 +96,13 @@ model = Sequential(
 # print(model)
 
 
-optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.06, momentum=0.9)
+optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.094, momentum=0.9)
 # optimizer = Adam(model.parameters())
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
     model=model,
-    criterion=CrossEntropyLoss(),
+    criterion=SmoothedCrossEntropy(),
     optimizer=optimizer,
     mixup=True
 )
@@ -109,7 +110,7 @@ learner = SupervisedImageLearner(
 # lr_finder = LRFinder(
 #     model=model,
 #     train_data=train_loader,
-#     criterion=CrossEntropyLoss(),
+#     criterion=SmoothedCrossEntropy(),
 #     optimizer=partial(SGD, lr=0.074, weight_decay=0.0001, momentum=0.9),
 #     device=get_device()
 # )
@@ -120,7 +121,7 @@ callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.02, T_max=1600)),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.024, T_max=1600)),
     swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
@@ -145,7 +146,7 @@ classifier = ImageClassifier(model, tta_transform=Compose([
     ToTensor()
 ]))
 print(classifier.evaluate(test_loader))
-# print("Test SWA:")
+print("Test SWA:")
 model = swa.get_averaged_model()
 classifier = ImageClassifier(model, tta_transform=Compose([
     ToPILImage(),
