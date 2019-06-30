@@ -64,7 +64,7 @@ def to_onehot(label: Tensor, n_class: Optional[int]=None) -> Tensor:
     '''
     if n_class is None:
         n_class = torch.max(label) + 1
-    label_oh = torch.zeros([label.shape[0], n_class] + list(label.shape)[1:])
+    label_oh = torch.zeros([label.shape[0], n_class] + list(label.shape)[1:]).long().to(label.device)
     label = label.unsqueeze(1)
     label_oh.scatter_(dim=1, index=label, value=1)
     return label_oh
