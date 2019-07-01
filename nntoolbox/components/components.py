@@ -1,6 +1,6 @@
 import torch
-from torch import nn
-from typing import Sequence
+from torch import nn, Tensor
+from typing import Sequence, Callable
 
 
 class ResidualLinearBlock(nn.Module):
@@ -81,8 +81,9 @@ class HighwayLayer(nn.Module):
 
 class MLP(nn.Sequential):
     def __init__(
-            self, in_features: int, out_features:int, hidden_layer_sizes:Sequence=(512,),
-            activation:nn.Module=nn.ReLU, bn_final:bool=False, drop_ps=(0.5, 0.5), use_batch_norm=True
+            self, in_features: int, out_features: int, hidden_layer_sizes: Sequence[int]=(512,),
+            activation: Callable[..., Tensor]=nn.ReLU, bn_final: bool=False,
+            drop_ps=(0.5, 0.5), use_batch_norm: bool=True
     ):
         layers = []
         if isinstance(drop_ps, float):
