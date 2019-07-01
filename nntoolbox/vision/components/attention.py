@@ -33,6 +33,8 @@ class StandAloneSelfAttention(nn.Conv2d):
         self.softmax = nn.Softmax(dim=2)
         self.rel_h = nn.Embedding(num_embeddings=self.kernel_size[0], embedding_dim=out_channels // 2)
         self.rel_w = nn.Embedding(num_embeddings=self.kernel_size[1], embedding_dim=out_channels // 2)
+        self.h_range = torch.arange(0, self.kernel_size[0])[:, None]
+        self.w_range = torch.arange(0, self.kernel_size[1])[None, :]
 
     def forward(self, input: Tensor) -> Tensor:
         batch_size, _, inp_h, inp_w = input.shape
@@ -78,11 +80,14 @@ class StandAloneSelfAttention(nn.Conv2d):
         )
 
     def get_rel_embedding(self) -> Tensor:
-        h_range = torch.arange(0, self.kernel_size[0])[:, None]
-        w_range = torch.arange(0, self.kernel_size[1])[None, :]
-        h_embedding = self.rel_h(h_range).repeat(1, self.kernel_size[1], 1)
-        w_embedding = self.rel_w(w_range).repeat(self.kernel_size[0], 1, 1)
+        h_embedding = self.rel_h(self.h_range).repeat(1, self.kernel_size[1], 1)
+        w_embedding = self.rel_w(self.w_range).repeat(self.kernel_size[0], 1, 1)
         return torch.cat((h_embedding, w_embedding), dim=-1).view(-1, self.out_channels).transpose(0, 1)
+
+    def to(self, *args, **kwargs):
+        self.h_range.to(*args, **kwargs)
+        self.w_range.to(*args, **kwargs)
+        super().to(*args, **kwargs)
 
 
 # UNTESTED
@@ -111,12 +116,13 @@ class StandAloneMultiheadAttention(nn.Module):
         heads = [head(input) for head in self.heads]
         return torch.cat(heads, dim=1)
 
-input = torch.rand(2, 3, 16, 16)
-layer = StandAloneMultiheadAttention(4, 3, 8, 7, stride=2)
-layer_2 = nn.Conv2d(3, 8, 7, stride=2)
-layer(input)
-print(layer(input).shape)
-print(layer_2(input).shape)
+
+# input = torch.rand(2, 3, 16, 16)
+# layer = StandAloneMultiheadAttention(4, 3, 8, 7, stride=2)
+# layer_2 = nn.Conv2d(3, 8, 7, stride=2)
+# layer(input)
+# print(layer(input).shape)
+# print(layer_2(input).shape)
 
 
 
