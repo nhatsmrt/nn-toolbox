@@ -16,7 +16,7 @@ def compute_num_batch(data_size: int, batch_size: int):
     return int(np.ceil(data_size / float(batch_size)))
 
 
-def copy_model(model: Module):
+def copy_model(model: Module) -> Module:
     '''
     Return an exact copy of the model (both architecture and initial weights, without tying the weights)
     :param model: model to be copied

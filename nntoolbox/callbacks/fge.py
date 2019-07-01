@@ -12,6 +12,8 @@ __all__ = ['FastGeometricEnsembling']
 class FastGeometricEnsembling(Callback):
     def __init__(self, model: Module, max_n_model: int, save_after: int, save_every: int=1, timescale: str="iter"):
         '''
+        https://arxiv.org/pdf/1802.10026.pdf
+        https://arxiv.org/pdf/1704.00109.pdf
         :param model: the model currently being trained
         :param average_after: the first epoch to start averaging
         :param update_every: how many epochs/iters between each average update

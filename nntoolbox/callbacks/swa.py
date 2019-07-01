@@ -14,6 +14,7 @@ class StochasticWeightAveraging(Callback):
             update_every: int=1, timescale: str="iter", device=get_device()
     ):
         '''
+        https://arxiv.org/pdf/1803.05407.pdf
         :param model: the model currently being trained
         :param average_after: the first epoch to start averaging
         :param update_every: how many epochs/iters between each average update
@@ -29,34 +30,16 @@ class StochasticWeightAveraging(Callback):
         if self._timescale == "epoch":
             if logs["epoch"] >= self._average_after and (logs["epoch"] - self._average_after) % self._update_every == 0:
                 n_model = (logs["epoch"] - self._average_after) // self._update_every
-                w1 = self._model.named_parameters()
-                w2 = self.model_swa.named_parameters()
-
-                dict_params2 = dict(w2)
-                for name1, param1 in w1:
-                    if name1 in dict_params2:
-                        dict_params2[name1].data.copy_((param1.data + n_model * dict_params2[name1].data) / (n_model + 1))
-                print("Update averaged model after epoch " + str(logs["epoch"]))
-
-                self.model_swa.load_state_dict(dict_params2, strict=False)
+                for model_p, swa_p in zip(self._model.parameters(), self.model_swa.parameters()):
+                    swa_p.data = (swa_p.data * n_model + model_p.data) / (n_model + 1)
         return False
 
     def on_batch_end(self, logs: Dict[str, Any]):
         if self._timescale == "iter":
             if logs["iter_cnt"] >= self._average_after and (logs["iter_cnt"] - self._average_after) % self._update_every == 0:
                 n_model = (logs["iter_cnt"] - self._average_after) // self._update_every
-                w1 = self._model.named_parameters()
-                w2 = self.model_swa.named_parameters()
-
-                dict_params2 = dict(w2)
-                for name1, param1 in w1:
-                    if name1 in dict_params2:
-                        dict_params2[name1].data.copy_(
-                            (param1.data + n_model * dict_params2[name1].data) / (n_model + 1)
-                        )
-                print("Update averaged model after iteration " + str(logs["iter_cnt"]))
-
-                self.model_swa.load_state_dict(dict_params2, strict=False)
+                for model_p, swa_p in zip(self._model.parameters(), self.model_swa.parameters()):
+                    swa_p.data = (swa_p.data * n_model + model_p.data) / (n_model + 1)
 
     def get_averaged_model(self) -> Module:
         '''
