@@ -2,6 +2,7 @@ import torch
 from torch import nn
 import math
 
+
 class CrossLayer(nn.Module):
     '''
     Implement a (residual) crossing layer for Deep and Cross Net (DCN):
@@ -19,7 +20,6 @@ class CrossLayer(nn.Module):
         self.reset_parameters()
         self._return_first = return_first
 
-
     def reset_parameters(self):
         '''
         Reset the parameters of the model
@@ -27,7 +27,6 @@ class CrossLayer(nn.Module):
         nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
         if self.bias is not None:
             nn.init.uniform_(self.bias, 0, 0)
-
 
     def forward(self, inputs):
         '''

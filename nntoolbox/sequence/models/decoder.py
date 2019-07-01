@@ -25,8 +25,6 @@ class Decoder(nn.Module):
         return torch.zeros(1, batch_size, self._hidden_size, device=self._device)
 
 
-
-
 class AttentionalDecoder(Decoder):
     def __init__(self, hidden_size, output_size, embedding_dim, max_length, enc_dim, device, dropout_p=0.1, pad_token=0):
         '''
@@ -43,10 +41,10 @@ class AttentionalDecoder(Decoder):
             hidden_size=self._hidden_size
         )
         self._attention = AdditiveAttention(
-            input_dim=self._enc_dim,
+            key_dim=self._enc_dim,
+            value_dim=self._enc_dim,
             query_dim=embedding_dim,
             hidden_dim=128,
-            max_length=max_length,
             return_summary=True
         )
         self._op = nn.Sequential(
@@ -54,7 +52,6 @@ class AttentionalDecoder(Decoder):
             nn.Softmax(dim=-1)
         )
         self.to(device)
-
 
     def forward(self, input, hidden, encoder_outputs=None, mask=None):
         '''
@@ -65,8 +62,9 @@ class AttentionalDecoder(Decoder):
         '''
         embedded = self._dropout(self._embedding(input)) # (out_len, n_batch, embedding_dim)
         encoder_outputs_sum, mask = self._attention(
-            inputs=encoder_outputs,
+            keys=encoder_outputs,
             queries=embedded,
+            values=encoder_outputs,
             mask=mask
         ) # (out_len, n_batch, embedding_dim)
         concat_input = torch.cat(

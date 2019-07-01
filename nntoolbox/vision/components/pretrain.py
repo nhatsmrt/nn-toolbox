@@ -31,7 +31,8 @@ class FeatureExtractor(nn.Module):
             self._normalization = InputNormalization(mean=mean, std=std)
         else:
             self._normalization = None
-        model = model(pretrained=True)
+        if not isinstance(model, nn.Module):
+            model = model(pretrained=True)
 
         if device is not None:
             model.to(device)
@@ -46,7 +47,7 @@ class FeatureExtractor(nn.Module):
         if last_layer is not None:
             self._features = self._features[:last_layer]
 
-    def forward(self, input, layers = None):
+    def forward(self, input, layers=None):
         if self._normalization is not None:
             input = self._normalization(input)
         op = []
@@ -64,5 +65,6 @@ class FeatureExtractor(nn.Module):
                 if ind == len(self._features) - 1:
                     op.append(input)
 
-
+        if len(op) == 1:
+            return op[0]
         return op

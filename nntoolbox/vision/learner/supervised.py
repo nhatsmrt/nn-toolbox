@@ -1,100 +1,103 @@
 from torch.utils.data import DataLoader
 from torch.nn import Module
-from torch.optim import Optimizer, Adam
-from torch.optim.lr_scheduler import ReduceLROnPlateau
-from ...utils import save_model, load_model, get_device
-from sklearn.metrics import accuracy_score
+from torch.optim import Optimizer
+from torch import Tensor
+from ...utils import load_model, get_device
 import torch
-import numpy as np
+from typing import Iterable, Dict
+from ...callbacks import CallbackHandler, Callback
+from ...metrics import Metric
+from ...transforms import MixupTransformer
 
 
 class SupervisedImageLearner:
 
     def __init__(
-            self, train_data:DataLoader, val_data:DataLoader, model:Module, criterion:Module,
-            optimizer:Optimizer, val_metric=None, use_scheduler=False, device=get_device()
+            self, train_data: DataLoader, val_data: DataLoader, model: Module,
+            criterion: Module, optimizer: Optimizer, mixup=False, mixup_alpha=0.4, device=get_device()
     ):
         self._train_data = train_data
         self._val_data = val_data
         self._model = model.to(device)
         self._criterion = criterion.to(device)
         self._optimizer = optimizer
-        self._val_metric = val_metric
         self._device = device
-        if use_scheduler:
-            self._lr_scheduler = ReduceLROnPlateau(self._optimizer)
+        self._mixup = mixup
+        if mixup:
+            self._mixup_transformer = MixupTransformer(alpha=mixup_alpha)
 
-    def learn(self, n_epoch, print_every, eval_every=1, load_path=None, save_path=None):
+    def learn(
+            self,
+            n_epoch: int, callbacks: Iterable[Callback]=None,
+            metrics: Dict[str, Metric]=None, final_metric: str='accuracy', load_path=None
+    ) -> float:
         if load_path is not None:
             load_model(self._model, load_path)
 
-        iter_cnt = 0
-        val_metrics = []
+        self._cb_handler = CallbackHandler(callbacks, metrics, final_metric)
         for e in range(n_epoch):
             print("Epoch " + str(e))
             self._model.train()
 
             for images, labels in self._train_data:
-                loss = self.learn_one_iter(images, labels)
-                if iter_cnt % print_every == 0:
-                    print(loss)
+                self.learn_one_iter(images, labels)
 
-                iter_cnt += 1
+            stop_training = self.evaluate()
+            if stop_training:
+                print("Patience exceeded. Training finished.")
+                break
 
-            if e % eval_every == 0:
-                print("Evaluate: ")
-                val_metric = self.evaluate()
-                print(self._val_metric + ": "  + str(val_metric))
-                val_metrics.append(val_metric)
-                if self._lr_scheduler is not None:
-                    self._lr_scheduler.step(val_metric)
+        return self._cb_handler.on_train_end()
 
-                if self.is_best(val_metric, val_metrics) and save_path is not None:
-                    save_model(self._model, save_path)
+    def learn_one_iter(self, images: Tensor, labels: Tensor):
+        images = images.to(self._device)
+        labels = labels.to(self._device)
+        data = self._cb_handler.on_batch_begin({'inputs': images, 'labels': labels}, True)
+        images = data['inputs']
+        labels = data['labels']
 
-    def learn_one_iter(self, images, labels):
+        if self._mixup:
+            images, labels = self._mixup_transformer.transform_data(images, labels)
+
         self._optimizer.zero_grad()
-        loss = self.compute_loss(images.to(self._device), labels.to(self._device))
+        loss = self.compute_loss(images, labels)
         loss.backward()
         self._optimizer.step()
-        return loss
+        if self._device.type == 'cuda':
+            mem = torch.cuda.memory_allocated(self._device)
+            self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})
+        else:
+            self._cb_handler.on_batch_end({"loss": loss})
+        # self._cb_handler.on_batch_end({"loss": loss})
 
     @torch.no_grad()
-    def evaluate(self):
+    def evaluate(self) -> float:
         self._model.eval()
-        vals = []
+        all_outputs = []
+        all_labels = []
         total_data = 0
+        loss = 0
 
         for images, labels in self._val_data:
-            if self._val_metric is None or self._val_metric == 'loss':
-                val_metric = self.compute_loss(images, labels).item()
-            elif self._val_metric == 'accuracy':
-                val_metric = self.compute_accuracy(images, labels).item()
-            else:
-                raise not NotImplementedError
-
+            all_outputs.append(self._model(images.to(self._device)))
+            all_labels.append(labels)
+            loss += self.compute_loss(images.to(self._device), labels.to(self._device)).cpu().item() * len(images)
             total_data += len(images)
-            vals.append(val_metric * len(images))
 
-        return np.sum(vals) / total_data
+        loss /= total_data
 
-    def compute_loss(self, images, labels):
-        return self._criterion(self._model(images), labels)
+        logs = dict()
+        logs["loss"] = loss
+        logs["outputs"] = torch.cat(all_outputs, dim=0)
+        logs["labels"] = torch.cat(all_labels, dim=0)
 
-    @torch.no_grad()
-    def compute_accuracy(self, images, labels):
-        outputs = torch.argmax(self._model(images.to(self._device)), dim=1).cpu().detach().numpy()
-        labels = labels.cpu().numpy()
-        return accuracy_score(
-            y_true=labels,
-            y_pred=outputs
-        )
+        return self._cb_handler.on_epoch_end(logs)
 
-    def is_best(self, val, vals):
-        if self._val_metric == 'loss':
-            return val == np.min(vals)
-        elif self._val_metric == 'accuracy':
-            return val == np.max(vals)
+    def compute_loss(self, images: Tensor, labels: Tensor) -> Tensor:
+        if self._mixup:
+            criterion = self._mixup_transformer.transform_loss(self._criterion, self._model.training)
         else:
-            raise NotImplementedError
+            criterion = self._criterion
+
+        return criterion(self._model(images), labels)
 

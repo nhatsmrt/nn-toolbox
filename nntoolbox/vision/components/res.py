@@ -1,6 +1,7 @@
 from torch import nn
 from nntoolbox.vision.components.layers import ConvolutionalLayer
 from nntoolbox.vision.components.regularization import ShakeShake
+from .kervolution import KervolutionalLayer
 import torch
 
 
@@ -77,5 +78,27 @@ class ResidualBlockPreActivation(ResNeXtBlock):
             ),
             use_shake_shake=False
         )
+
+
+class ResidualBlockPreActivationKer(ResNeXtBlock):
+    def __init__(self, in_channels, kernel, activation=nn.ReLU, normalization=nn.BatchNorm2d):
+        super(ResidualBlockPreActivationKer, self).__init__(
+            branches=nn.ModuleList(
+                [
+                    nn.Sequential(
+                        KervolutionalLayer(
+                            in_channels, in_channels, kernel=kernel, kernel_size=3, padding=1,
+                            activation=activation, normalization=normalization
+                        ),
+                        KervolutionalLayer(
+                            in_channels, in_channels, kernel=kernel, kernel_size=3, padding=1,
+                            activation=activation, normalization=normalization
+                        )
+                    )
+                ]
+            ),
+            use_shake_shake=False
+        )
+
 
 

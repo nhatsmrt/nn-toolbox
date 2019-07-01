@@ -5,6 +5,9 @@ import numpy as np
 import collections
 
 
+__all__ = ['ElasticDeformation', 'Cutout']
+
+
 class ElasticDeformation(object):
     """
     Apply elastic deformation on a PIL image (H x W x C)
@@ -28,7 +31,7 @@ class ElasticDeformation(object):
         return ElasticDeformation.elastic_deform(image, alpha=alpha, sigma=sigma)
 
     @staticmethod
-    def elastic_deform(image:Image, alpha=1000, sigma=30, spline_order=1, mode='nearest')->Image:
+    def elastic_deform(image:Image, alpha=1000, sigma=30, spline_order=1, mode='nearest') -> Image:
         """Elastic deformation of image as described in [Simard2003]_.
         .. [Simard2003] Simard, Steinkraus and Platt, "Best Practices for
            Convolutional Neural Networks applied to Visual Document Analysis", in
@@ -37,6 +40,8 @@ class ElasticDeformation(object):
            :param image: The image to be deformed
            :param alpha:  scaling factor that controls the intensity of the deformation
            :param sigma: the std of gaussian filters. Smaller sigma implies more random deformation field
+           :param spline_order
+           :param mode: interpolation mode
         """
 
         image = np.array(image)
@@ -54,6 +59,30 @@ class ElasticDeformation(object):
             result[:, :, i] = map_coordinates(
                 image[:, :, i], indices, order=spline_order, mode=mode).reshape(shape)
         return Image.fromarray(result)
+
+
+class Cutout(object):
+    '''
+    https://arxiv.org/pdf/1708.04552.pdf
+    '''
+    def __init__(self, n_holes, length):
+        self._n_holes = n_holes
+        self._length = length
+
+    def __call__(self, image: Image) -> Image:
+        h, w = image.size
+        ret = np.array(image)
+
+        for _ in range(self._n_holes):
+            h1 = np.random.choice(h)
+            h2 = min(h, h1 + self._length)
+
+            w1 = np.random.choice(w)
+            w2 = min(w, w1 + self._length)
+
+            ret[h1:h2, w1:w2] = 0
+
+        return Image.fromarray(ret)
 
 
 def random_num_generator(config):

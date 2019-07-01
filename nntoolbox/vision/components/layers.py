@@ -1,7 +1,21 @@
 import torch
-from torch import nn
+from torch import nn, Tensor
 from torch.nn import functional as F
 from ...components import HighwayLayer
+from typing import Callable
+
+
+class LambdaLayer(nn.Module):
+    '''
+    Implement a quick layer wrapper for a function
+    '''
+    def __init__(self, fn: Callable[[Tensor], Tensor]):
+        super(LambdaLayer, self).__init__()
+        self.fn = fn
+
+    def forward(self, input):
+        return self.fn(input)
+
 
 class ConvolutionalLayer(nn.Sequential):
     '''
@@ -114,26 +128,28 @@ class HighwayConvolutionalLayer(HighwayLayer):
             gate=ConvolutionalLayer(in_channels, in_channels, 3, padding=1, activation=nn.Sigmoid)
         )
 
+
 class Flatten(nn.Module):
     def forward(self, input):
         return input.view(input.size(0), -1)
-
 
 
 class ResizeConvolutionalLayer(nn.Module):
     '''
     Upsample the image (using an interpolation algorithm), then pass to a conv layer
     '''
-    def __init__(self, in_channels, out_channels, mode='bilinear'):
+    def __init__(self, in_channels, out_channels, activation=nn.ReLU, normalization=nn.BatchNorm2d, mode='bilinear'):
         super(ResizeConvolutionalLayer, self).__init__()
         self._mode = mode
         self.add_module(
             "conv",
-            nn.Conv2d(
+            ConvolutionalLayer(
                 in_channels=in_channels,
                 out_channels=out_channels,
                 kernel_size=3,
-                padding=1
+                padding=1,
+                activation=activation,
+                normalization=normalization
             )
         )
 
