@@ -7,7 +7,6 @@ from torch.nn import Module
 __all__ = ['StochasticWeightAveraging']
 
 
-# NOT FINISHED!
 class StochasticWeightAveraging(Callback):
     def __init__(
             self, learner, average_after: int,
