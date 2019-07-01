@@ -5,6 +5,11 @@ from .utils import is_image
 from PIL import Image
 import os
 from typing import Tuple, Any, Optional
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+
+__all__ = ['UnlabelledImageDataset', 'UnsupervisedFromSupervisedDataset', 'PairedDataset']
 
 
 class UnlabelledImageDataset(Dataset):
