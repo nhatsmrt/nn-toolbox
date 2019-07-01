@@ -115,15 +115,15 @@ learner = SupervisedImageLearner(
 # )
 # lr_finder.find_lr(warmup=100)
 
-# swa = StochasticWeightAveraging(model, average_after=4800, update_every=3200)
-fge = FastGeometricEnsembling(model, max_n_model=5, save_every=3200, save_after=8000)
+swa = StochasticWeightAveraging(model, average_after=11200, update_every=3200)
+# fge = FastGeometricEnsembling(model, max_n_model=5, save_every=3200, save_after=8000)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.024, T_max=1600)),
-    # swa,
-    fge,
+    swa,
+    # fge,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
     # EarlyStoppingCB(monitor='accuracy', mode='max', patience=20)
@@ -147,24 +147,25 @@ classifier = ImageClassifier(model, tta_transform=Compose([
     ToTensor()
 ]))
 print(classifier.evaluate(test_loader))
-print("Test FGE:")
-models = fge.get_models()
-models = [
-    ImageClassifier(model, tta_transform=Compose([
-        ToPILImage(),
-        RandomHorizontalFlip(),
-        RandomResizedCrop(size=32, scale=(0.95, 1.0)),
-        ToTensor()
-    ])) for model in models
-]
-ensemble_classifier = EnsembleImageClassifier(models)
-print(ensemble_classifier.evaluate(test_loader))
+# print("Test FGE:")
+# models = fge.get_models()
+# models = [
+#     ImageClassifier(model, tta_transform=Compose([
+#         ToPILImage(),
+#         RandomHorizontalFlip(),
+#         RandomResizedCrop(size=32, scale=(0.95, 1.0)),
+#         ToTensor()
+#     ])) for model in models
+# ]
+# ensemble_classifier = EnsembleImageClassifier(models)
+# print(ensemble_classifier.evaluate(test_loader))
 
-# model = swa.get_averaged_model()
-# classifier = ImageClassifier(model, tta_transform=Compose([
-#     ToPILImage(),
-#     RandomHorizontalFlip(),
-#     RandomResizedCrop(size=32, scale=(0.95, 1.0)),
-#     ToTensor()
-# ]))
-# print(classifier.evaluate(test_loader))
+print("Test SWA:")
+model = swa.get_averaged_model()
+classifier = ImageClassifier(model, tta_transform=Compose([
+    ToPILImage(),
+    RandomHorizontalFlip(),
+    RandomResizedCrop(size=32, scale=(0.95, 1.0)),
+    ToTensor()
+]))
+print(classifier.evaluate(test_loader))
