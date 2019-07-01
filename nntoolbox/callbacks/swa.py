@@ -10,7 +10,7 @@ __all__ = ['StochasticWeightAveraging']
 # NOT FINISHED!
 class StochasticWeightAveraging(Callback):
     def __init__(
-            self, model: Module, average_after: int,
+            self, learner, average_after: int,
             update_every: int=1, timescale: str="iter", device=get_device()
     ):
         '''
@@ -20,8 +20,9 @@ class StochasticWeightAveraging(Callback):
         :param update_every: how many epochs/iters between each average update
         '''
         assert timescale == "epoch" or timescale == "iter"
-        self._model = model
-        self.model_swa = copy_model(model).to(device)
+        self._learner = learner
+        self._model = learner._model
+        self.model_swa = copy_model(self._model).to(device)
         self._update_every = update_every
         self._average_after = average_after
         self._timescale = timescale
@@ -32,6 +33,7 @@ class StochasticWeightAveraging(Callback):
                 n_model = (logs["epoch"] - self._average_after) // self._update_every
                 for model_p, swa_p in zip(self._model.parameters(), self.model_swa.parameters()):
                     swa_p.data = (swa_p.data * n_model + model_p.data) / (n_model + 1)
+                print("Update averaged model after epoch " + str(logs["epoch"]))
         return False
 
     def on_batch_end(self, logs: Dict[str, Any]):
@@ -40,6 +42,11 @@ class StochasticWeightAveraging(Callback):
                 n_model = (logs["iter_cnt"] - self._average_after) // self._update_every
                 for model_p, swa_p in zip(self._model.parameters(), self.model_swa.parameters()):
                     swa_p.data = (swa_p.data * n_model + model_p.data) / (n_model + 1)
+                print("Update averaged model after iteration " + str(logs["iter_cnt"]))
+
+    def on_train_end(self):
+        for images, labels in self._learner._train_data:
+            self.model_swa(images.to(self._learner._device))
 
     def get_averaged_model(self) -> Module:
         '''

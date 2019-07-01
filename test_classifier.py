@@ -115,7 +115,7 @@ learner = SupervisedImageLearner(
 # )
 # lr_finder.find_lr(warmup=100)
 
-swa = StochasticWeightAveraging(model, average_after=11200, update_every=3200)
+swa = StochasticWeightAveraging(learner, average_after=11200, update_every=3200)
 # fge = FastGeometricEnsembling(model, max_n_model=5, save_every=3200, save_after=8000)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
@@ -133,7 +133,7 @@ metrics = {
     "loss": Loss()
 }
 final = learner.learn(
-    n_epoch=500,
+    n_epoch=100,
     callbacks=callbacks,
     metrics=metrics,
     final_metric='accuracy'

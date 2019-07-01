@@ -16,6 +16,9 @@ from torch import Tensor
 from typing import Iterable, Tuple
 
 
+__all__ = ['StyleTransferLearner', 'MultipleStylesTransferLearner']
+
+
 class StyleTransferLearner:
     def __init__(
             self, images:DataLoader, images_val:DataLoader, style_img:torch.Tensor,
