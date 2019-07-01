@@ -6,10 +6,13 @@ from torch import Tensor, nn
 import torch
 
 
+__all__ = ['ManifoldMixupCallback', 'ManifoldMixupModule']
+
+
 class ManifoldMixupModule(nn.Module):
-    '''
+    """
     Wrapper module to apply manifold mixup
-    '''
+    """
     def __init__(self, base_module: nn.Module):
         super(ManifoldMixupModule, self).__init__()
         self._base_module = base_module
@@ -23,14 +26,14 @@ class ManifoldMixupModule(nn.Module):
 
 
 class ManifoldMixupCallback(Callback):
-    '''
+    """
     Implement manifold mixup regularization as a callback. Each iteration, pick a random layer and transform its output
     and label:
     x = tau x_1 + (1 - tau) x_2
     y = tau y_1 + (1 - tau) y_2
     Reference: https://arxiv.org/pdf/1806.05236.pdf
     Based on fastai implementation: https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py
-    '''
+    """
 
     def __init__(self, learner, modules: Sequence[ManifoldMixupModule], alpha: float=2.0):
         for module in modules:

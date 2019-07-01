@@ -12,12 +12,12 @@ class StochasticWeightAveraging(Callback):
             self, learner, average_after: int,
             update_every: int=1, timescale: str="iter", device=get_device()
     ):
-        '''
+        """
         https://arxiv.org/pdf/1803.05407.pdf
         :param model: the model currently being trained
         :param average_after: the first epoch to start averaging
         :param update_every: how many epochs/iters between each average update
-        '''
+        """
         assert timescale == "epoch" or timescale == "iter"
         self._learner = learner
         self._model = learner._model
@@ -48,8 +48,8 @@ class StochasticWeightAveraging(Callback):
             self.model_swa(images.to(self._learner._device))
 
     def get_averaged_model(self) -> Module:
-        '''
+        """
         Return the post-training average model
         :return: the averaged model
-        '''
+        """
         return self.model_swa

@@ -17,7 +17,7 @@ class MaxoutLinear(nn.Module):
     def forward(self, input: Tensor) -> Tensor:
         '''
         :param input: (batch_size, in_features)
-        :return: (batch_size, out_features(
+        :return: (batch_size, out_features)
         '''
         features = [self._features[i](input) for i in range(len(self._features))]
         return torch.max(torch.stack(features, dim=-1), dim=-1)[0]

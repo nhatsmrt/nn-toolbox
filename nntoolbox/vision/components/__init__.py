@@ -9,4 +9,4 @@ from .activation import *
 from .se import *
 from .ff import *
 from .kervolution import *
-# from .attention import *
+from .attention import *

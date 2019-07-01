@@ -1,7 +1,10 @@
-from torch.optim.lr_scheduler import _LRScheduler, ReduceLROnPlateau
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from .callbacks import Callback
 from torch.optim import Optimizer
 from typing import Dict, Any
+
+
+__all__ = ['LRSchedulerCB', 'ReduceLROnPlateauCB']
 
 
 class LRSchedulerCB(Callback):
