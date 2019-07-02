@@ -213,7 +213,7 @@ callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.03, T_max=335)),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.007, T_max=335)),
     swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
