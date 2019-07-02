@@ -8,6 +8,7 @@ from matplotlib import pyplot as plt
 from copy import deepcopy
 import numpy as np
 from typing import Tuple
+from .utils import is_nan
 
 
 __all__ = ['LRFinder']
@@ -61,7 +62,7 @@ class LRFinder:
             iter += 1
             outputs = self.model(inputs.to(self._device))
             loss = self.criterion(outputs, labels.to(self._device))
-            if not torch.isnan(loss).any():
+            if not is_nan(loss):
                 avg_loss = beta * avg_loss + (1 - beta) * loss.cpu().item()
                 changes.append(avg_loss / (1 + beta ** iter) - smoothed_loss)
                 smoothed_loss = avg_loss / (1 + beta ** iter)

@@ -78,3 +78,12 @@ def to_onehot(label: Tensor, n_class: Optional[int]=None) -> Tensor:
     label_oh.scatter_(dim=1, index=label, value=1)
     return label_oh
 
+
+def is_nan(tensor: Tensor) -> bool:
+    """
+    Check if any element of a tensor is NaN
+    :param tensor:
+    :return: whether any element of the tensor is NaN
+    """
+    return torch.isnan(tensor).any()
+

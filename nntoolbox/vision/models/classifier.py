@@ -35,19 +35,23 @@ class ImageClassifier:
         :return:
         '''
         if self._tta_transform is not None:
-            probs = [self._softmax(self._model(images.to(self._device))) * self._tta_beta]
+            probs = [
+                self._softmax(self._model(images.to(self._device))).cpu().detach().numpy() * self._tta_beta
+            ]
             for _ in range(tries):
                 transformed_images = torch.stack([self._tta_transform(image) for image in images], dim=0)
                 probs.append(
-                    self._softmax(self._model(transformed_images.to(self._device))) * (1 - self._tta_beta) / tries
+                    self._softmax(
+                        self._model(transformed_images.to(self._device))
+                    ).cpu().detach().numpy() * (1 - self._tta_beta) / tries
                 )
-            probs = torch.stack(probs, dim=0).sum(dim=0)
+            probs = np.stack(probs, axis=0).sum(axis=0)
         else:
-            probs = self._softmax(self._model(images.to(self._device)))
+            probs = self._softmax(self._model(images.to(self._device))).cpu().detach().numpy()
         if return_probs:
-            return probs.cpu().detach().numpy()
+            return probs
         else:
-            return torch.argmax(probs, dim=1).cpu().detach().numpy()
+            return np.argmax(probs, axis=1)
 
     def evaluate(self, test_loader: DataLoader, tries: int=5) -> float:
         total = 0
