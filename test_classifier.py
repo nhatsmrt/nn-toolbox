@@ -135,9 +135,9 @@ model = Sequential(
         kernel_size=2, stride=2
     ),
     SEResNeXtShakeShake(in_channels=64),
-    StandAloneMultiheadAttentionLayer(
-        num_heads=8, in_channels=64, out_channels=128,
-        kernel_size=7, stride=2
+    ConvolutionalLayer(
+        in_channels=64, out_channels=128,
+        kernel_size=2, stride=2
     ),
     SEResNeXtShakeShakeAttention(num_heads=8, in_channels=128),
     FeedforwardBlock(
@@ -148,7 +148,7 @@ model = Sequential(
     )
 )
 
-optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.06, momentum=0.9)
+optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.09, momentum=0.9)
 # optimizer = Adam(model.parameters())
 learner = SupervisedImageLearner(
     train_data=train_loader,
@@ -173,7 +173,7 @@ callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.02, T_max=1600)),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.03, T_max=1600)),
     swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
