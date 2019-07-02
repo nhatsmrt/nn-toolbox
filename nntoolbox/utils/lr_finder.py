@@ -1,3 +1,4 @@
+import torch
 from torch.optim import Optimizer
 from torch.nn import Module
 from torch.utils.data import DataLoader
@@ -60,32 +61,36 @@ class LRFinder:
             iter += 1
             outputs = self.model(inputs.to(self._device))
             loss = self.criterion(outputs, labels.to(self._device))
-            avg_loss = beta * avg_loss + (1 - beta) * loss.cpu().item()
-            changes.append(avg_loss / (1 + beta ** iter) - smoothed_loss)
-            smoothed_loss = avg_loss / (1 + beta ** iter)
-            losses.append(smoothed_loss)
-            log_lrs.append(log10(lr))
+            if not torch.isnan(loss).any():
+                avg_loss = beta * avg_loss + (1 - beta) * loss.cpu().item()
+                changes.append(avg_loss / (1 + beta ** iter) - smoothed_loss)
+                smoothed_loss = avg_loss / (1 + beta ** iter)
+                losses.append(smoothed_loss)
+                log_lrs.append(log10(lr))
 
-            if verbose:
-                print("LR: " + str(lr))
-                print("Loss Change: " + str(changes[-1]))
-                print("Loss: " + str(loss.cpu().item()))
-                print("Smoothed loss: " + str(smoothed_loss))
-                print()
+                if verbose:
+                    print("LR: " + str(lr))
+                    print("Loss Change: " + str(changes[-1]))
+                    print("Loss: " + str(loss.cpu().item()))
+                    print("Smoothed loss: " + str(smoothed_loss))
+                    print()
 
-            if iter > warmup and smoothed_loss > best_loss * 4:
-                print("Loss blows up")
+                if iter > warmup and smoothed_loss > best_loss * 4:
+                    print("Loss blows up")
+                    break
+                    # return log_lrs, losses
+                if smoothed_loss < best_loss or iter == warmup:
+                    best_loss = smoothed_loss
+
+                self.optimizer.zero_grad()
+                loss.backward()
+                self.optimizer.step()
+
+                lr *= mult
+                self.optimizer.param_groups[0]['lr'] = lr
+            else:
+                print("Loss becomes NaN")
                 break
-                # return log_lrs, losses
-            if smoothed_loss < best_loss or iter == warmup:
-                best_loss = smoothed_loss
-
-            self.optimizer.zero_grad()
-            loss.backward()
-            self.optimizer.step()
-
-            lr *= mult
-            self.optimizer.param_groups[0]['lr'] = lr
 
         self.model.load_state_dict(model_state_dict)
         # logs, losses = find_lr()
