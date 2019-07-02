@@ -1,3 +1,4 @@
+import torch
 from torch.utils.data import Dataset
 from torchvision.transforms import ToTensor
 from torch import Tensor
@@ -39,6 +40,24 @@ class UnlabelledImageDataset(Dataset):
             return self._to_tensor(self.transform(self._images[i]))
         else:
             return self._to_tensor(self._images[i])
+
+
+# class ClassificationImageDataset(Dataset):
+#     def __init__(self, images, labels, transform=None):
+#         assert len(images) == len(labels)
+#         self._images = images
+#         self._labels = labels
+#         self.transform = transform
+#         self._to_tensor = ToTensor()
+#
+#     def __len__(self):
+#         return len(self._images)
+#
+#     def __getitem__(self, i) -> Tuple[Tensor, Tensor]:
+#         if self.transform is not None:
+#             return self._to_tensor(self.transform(self._images[i])), torch.from_numpy(self._labels[i]).long()
+#         else:
+#             return self._to_tensor(self._images[i]), torch.from_numpy(self._labels[i]).long()
 
 
 class UnsupervisedFromSupervisedDataset(Dataset):
