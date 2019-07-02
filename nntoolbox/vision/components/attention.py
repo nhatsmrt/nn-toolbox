@@ -33,8 +33,8 @@ class StandAloneSelfAttention(nn.Conv2d):
         self.softmax = nn.Softmax(dim=2)
         self.rel_h = nn.Embedding(num_embeddings=self.kernel_size[0], embedding_dim=out_channels // 2)
         self.rel_w = nn.Embedding(num_embeddings=self.kernel_size[1], embedding_dim=out_channels // 2)
-        self.h_range = torch.arange(0, self.kernel_size[0])[:, None]
-        self.w_range = torch.arange(0, self.kernel_size[1])[None, :]
+        self.h_range = nn.Parameter(torch.arange(0, self.kernel_size[0])[:, None], requires_grad=False)
+        self.w_range = nn.Parameter(torch.arange(0, self.kernel_size[1])[None, :], requires_grad=False)
 
     def forward(self, input: Tensor) -> Tensor:
         batch_size, _, inp_h, inp_w = input.shape
