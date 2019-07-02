@@ -3,6 +3,7 @@ from torch import nn, Tensor
 from typing import Tuple
 import torch.nn.functional as F
 import numpy as np
+import time
 
 
 __all__ = ['StandAloneSelfAttention', 'StandAloneMultiheadAttention']
@@ -47,8 +48,12 @@ class StandAloneSelfAttention(nn.Conv2d):
         else:
             padding = self.padding
 
+        start = time.time()
         key, query, value = self.key_transform(input), self.query_transform(input), self.value_transform(input)
+        end = time.time()
+        print("Transform time: " + str(end - start))
 
+        start = time.time()
         key_uf = F.unfold(
             key, kernel_size=self.kernel_size, dilation=self.dilation,
             padding=padding, stride=self.stride
@@ -63,10 +68,26 @@ class StandAloneSelfAttention(nn.Conv2d):
             value, kernel_size=self.kernel_size, dilation=self.dilation,
             padding=padding, stride=self.stride
         ).view(batch_size, self.out_channels, self.kernel_size[0] * self.kernel_size[1], -1)
+        end = time.time()
+        print("Unfold time: " + str(end - start))
+
+        # start = time.time()
         rel_embedding = self.get_rel_embedding()[None, :, :, None]
         logits = (key_uf[:, :, None, :] * (query_uf + rel_embedding)).sum(1, keepdim=True)
+        # end = time.time()
+        print("Find logit time: " + str(end - start))
+
+        start = time.time()
         attention_weights = self.softmax(logits)
+        end = time.time()
+        print("Softmax time: " + str(end - start))
+
+        start = time.time()
         output = (attention_weights * value_uf).sum(2).view(batch_size, -1, output_h, output_w)
+        end = time.time()
+        print("Output time: " + str(end - start))
+        print()
+
         return output
 
     def compute_output_shape(self, height, width):

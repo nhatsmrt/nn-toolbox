@@ -19,6 +19,8 @@ from functools import partial
 
 from sklearn.metrics import accuracy_score
 
+torch.backends.cudnn.benchmark=True
+
 
 data = torchvision.datasets.CIFAR10('data/', train=True, download=True, transform=ToTensor())
 train_size = int(0.8 * len(data))
@@ -195,18 +197,6 @@ classifier = ImageClassifier(model, tta_transform=Compose([
     ToTensor()
 ]))
 print(classifier.evaluate(test_loader))
-# print("Test FGE:")
-# models = fge.get_models()
-# models = [
-#     ImageClassifier(model, tta_transform=Compose([
-#         ToPILImage(),
-#         RandomHorizontalFlip(),
-#         RandomResizedCrop(size=32, scale=(0.95, 1.0)),
-#         ToTensor()
-#     ])) for model in models
-# ]
-# ensemble_classifier = EnsembleImageClassifier(models)
-# print(ensemble_classifier.evaluate(test_loader))
 
 print("Test SWA:")
 model = swa.get_averaged_model()
