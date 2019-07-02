@@ -130,11 +130,11 @@ model = Sequential(
         kernel_size=2, stride=2
     ),
     SEResNeXtShakeShake(in_channels=32),
-    StandAloneMultiheadAttentionLayer(
-        num_heads=8, in_channels=32, out_channels=64,
-        kernel_size=7, stride=2
+    ConvolutionalLayer(
+        in_channels=32, out_channels=64,
+        kernel_size=2, stride=2
     ),
-    SEResNeXtShakeShakeAttention(num_heads=8, in_channels=64),
+    SEResNeXtShakeShake(in_channels=64),
     StandAloneMultiheadAttentionLayer(
         num_heads=8, in_channels=64, out_channels=128,
         kernel_size=7, stride=2
