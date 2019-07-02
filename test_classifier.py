@@ -223,7 +223,7 @@ metrics = {
     "loss": Loss()
 }
 final = learner.learn(
-    n_epoch=100,
+    n_epoch=2,
     callbacks=callbacks,
     metrics=metrics,
     final_metric='accuracy'
