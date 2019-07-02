@@ -61,6 +61,59 @@ class SEResNeXtShakeShake(ResNeXtBlock):
             use_shake_shake=True
         )
 
+
+class StandAloneMultiheadAttentionLayer(nn.Sequential):
+    def __init__(
+            self, num_heads, in_channels, out_channels, kernel_size, stride=1, padding=3,
+            activation=nn.ReLU, normalization=nn.BatchNorm2d
+    ):
+        layers = [
+            StandAloneMultiheadAttention(
+                num_heads=num_heads,
+                in_channels=in_channels,
+                out_channels=out_channels,
+                kernel_size=kernel_size,
+                stride=stride,
+                padding=padding,
+                bias=False
+            ),
+            activation(),
+            normalization(num_features=out_channels),
+        ]
+        super(StandAloneMultiheadAttentionLayer, self).__init__(*layers)
+
+
+class SEResNeXtShakeShakeAttention(ResNeXtBlock):
+    def __init__(self, num_heads, in_channels, reduction_ratio=16, cardinality=2, activation=nn.ReLU,
+                 normalization=nn.BatchNorm2d):
+        super(SEResNeXtShakeShakeAttention, self).__init__(
+            branches=nn.ModuleList(
+                [
+                    nn.Sequential(
+                        StandAloneMultiheadAttentionLayer(
+                            num_heads=num_heads,
+                            in_channels=in_channels,
+                            out_channels=in_channels,
+                            kernel_size=7,
+                            activation=activation,
+                            normalization=normalization
+                        ),
+                        StandAloneMultiheadAttentionLayer(
+                            num_heads=num_heads,
+                            in_channels=in_channels,
+                            out_channels=in_channels,
+                            kernel_size=7,
+                            activation=activation,
+                            normalization=normalization
+                        ),
+                        SEBlock(in_channels, reduction_ratio)
+                    ) for _ in range(cardinality)
+                ]
+            ),
+            use_shake_shake=True
+        )
+
+
 # layer_1 = ManifoldMixupModule(ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU))
 # block_1 = ManifoldMixupModule(SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU))
 
@@ -75,16 +128,16 @@ model = Sequential(
         kernel_size=2, stride=2
     ),
     SEResNeXtShakeShake(in_channels=32),
-    ConvolutionalLayer(
-        in_channels=32, out_channels=64,
-        kernel_size=2, stride=2
+    StandAloneMultiheadAttentionLayer(
+        num_heads=8, in_channels=32, out_channels=64,
+        kernel_size=7, stride=2
     ),
-    SEResNeXtShakeShake(in_channels=64),
-    ConvolutionalLayer(
-        in_channels=64, out_channels=128,
-        kernel_size=2, stride=2
+    SEResNeXtShakeShakeAttention(num_heads=8, in_channels=64),
+    StandAloneMultiheadAttentionLayer(
+        num_heads=8, in_channels=64, out_channels=128,
+        kernel_size=7, stride=2
     ),
-    SEResNeXtShakeShake(in_channels=128),
+    SEResNeXtShakeShakeAttention(num_heads=8, in_channels=128),
     FeedforwardBlock(
         in_channels=128,
         out_features=10,
@@ -92,10 +145,8 @@ model = Sequential(
         hidden_layer_sizes=(512, 256)
     )
 )
-# print(model)
 
-
-optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.094, momentum=0.9)
+optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.06, momentum=0.9)
 # optimizer = Adam(model.parameters())
 learner = SupervisedImageLearner(
     train_data=train_loader,
@@ -116,17 +167,14 @@ learner = SupervisedImageLearner(
 # lr_finder.find_lr(warmup=100)
 
 swa = StochasticWeightAveraging(learner, average_after=11200, update_every=3200)
-# fge = FastGeometricEnsembling(model, max_n_model=5, save_every=3200, save_after=8000)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.024, T_max=1600)),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.02, T_max=1600)),
     swa,
-    # fge,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
-    # EarlyStoppingCB(monitor='accuracy', mode='max', patience=20)
 ]
 metrics = {
     "accuracy": Accuracy(),
