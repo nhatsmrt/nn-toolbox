@@ -129,8 +129,10 @@ class MultipleStylesTransferLearner:
         self._optimizer = Adam(model.parameters()) if optimizer is None else optimizer
 
     def learn(self, n_epoch: int, callbacks: Iterable[Callback]):
+        print("Begin training")
         self._cb_handler = CallbackHandler(callbacks=callbacks)
         for e in range(n_epoch):
+            print("Epoch " + str(e))
             self._model.train()
             for content_batch, style_batch in self._content_style_imgs:
                 data = self._cb_handler.on_batch_begin({"content": content_batch, "style": style_batch}, True)
