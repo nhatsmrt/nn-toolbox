@@ -69,12 +69,13 @@ class PairedDataset(Dataset):
 
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
         assert index < self.__len__()
+        print("Getting " + str(index))
         i = index % len(self.data_1)
         j = index // len(self.data_1)
         x1 = self.data_1[i]
-        print("Retrieve item 1")
+        # print("Retrieve item 1")
         x2 = self.data_2[j]
-        print("Retrieve item 2")
+        # print("Retrieve item 2")
         return x1, x2
 
     def __len__(self) -> int:
@@ -101,13 +102,13 @@ class UnlabelledImageListDataset(Dataset):
         return len(self._image_paths)
 
     def __getitem__(self, index):
-        print("Opening image")
+        # print("Opening image")
         image = Image.open(self._image_paths[index])
-        print("Finish reading data")
+        # print("Finish reading data")
         if self.img_dim is not None:
             image = image.resize(self.img_dim)
-            print("Finish resizing data")
-            print()
+            # print("Finish resizing data")
+            # print()
         image = image.convert('RGB')
         if self.transform is not None:
             return self._to_tensor(self.transform(image))
