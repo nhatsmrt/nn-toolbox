@@ -107,6 +107,7 @@ class UnlabelledImageListDataset(Dataset):
         if self.img_dim is not None:
             image = image.resize(self.img_dim)
             print("Finish resizing data")
+            print()
         image = image.convert('RGB')
         if self.transform is not None:
             return self._to_tensor(self.transform(image))
