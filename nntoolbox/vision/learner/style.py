@@ -133,7 +133,9 @@ class MultipleStylesTransferLearner:
         for e in range(n_epoch):
             self._model.train()
             for content_batch, style_batch in self._content_style_imgs:
-                self.learn_one_iter(content_batch.to(self._device), style_batch.to(self._device))
+                data = self._cb_handler.on_batch_begin({"content": content_batch, "style": style_batch}, True)
+                content_batch, style_batch = data["content"], data["style"]
+                self.learn_one_iter(content_batch, style_batch)
             stop_training = self.evaluate()
             if stop_training:
                 break
@@ -151,8 +153,11 @@ class MultipleStylesTransferLearner:
     def evaluate(self):
         self._model.eval()
         for content_batch, style_batch in self._content_style_val:
+            data = self._cb_handler.on_batch_begin({"content": content_batch, "style": style_batch}, False)
+            content_batch, style_batch = data["content"], data["style"]
+
             self._model.set_style(style_batch)
-            styled_imgs = self._model(content_batch.to(self._device)).cpu().detach()
+            styled_imgs = self._model(content_batch).cpu().detach()
             imgs = torch.cat((content_batch.cpu(), style_batch.cpu(), styled_imgs), dim=0)
             tag = \
                 ["content_" + str(i) for i in range(len(content_batch))] + \

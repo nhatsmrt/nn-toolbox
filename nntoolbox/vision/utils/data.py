@@ -10,7 +10,7 @@ from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
-__all__ = ['UnlabelledImageDataset', 'UnsupervisedFromSupervisedDataset', 'PairedDataset']
+__all__ = ['UnlabelledImageDataset', 'UnsupervisedFromSupervisedDataset', 'PairedDataset', 'UnlabelledImageListDataset']
 
 
 class UnlabelledImageDataset(Dataset):
@@ -77,4 +77,33 @@ class PairedDataset(Dataset):
 
     def __len__(self) -> int:
         return len(self.data_1) * len(self.data_2)
+
+
+class UnlabelledImageListDataset(Dataset):
+    """
+    Abstraction for a list of path to images without labels
+    """
+    def __init__(self, path, transform=None, img_dim=None):
+        print("Begin reading images and convert to RGB")
+        super(UnlabelledImageListDataset, self).__init__()
+        self._image_paths = []
+        for filename in os.listdir(path):
+            if is_image(filename):
+                full_path = path + filename
+                self._image_paths.append(full_path)
+        self.transform = transform
+        self.img_dim = img_dim
+        self._to_tensor = ToTensor()
+
+    def __len__(self):
+        return len(self._image_paths)
+
+    def __getitem__(self, index):
+        image = Image.open(self._image_paths[index]).convert('RGB')
+        if self.img_dim is not None:
+            image = image.resize(self.img_dim)
+        if self.transform is not None:
+            return self._to_tensor(self.transform(image))
+        else:
+            return self._to_tensor(image)
 

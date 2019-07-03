@@ -47,18 +47,19 @@ class ManifoldMixupCallback(Callback):
         self._shuffle = None
         self._lambd = None
 
-    def on_batch_begin(self, data, train):
-        self._learner._criterion = self.transform_loss(self._learner._criterion, True)
-        labels = data["labels"]
-        self._shuffle = torch.randperm(labels.size(0)).to(labels.device)
-        self._lambd = self.get_lambd(labels.size(0), labels.device)
-        data['labels'] = self.transform_labels(data['labels'])
-        mix_ind = np.random.choice(len(self._modules))
-        for ind in range(len(self._modules)):
-            if mix_ind == ind:
-                self._modules[ind].is_mixing = True
-            else:
-                self._modules[ind].is_mixing = False
+    def on_batch_begin(self, data: Dict[str, Any], train) -> Dict[str, Any]:
+        if train:
+            self._learner._criterion = self.transform_loss(self._learner._criterion, True)
+            labels = data["labels"]
+            self._shuffle = torch.randperm(labels.size(0)).to(labels.device)
+            self._lambd = self.get_lambd(labels.size(0), labels.device)
+            data['labels'] = self.transform_labels(data['labels'])
+            mix_ind = np.random.choice(len(self._modules))
+            for ind in range(len(self._modules)):
+                if mix_ind == ind:
+                    self._modules[ind].is_mixing = True
+                else:
+                    self._modules[ind].is_mixing = False
         return data
 
     def on_batch_end(self, logs: Dict[str, Any]):
