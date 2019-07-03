@@ -72,7 +72,9 @@ class PairedDataset(Dataset):
         i = index % len(self.data_1)
         j = index // len(self.data_1)
         x1 = self.data_1[i]
+        print("Retrieve item 1")
         x2 = self.data_2[j]
+        print("Retrieve item 2")
         return x1, x2
 
     def __len__(self) -> int:
@@ -99,6 +101,7 @@ class UnlabelledImageListDataset(Dataset):
         return len(self._image_paths)
 
     def __getitem__(self, index):
+        print("Opening image")
         image = Image.open(self._image_paths[index])
         print("Finish reading data")
         if self.img_dim is not None:
