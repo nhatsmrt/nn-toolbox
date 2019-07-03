@@ -2,8 +2,17 @@ import torch
 import numpy as np
 import copy
 from torch.nn import Module
-from torch import Tensor
-from typing import Optional, List
+from torch import nn, Tensor
+from typing import Optional, List, Iterable
+from torch.utils.data import DataLoader
+
+
+__all__ = [
+    'compute_num_batch', 'copy_model', 'save_model',
+    'load_model', 'get_device', 'get_trainable_parameters',
+    'count_trainable_parameters', 'to_onehot', 'is_nan',
+    'get_children', 'get_all_submodules', 'get_first_batch'
+]
 
 
 def compute_num_batch(data_size: int, batch_size: int):
@@ -87,3 +96,32 @@ def is_nan(tensor: Tensor) -> bool:
     """
     return torch.isnan(tensor).any()
 
+
+def get_children(model: Module) -> List[Module]:
+    """
+    :param model:
+    :return: list of all children of a model
+    """
+    return list(model.children())
+
+
+def get_all_submodules(module: Module) -> List[Module]:
+    '''
+    :param model:
+    :return: list of all submodules of a model
+    '''
+    return [submodule for submodule in module.modules() if type(submodule) != nn.Sequential]
+
+
+def get_first_batch(data: DataLoader, callbacks: Optional[Iterable['Callback']]=None):
+    first_batch = next(iter(data))
+    if callbacks is None or len(callbacks) == 0:
+        return first_batch
+    else:
+        if isinstance(first_batch, tuple):
+            data = {"inputs": first_batch[0], "labels": first_batch[1]}
+        else:
+            data = {"inputs": first_batch[0], "labels": first_batch[1]}
+        for callback in callbacks:
+            data = callback.on_batch_begin(data, True)
+        return data["inputs"] if callbacks is None else data["inputs"], data["labels"]
