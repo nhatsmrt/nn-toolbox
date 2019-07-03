@@ -3,7 +3,6 @@ Implement LSUV initialization from "ALL YOU NEED IS A GOOD INIT"
 https://arxiv.org/pdf/1511.06422.pdf
 Adopt from fastai
 """
-import torch
 from torch.nn import Module
 from torch import Tensor,nn
 from nntoolbox.hooks import Hook, OutputStatsHook
@@ -20,7 +19,9 @@ def lsuv_init(module: Module, input: Tensor, tol: float=1e-3, Tmax: int=100):
     LSUV initialization
     :param module:
     :param input:
-    :return:
+    :param tol: maximum tolerance
+    :param Tmax: maximum iterations to attempt to demean and normalize weight
+    :return: final mean and std of each layer's output
     """
     means, stds = [], []
     for layer in get_all_submodules(module):

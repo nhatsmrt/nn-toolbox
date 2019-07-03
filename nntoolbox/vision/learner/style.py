@@ -1,5 +1,4 @@
 from ..losses import FeatureLoss, StyleLoss, TotalVariationLoss, INStatisticsMatchingStyleLoss
-from ...losses import RMSELoss
 from ..components import FeatureExtractor
 from ..utils import tensor_to_pil, PairedDataset
 from ...utils import save_model, load_model
@@ -126,7 +125,7 @@ class MultipleStylesTransferLearner:
         self._style_weight = style_weight
         self._total_variation_weight = total_variation_weight
         self._style_loss = INStatisticsMatchingStyleLoss(self._feature_extractor, style_layers).to(device)
-        self._content_loss = RMSELoss().to(device)
+        self._content_loss = MSELoss().to(device)
         self._total_variation_loss = TotalVariationLoss().to(device)
         self._optimizer = Adam(model.parameters()) if optimizer is None else optimizer
 
