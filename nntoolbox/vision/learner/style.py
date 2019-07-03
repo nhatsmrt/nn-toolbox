@@ -137,7 +137,7 @@ class MultipleStylesTransferLearner:
                 data = self._cb_handler.on_batch_begin({"content": content_batch, "style": style_batch}, True)
                 content_batch, style_batch = data["content"], data["style"]
                 self.learn_one_iter(content_batch, style_batch)
-            if e % eval_every == 1:
+            if e % eval_every == 0:
                 stop_training = self.evaluate()
                 if stop_training:
                     break
