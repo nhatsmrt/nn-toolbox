@@ -128,20 +128,20 @@ class MultipleStylesTransferLearner:
         self._content_loss = RMSELoss().to(device)
         self._optimizer = Adam(model.parameters()) if optimizer is None else optimizer
 
-    def learn(self, n_epoch: int, callbacks: Iterable[Callback]):
+    def learn(self, n_epoch: int, callbacks: Iterable[Callback], eval_every: int=1):
         print("Begin training")
         self._cb_handler = CallbackHandler(callbacks=callbacks)
         for e in range(n_epoch):
             print("Epoch " + str(e))
             self._model.train()
             for content_batch, style_batch in self._content_style_imgs:
-                print(len(content_batch))
                 data = self._cb_handler.on_batch_begin({"content": content_batch, "style": style_batch}, True)
                 content_batch, style_batch = data["content"], data["style"]
                 self.learn_one_iter(content_batch, style_batch)
-            stop_training = self.evaluate()
-            if stop_training:
-                break
+            if e % eval_every == 1:
+                stop_training = self.evaluate()
+                if stop_training:
+                    break
 
     def learn_one_iter(self, content_batch: Tensor, style_batch: Tensor):
         content_loss, style_loss = self.compute_losses(content_batch, style_batch)
