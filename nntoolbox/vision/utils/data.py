@@ -99,9 +99,10 @@ class UnlabelledImageListDataset(Dataset):
         return len(self._image_paths)
 
     def __getitem__(self, index):
-        image = Image.open(self._image_paths[index]).convert('RGB')
+        image = Image.open(self._image_paths[index])
         if self.img_dim is not None:
             image = image.resize(self.img_dim)
+        image = image.convert('RGB')
         if self.transform is not None:
             return self._to_tensor(self.transform(image))
         else:
