@@ -135,7 +135,7 @@ class MultipleStylesTransferLearner:
             print("Epoch " + str(e))
             self._model.train()
             for content_batch, style_batch in self._content_style_imgs:
-                print("Blah")
+                # print("Blah")
                 data = self._cb_handler.on_batch_begin({"content": content_batch, "style": style_batch}, True)
                 content_batch, style_batch = data["content"], data["style"]
                 self.learn_one_iter(content_batch, style_batch)
