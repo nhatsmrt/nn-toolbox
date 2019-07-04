@@ -232,7 +232,7 @@ final = learner.learn(
     final_metric='accuracy'
 )
 
-lsuv_init(module=model, input=get_first_batch(train_loader, callbacks))
+# lsuv_init(module=model, input=get_first_batch(train_loader, callbacks))
 
 print(final)
 load_model(model=model, path="weights/model.pt")
