@@ -10,12 +10,13 @@ from torch.utils.data import random_split
 
 from nntoolbox.vision.components import *
 from nntoolbox.vision.learner import SupervisedImageLearner
-from nntoolbox.utils import load_model, get_device, LRFinder, count_trainable_parameters
+from nntoolbox.utils import load_model, LRFinder, get_first_batch, get_device
 from nntoolbox.callbacks import *
 from nntoolbox.metrics import Accuracy, Loss
 from nntoolbox.vision.transforms import Cutout
 from nntoolbox.vision.models import ImageClassifier, EnsembleImageClassifier
 from nntoolbox.losses import SmoothedCrossEntropy
+from nntoolbox.init import lsuv_init
 
 from functools import partial
 
@@ -184,7 +185,7 @@ model = Sequential(
         pool_output_size=4,
         hidden_layer_sizes=(128, )
     )
-)
+).to(get_device())
 
 # print(count_trainable_parameters(model)) # 14437816 3075928
 
@@ -194,7 +195,7 @@ learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
     model=model,
-    criterion=SmoothedCrossEntropy(),
+    criterion=SmoothedCrossEntropy().to(get_device()),
     optimizer=optimizer,
     mixup=True
 )
@@ -211,6 +212,7 @@ learner = SupervisedImageLearner(
 swa = StochasticWeightAveraging(learner, average_after=335, update_every=670)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
+    ToDeviceCallback(),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.004, T_max=335)),
@@ -218,6 +220,7 @@ callbacks = [
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
 ]
+
 metrics = {
     "accuracy": Accuracy(),
     "loss": Loss()
@@ -228,6 +231,9 @@ final = learner.learn(
     metrics=metrics,
     final_metric='accuracy'
 )
+
+lsuv_init(module=model, input=get_first_batch(train_loader, callbacks))
+
 print(final)
 load_model(model=model, path="weights/model.pt")
 classifier = ImageClassifier(model, tta_transform=Compose([

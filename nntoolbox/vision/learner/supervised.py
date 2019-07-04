@@ -14,12 +14,15 @@ class SupervisedImageLearner:
 
     def __init__(
             self, train_data: DataLoader, val_data: DataLoader, model: Module,
-            criterion: Module, optimizer: Optimizer, mixup=False, mixup_alpha=0.4, device=get_device()
+            criterion: Module, optimizer: Optimizer,
+            mixup: bool=False, mixup_alpha: float=0.4, device=get_device()
     ):
         self._train_data = train_data
         self._val_data = val_data
-        self._model = model.to(device)
-        self._criterion = criterion.to(device)
+        # self._model = model.to(device)
+        self._model = model
+        # self._criterion = criterion.to(device)
+        self._criterion = criterion
         self._optimizer = optimizer
         self._device = device
         self._mixup = mixup
@@ -50,8 +53,8 @@ class SupervisedImageLearner:
         return self._cb_handler.on_train_end()
 
     def learn_one_iter(self, images: Tensor, labels: Tensor):
-        images = images.to(self._device)
-        labels = labels.to(self._device)
+        # images = images.to(self._device)
+        # labels = labels.to(self._device)
         data = self._cb_handler.on_batch_begin({'inputs': images, 'labels': labels}, True)
         images = data['inputs']
         labels = data['labels']
@@ -79,9 +82,14 @@ class SupervisedImageLearner:
         loss = 0
 
         for images, labels in self._val_data:
-            all_outputs.append(self._model(images.to(self._device)))
-            all_labels.append(labels)
-            loss += self.compute_loss(images.to(self._device), labels.to(self._device)).cpu().item() * len(images)
+            data = self._cb_handler.on_batch_begin({"inputs": images, "labels": labels}, False)
+            images, labels = data["inputs"], data["labels"]
+
+            # all_outputs.append(self._model(images.to(self._device)))
+            all_outputs.append(self._model(images))
+            all_labels.append(labels.cpu())
+            # loss += self.compute_loss(images.to(self._device), labels.to(self._device)).cpu().item() * len(images)
+            loss += self.compute_loss(images, labels).cpu().item() * len(images)
             total_data += len(images)
 
         loss /= total_data

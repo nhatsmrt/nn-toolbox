@@ -69,12 +69,11 @@ class INStatisticsMatchingStyleLoss(FeatureLoss):
         return output_features, target_features
 
 
-
 class TotalVariationLoss(nn.Module):
     '''
     Based on https://github.com/tensorflow/tensorflow/blob/r1.13/tensorflow/python/ops/image_ops_impl.py
     '''
-    def __init__(self, base_loss = nn.L1Loss):
+    def __init__(self, base_loss=nn.L1Loss):
         super(TotalVariationLoss, self).__init__()
         self._base_loss = base_loss()
 
