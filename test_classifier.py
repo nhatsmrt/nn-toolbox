@@ -154,7 +154,7 @@ class SEResNeXtShakeShakeAttention(ResNeXtBlock):
 # block_1 = ManifoldMixupModule(SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU))
 
 model = Sequential(
-    ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=7, activation=nn.ReLU),
+    ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU),
     SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU),
     # layer_1,
     # block_1,
@@ -173,25 +173,26 @@ model = Sequential(
         in_channels=64, out_channels=128,
         kernel_size=2, stride=2
     ),
-    # SEResNeXtShakeShakeAttention(num_heads=8, in_channels=128),
     SEResNeXtShakeShake(in_channels=128),
     ConvolutionalLayer(
         in_channels=128, out_channels=256,
         kernel_size=2, stride=2
     ),
-    SEResNeXtShakeShakeAttention(num_heads=8, in_channels=256),
-    # ConvolutionalLayer(
-    #     in_channels=256, out_channels=512,
-    #     kernel_size=2, stride=2
-    # ),
-    # SEResNeXtShakeShake(in_channels=512),
+    SEResNeXtShakeShake(in_channels=256),
+    ConvolutionalLayer(
+        in_channels=256, out_channels=512,
+        kernel_size=2, stride=2
+    ),
+    SEResNeXtShakeShake(in_channels=512),
     FeedforwardBlock(
-        in_channels=256,
+        in_channels=512,
         out_features=10,
-        pool_output_size=4,
-        hidden_layer_sizes=(128, )
+        pool_output_size=2,
+        hidden_layer_sizes=(256, 128)
     )
 ).to(get_device())
+
+# lsuv_init(module=model, input=get_first_batch(train_loader, callbacks = [ToDeviceCallback()]))
 
 # print(count_trainable_parameters(model)) # 14437816 3075928
 
@@ -206,56 +207,55 @@ learner = SupervisedImageLearner(
     mixup=True
 )
 
-# lr_finder = LRFinder(
-#     model=model,
-#     train_data=train_loader,
-#     criterion=SmoothedCrossEntropy(),
-#     optimizer=partial(SGD, lr=0.074, weight_decay=0.0001, momentum=0.9),
-#     device=get_device()
-# )
-# lr_finder.find_lr(warmup=100)
-
-swa = StochasticWeightAveraging(learner, average_after=335, update_every=670)
-callbacks = [
-    # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
-    ToDeviceCallback(),
-    Tensorboard(),
-    # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.004, T_max=335)),
-    swa,
-    LossLogger(),
-    ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
-]
-
-metrics = {
-    "accuracy": Accuracy(),
-    "loss": Loss()
-}
-final = learner.learn(
-    n_epoch=10,
-    callbacks=callbacks,
-    metrics=metrics,
-    final_metric='accuracy'
+lr_finder = LRFinder(
+    model=model,
+    train_data=train_loader,
+    criterion=SmoothedCrossEntropy(),
+    optimizer=partial(SGD, lr=0.074, weight_decay=0.0001, momentum=0.9),
+    device=get_device()
 )
+lr_finder.find_lr(warmup=100)
 
-# lsuv_init(module=model, input=get_first_batch(train_loader, callbacks))
-
-print(final)
-load_model(model=model, path="weights/model.pt")
-classifier = ImageClassifier(model, tta_transform=Compose([
-    ToPILImage(),
-    RandomHorizontalFlip(),
-    RandomResizedCrop(size=(128, 128), scale=(0.95, 1.0)),
-    ToTensor()
-]))
-print(classifier.evaluate(test_loader))
-
-print("Test SWA:")
-model = swa.get_averaged_model()
-classifier = ImageClassifier(model, tta_transform=Compose([
-    ToPILImage(),
-    RandomHorizontalFlip(),
-    RandomResizedCrop(size=(128, 128), scale=(0.95, 1.0)),
-    ToTensor()
-]))
-print(classifier.evaluate(test_loader))
+# swa = StochasticWeightAveraging(learner, average_after=335, update_every=670)
+# callbacks = [
+#     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
+#     ToDeviceCallback(),
+#     Tensorboard(),
+#     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
+#     LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.004, T_max=335)),
+#     swa,
+#     LossLogger(),
+#     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
+# ]
+#
+# metrics = {
+#     "accuracy": Accuracy(),
+#     "loss": Loss()
+# }
+# final = learner.learn(
+#     n_epoch=10,
+#     callbacks=callbacks,
+#     metrics=metrics,
+#     final_metric='accuracy'
+# )
+#
+#
+# print(final)
+# load_model(model=model, path="weights/model.pt")
+# classifier = ImageClassifier(model, tta_transform=Compose([
+#     ToPILImage(),
+#     RandomHorizontalFlip(),
+#     RandomResizedCrop(size=(128, 128), scale=(0.95, 1.0)),
+#     ToTensor()
+# ]))
+# print(classifier.evaluate(test_loader))
+#
+# print("Test SWA:")
+# model = swa.get_averaged_model()
+# classifier = ImageClassifier(model, tta_transform=Compose([
+#     ToPILImage(),
+#     RandomHorizontalFlip(),
+#     RandomResizedCrop(size=(128, 128), scale=(0.95, 1.0)),
+#     ToTensor()
+# ]))
+# print(classifier.evaluate(test_loader))
