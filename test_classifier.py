@@ -42,19 +42,25 @@ torch.backends.cudnn.benchmark=True
 # kernel = partial(PolynomialKernel, dp=3, cp=2.0)
 
 
-data = ImageFolder(
-    'data/imagenette-160',
+train_val_dataset = ImageFolder(
+    'data/imagenette-160/train',
     transform=Compose([
         Resize((128, 128)),
         ToTensor()
     ])
 )
-train_val_size = int(0.8 * len(data))
-test_size = len(data) - train_val_size
-train_size = int(0.8 * train_val_size)
-val_size = train_val_size - train_size
 
-train_val_dataset, test_dataset = random_split(data, [train_val_size, test_size])
+test_dataset = ImageFolder(
+    'data/imagenette-160/val',
+    transform=Compose([
+        Resize((128, 128)),
+        ToTensor()
+    ])
+)
+
+train_size = int(0.8 * len(train_val_dataset))
+val_size = len(train_val_dataset) - train_size
+
 train_dataset, val_dataset = random_split(train_val_dataset, [train_size, val_size])
 
 train_dataset.dataset.transform = Compose(
