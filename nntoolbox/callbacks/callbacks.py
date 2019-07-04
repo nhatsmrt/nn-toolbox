@@ -9,6 +9,10 @@ class Callback:
 
     def on_batch_begin(self, data: Dict[str, Tensor], train) -> Dict[str, Tensor]: return data
 
+    def after_outputs(self, outputs: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]: return outputs
+
+    def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]: return losses
+
     def on_phase_begin(self): pass
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool: return False
@@ -39,6 +43,18 @@ class CallbackHandler:
             for callback in self._callbacks:
                 data = callback.on_batch_begin(data, train)
         return data
+
+    def after_outputs(self, outputs: Dict[str, Tensor], train) -> Dict[str, Tensor]:
+        if self._callbacks is not None:
+            for callback in self._callbacks:
+                outputs = callback.on_batch_begin(outputs, train)
+        return outputs
+
+    def after_losses(self, losses: Dict[str, Tensor], train) -> Dict[str, Tensor]:
+        if self._callbacks is not None:
+            for callback in self._callbacks:
+                losses = callback.after_losses(losses, train)
+        return losses
 
     def on_batch_end(self, logs: Dict[str, Any]):
         logs["iter_cnt"] = self._iter_cnt

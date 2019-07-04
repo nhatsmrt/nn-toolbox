@@ -107,5 +107,7 @@ class SupervisedImageLearner:
         else:
             criterion = self._criterion
 
-        return criterion(self._model(images), labels)
+        outputs = self._cb_handler.after_outputs({"output": self._model(images)}, True)
+
+        return criterion(outputs["output"], labels)
 
