@@ -60,7 +60,7 @@ class CallbackHandler:
     def after_outputs(self, outputs: Dict[str, Tensor], train) -> Dict[str, Tensor]:
         if self._callbacks is not None:
             for callback in self._callbacks:
-                outputs = callback.on_batch_begin(outputs, train)
+                outputs = callback.after_outputs(outputs, train)
         return outputs
 
     def after_losses(self, losses: Dict[str, Tensor], train) -> Dict[str, Tensor]:
