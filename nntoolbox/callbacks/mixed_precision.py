@@ -120,7 +120,7 @@ class MixedPrecision(Callback):
             self.count = 0
             return False
 
-        to_master_grads(self.model_param_groups, self.master_param_groups)
+        # to_master_grads(self.model_param_groups, self.master_param_groups)
         # for group in self.master_param_groups:
         #     for param in group:
         #         if param.grad is not None:
