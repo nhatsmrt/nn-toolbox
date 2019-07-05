@@ -63,7 +63,8 @@ class SupervisedImageLearner:
         if self._mixup:
             images, labels = self._mixup_transformer.transform_data(images, labels)
 
-        loss = self.compute_loss(images, labels)
+        loss = self._cb_handler.after_losses({"loss": self.compute_loss(images, labels)}, True)["loss"]
+
 
         loss.backward()
         self._cb_handler.after_backward()
