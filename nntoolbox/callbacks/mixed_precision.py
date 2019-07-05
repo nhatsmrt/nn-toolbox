@@ -1,6 +1,6 @@
 """
 Implement mixed precision training as a callback
-Based on fastai's course 2 v3 notebook and apex library
+Adap from fastai's course 2 v3 notebook and apex library
 """
 import torch
 from torch.optim import Optimizer
@@ -16,7 +16,8 @@ __all__ = ['MixedPrecision']
 
 class MixedPrecision(Callback):
     """
-    Callback for mixed precision training, based on fastai course 2 v3 notebook 10
+    Callback for mixed precision training, adapted from fastai course 2 v3 notebook 10
+    with minor changes to work with pytorch optimizer
     Training flow:
         switch model to float16, keeping a copy of params in float32
         forward (on float16 model):
@@ -90,6 +91,7 @@ class MixedPrecision(Callback):
     def after_backward(self):
         """
         Copy the gradient to master and unscale
+        :return: True if gradient does not overflow
         """
         if self.dynamic and check_grad_overflow(self.model_param_groups):
             # if overflow, divide the loss scale, zerograd and ignore batch:
@@ -114,7 +116,7 @@ class MixedPrecision(Callback):
     def after_step(self) -> bool:
         """
         Zero the gradient of the float16 and update master model's weight to float16 model
-        :return:
+        :return: false (skipping zero grad step for optimizer)
         """
         self.learner._model.zero_grad()
         to_model_params(self.model_param_groups, self.master_param_groups)
@@ -149,31 +151,45 @@ def get_param_groups(optimizer: Optimizer) -> Tuple[List[List[Tensor]], List[Lis
 
 
 def to_master_grads(model_param_groups: List[List[Tensor]], master_param_groups: List[List[Tensor]]):
+    """
+    Copy gradient from float 16 model to master model
+    :param model_param_groups:
+    :param master_param_groups:
+    """
     for model_group, master_group in zip(model_param_groups, master_param_groups):
         model_grads_to_master_grads(model_params=model_group, master_params=master_group)
 
 
 def copy_param_to_optimizer(optimizer, param_groups):
+    """
+    Copy parameter to optimizer
+    :param optimizer:
+    :param param_groups:
+    """
     for optimizer_group, model_group in zip(optimizer.param_groups, param_groups):
         optimizer_group['params'] = model_group
 
 
 def to_model_params(model_param_groups: List[List[Tensor]], master_param_groups: List[List[Tensor]]):
+    """
+    Copy master params to float16 model params
+    :param model_param_groups:
+    :param master_param_groups:
+    :return:
+    """
     for model_group, master_group in zip(model_param_groups, master_param_groups):
         master_params_to_model_params(model_params=model_group, master_params=master_group)
 
 
 def check_grad_overflow(param_groups: List[List[Tensor]]) -> bool:
+    """
+    Check whether any parameter's gradient is overflow
+    :param param_groups:
+    :return: true if a gradient is overflown
+    """
     for group in param_groups:
         for param in group:
             if param.grad is not None:
                 grad_sum = float(param.grad.data.float().sum())
                 if grad_sum == float('inf') or grad_sum == float('inf') or grad_sum != grad_sum: return True
     return False
-
-
-# layer = torch.nn.Linear(3, 5)
-# optimizer = torch.optim.Adam(layer.parameters())
-# for group in optimizer.param_groups:
-#     for param in group['params']:
-#         print(param.requires_grad)
