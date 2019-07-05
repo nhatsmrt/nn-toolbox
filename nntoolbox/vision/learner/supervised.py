@@ -67,6 +67,7 @@ class SupervisedImageLearner:
 
         loss.backward()
         if self._cb_handler.after_backward():
+            print("Step")
             self._optimizer.step()
             if self._cb_handler.after_step():
                 self._optimizer.zero_grad()
