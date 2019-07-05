@@ -107,8 +107,9 @@ class MixedPrecision(Callback):
         for master_pg, optimizer_pg in zip(self.master_param_groups, self.learner._optimizer.param_groups):
             for master_param, optimizer_param in zip(master_pg, optimizer_pg['params']):
                 if master_param.grad is not None:
-                    print(master_param.grad)
-                    print(optimizer_param.grad)
+                    print(torch.sum(master_param.grad))
+                    print(torch.sum(optimizer_param.grad))
+                    print()
                     break
             break
 
