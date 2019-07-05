@@ -108,6 +108,7 @@ class MixedPrecision(Callback):
             if self.count == self.scale_wait:
                 self.count = 0
                 self.loss_scale *= self.div_factor
+        return True
 
     def after_step(self) -> bool:
         """
