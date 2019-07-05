@@ -183,7 +183,8 @@ model = Sequential(
         in_channels=256, out_channels=512,
         kernel_size=2, stride=2
     ),
-    SEResNeXtShakeShake(in_channels=512),
+    # SEResNeXtShakeShake(in_channels=512),
+    SEResNeXtShakeShakeAttention(num_heads=8, in_channels=512),
     FeedforwardBlock(
         in_channels=512,
         out_features=10,
@@ -215,8 +216,7 @@ learner = SupervisedImageLearner(
 # )
 # lr_finder.find_lr(warmup=100)
 
-# swa = StochasticWeightAveraging(learner, average_after=5025, update_every=670)
-swa = StochasticWeightAveraging(learner, average_after=0, update_every=670)
+swa = StochasticWeightAveraging(learner, average_after=5025, update_every=670)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     ToDeviceCallback(),
