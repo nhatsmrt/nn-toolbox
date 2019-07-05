@@ -6,7 +6,7 @@ import torch
 from torch.optim import Optimizer
 from nntoolbox.callbacks import Callback
 from apex.fp16_utils import convert_network, model_grads_to_master_grads, master_params_to_model_params
-from typing import Dict
+from typing import Dict, Any
 from torch import Tensor, float32, float16
 from typing import List, Tuple
 
@@ -90,6 +90,10 @@ class MixedPrecision(Callback):
         self.learner._model.zero_grad()
         to_model_params(self.model_param_groups, self.master_param_groups)
         return False
+
+    def on_batch_end(self, logs: Dict[str, Any]):
+        if "loss" in logs:
+            logs['loss'] = logs['loss'] / self.loss_scale
 
     def on_train_end(self):
         """
