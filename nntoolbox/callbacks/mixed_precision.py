@@ -94,7 +94,32 @@ class MixedPrecision(Callback):
         Copy the gradient to master and unscale
         :return: True if gradient does not overflow
         """
+        # to_master_grads(self.model_param_groups, self.master_param_groups)
+        # for group in self.master_param_groups:
+        #     for param in group:
+        #         if param.grad is not None:
+        #             # isnan_before = torch.isnan(param.grad).sum() > 0
+        #             param.grad.div_(self.loss_scale)
+        #             # isnan_after = torch.isnan(param.grad).sum() > 0
+        #             # if (not isnan_before) and isnan_after:
+        #             #     print("found problem")
+
         to_master_grads(self.model_param_groups, self.master_param_groups)
+        if self.dynamic and check_grad_overflow(self.master_param_groups) and self.loss_scale > 1:
+            # if overflow, divide the loss scale, zerograd and ignore batch:
+            self.loss_scale /= self.div_factor
+            print("Overflow, changing loss scale to " + str(self.loss_scale))
+            self.learner._model.zero_grad()
+            for group in self.master_param_groups:
+                for param in group:
+                    if param.grad is not None:
+                        # isnan_before = torch.isnan(param.grad).sum() > 0
+                        param.grad.detach_()
+                        param.grad.zero_()
+
+            self.count = 0
+            return False
+
         for group in self.master_param_groups:
             for param in group:
                 if param.grad is not None:
@@ -103,23 +128,6 @@ class MixedPrecision(Callback):
                     # isnan_after = torch.isnan(param.grad).sum() > 0
                     # if (not isnan_before) and isnan_after:
                     #     print("found problem")
-
-        if self.dynamic and check_grad_overflow(self.master_param_groups) and self.loss_scale > 1:
-            # if overflow, divide the loss scale, zerograd and ignore batch:
-            self.loss_scale /= self.div_factor
-            print("Overflow, changing loss scale to " + str(self.loss_scale))
-            self.learner._model.zero_grad()
-            self.count = 0
-            return False
-
-        # if self.dynamic and check_grad_overflow(self.model_param_groups) and self.loss_scale > 1:
-        #     # if overflow, divide the loss scale, zerograd and ignore batch:
-        #     self.loss_scale /= self.div_factor
-        #     print("Overflow, changing loss scale to " + str(self.loss_scale))
-        #     self.learner._model.zero_grad()
-        #     self.count = 0
-        #     return False
-
 
         if self.dynamic:
             self.count += 1
