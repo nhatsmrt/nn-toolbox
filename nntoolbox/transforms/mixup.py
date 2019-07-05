@@ -18,7 +18,7 @@ class MixupTransformer:
     def transform_data(self, images: Tensor, labels: Tensor) -> Tuple[Tensor, Tensor]:
         lambd = np.random.beta(self._alpha, self._alpha, labels.size(0))
         lambd = np.concatenate([lambd[:, None], 1 - lambd[:, None]], 1).max(1)
-        lambd = torch.from_numpy(lambd).float().to(images.device)
+        lambd = torch.from_numpy(lambd).to(images.dtype).to(images.device)
         shuffle = torch.randperm(labels.size(0)).to(images.device)
         images_shuffled,labels_shuffled = images[shuffle], labels[shuffle]
 
@@ -26,7 +26,7 @@ class MixupTransformer:
             images * lambd.view((lambd.size(0), 1, 1, 1))
             + images_shuffled * (1 - lambd).view((lambd.size(0), 1, 1, 1))
         )
-        new_labels = torch.cat([labels[:, None].float(), labels_shuffled[:, None].float(), lambd[:, None].float()], 1)
+        new_labels = torch.cat([labels[:, None].to(images.dtype), labels_shuffled[:, None].to(images.dtype), lambd[:, None].to(images.dtype)], 1)
 
         return new_images, new_labels
 
