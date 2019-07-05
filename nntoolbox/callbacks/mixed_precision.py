@@ -101,9 +101,9 @@ def get_param_groups(optimizer: Optimizer) -> Tuple[List[List[Tensor]], List[Lis
     :param optimizer:
     :return: lists of params
     """
-    model_param_groups = [[param for param in group if param.requires_grad] for group in optimizer.param_groups]
+    model_param_groups = [[param for param in group['params'] if param.requires_grad] for group in optimizer.param_groups]
     master_param_groups = [
-        [param.clone().float().detach() for param in group if param.requires_grad]
+        [param.clone().float().detach() for param in group['params'] if param.requires_grad]
         for group in optimizer.param_groups
     ]
     for group in master_param_groups:
@@ -124,6 +124,8 @@ def to_model_params(model_param_groups: List[List[Tensor]], master_param_groups:
 
 
 
-# data = {"input_1": torch.rand(12).float(), "input_2": torch.rand(12).long()}
-# cb = MixedPrecision()
-# print(cb.on_batch_begin(data, True))
+# layer = torch.nn.Linear(3, 5)
+# optimizer = torch.optim.Adam(layer.parameters())
+# for group in optimizer.param_groups:
+#     for param in group['params']:
+#         print(param.requires_grad)
