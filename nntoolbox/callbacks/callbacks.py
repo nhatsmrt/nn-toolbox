@@ -46,6 +46,11 @@ class CallbackHandler:
         self._epoch = 0
         self.learner = learner
 
+    def on_train_begin(self):
+        if self._callbacks is not None:
+            for callback in self._callbacks:
+                callback.on_train_begin()
+
     def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         if self._callbacks is not None:
             for callback in self._callbacks:
