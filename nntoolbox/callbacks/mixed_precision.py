@@ -93,7 +93,7 @@ class MixedPrecision(Callback):
 
     def on_batch_end(self, logs: Dict[str, Any]):
         if "loss" in logs:
-            logs['loss'] = logs['loss'] / self.loss_scale
+            logs['loss'] /= self.loss_scale
 
     def on_train_end(self):
         """
