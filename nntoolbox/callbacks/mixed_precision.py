@@ -110,13 +110,6 @@ class MixedPrecision(Callback):
                 if param.grad is not None:
                     param.grad.div_(self.loss_scale)
 
-        for group in self.master_param_groups:
-            for param in group:
-                if param.grad is not None:
-                    print(param.grad.sum())
-                    break
-            break
-
         if self.dynamic:
             self.count += 1
             if self.count >= self.scale_wait and self.loss_scale < self.max_loss_scale:

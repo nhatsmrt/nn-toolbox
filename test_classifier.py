@@ -220,7 +220,7 @@ swa = StochasticWeightAveraging(learner, average_after=5025, update_every=670)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     ToDeviceCallback(),
-    MixedPrecision(),
+    # MixedPrecision(),
     Tensorboard(),
     NaNWarner(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
