@@ -19,7 +19,7 @@ class SequenceClassifierLearner:
         self._device = device
 
     def learn(self, n_epoch, callbacks, metrics, final_metric):
-        self._cb_handler = CallbackHandler(callbacks, metrics, final_metric)
+        self._cb_handler = CallbackHandler(self, callbacks, metrics, final_metric)
 
         for e in range(n_epoch):
             self._model.train()

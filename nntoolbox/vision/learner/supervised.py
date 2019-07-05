@@ -37,7 +37,7 @@ class SupervisedImageLearner:
         if load_path is not None:
             load_model(self._model, load_path)
 
-        self._cb_handler = CallbackHandler(callbacks, metrics, final_metric)
+        self._cb_handler = CallbackHandler(self, callbacks, metrics, final_metric)
         for e in range(n_epoch):
             print("Epoch " + str(e))
             self._model.train()
@@ -64,8 +64,13 @@ class SupervisedImageLearner:
 
         self._optimizer.zero_grad()
         loss = self.compute_loss(images, labels)
+
         loss.backward()
+        self._cb_handler.after_backward()
+
         self._optimizer.step()
+        self._cb_handler.after_step()
+
         if self._device.type == 'cuda':
             mem = torch.cuda.memory_allocated(self._device)
             self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})

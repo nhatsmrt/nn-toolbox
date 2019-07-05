@@ -13,11 +13,15 @@ class Callback:
 
     def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]: return losses
 
-    def on_phase_begin(self): pass
+    def after_backward(self): pass
+
+    def after_step(self): pass
+
+    # def on_phase_begin(self): pass
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool: return False
 
-    def on_phase_end(self): pass
+    # def on_phase_end(self): pass
 
     def on_batch_end(self, logs: Dict[str, Any]): pass
 
@@ -26,17 +30,21 @@ class Callback:
 
 class CallbackHandler:
     def __init__(
-            self, callbacks: Iterable[Callback]=None,
-            metrics: Dict[str, Metric]=None, final_metric: str='accuracy'
+            self, learner, callbacks: Iterable[Callback]=None, metrics: Dict[str, Metric]=None,
+            final_metric: str='accuracy'
     ):
         if metrics is not None:
             assert final_metric in metrics
+
+        if callbacks is not None:
+            for callback in callbacks: callback.learner = learner
 
         self._callbacks = callbacks
         self._metrics = metrics
         self._final_metric = final_metric
         self._iter_cnt = 0
         self._epoch = 0
+        self.learner = learner
 
     def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         if self._callbacks is not None:
@@ -55,6 +63,16 @@ class CallbackHandler:
             for callback in self._callbacks:
                 losses = callback.after_losses(losses, train)
         return losses
+
+    def after_backward(self):
+        if self._callbacks is not None:
+            for callback in self._callbacks:
+                callback.after_backward()
+
+    def after_step(self):
+        if self._callbacks is not None:
+            for callback in self._callbacks:
+                callback.after_step()
 
     def on_batch_end(self, logs: Dict[str, Any]):
         logs["iter_cnt"] = self._iter_cnt
