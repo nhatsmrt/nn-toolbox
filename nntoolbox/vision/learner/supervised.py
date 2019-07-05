@@ -63,14 +63,14 @@ class SupervisedImageLearner:
         if self._mixup:
             images, labels = self._mixup_transformer.transform_data(images, labels)
 
-        self._optimizer.zero_grad()
         loss = self.compute_loss(images, labels)
 
         loss.backward()
         self._cb_handler.after_backward()
 
         self._optimizer.step()
-        self._cb_handler.after_step()
+        if self._cb_handler.after_step():
+            self._optimizer.zero_grad()
 
         if self._device.type == 'cuda':
             mem = torch.cuda.memory_allocated(self._device)

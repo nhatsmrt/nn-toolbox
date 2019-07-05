@@ -36,6 +36,7 @@ class MixedPrecision(Callback):
         self.learner._model = convert_network(self.learner._model, float16)
         self.model_param_groups, self.master_param_groups = get_param_groups(self.learner._optimizer)
         self.learner._optimizer.param_groups = self.master_param_groups
+        self.learner._optimizer.zero_grad = self.learner._model.zero_grad
 
     def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         """
@@ -80,13 +81,14 @@ class MixedPrecision(Callback):
             for param in group:
                 if param.grad is not None: param.grad.div_(self.loss_scale)
 
-    def after_step(self):
+    def after_step(self) -> bool:
         """
         Zero the gradient of the float16 and update master model's weight to float16 model
         :return:
         """
         self.learner._model.zero_grad()
         to_model_params(self.model_param_groups, self.master_param_groups)
+        return False
 
     def on_train_end(self):
         """

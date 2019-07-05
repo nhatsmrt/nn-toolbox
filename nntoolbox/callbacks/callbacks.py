@@ -15,7 +15,7 @@ class Callback:
 
     def after_backward(self): pass
 
-    def after_step(self): pass
+    def after_step(self) -> bool: return True
 
     # def on_phase_begin(self): pass
 
@@ -74,10 +74,12 @@ class CallbackHandler:
             for callback in self._callbacks:
                 callback.after_backward()
 
-    def after_step(self):
+    def after_step(self) -> bool:
+        ret = True
         if self._callbacks is not None:
             for callback in self._callbacks:
-                callback.after_step()
+                ret = ret and callback.after_step()
+        return ret
 
     def on_batch_end(self, logs: Dict[str, Any]):
         logs["iter_cnt"] = self._iter_cnt
