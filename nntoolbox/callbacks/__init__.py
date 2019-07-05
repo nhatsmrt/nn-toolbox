@@ -6,3 +6,4 @@ from .swa import *
 from .fge import *
 from .device import *
 from .mixed_precision import *
+from .nan import *

@@ -104,6 +104,14 @@ class MixedPrecision(Callback):
                     # if (not isnan_before) and isnan_after:
                     #     print("found problem")
 
+        for master_pg, optimizer_pg in zip(self.master_param_groups, self.learner._optimizer.param_group):
+            for master_param, optimizer_param in zip(master_pg, optimizer_pg['params']):
+                if master_param.grad is not None:
+                    print(master_param.grad)
+                    print(optimizer_param.grad)
+                    break
+            break
+
         if self.dynamic and check_grad_overflow(self.master_param_groups):
             # if overflow, divide the loss scale, zerograd and ignore batch:
             if self.loss_scale > 1:

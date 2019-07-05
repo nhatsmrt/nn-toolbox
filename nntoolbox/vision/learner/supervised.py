@@ -54,8 +54,6 @@ class SupervisedImageLearner:
         return self._cb_handler.on_train_end()
 
     def learn_one_iter(self, images: Tensor, labels: Tensor):
-        # images = images.to(self._device)
-        # labels = labels.to(self._device)
         data = self._cb_handler.on_batch_begin({'inputs': images, 'labels': labels}, True)
         images = data['inputs']
         labels = data['labels']
@@ -67,7 +65,6 @@ class SupervisedImageLearner:
 
         loss.backward()
         if self._cb_handler.after_backward():
-            print("Step")
             self._optimizer.step()
             if self._cb_handler.after_step():
                 self._optimizer.zero_grad()
@@ -91,10 +88,8 @@ class SupervisedImageLearner:
             data = self._cb_handler.on_batch_begin({"inputs": images, "labels": labels}, False)
             images, labels = data["inputs"], data["labels"]
 
-            # all_outputs.append(self._model(images.to(self._device)))
             all_outputs.append(self._model(images))
             all_labels.append(labels.cpu())
-            # loss += self.compute_loss(images.to(self._device), labels.to(self._device)).cpu().item() * len(images)
             loss += self.compute_loss(images, labels, False).cpu().item() * len(images)
             total_data += len(images)
 

@@ -1,9 +1,9 @@
 from torch.utils.tensorboard import SummaryWriter
 from .callbacks import Callback
-from typing import Sequence, Dict, Any
-from torch import Tensor
-from ..utils import is_nan
-from warnings import warn
+from typing import Sequence
+
+
+__all__ = ['Tensorboard', 'LossLogger', 'MultipleMetricLogger']
 
 
 class Tensorboard(Callback):
@@ -72,10 +72,3 @@ class MultipleMetricLogger(Callback):
         for metric in self._epoch_metrics:
             assert metric in logs
             print(metric + ": " + str(logs[metric]))
-
-
-class NaNWarner(Callback):
-    def on_batch_end(self, logs: Dict[str, Any]):
-        for key in logs:
-            if isinstance(logs[key], Tensor) and is_nan(logs[key]):
-                warn(key + " becomes NaN at iteration " + str(logs["iter_cnt"]))
