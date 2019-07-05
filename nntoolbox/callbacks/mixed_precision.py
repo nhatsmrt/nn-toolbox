@@ -97,7 +97,11 @@ class MixedPrecision(Callback):
             # if overflow, divide the loss scale, zerograd and ignore batch:
             self.loss_scale /= self.div_factor
             print("Overflow, changing loss scale to " + str(self.loss_scale))
-            self.learner._model.zero_grad()
+            # self.learner._model.zero_grad()
+            for group in self.model_param_groups:
+                for param in group:
+                    if param.requires_grad:
+                        param.grad = None
             self.count = 0
             return False
 
