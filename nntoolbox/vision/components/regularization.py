@@ -60,14 +60,14 @@ class ShakeShakeFunction(torch.autograd.Function):
             cardinality = ctx.saved_tensors[1].item()
             branch_weights = 1.0 / cardinality * torch.ones(
                 size=(cardinality, grad_output.shape[0])
-            ).to(grad_output.dtype).to(grad_output.device)
+            ).to(grad_output.device)
         else: # shake mode
             cardinality = ctx.saved_tensors[1].item()
             branch_weights = ShakeShakeFunction.get_branch_weights(
                 cardinality, grad_output.shape[0]
             ).to(grad_output.device)
 
-        return branch_weights.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1) * grad_output, None, None
+        return branch_weights.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1).to(grad_output.dtype) * grad_output, None, None
 
     @staticmethod
     def get_branch_weights(cardinality: Tensor, batch_size: Tensor) -> Tensor:
