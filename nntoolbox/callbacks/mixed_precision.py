@@ -22,8 +22,8 @@ class MixedPrecision(Callback):
         forward (on float16 model):
             convert input to 16, forward all the way to prediction, convert back to 32, compute loss and scale
         backward:
-            backprop through 16 model (float16 grad) -> copy to float32 model -> scale down gradient
-            -> update master model -> copy to float16 model
+            backprop through 16 model (float16 grad) -> dynamically scale loss
+            (if no overflow) -> copy to float32 model -> scale down gradient -> update master model -> copy to float16 model
         switch model back to float32 after training
     """
     def __init__(
@@ -94,9 +94,11 @@ class MixedPrecision(Callback):
         if self.dynamic and check_grad_overflow(self.model_param_groups):
             # if overflow, divide the loss scale, zerograd and ignore batch:
             self.loss_scale /= self.div_factor
+            print(self.loss_scale)
             self.learner._model.zero_grad()
             self.count = 0
             return False
+
         to_master_grads(self.model_param_groups, self.master_param_groups)
         for group in self.master_param_groups:
             for param in group:
