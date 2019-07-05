@@ -221,6 +221,7 @@ callbacks = [
     ToDeviceCallback(),
     MixedPrecision(),
     Tensorboard(),
+    NaNWarner(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.06, T_max=335)),
     swa,
