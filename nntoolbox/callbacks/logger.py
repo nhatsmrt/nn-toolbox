@@ -78,4 +78,4 @@ class NaNWarner(Callback):
     def on_batch_end(self, logs: Dict[str, Any]):
         for key in logs:
             if isinstance(logs[key], Tensor) and is_nan(logs[key]):
-                warn(key + " becomes NaN")
+                warn(key + " becomes NaN at iteration " + str(logs["iter_cnt"]))

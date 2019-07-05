@@ -104,9 +104,10 @@ class MixedPrecision(Callback):
                     # if (not isnan_before) and isnan_after:
                     #     print("found problem")
 
-        if self.dynamic and check_grad_overflow(self.master_param_groups) and self.loss_scale > 1:
+        if self.dynamic and check_grad_overflow(self.master_param_groups):
             # if overflow, divide the loss scale, zerograd and ignore batch:
-            self.loss_scale /= self.div_factor
+            if self.loss_scale > 1:
+                self.loss_scale /= self.div_factor
             print("Overflow, changing loss scale to " + str(self.loss_scale))
             self.learner._model.zero_grad()
             for group in self.master_param_groups:
