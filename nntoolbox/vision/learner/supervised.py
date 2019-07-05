@@ -38,6 +38,7 @@ class SupervisedImageLearner:
             load_model(self._model, load_path)
 
         self._cb_handler = CallbackHandler(self, callbacks, metrics, final_metric)
+        self._cb_handler.on_train_begin()
         for e in range(n_epoch):
             print("Epoch " + str(e))
             self._model.train()
