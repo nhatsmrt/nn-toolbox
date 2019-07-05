@@ -35,8 +35,9 @@ class MixedPrecision(Callback):
         """Convert network to float16"""
         self.learner._model = convert_network(self.learner._model, float16)
         self.model_param_groups, self.master_param_groups = get_param_groups(self.learner._optimizer)
-        self.learner._optimizer.param_groups = self.master_param_groups
-        self.learner._optimizer.zero_grad = self.learner._model.zero_grad
+        # self.learner._optimizer.param_groups = self.master_param_groups
+        # self.learner._optimizer.zero_grad = self.learner._model.zero_grad
+        copy_param_to_optimizer(self.learner._optimizer, self.master_param_groups)
 
     def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         """
@@ -117,6 +118,11 @@ def get_param_groups(optimizer: Optimizer) -> Tuple[List[List[Tensor]], List[Lis
 def to_master_grads(model_param_groups: List[List[Tensor]], master_param_groups: List[List[Tensor]]):
     for model_group, master_group in zip(model_param_groups, master_param_groups):
         model_grads_to_master_grads(model_params=model_group, master_params=master_group)
+
+
+def copy_param_to_optimizer(optimizer, param_groups):
+    for optimizer_group, model_group in zip(optimizer.param_groups, param_groups):
+        optimizer_group['params'] = model_group
 
 
 def to_model_params(model_param_groups: List[List[Tensor]], master_param_groups: List[List[Tensor]]):
