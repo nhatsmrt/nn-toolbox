@@ -24,7 +24,7 @@ class MixedPrecision(Callback):
         forward (on float16 model):
             convert input to 16, forward all the way to prediction, convert back to 32, compute loss and scale
         backward:
-            backprop through 16 model (float16 grad) -> dynamically scale loss
+            backprop through 16 model (float16 grad) -> dynamically adjust scaling factor
             (if no overflow) -> copy to float32 model -> scale down gradient -> update master model -> copy to float16 model
         switch model back to float32 after training
     """
