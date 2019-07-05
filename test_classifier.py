@@ -192,11 +192,11 @@ model = Sequential(
     )
 ).to(get_device())
 
-lsuv_init(module=model, input=get_first_batch(train_loader, callbacks = [ToDeviceCallback()])[0])
+# lsuv_init(module=model, input=get_first_batch(train_loader, callbacks = [ToDeviceCallback()])[0])
 
 # print(count_trainable_parameters(model)) # 14437816 3075928
 
-optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.30, momentum=0.9)
+optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.25, momentum=0.9)
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
@@ -222,7 +222,7 @@ callbacks = [
     MixedPrecision(),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.075, T_max=335)),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.06, T_max=335)),
     swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
