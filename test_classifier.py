@@ -192,7 +192,7 @@ model = Sequential(
     )
 ).to(get_device())
 
-lsuv_init(module=model, input=get_first_batch(train_loader, callbacks = [ToDeviceCallback()]))
+lsuv_init(module=model, input=get_first_batch(train_loader, callbacks = [ToDeviceCallback()])[0])
 
 # print(count_trainable_parameters(model)) # 14437816 3075928
 
