@@ -31,7 +31,7 @@ class StochasticWeightAveraging(Callback):
             if logs["epoch"] >= self._average_after and (logs["epoch"] - self._average_after) % self._update_every == 0:
                 n_model = (logs["epoch"] - self._average_after) // self._update_every
                 for model_p, swa_p in zip(self._model.parameters(), self.model_swa.parameters()):
-                    swa_p.data = (swa_p.data * n_model + model_p.data) / (n_model + 1)
+                    swa_p.data = (swa_p.data * n_model + model_p.data.to(swa_p.data.dtype)) / (n_model + 1)
                 print("Update averaged model after epoch " + str(logs["epoch"]))
         return False
 
@@ -40,7 +40,7 @@ class StochasticWeightAveraging(Callback):
             if logs["iter_cnt"] >= self._average_after and (logs["iter_cnt"] - self._average_after) % self._update_every == 0:
                 n_model = (logs["iter_cnt"] - self._average_after) // self._update_every
                 for model_p, swa_p in zip(self._model.parameters(), self.model_swa.parameters()):
-                    swa_p.data = (swa_p.data * n_model + model_p.data) / (n_model + 1)
+                    swa_p.data = (swa_p.data * n_model + model_p.data.to(swa_p.data.dtype)) / (n_model + 1)
                 print("Update averaged model after iteration " + str(logs["iter_cnt"]))
 
     def on_train_end(self):
