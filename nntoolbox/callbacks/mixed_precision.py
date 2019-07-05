@@ -101,7 +101,7 @@ class MixedPrecision(Callback):
             for group in self.model_param_groups:
                 for param in group:
                     if param.requires_grad:
-                        param.grad = None
+                        param.grad.zero_()
             self.count = 0
             return False
 

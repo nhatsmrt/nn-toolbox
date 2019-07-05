@@ -19,7 +19,7 @@ class StochasticWeightAveraging(Callback):
         :param update_every: how many epochs/iters between each average update
         """
         assert timescale == "epoch" or timescale == "iter"
-        self._learner = learner
+        self.learner = learner
         self._model = learner._model
         self.model_swa = copy_model(self._model).to(device)
         self._update_every = update_every
@@ -44,8 +44,9 @@ class StochasticWeightAveraging(Callback):
                 print("Update averaged model after iteration " + str(logs["iter_cnt"]))
 
     def on_train_end(self):
-        for images, labels in self._learner._train_data:
-            self.model_swa(images.to(self._learner._device))
+        self.model_swa.to(self.learner._device)
+        for images, labels in self.learner._train_data:
+            self.model_swa(images.to(self.learner._device))
 
     def get_averaged_model(self) -> Module:
         """

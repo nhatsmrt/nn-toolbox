@@ -25,6 +25,7 @@ class FastGeometricEnsembling(Callback):
         self._save_after = save_after
         self._timescale = timescale
         self._max_n_model = max_n_model
+        self.learner = None
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         if self._timescale == "epoch":
@@ -42,6 +43,10 @@ class FastGeometricEnsembling(Callback):
                 if len(self.models) > self._max_n_model:
                     self.models.pop()
                 print("Save model after iteration " + str(logs["iter_cnt"]))
+
+    def on_train_end(self):
+        self.models = list(self.models)
+        self.models = [model.to(self.learner.device) for model in self.models]
 
     def get_models(self) -> List[Module]:
         '''

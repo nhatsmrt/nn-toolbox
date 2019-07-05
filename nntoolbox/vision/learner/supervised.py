@@ -63,7 +63,7 @@ class SupervisedImageLearner:
         if self._mixup:
             images, labels = self._mixup_transformer.transform_data(images, labels)
 
-        loss = self._cb_handler.after_losses({"loss": self.compute_loss(images, labels)}, True)["loss"]
+        loss = self._cb_handler.after_losses({"loss": self.compute_loss(images, labels, True)}, True)["loss"]
 
         loss.backward()
         if self._cb_handler.after_backward():
@@ -94,7 +94,7 @@ class SupervisedImageLearner:
             all_outputs.append(self._model(images))
             all_labels.append(labels.cpu())
             # loss += self.compute_loss(images.to(self._device), labels.to(self._device)).cpu().item() * len(images)
-            loss += self.compute_loss(images, labels).cpu().item() * len(images)
+            loss += self.compute_loss(images, labels, False).cpu().item() * len(images)
             total_data += len(images)
 
         loss /= total_data
@@ -106,13 +106,13 @@ class SupervisedImageLearner:
 
         return self._cb_handler.on_epoch_end(logs)
 
-    def compute_loss(self, images: Tensor, labels: Tensor) -> Tensor:
+    def compute_loss(self, images: Tensor, labels: Tensor, train: bool) -> Tensor:
         if self._mixup:
             criterion = self._mixup_transformer.transform_loss(self._criterion, self._model.training)
         else:
             criterion = self._criterion
 
-        outputs = self._cb_handler.after_outputs({"output": self._model(images)}, True)
+        outputs = self._cb_handler.after_outputs({"output": self._model(images)}, train)
 
         return criterion(outputs["output"], labels)
 
