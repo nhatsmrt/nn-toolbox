@@ -101,13 +101,6 @@ class MixedPrecision(Callback):
                 self.loss_scale /= self.div_factor
             print("Overflow, changing loss scale to " + str(self.loss_scale))
             self.learner._model.zero_grad()
-            for group in self.master_param_groups:
-                for param in group:
-                    if param.grad is not None:
-                        # isnan_before = torch.isnan(param.grad).sum() > 0
-                        param.grad.detach_()
-                        param.grad.zero_()
-
             self.count = 0
             return False
 
@@ -115,11 +108,7 @@ class MixedPrecision(Callback):
         for group in self.master_param_groups:
             for param in group:
                 if param.grad is not None:
-                    # isnan_before = torch.isnan(param.grad).sum() > 0
                     param.grad.div_(self.loss_scale)
-                    # isnan_after = torch.isnan(param.grad).sum() > 0
-                    # if (not isnan_before) and isnan_after:
-                    #     print("found problem")
 
         if self.dynamic:
             self.count += 1
