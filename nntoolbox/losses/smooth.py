@@ -35,7 +35,7 @@ class SmoothedCrossEntropy(Module):
         if self.weight is not None:
             assert len(self.weight) == output.shape[1]
 
-        smoothed_label = self.smooth_label(label, output.shape[1])
+        smoothed_label = self.smooth_label(label, output.shape[1]).to(output.dtype)
         output = F.log_softmax(output, 1)
         loss = -output * smoothed_label
         if self.weight is not None:
