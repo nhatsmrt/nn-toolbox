@@ -94,18 +94,8 @@ class MixedPrecision(Callback):
         Copy the gradient to master and unscale
         :return: True if gradient does not overflow
         """
-        to_master_grads(self.model_param_groups, self.master_param_groups)
-        for group in self.master_param_groups:
-            for param in group:
-                if param.grad is not None:
-                    # isnan_before = torch.isnan(param.grad).sum() > 0
-                    param.grad.div_(self.loss_scale)
-                    # isnan_after = torch.isnan(param.grad).sum() > 0
-                    # if (not isnan_before) and isnan_after:
-                    #     print("found problem")
 
-
-        if self.dynamic and check_grad_overflow(self.master_param_groups):
+        if self.dynamic and check_grad_overflow(self.model_param_groups):
             # if overflow, divide the loss scale, zerograd and ignore batch:
             if self.loss_scale > 1:
                 self.loss_scale /= self.div_factor
@@ -121,24 +111,15 @@ class MixedPrecision(Callback):
             self.count = 0
             return False
 
-        for master_pg, optimizer_pg in zip(self.master_param_groups, self.learner._optimizer.param_groups):
-            for master_param, optimizer_param in zip(master_pg, optimizer_pg['params']):
-                if master_param.grad is not None:
-                    print(torch.sum(master_param.grad))
-                    print(torch.sum(optimizer_param.grad))
-                    print()
-                    break
-            break
-
-        # to_master_grads(self.model_param_groups, self.master_param_groups)
-        # for group in self.master_param_groups:
-        #     for param in group:
-        #         if param.grad is not None:
-        #             # isnan_before = torch.isnan(param.grad).sum() > 0
-        #             param.grad.div_(self.loss_scale)
-        #             # isnan_after = torch.isnan(param.grad).sum() > 0
-        #             # if (not isnan_before) and isnan_after:
-        #             #     print("found problem")
+        to_master_grads(self.model_param_groups, self.master_param_groups)
+        for group in self.master_param_groups:
+            for param in group:
+                if param.grad is not None:
+                    # isnan_before = torch.isnan(param.grad).sum() > 0
+                    param.grad.div_(self.loss_scale)
+                    # isnan_after = torch.isnan(param.grad).sum() > 0
+                    # if (not isnan_before) and isnan_after:
+                    #     print("found problem")
 
         if self.dynamic:
             self.count += 1
@@ -226,5 +207,5 @@ def check_grad_overflow(param_groups: List[List[Tensor]]) -> bool:
         for param in group:
             if param.grad is not None:
                 grad_sum = float(param.grad.data.float().sum())
-                if grad_sum == float('inf') or grad_sum == float('inf') or grad_sum != grad_sum: return True
+                if grad_sum == float('-inf') or grad_sum == float('inf') or grad_sum != grad_sum: return True
     return False
