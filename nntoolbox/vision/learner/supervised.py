@@ -65,20 +65,18 @@ class SupervisedImageLearner:
 
         loss = self._cb_handler.after_losses({"loss": self.compute_loss(images, labels)}, True)["loss"]
 
-
         loss.backward()
-        self._cb_handler.after_backward()
+        if self._cb_handler.after_backward():
+            self._optimizer.step()
+            if self._cb_handler.after_step():
+                self._optimizer.zero_grad()
 
-        self._optimizer.step()
-        if self._cb_handler.after_step():
-            self._optimizer.zero_grad()
-
-        if self._device.type == 'cuda':
-            mem = torch.cuda.memory_allocated(self._device)
-            self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})
-        else:
-            self._cb_handler.on_batch_end({"loss": loss})
-        # self._cb_handler.on_batch_end({"loss": loss})
+            if self._device.type == 'cuda':
+                mem = torch.cuda.memory_allocated(self._device)
+                self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})
+            else:
+                self._cb_handler.on_batch_end({"loss": loss})
+            # self._cb_handler.on_batch_end({"loss": loss})
 
     @torch.no_grad()
     def evaluate(self) -> float:

@@ -26,9 +26,21 @@ class MixedPrecision(Callback):
             -> update master model -> copy to float16 model
         switch model back to float32 after training
     """
-    def __init__(self, loss_scale: int=512):
+    def __init__(
+            self, loss_scale: int=512, dynamic: bool=True,
+            max_loss_scale: float=2.**24, div_factor: float=2., scale_wait: int=500
+    ):
+        """
+        :param loss_scale: loss scale (if not dynamic)
+        :param dynamic: whether to scale loss dynamically
+        :param max_loss_scale: upper bound for loss scale
+        :param div_factor: how much to increment loss scale each time
+        :param scale_wait: how many iterations of not overflowing to wait before scaling loss again
+        """
         assert torch.backends.cudnn.enabled
-        self.loss_scale = loss_scale
+        self.loss_scale = loss_scale if not dynamic else max_loss_scale
+        self.max_loss_scale, self.div_factor, self.scale_wait = max_loss_scale, div_factor, scale_wait
+        self.dynamic = dynamic
         self.learner = None
 
     def on_train_begin(self):
@@ -38,6 +50,7 @@ class MixedPrecision(Callback):
         # self.learner._optimizer.param_groups = self.master_param_groups
         # self.learner._optimizer.zero_grad = self.learner._model.zero_grad
         copy_param_to_optimizer(self.learner._optimizer, self.master_param_groups)
+        if self.dynamic: self.count = 0
 
     def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         """
@@ -65,22 +78,34 @@ class MixedPrecision(Callback):
 
     def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         """
-        Scale the loss to prevent gradient vanishing
+        Scale the loss to prevent gradient underflow
         :param losses: dictionary of losses
         :return: scaled losses
         """
-        for key in losses:
-            losses[key] = losses[key] * self.loss_scale
+        if train:
+            for key in losses:
+                losses[key] = losses[key] * self.loss_scale
         return losses
 
     def after_backward(self):
         """
         Copy the gradient to master and unscale
         """
+        if self.dynamic and check_grad_overflow(self.model_param_groups):
+            # if overflow, divide the loss scale, zerograd and ignore batch:
+            self.loss_scale /= self.div_factor
+            self.learner._model.zero_grad()
+            self.count = 0
+            return False
         to_master_grads(self.model_param_groups, self.master_param_groups)
         for group in self.master_param_groups:
             for param in group:
                 if param.grad is not None: param.grad.div_(self.loss_scale)
+        if self.dynamic:
+            self.count += 1
+            if self.count == self.scale_wait:
+                self.count = 0
+                self.loss_scale *= self.div_factor
 
     def after_step(self) -> bool:
         """
@@ -134,6 +159,13 @@ def to_model_params(model_param_groups: List[List[Tensor]], master_param_groups:
         master_params_to_model_params(model_params=model_group, master_params=master_group)
 
 
+def check_grad_overflow(param_groups: List[List[Tensor]]) -> bool:
+    for group in param_groups:
+        for param in group:
+            if param.grad is not None:
+                grad_sum = float(param.grad.data.float().sum())
+                if grad_sum == float('inf') or grad_sum == float('inf') or grad_sum != grad_sum: return True
+    return False
 
 
 # layer = torch.nn.Linear(3, 5)
