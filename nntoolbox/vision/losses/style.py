@@ -1,7 +1,9 @@
-from torch import nn
+from torch import nn, Tensor
 import math
 import torch
 from ..components import AdaIN
+
+__all__ = ['FeatureLoss', 'StyleLoss', 'INStatisticsMatchingStyleLoss', 'TotalVariationLoss']
 
 
 class FeatureLoss(nn.Module):
@@ -46,9 +48,9 @@ class StyleLoss(FeatureLoss):
 
 
 class INStatisticsMatchingStyleLoss(FeatureLoss):
-    '''
+    """
     As suggested by https://arxiv.org/pdf/1703.06868.pdf
-    '''
+    """
     def __init__(self, model, layers, base_loss=nn.MSELoss):
         super(INStatisticsMatchingStyleLoss, self).__init__(model, layers, base_loss)
 
@@ -70,14 +72,14 @@ class INStatisticsMatchingStyleLoss(FeatureLoss):
 
 
 class TotalVariationLoss(nn.Module):
-    '''
+    """
     Based on https://github.com/tensorflow/tensorflow/blob/r1.13/tensorflow/python/ops/image_ops_impl.py
-    '''
+    """
     def __init__(self, base_loss=nn.L1Loss):
         super(TotalVariationLoss, self).__init__()
         self._base_loss = base_loss()
 
-    def forward(self, input):
+    def forward(self, input: Tensor) -> Tensor:
         return 0.5 * (
             self._base_loss(input[:, :, 1:, :], input[:, :, :-1, :])
             + self._base_loss(input[:, :, :, 1:], input[:, :, :, :-1])
