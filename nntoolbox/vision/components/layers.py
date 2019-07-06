@@ -166,6 +166,7 @@ class PixelShuffleConvolutionLayer(nn.Sequential):
     """
     Upsample the image using normal convolution follow by pixel shuffling
     https://arxiv.org/pdf/1609.05158.pdf
+    https://arxiv.org/pdf/1806.02658.pdf (additional blurring at the end)
     """
     def __init__(
             self, in_channels: int, out_channels: int, upscale_factor: int, activation=nn.ReLU,
@@ -177,6 +178,7 @@ class PixelShuffleConvolutionLayer(nn.Sequential):
         :param upscale_factor: factor to increase spatial resolution by
         :param activation: activation function
         :param normalization: normalization function
+        :param: whether to blur at the end to remove checkerboard artifact
         """
         conv = nn.Conv2d(
             in_channels=in_channels,
@@ -193,7 +195,7 @@ class PixelShuffleConvolutionLayer(nn.Sequential):
             nn.PixelShuffle(upscale_factor)
         ]
         if blur:
-            layers += [nn.ReplicationPad2d(1), nn.AvgPool2d(kernel_size=2, stride=1)]
+            layers += [nn.ReplicationPad2d((1, 0, 1, 0)), nn.AvgPool2d(kernel_size=2, stride=1)]
         super(PixelShuffleConvolutionLayer, self).__init__(*layers)
 
     def initialize_conv(self, conv, in_channels: int, out_channels: int, upscale_factor: int):
