@@ -7,7 +7,6 @@ from math import log10
 from typing import Callable
 from matplotlib import pyplot as plt
 from copy import deepcopy
-from nntoolbox.callbacks import Callback, CallbackHandler
 import numpy as np
 from typing import Tuple, List, Optional
 from .utils import is_nan
