@@ -75,7 +75,7 @@ class LRFinder:
                     outputs = callback.after_outputs({"outputs": outputs}, True)["outputs"]
                 loss = self.criterion(outputs, labels.to(self._device))
                 for callback in callbacks:
-                    loss = callback.after_losses({"loss": loss})["loss"]
+                    loss = callback.after_losses({"loss": loss}, True)["loss"]
 
             if not is_nan(loss):
                 avg_loss = beta * avg_loss + (1 - beta) * loss.cpu().item()
