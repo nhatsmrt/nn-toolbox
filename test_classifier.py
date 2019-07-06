@@ -83,11 +83,15 @@ class SEResNeXtShakeShake(ResNeXtBlock):
                 [
                     nn.Sequential(
                         ConvolutionalLayer(
-                            in_channels, in_channels, 3, padding=1,
+                            in_channels, in_channels // 4, kernel_size=1, padding=0,
                             activation=activation, normalization=normalization
                         ),
                         ConvolutionalLayer(
-                            in_channels, in_channels, 3, padding=1,
+                            in_channels // 4, in_channels // 4, kernel_size=3, padding=1,
+                            activation=activation, normalization=normalization
+                        ),
+                        ConvolutionalLayer(
+                            in_channels // 4, in_channels, kernel_size=1, padding=0,
                             activation=activation, normalization=normalization
                         ),
                         SEBlock(in_channels, reduction_ratio)
@@ -126,19 +130,25 @@ class SEResNeXtShakeShakeAttention(ResNeXtBlock):
             branches=nn.ModuleList(
                 [
                     nn.Sequential(
-                        StandAloneMultiheadAttentionLayer(
-                            num_heads=num_heads,
+                        ConvolutionalLayer(
                             in_channels=in_channels,
-                            out_channels=in_channels,
-                            kernel_size=7,
+                            out_channels=in_channels // 2,
+                            kernel_size=1,
                             activation=activation,
                             normalization=normalization
                         ),
                         StandAloneMultiheadAttentionLayer(
                             num_heads=num_heads,
-                            in_channels=in_channels,
+                            in_channels=in_channels // 2,
+                            out_channels=in_channels // 2,
+                            kernel_size=3,
+                            activation=activation,
+                            normalization=normalization
+                        ),
+                        ConvolutionalLayer(
+                            in_channels=in_channels // 2,
                             out_channels=in_channels,
-                            kernel_size=7,
+                            kernel_size=1,
                             activation=activation,
                             normalization=normalization
                         ),
@@ -183,8 +193,8 @@ model = Sequential(
         in_channels=256, out_channels=512,
         kernel_size=2, stride=2
     ),
-    # SEResNeXtShakeShake(in_channels=512),
-    SEResNeXtShakeShakeAttention(num_heads=8, in_channels=512),
+    SEResNeXtShakeShake(in_channels=512),
+    # SEResNeXtShakeShakeAttention(num_heads=8, in_channels=512),
     FeedforwardBlock(
         in_channels=512,
         out_features=10,

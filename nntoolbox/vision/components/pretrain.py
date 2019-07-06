@@ -2,6 +2,7 @@ from torch import nn
 from .layers import InputNormalization
 from torchvision.models import resnet18, vgg16_bn
 
+
 # # based on https://github.com/chenyuntc/pytorch-book/blob/master/chapter8-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB(Neural%20Style)/PackedVGG.py
 class PretrainedModel(nn.Sequential):
     def __init__(self, model=resnet18, embedding_size=128, fine_tune=False):
@@ -45,6 +46,7 @@ class FeatureExtractor(nn.Module):
         self._features = list(model.features)
         if last_layer is not None:
             self._features = self._features[:last_layer]
+        self._features = nn.ModuleList(self._features)
 
     def forward(self, input, layers=None):
         if self._normalization is not None:
