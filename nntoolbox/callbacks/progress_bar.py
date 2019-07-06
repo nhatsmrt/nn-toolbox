@@ -8,6 +8,7 @@ from fastprogress.fastprogress import format_time
 from typing import Dict, Any
 
 
+# INCOMPLETE
 class ProgressBar(Callback):
     def on_train_begin(self):
         self.master_bar = master_bar()
