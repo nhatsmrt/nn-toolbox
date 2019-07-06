@@ -13,9 +13,10 @@ __all__ = [
 
 
 class LambdaLayer(nn.Module):
-    '''
+    """
     Implement a quick layer wrapper for a function
-    '''
+    Useful for stateless layer (e.g without parameters)
+    """
     def __init__(self, fn: Callable[[Tensor], Tensor]):
         super(LambdaLayer, self).__init__()
         self.fn = fn
@@ -25,9 +26,9 @@ class LambdaLayer(nn.Module):
 
 
 class ConvolutionalLayer(nn.Sequential):
-    '''
+    """
     Simple convolutional layer: input -> conv2d -> activation -> norm 2d
-    '''
+    """
     def __init__(
             self, in_channels, out_channels,
             kernel_size=3, stride=1, padding=0,
@@ -52,10 +53,10 @@ class ConvolutionalLayer(nn.Sequential):
 
 
 class CoordConv2D(nn.Conv2d):
-    '''
+    """
     Implement CoordConv
     https://arxiv.org/pdf/1807.03247.pdf
-    '''
+    """
     def __init__(
             self, in_channels, out_channels,
             kernel_size, stride=1, padding=0,
@@ -73,11 +74,11 @@ class CoordConv2D(nn.Conv2d):
 
     @staticmethod
     def augment_input(input):
-        '''
+        """
         Add two coordinate channels to input
         :param input: (N, C, H, W)
         :return: (N, C + 2, H, W)
-        '''
+        """
         batch_size = input.shape[0]
         h = input.shape[2]
         w = input.shape[3]
@@ -94,9 +95,9 @@ class CoordConv2D(nn.Conv2d):
 
 
 class CoordConvolutionalLayer(nn.Sequential):
-    '''
+    """
     Simple convolutional layer: input -> conv2d -> activation -> batch norm 2d
-    '''
+    """
     def __init__(
             self, in_channels, out_channels,
             kernel_size=3, stride=1, padding=0,
@@ -120,15 +121,15 @@ class CoordConvolutionalLayer(nn.Sequential):
         )
 
 class HighwayConvolutionalLayer(HighwayLayer):
-    '''
+    """
     Highway layer (for images):
     y = T(x) * H(x) + (1 - T(x)) * x
-    '''
+    """
     def __init__(self, in_channels, main):
-        '''
+        """
         :param in_channels: Number of channels of each input
         :param main: The main network H(x). Return output of same number of channels and dimensions
-        '''
+        """
         super(HighwayConvolutionalLayer, self).__init__(
             in_features=in_channels,
             main=main,
@@ -142,9 +143,9 @@ class Flatten(nn.Module):
 
 
 class ResizeConvolutionalLayer(nn.Module):
-    '''
+    """
     Upsample the image (using an interpolation algorithm), then pass to a conv layer
-    '''
+    """
     def __init__(self, in_channels, out_channels, activation=nn.ReLU, normalization=nn.BatchNorm2d, mode='bilinear'):
         super(ResizeConvolutionalLayer, self).__init__()
         self._mode = mode
@@ -162,9 +163,9 @@ class ResizeConvolutionalLayer(nn.Module):
 
 
 class PixelShuffleConvolutionLayer(nn.Sequential):
-    '''
+    """
     Upsample the image using normal convolution follow by pixel shuffling
-    '''
+    """
     def __init__(
             self, in_channels: int, out_channels: int, upscale_factor: int, activation=nn.ReLU,
             normalization=nn.BatchNorm2d
@@ -215,10 +216,10 @@ class Reshape(nn.Module):
 
 
 class InputNormalization(nn.Module):
-    '''
+    """
     Normalize input before feed into a network
     Adapt from https://pytorch.org/tutorials/advanced/neural_style_tutorial.html
-    '''
+    """
 
     def __init__(self, mean, std):
         super(InputNormalization, self).__init__()
