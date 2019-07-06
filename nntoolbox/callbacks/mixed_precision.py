@@ -96,7 +96,7 @@ class MixedPrecision(Callback):
         """
 
         if self.dynamic and check_grad_overflow(self.model_param_groups):
-            # if overflow, divide the loss scale, zerograd and ignore batch:
+            # if overflow, divide the loss scale, zero grad and ignore batch:
             if self.loss_scale > 1:
                 self.loss_scale /= self.div_factor
             print("Overflow, changing loss scale to " + str(self.loss_scale))

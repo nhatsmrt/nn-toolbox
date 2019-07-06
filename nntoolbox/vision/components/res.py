@@ -80,6 +80,31 @@ class ResidualBlockPreActivation(ResNeXtBlock):
         )
 
 
+class BottleneckPreActivation(ResNeXtBlock):
+    def __init__(self, in_channels, activation=nn.ReLU, normalization=nn.BatchNorm2d):
+        super(BottleneckPreActivation, self).__init__(
+            branches=nn.ModuleList(
+                [
+                    nn.Sequential(
+                        ConvolutionalLayer(
+                            in_channels, in_channels // 4, 1, padding=0,
+                            activation=activation, normalization=normalization
+                        ),
+                        ConvolutionalLayer(
+                            in_channels // 4, in_channels // 4, 3, padding=1,
+                            activation=activation, normalization=normalization
+                        ),
+                        ConvolutionalLayer(
+                            in_channels // 4, in_channels, 1, padding=0,
+                            activation=activation, normalization=normalization
+                        )
+                    )
+                ]
+            ),
+            use_shake_shake=False
+        )
+
+
 class ResidualBlockPreActivationKer(ResNeXtBlock):
     def __init__(self, in_channels, kernel, activation=nn.ReLU, normalization=nn.BatchNorm2d):
         super(ResidualBlockPreActivationKer, self).__init__(

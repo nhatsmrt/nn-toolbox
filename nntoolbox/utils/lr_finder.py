@@ -2,12 +2,14 @@ import torch
 from torch.optim import Optimizer
 from torch.nn import Module
 from torch.utils.data import DataLoader
+from torch import device
 from math import log10
 from typing import Callable
 from matplotlib import pyplot as plt
 from copy import deepcopy
+from nntoolbox.callbacks import Callback, CallbackHandler
 import numpy as np
-from typing import Tuple
+from typing import Tuple, List, Optional
 from .utils import is_nan
 
 
@@ -22,7 +24,7 @@ class LRFinder:
     '''
     def __init__(
             self, model: Module, train_data: DataLoader,
-            criterion: Module, optimizer: Callable[..., Optimizer], device
+            criterion: Module, optimizer: Callable[..., Optimizer], device: device
     ):
         self.model = model
         self.train_data = train_data
@@ -32,7 +34,7 @@ class LRFinder:
 
     def find_lr(
             self, lr0: float=1e-7, lr_final: float=10.0, warmup: int=15,
-            beta: float=0.98, verbose: bool=True, display: bool=True
+            beta: float=0.98, verbose: bool=True, display: bool=True, callbacks: Optional[List['Callback']]=None
     ) -> Tuple[float, float]:
         '''
         Start from a very low initial learning rate, then gradually increases it up to a big lr until loss blows up
@@ -42,6 +44,7 @@ class LRFinder:
         :param beta: smoothing coefficient for loss
         :param verbose: whether to print out the progress
         :param display: whether to graph
+        :param callbacks: an optional list of callbacks to process input
         :return: a base_lr and the best lr (base_lr = best_lr / 4)
         '''
         assert warmup > 0
@@ -60,8 +63,21 @@ class LRFinder:
         changes = []
         for inputs, labels in self.train_data:
             iter += 1
-            outputs = self.model(inputs.to(self._device))
-            loss = self.criterion(outputs, labels.to(self._device))
+            if callbacks is None:
+                outputs = self.model(inputs.to(self._device))
+                loss = self.criterion(outputs, labels.to(self._device))
+            else:
+                data = {"inputs": inputs, "labels": labels}
+                for callback in callbacks:
+                    data = callback.on_batch_begin(data, True)
+                inputs, labels = data["inputs"], data["labels"]
+                outputs = self.model(inputs)
+                for callback in callbacks:
+                    outputs = callback.after_outputs({"outputs": outputs}, True)["outputs"]
+                loss = self.criterion(outputs, labels.to(self._device))
+                for callback in callbacks:
+                    loss = callback.after_losses({"loss": loss})["loss"]
+
             if not is_nan(loss):
                 avg_loss = beta * avg_loss + (1 - beta) * loss.cpu().item()
                 changes.append(avg_loss / (1 + beta ** iter) - smoothed_loss)
