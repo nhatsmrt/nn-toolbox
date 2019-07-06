@@ -132,6 +132,7 @@ class MultipleStylesTransferLearner:
     def learn(self, n_epoch: int, callbacks: Iterable[Callback], eval_every: int=1):
         print("Begin training")
         self._cb_handler = CallbackHandler(self, callbacks=callbacks)
+        self._cb_handler.on_train_begin()
         for e in range(n_epoch):
             self._model.train()
             for content_batch, style_batch in self._content_style_imgs:
