@@ -3,6 +3,7 @@ from .utils import plot_schedule
 from typing import Optional
 
 
+# UNTESTED
 class CyclicalTriangularLR(LambdaLR):
     def __init__(self, optimizer: Optimizer, min_lr: float, max_lr: float, cycle_length: int, inc_fraction: float):
         """
@@ -28,6 +29,7 @@ class CyclicalTriangularLR(LambdaLR):
         self.iter = 0
 
 
+# UNTESTED
 class TriangularLR(LambdaLR):
     def __init__(self, optimizer: Optimizer, min_lr: float, max_lr: float, cycle_length: int, inc_fraction: float):
         """

@@ -165,10 +165,11 @@ class ResizeConvolutionalLayer(nn.Module):
 class PixelShuffleConvolutionLayer(nn.Sequential):
     """
     Upsample the image using normal convolution follow by pixel shuffling
+    https://arxiv.org/pdf/1609.05158.pdf
     """
     def __init__(
             self, in_channels: int, out_channels: int, upscale_factor: int, activation=nn.ReLU,
-            normalization=nn.BatchNorm2d
+            normalization=nn.BatchNorm2d, blur: bool=True
     ):
         """
         :param in_channels: input channels
@@ -181,15 +182,18 @@ class PixelShuffleConvolutionLayer(nn.Sequential):
             in_channels=in_channels,
             out_channels=out_channels * (upscale_factor ** 2),
             kernel_size=3,
-            padding=1,
+            padding=0,
         )
         self.initialize_conv(conv, in_channels, out_channels, upscale_factor)
         layers = [
+            nn.ReplicationPad2d(1),
             conv,
             activation(),
             normalization(num_features=out_channels * (upscale_factor ** 2)),
             nn.PixelShuffle(upscale_factor)
         ]
+        if blur:
+            layers += [nn.ReplicationPad2d(1), nn.AvgPool2d(kernel_size=2, stride=1)]
         super(PixelShuffleConvolutionLayer, self).__init__(*layers)
 
     def initialize_conv(self, conv, in_channels: int, out_channels: int, upscale_factor: int):
