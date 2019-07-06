@@ -183,7 +183,6 @@ class PixelShuffleConvolutionLayer(nn.Sequential):
             padding=1,
         )
         self.initialize_conv(conv, in_channels, out_channels, upscale_factor)
-        print(conv.weight[:, 0, 0, 0])
         layers = [
             conv,
             activation(),
