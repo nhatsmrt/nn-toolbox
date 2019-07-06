@@ -224,7 +224,7 @@ lr_finder = LRFinder(
     optimizer=partial(SGD, lr=0.074, weight_decay=0.0001, momentum=0.9),
     device=get_device()
 )
-lr_finder.find_lr(warmup=100, callbacks=[ToDeviceCallback(), MixedPrecision()])
+lr_finder.find_lr(warmup=100, callbacks=[ToDeviceCallback()])
 
 # swa = StochasticWeightAveraging(learner, average_after=5025, update_every=670)
 # callbacks = [
