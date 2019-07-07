@@ -149,7 +149,8 @@ class MultipleStylesTransferLearner:
         content_loss, style_loss, total_variation_loss = self.compute_losses(content_batch, style_batch)
         total_loss = content_loss + style_loss + total_variation_loss
 
-        total_loss.backward()
+        if self._cb_handler.on_backward_begin():
+            total_loss.backward()
         if self._cb_handler.after_backward():
             self._optimizer.step()
             if self._cb_handler.after_step():

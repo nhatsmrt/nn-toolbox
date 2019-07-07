@@ -13,6 +13,8 @@ class Callback:
 
     def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]: return losses
 
+    def on_backward_begin(self) -> bool: return True # if false, skip backward
+
     def after_backward(self) -> bool: return True # whether to continue with iteration
 
     def after_step(self) -> bool: return True
@@ -68,6 +70,13 @@ class CallbackHandler:
             for callback in self._callbacks:
                 losses = callback.after_losses(losses, train)
         return losses
+
+    def on_backward_begin(self):
+        ret = True
+        if self._callbacks is not None:
+            for callback in self._callbacks:
+                ret = ret and callback.on_backward_begin()
+        return ret
 
     def after_backward(self) -> bool:
         ret = True

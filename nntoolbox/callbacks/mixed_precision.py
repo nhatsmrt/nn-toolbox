@@ -163,9 +163,7 @@ class MixedPrecisionV2(Callback):
 
     def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         """
-        Scale the loss to prevent gradient underflow
-        :param losses: dictionary of losses
-        :return: scaled losses
+        Call amp functionality
         """
         if train:
             total_loss = 0
@@ -176,20 +174,13 @@ class MixedPrecisionV2(Callback):
             self.optimizer.step()
         return losses
 
+    def on_backward_begin(self): return False
+
     def after_backward(self):
-        """
-        Copy the gradient to master and unscale
-        :return: True if gradient does not overflow
-        """
         self.optimizer.zero_grad()
         return True
 
-    def after_step(self) -> bool:
-        """
-        Zero the gradient of the float16 and update master model's weight to float16 model
-        :return: false (skipping zero grad step for optimizer)
-        """
-        return False
+    def after_step(self) -> bool: return False
 
 def get_param_groups(optimizer: Optimizer) -> Tuple[List[List[Tensor]], List[List[Tensor]]]:
     """
