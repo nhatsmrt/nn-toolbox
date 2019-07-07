@@ -183,12 +183,13 @@ class PixelShuffleConvolutionLayer(nn.Sequential):
         conv = nn.Conv2d(
             in_channels=in_channels,
             out_channels=out_channels * (upscale_factor ** 2),
-            kernel_size=3,
+            # kernel_size=3,
+            kernel_size=1,
             padding=0,
         )
         self.initialize_conv(conv, in_channels, out_channels, upscale_factor)
         layers = [
-            nn.ReplicationPad2d(1),
+            # nn.ReplicationPad2d(1),
             conv,
             activation(),
             normalization(num_features=out_channels * (upscale_factor ** 2)),
