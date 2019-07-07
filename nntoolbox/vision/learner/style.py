@@ -188,7 +188,10 @@ class MultipleStylesTransferLearner:
         output = self._model.decode(t) # g(t)
         fgt = self._model.encode(output) # f(g(t))
 
-        outputs = self._cb_handler.after_outputs({"output": output, "fgt": fgt, "t": t}, True)
+        outputs = self._cb_handler.after_outputs(
+            {"output": output, "fgt": fgt, "t": t, "style_batch": style_batch},
+            True
+        )
         output, fgt, t = outputs["output"], outputs["fgt"], outputs["t"]
 
         content_loss = self._content_weight * self._content_loss(t, fgt)
