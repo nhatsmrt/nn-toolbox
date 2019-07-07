@@ -1,5 +1,6 @@
 from torchvision.transforms import functional as F
 
+
 def gram_matrix(x):
     n, c, h, w = x.size()
     x = x.view(n, c, -1)

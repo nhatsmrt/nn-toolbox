@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 __all__ = [
     'compute_num_batch', 'copy_model', 'save_model',
     'load_model', 'get_device', 'get_trainable_parameters',
-    'count_trainable_parameters', 'to_onehot', 'is_nan',
+    'count_trainable_parameters', 'to_onehot', 'is_nan', 'is_valid',
     'get_children', 'get_all_submodules', 'get_first_batch'
 ]
 
@@ -95,6 +95,16 @@ def is_nan(tensor: Tensor) -> bool:
     :return: whether any element of the tensor is NaN
     """
     return torch.isnan(tensor).any()
+
+
+def is_valid(tensor: Tensor) -> bool:
+    """
+    Check if a tensor is valid (not inf + not nan)
+    :param tensor:
+    :return: whether a tensor is valid
+    """
+    sum = float(tensor.sum().cpu().detach())
+    return sum != float('-inf') and sum != float('inf') and sum == sum
 
 
 def get_children(model: Module) -> List[Module]:

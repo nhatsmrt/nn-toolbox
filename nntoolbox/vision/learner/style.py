@@ -1,7 +1,7 @@
 from ..losses import FeatureLoss, StyleLoss, TotalVariationLoss, INStatisticsMatchingStyleLoss
 from ..components import FeatureExtractor
 from ..utils import tensor_to_pil, PairedDataset
-from ...utils import save_model, load_model, is_nan
+from ...utils import save_model, load_model, is_valid
 from ...callbacks import Callback, CallbackHandler
 
 from torch.optim import Adam, Optimizer
@@ -193,7 +193,6 @@ class MultipleStylesTransferLearner:
             True
         )
         output, fgt, t, style_batch = outputs["output"], outputs["fgt"], outputs["t"], outputs["style_batch"]
-        print(is_nan(output))
 
         content_loss = self._content_weight * self._content_loss(t, fgt)
         style_loss = self._style_weight * self._style_loss(output, style_batch)
