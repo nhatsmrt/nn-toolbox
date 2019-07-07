@@ -192,7 +192,7 @@ class MultipleStylesTransferLearner:
             {"output": output, "fgt": fgt, "t": t, "style_batch": style_batch},
             True
         )
-        output, fgt, t = outputs["output"], outputs["fgt"], outputs["t"]
+        output, fgt, t, style_batch = outputs["output"], outputs["fgt"], outputs["t"], outputs["style_batch"]
 
         content_loss = self._content_weight * self._content_loss(t, fgt)
         style_loss = self._style_weight * self._style_loss(output, style_batch)
