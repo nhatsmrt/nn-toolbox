@@ -143,19 +143,23 @@ class MultipleStylesTransferLearner:
                 stop_training = self.evaluate()
                 if stop_training:
                     break
+        self._cb_handler.on_train_end()
 
     def learn_one_iter(self, content_batch: Tensor, style_batch: Tensor):
         content_loss, style_loss, total_variation_loss = self.compute_losses(content_batch, style_batch)
         total_loss = content_loss + style_loss + total_variation_loss
-        self._optimizer.zero_grad()
+
         total_loss.backward()
-        self._optimizer.step()
-        logs = {
-            'content_loss': content_loss,
-            'style_loss': style_loss, 'total_variation_loss': total_variation_loss,
-            'loss': total_loss
-        }
-        self._cb_handler.on_batch_end(logs)
+        if self._cb_handler.after_backward():
+            self._optimizer.step()
+            if self._cb_handler.after_step():
+                self._optimizer.zero_grad()
+            logs = {
+                'content_loss': content_loss,
+                'style_loss': style_loss, 'total_variation_loss': total_variation_loss,
+                'loss': total_loss
+            }
+            self._cb_handler.on_batch_end(logs)
 
     @torch.no_grad()
     def evaluate(self):
@@ -166,6 +170,11 @@ class MultipleStylesTransferLearner:
 
             self._model.set_style(style_batch)
             styled_imgs = self._model(content_batch).cpu().detach()
+            outputs = self._cb_handler.after_outputs(
+                {"content_batch": content_batch, "style_batch": style_batch, "styled_imgs": styled_imgs}, False
+            )
+            content_batch, style_batch, styled_imgs = \
+                outputs["content_batch"], outputs["style_batch"], outputs["styled_imgs"]
             imgs = torch.cat((content_batch.cpu(), style_batch.cpu(), styled_imgs), dim=0)
             tag = \
                 ["content_" + str(i) for i in range(len(content_batch))] + \
@@ -176,11 +185,19 @@ class MultipleStylesTransferLearner:
     def compute_losses(self, content_batch: Tensor, style_batch: Tensor) -> Tuple[Tensor, Tensor, Tensor]:
         self._model.set_style(style_batch)
         t = self._model.style_encode(content_batch) # t = AdaIn(f(c), f(s))
+
         output = self._model.decode(t) # g(t)
         fgt = self._model.encode(output) # f(g(t))
+        outputs = self._cb_handler.after_outputs({"output": output, "fgt": fgt}, True)
+        output, fgt = outputs["output"], outputs["fgt"]
+
         content_loss = self._content_weight * self._content_loss(t, fgt)
         style_loss = self._style_weight * self._style_loss(output, style_batch)
         total_variation_loss = self._total_variation_weight * self._total_variation_loss(output)
+        losses = self._cb_handler.after_losses(
+            {"content": content_loss, "style": style_loss, "tv": total_variation_loss}, True
+        )
+        content_loss, style_loss, total_variation_loss = losses["content"], losses["style"], losses["tv"]
         return content_loss, style_loss, total_variation_loss
 
 
