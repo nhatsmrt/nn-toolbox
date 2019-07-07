@@ -120,6 +120,7 @@ class CoordConvolutionalLayer(nn.Sequential):
             )
         )
 
+
 class HighwayConvolutionalLayer(HighwayLayer):
     """
     Highway layer (for images):
@@ -211,7 +212,7 @@ class PixelShuffleConvolutionLayer(nn.Sequential):
         """
         from torch.nn.init import kaiming_uniform_
         import math
-        weight_tensor = torch.rand(out_channels, in_channels, 3, 3)
+        weight_tensor = torch.rand(out_channels, in_channels, 1, 1)
         kaiming_uniform_(weight_tensor, a=math.sqrt(5))
         weight_tensor = weight_tensor.repeat((upscale_factor ** 2, 1, 1, 1))
         conv.weight.data.copy_(weight_tensor)
