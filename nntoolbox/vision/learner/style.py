@@ -185,11 +185,11 @@ class MultipleStylesTransferLearner:
     def compute_losses(self, content_batch: Tensor, style_batch: Tensor) -> Tuple[Tensor, Tensor, Tensor]:
         self._model.set_style(style_batch)
         t = self._model.style_encode(content_batch) # t = AdaIn(f(c), f(s))
-
         output = self._model.decode(t) # g(t)
         fgt = self._model.encode(output) # f(g(t))
-        outputs = self._cb_handler.after_outputs({"output": output, "fgt": fgt}, True)
-        output, fgt = outputs["output"], outputs["fgt"]
+
+        outputs = self._cb_handler.after_outputs({"output": output, "fgt": fgt, "t": t}, True)
+        output, fgt, t = outputs["output"], outputs["fgt"], outputs["t"]
 
         content_loss = self._content_weight * self._content_loss(t, fgt)
         style_loss = self._style_weight * self._style_loss(output, style_batch)
