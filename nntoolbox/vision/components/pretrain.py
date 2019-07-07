@@ -30,7 +30,7 @@ class FeatureExtractor(nn.Module):
         if mean is not None and std is not None:
             self._normalization = InputNormalization(mean=mean, std=std)
         else:
-            self._normalization = None
+            self._normalization = nn.Identity()
         if not isinstance(model, nn.Module):
             model = model(pretrained=True)
 
@@ -49,8 +49,7 @@ class FeatureExtractor(nn.Module):
         self._features = nn.ModuleList(self._features)
 
     def forward(self, input, layers=None):
-        if self._normalization is not None:
-            input = self._normalization(input)
+        input = self._normalization(input)
         op = []
 
         for ind in range(len(self._features)):

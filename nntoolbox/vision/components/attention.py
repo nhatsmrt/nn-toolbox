@@ -310,18 +310,18 @@ class Attention2D(nn.Module):
         """
 
 
-from time import time
-total = 0
-input = torch.rand(128, 16, 32, 32)
-layer = StandAloneMultiheadAttention(num_heads=8, in_channels=16, out_channels=16, kernel_size=11)
-# print(input)
-# print()
-# print(layer(input))
-
-for _ in range(10):
-    start = time()
-    print(layer(input).shape)
-    end = time()
-    # print(end - start)
-    total += end - start
-print(total / 10)
+# from time import time
+# total = 0
+# input = torch.rand(128, 16, 32, 32)
+# layer = StandAloneMultiheadAttention(num_heads=8, in_channels=16, out_channels=16, kernel_size=11)
+# # print(input)
+# # print()
+# # print(layer(input))
+#
+# for _ in range(10):
+#     start = time()
+#     print(layer(input).shape)
+#     end = time()
+#     # print(end - start)
+#     total += end - start
+# print(total / 10)

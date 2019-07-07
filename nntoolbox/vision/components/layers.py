@@ -234,14 +234,9 @@ class InputNormalization(nn.Module):
         # .view the mean and std to make them [C x 1 x 1] so that they can
         # directly work with image Tensor of shape [B x C x H x W].
         # B is batch size. C is number of channels. H is height and W is width.
-        self._mean = torch.tensor(mean).view(-1, 1, 1)
-        self._std = torch.tensor(std).view(-1, 1, 1)
+        self._mean = nn.Parameter(torch.tensor(mean).view(-1, 1, 1), requires_grad=False)
+        self._std = nn.Parameter(torch.tensor(std).view(-1, 1, 1), requires_grad=False)
 
     def forward(self, img):
         # normalize img
         return (img - self._mean) / self._std
-
-    def to(self, *args, **kwargs):
-        self._mean = self._mean.to(*args, **kwargs)
-        self._std = self._std.to(*args, **kwargs)
-        super().to(*args, **kwargs)
