@@ -237,8 +237,7 @@ def run_classifier_test():
         LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.10, T_max=335)),
         swa,
         LossLogger(),
-        ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
-        ProgressBarCB()
+        ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max')
     ]
 
     metrics = {
