@@ -118,7 +118,7 @@ class MultipleStylesTransferLearner:
     ):
         self._device = device
         self._feature_extractor = feature_extractor.to(device)
-        self._content_style_imgs = content_style_imgs
+        self._train_data = self._content_style_imgs = content_style_imgs
         self._content_style_val = content_style_val
         self._model = model.to(self._device)
         self._content_weight = content_weight
