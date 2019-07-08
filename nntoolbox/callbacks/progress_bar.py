@@ -11,7 +11,6 @@ from torch.utils.data import DataLoader
 __all__ = ['ProgressBarCB']
 
 
-# UNTESTED
 class ProgressBarCB(Callback):
     n_epoch: int
 
