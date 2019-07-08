@@ -231,6 +231,7 @@ def run_classifier_test():
     callbacks = [
         # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
         ToDeviceCallback(),
+        MixedPrecisionV2(),
         Tensorboard(),
         NaNWarner(),
         # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
