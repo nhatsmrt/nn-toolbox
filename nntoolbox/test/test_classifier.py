@@ -1,28 +1,29 @@
+import torchvision
+from torch.nn import *
+from torchvision.datasets import ImageFolder, CIFAR10
+from torchvision.transforms import *
+from torch.optim import *
+from torch.optim.lr_scheduler import CosineAnnealingLR
+from nntoolbox.optim import AdamW
+from torch.utils.data import random_split
+# from adabound import AdaBound
+
+from nntoolbox.vision.components import *
+from nntoolbox.vision.learner import SupervisedImageLearner
+from nntoolbox.utils import load_model, LRFinder, get_first_batch, get_device
+from nntoolbox.callbacks import *
+from nntoolbox.metrics import Accuracy, Loss
+from nntoolbox.vision.transforms import Cutout
+from nntoolbox.vision.models import ImageClassifier, EnsembleImageClassifier
+from nntoolbox.losses import SmoothedCrossEntropy
+from nntoolbox.init import lsuv_init
+
+from functools import partial
+
+from sklearn.metrics import accuracy_score
+
+
 def run_classifier_test():
-    import torchvision
-    from torch.nn import *
-    from torchvision.datasets import ImageFolder, CIFAR10
-    from torchvision.transforms import *
-    from torch.optim import *
-    from torch.optim.lr_scheduler import CosineAnnealingLR
-    from nntoolbox.optim import AdamW
-    from torch.utils.data import random_split
-    # from adabound import AdaBound
-
-    from nntoolbox.vision.components import *
-    from nntoolbox.vision.learner import SupervisedImageLearner
-    from nntoolbox.utils import load_model, LRFinder, get_first_batch, get_device
-    from nntoolbox.callbacks import *
-    from nntoolbox.metrics import Accuracy, Loss
-    from nntoolbox.vision.transforms import Cutout
-    from nntoolbox.vision.models import ImageClassifier, EnsembleImageClassifier
-    from nntoolbox.losses import SmoothedCrossEntropy
-    from nntoolbox.init import lsuv_init
-
-    from functools import partial
-
-    from sklearn.metrics import accuracy_score
-
     torch.backends.cudnn.benchmark = True
 
     # data = CIFAR10('data/', train=True, download=True, transform=ToTensor())
