@@ -129,17 +129,18 @@ class MultipleStylesTransferLearner:
         self._total_variation_loss = TotalVariationLoss().to(device)
         self._optimizer = Adam(model.parameters()) if optimizer is None else optimizer
 
-    def learn(self, n_epoch: int, callbacks: Iterable[Callback], eval_every: int=1):
+    def learn(self, n_iter: int, callbacks: Iterable[Callback], eval_every: int=1):
         print("Begin training")
+        n_epoch = n_iter // eval_every
         self._cb_handler = CallbackHandler(self, callbacks=callbacks, n_epoch=n_epoch)
         self._cb_handler.on_train_begin()
-        for e in range(n_epoch):
+        for iter in range(n_iter):
             self._model.train()
             for content_batch, style_batch in self._content_style_imgs:
                 data = self._cb_handler.on_batch_begin({"content": content_batch, "style": style_batch}, True)
                 content_batch, style_batch = data["content"], data["style"]
                 self.learn_one_iter(content_batch, style_batch)
-            if e % eval_every == 0:
+            if iter % eval_every == 0:
                 stop_training = self.evaluate()
                 if stop_training:
                     break
