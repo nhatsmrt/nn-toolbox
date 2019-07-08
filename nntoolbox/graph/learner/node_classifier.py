@@ -3,6 +3,7 @@ import torch
 from torch import nn
 from torch.optim import Adam
 
+
 class NodeClassificationLearner:
     def __init__(self):
         self._loss = nn.CrossEntropyLoss()
