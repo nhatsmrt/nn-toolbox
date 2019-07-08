@@ -28,7 +28,7 @@ class ProgressBar(Callback):
         return data
 
     def on_batch_end(self, logs: Dict[str, Any]):
-        self.progress_bar.update(logs["iter_cnt"] % len(self.learner._train_dl))
+        self.progress_bar.update(logs["iter_cnt"] % len(self.learner._train_data))
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         self.set_progress(self.learner._train_data, logs["epoch"] + 1)
