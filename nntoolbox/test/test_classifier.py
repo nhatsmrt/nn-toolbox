@@ -26,7 +26,7 @@ from .prog_bar import progress_bar_test
 
 def run_classifier_test():
     print("Starting classifier test")
-    progress_bar_test()
+    # progress_bar_test()
     torch.backends.cudnn.benchmark = True
 
     # data = CIFAR10('data/', train=True, download=True, transform=ToTensor())
@@ -238,7 +238,7 @@ def run_classifier_test():
         swa,
         LossLogger(),
         ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
-        ProgressBar()
+        ProgressBarCB()
     ]
 
     metrics = {

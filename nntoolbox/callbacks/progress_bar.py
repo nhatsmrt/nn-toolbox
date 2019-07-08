@@ -8,11 +8,11 @@ from typing import Dict, Any
 from torch.utils.data import DataLoader
 
 
-__all__ = ['ProgressBar']
+__all__ = ['ProgressBarCB']
 
 
 # UNTESTED
-class ProgressBar(Callback):
+class ProgressBarCB(Callback):
     n_epoch: int
 
     def on_train_begin(self):
