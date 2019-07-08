@@ -25,6 +25,7 @@ from .prog_bar import progress_bar_test
 
 
 def run_classifier_test():
+    print("Starting classifier test")
     progress_bar_test()
     torch.backends.cudnn.benchmark = True
 
