@@ -40,10 +40,11 @@ class SupervisedImageLearner:
         self._cb_handler = CallbackHandler(self, n_epoch, callbacks, metrics, final_metric)
         self._cb_handler.on_train_begin()
 
-        from fastprogress import master_bar, progress_bar, force_console_behavior
-        from fastprogress.fastprogress import format_time
+        from fastprogress import master_bar, progress_bar
+        from fastprogress.fastprogress import NBMasterBar
         from time import sleep, time
         mb = master_bar(range(n_epoch))
+        print(isinstance(mb, NBMasterBar))
         mb.on_iter_begin()
         pb = progress_bar(self._train_data, parent=mb, auto_update=False)
         mb.update(0)
