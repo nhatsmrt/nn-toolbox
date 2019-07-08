@@ -39,6 +39,28 @@ class SupervisedImageLearner:
 
         self._cb_handler = CallbackHandler(self, n_epoch, callbacks, metrics, final_metric)
         self._cb_handler.on_train_begin()
+
+        from fastprogress import master_bar, progress_bar, force_console_behavior
+        from fastprogress.fastprogress import format_time
+        from time import sleep, time
+        mb = master_bar(range(n_epoch))
+        mb.on_iter_begin()
+        pb = progress_bar(self._train_data, parent=mb, auto_update=False)
+        mb.update(0)
+        iter_cnt = 0
+
+        for e in range(n_epoch):
+            start = time()
+            for _ in self._train_data:
+                iter = iter_cnt % len(self._train_data)
+                pb.update(iter)
+                iter_cnt += 1
+            pb = progress_bar(self._train_data, parent=mb, auto_update=False)
+            #   mb.write([format_time(time() - start)], table=True)
+            mb.update(e + 1)
+        mb.on_iter_end()
+
+
         for e in range(n_epoch):
             print("Epoch " + str(e))
             self._model.train()
