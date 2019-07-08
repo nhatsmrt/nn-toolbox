@@ -7,7 +7,6 @@ from fastprogress import master_bar, progress_bar
 from torch import Tensor
 from typing import Dict, Any
 from torch.utils.data import DataLoader
-# master_bar, progress_bar = force_console_behavior()
 
 
 __all__ = ['ProgressBar']
@@ -18,16 +17,15 @@ class ProgressBar(Callback):
     n_epoch: int
 
     def on_train_begin(self):
+        print("Epoch :" + str(self.n_epoch))
         self.master_bar = master_bar(range(self.n_epoch))
         self.master_bar.on_iter_begin()
         self.set_progress(self.learner._train_data, 0)
 
     def on_train_end(self): self.master_bar.on_iter_end()
 
-    def on_batch_begin(self, data: Dict[str, Tensor], train):
-        return data
-
     def on_batch_end(self, logs: Dict[str, Any]):
+        print("Iter: " + str(logs["iter_cnt"] % len(self.learner._train_data)))
         self.progress_bar.update(logs["iter_cnt"] % len(self.learner._train_data))
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
