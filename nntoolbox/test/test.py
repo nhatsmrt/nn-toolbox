@@ -2,6 +2,7 @@ def progress_bar_test():
     from fastprogress import master_bar, progress_bar
     from fastprogress.fastprogress import NBMasterBar
     from time import sleep, time
+    print("Starting progress bar test")
 
     mb = master_bar(range(500))
     print(isinstance(mb, NBMasterBar))
