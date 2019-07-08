@@ -16,15 +16,11 @@ class ProgressBarCB(Callback):
     n_epoch: int
 
     def on_train_begin(self):
-        # print("num epoch: " + str(self.n_epoch))
         self.master_bar = master_bar(range(self.n_epoch))
         self.master_bar.on_iter_begin()
         self.set_progress(self.learner._train_data, 0)
-        # print("on train begin")
 
     def on_batch_end(self, logs: Dict[str, Any]):
-        # print("On batch end")
-        # print("Iter: " + str(logs["iter_cnt"] % len(self.learner._train_data)))
         self.progress_bar.update(logs["iter_cnt"] % len(self.learner._train_data))
         self.master_bar.child.comment = f'Iterations'
 
@@ -36,7 +32,6 @@ class ProgressBarCB(Callback):
     def on_train_end(self): self.master_bar.on_iter_end()
 
     def set_progress(self, data: DataLoader, epoch: int):
-        # print("Epoch: " + str(epoch))
         self.progress_bar = progress_bar(data, parent=self.master_bar, auto_update=False)
         self.master_bar.update(epoch)
         self.master_bar.first_bar.comment = f'Epochs'

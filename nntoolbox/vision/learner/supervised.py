@@ -19,9 +19,7 @@ class SupervisedImageLearner:
     ):
         self._train_data = train_data
         self._val_data = val_data
-        # self._model = model.to(device)
         self._model = model
-        # self._criterion = criterion.to(device)
         self._criterion = criterion
         self._optimizer = optimizer
         self._device = device
