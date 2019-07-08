@@ -1,2 +1,2 @@
-from .test import progress_bar
+from .test import progress_bar_test
 from .test_classifier import run_classifier_test

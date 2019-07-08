@@ -21,9 +21,11 @@ from nntoolbox.init import lsuv_init
 from functools import partial
 
 from sklearn.metrics import accuracy_score
+from .test import progress_bar_test
 
 
 def run_classifier_test():
+    progress_bar_test()
     torch.backends.cudnn.benchmark = True
 
     # data = CIFAR10('data/', train=True, download=True, transform=ToTensor())
