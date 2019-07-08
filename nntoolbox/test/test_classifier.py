@@ -21,7 +21,7 @@ from nntoolbox.init import lsuv_init
 from functools import partial
 
 from sklearn.metrics import accuracy_score
-from .test import progress_bar_test
+from nntoolbox.test.prog_bar import progress_bar_test
 
 
 def run_classifier_test():
