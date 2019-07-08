@@ -3,9 +3,11 @@ Add a progress bar to learner
 Adapt from fastai course 2 v3 notebook
 """
 from .callbacks import Callback
-from fastprogress import master_bar, progress_bar
+# from fastprogress import master_bar, progress_bar
+from fastprogress import force_console_behavior
 from typing import Dict, Any
 from torch.utils.data import DataLoader
+master_bar, progress_bar = force_console_behavior()
 
 
 __all__ = ['ProgressBar']

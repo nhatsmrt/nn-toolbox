@@ -1,13 +1,34 @@
 from .callbacks import Callback
-from typing import Dict, Any
+from typing import Dict, Any, Callable
 from torch.utils.data import DataLoader
 
 
 __all__ = ['BatchSizeScheduler']
 
 
-# UNTESTED
 class BatchSizeScheduler(Callback):
+    def __init__(self, train_data: DataLoader, bs_schedule_fn: Callable[[int], int], timescale: str="iter"):
+        assert timescale == "iter" or timescale == "epoch"
+        self.timescale = timescale
+        self._train_data = train_data
+        self._bs_schedule_fn = bs_schedule_fn
+
+    def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
+        if self.timescale == "epoch":
+            new_bs = self._bs_schedule_fn(logs["epoch"])
+            self._train_data.batch_size = new_bs
+            self._train_data.batch_sampler.batch_size = new_bs
+        return False
+
+    def on_batch_end(self, logs: Dict[str, Any]):
+        if self.timescale == "iter":
+            new_bs = self._bs_schedule_fn(logs["iter_cnt"])
+            self._train_data.batch_size = new_bs
+            self._train_data.batch_sampler.batch_size = new_bs
+
+
+# UNTESTED
+class BatchSizeIncreaser(Callback):
     '''
     Implement a callback to increase batch size during training
     https://arxiv.org/pdf/1711.00489.pdf
