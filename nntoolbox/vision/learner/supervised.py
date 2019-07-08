@@ -37,7 +37,7 @@ class SupervisedImageLearner:
         if load_path is not None:
             load_model(self._model, load_path)
 
-        self._cb_handler = CallbackHandler(self, callbacks, metrics, final_metric)
+        self._cb_handler = CallbackHandler(self, n_epoch, callbacks, metrics, final_metric)
         self._cb_handler.on_train_begin()
         for e in range(n_epoch):
             print("Epoch " + str(e))
@@ -63,7 +63,8 @@ class SupervisedImageLearner:
 
         loss = self._cb_handler.after_losses({"loss": self.compute_loss(images, labels, True)}, True)["loss"]
 
-        loss.backward()
+        if self._cb_handler.on_backward_begin():
+            loss.backward()
         if self._cb_handler.after_backward():
             self._optimizer.step()
             if self._cb_handler.after_step():

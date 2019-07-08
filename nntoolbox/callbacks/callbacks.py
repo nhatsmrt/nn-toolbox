@@ -2,6 +2,8 @@ from typing import Iterable, Dict, Any, Tuple
 from ..utils import save_model
 from ..metrics import Metric
 from torch import Tensor
+from time import time
+from fastprogress.fastprogress import format_time
 
 
 class Callback:
@@ -21,7 +23,7 @@ class Callback:
 
     # def on_phase_begin(self): pass
 
-    def on_epoch_end(self, logs: Dict[str, Any]) -> bool: return False
+    def on_epoch_end(self, logs: Dict[str, Any]) -> bool: return False # whether to stop training
 
     # def on_phase_end(self): pass
 
@@ -32,14 +34,16 @@ class Callback:
 
 class CallbackHandler:
     def __init__(
-            self, learner, callbacks: Iterable[Callback]=None, metrics: Dict[str, Metric]=None,
-            final_metric: str='accuracy'
+            self, learner, n_epoch: int, callbacks: Iterable[Callback]=None,
+            metrics: Dict[str, Metric]=None, final_metric: str='accuracy'
     ):
         if metrics is not None:
             assert final_metric in metrics
 
         if callbacks is not None:
-            for callback in callbacks: callback.learner = learner
+            for callback in callbacks:
+                callback.learner = learner
+                callback.n_epoch = n_epoch
 
         self._callbacks = callbacks
         self._metrics = metrics
@@ -47,11 +51,14 @@ class CallbackHandler:
         self._iter_cnt = 0
         self._epoch = 0
         self.learner = learner
+        self.start_time = 0
+        self.epoch_times = []
 
     def on_train_begin(self):
         if self._callbacks is not None:
             for callback in self._callbacks:
                 callback.on_train_begin()
+        self.start_time = time()
 
     def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         if self._callbacks is not None:
@@ -116,6 +123,8 @@ class CallbackHandler:
                 stop_training = stop_training or callback.on_epoch_end(logs)
 
         self._epoch += 1
+        self.epoch_times.append(format_time(time() - self.start_time))
+        self.start_time = time()
         return stop_training
 
     def on_train_end(self) -> float:

@@ -182,6 +182,7 @@ class MixedPrecisionV2(Callback):
 
     def after_step(self) -> bool: return False
 
+
 def get_param_groups(optimizer: Optimizer) -> Tuple[List[List[Tensor]], List[List[Tensor]]]:
     """
     Store lists (grouped) params of a float16 model and its float32 version
@@ -245,6 +246,9 @@ def check_grad_overflow(param_groups: List[List[Tensor]]) -> bool:
 
 
 class DummyOptimizer:
+    """
+    Destroy original optimizer
+    """
     def step(self): pass
 
     def zero_grad(self): pass

@@ -238,6 +238,7 @@ callbacks = [
     swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
+    ProgressBar()
 ]
 
 metrics = {

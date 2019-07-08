@@ -6,6 +6,7 @@ from nntoolbox.metrics import *
 from torch.optim import Optimizer
 
 
+# UNTESTED
 class SequenceClassifierLearner:
     def __init__(
             self, train_iterator: Iterator, val_iterator: Iterator, model: nn.Module,
@@ -19,7 +20,7 @@ class SequenceClassifierLearner:
         self._device = device
 
     def learn(self, n_epoch, callbacks, metrics, final_metric):
-        self._cb_handler = CallbackHandler(self, callbacks, metrics, final_metric)
+        self._cb_handler = CallbackHandler(self, n_epoch, callbacks, metrics, final_metric)
 
         for e in range(n_epoch):
             self._model.train()
