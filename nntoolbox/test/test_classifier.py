@@ -235,7 +235,7 @@ def run_classifier_test():
         swa,
         LossLogger(),
         ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
-        # ProgressBar()
+        ProgressBar()
     ]
 
     metrics = {
