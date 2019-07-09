@@ -20,7 +20,10 @@ def _get_sfs_idxs(sizes:Sizes) -> List[int]:
 
 
 class CustomMergeLayer(nn.Module):
-    "Merge a shortcut with the result of the module by adding them or concatenating thme if `dense=True`."
+    """
+    Merge a shortcut with the result of the module by adding them or concatenating thme if `dense=True`.
+    Use hook instead of .orig
+    """
 
     def __init__(self, input_hook: InputHook, dense: bool=False, remove_store: bool=True):
         super().__init__()

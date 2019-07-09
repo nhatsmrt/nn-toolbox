@@ -109,6 +109,7 @@ class FeatureExtractorSequential(nn.Sequential):
         if last_layer is not None:
             self._features = self._features[:last_layer + 1]
         super(FeatureExtractorSequential, self).__init__(*([normalization] + self._features))
+
     def forward(self, input, layers=None):
         input = self._modules['0'](input)
         op = []
