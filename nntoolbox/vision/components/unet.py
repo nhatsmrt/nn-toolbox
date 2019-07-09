@@ -1,5 +1,5 @@
 """
-Modified version of UNet that allows for decoder extraction
+Modified version of UNet that allows for decoder extraction and a little bit more customization
 """
 from fastai.torch_core import *
 from fastai.layers import *
@@ -67,7 +67,10 @@ def custom_res_block(nf, dense: bool = False, norm_type: Optional[nn.Module] = n
 
 
 class CustomPixelShuffle_ICNR(nn.Module):
-    "Upsample by `scale` from `ni` filters to `nf` (default `ni`), using `nn.PixelShuffle`, `icnr` init, and `weight_norm`."
+    """"
+    Upsample by `scale` from `ni` filters to `nf` (default `ni`),
+    using `nn.PixelShuffle`, `icnr` init, and `weight_norm`.
+    """
 
     def __init__(self, ni: int, nf: int = None, scale: int = 2, blur: bool = False, norm_type=nn.BatchNorm2d,
                  leaky: float = None):
@@ -94,9 +97,9 @@ class CustomUnetBlock(nn.Module):
                  self_attention:bool=False, normalization=batchnorm_2d, **kwargs):
         super().__init__()
         self.hook = hook
-        self.shuf = CustomPixelShuffle_ICNR(up_in_c, up_in_c//2, blur=blur, leaky=leaky, **kwargs)
+        self.shuf = CustomPixelShuffle_ICNR(up_in_c, up_in_c // 2, blur=blur, leaky=leaky, **kwargs)
         self.bn = normalization(x_in_c)
-        ni = up_in_c//2 + x_in_c
+        ni = up_in_c // 2 + x_in_c
         nf = ni if final_div else ni//2
         self.conv1 = custom_conv_layer(ni, nf, leaky=leaky, norm_type=normalization, **kwargs)
         self.conv2 = custom_conv_layer(nf, nf, leaky=leaky, self_attention=self_attention, norm_type=normalization, **kwargs)
