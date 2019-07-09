@@ -16,7 +16,7 @@ class ProgressBarCB(Callback):
     
     def __init__(self, dataloader: Optional[DataLoader]=None):
         self.dataloader = dataloader
-
+        
     def on_train_begin(self):
         if self.dataloader is None:
             self.dataloader = self.learner._train_data
