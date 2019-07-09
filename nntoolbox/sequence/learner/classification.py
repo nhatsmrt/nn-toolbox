@@ -12,7 +12,7 @@ class SequenceClassifierLearner:
             self, train_iterator: Iterator, val_iterator: Iterator, model: nn.Module,
             criterion: nn.Module, optimizer: Optimizer, device=get_device()
     ):
-        self._train_iterator = train_iterator
+        self._train_data = self._train_iterator = train_iterator
         self._val_iterator = val_iterator
         self._model = model.to(device)
         self._optimizer = optimizer
@@ -36,20 +36,17 @@ class SequenceClassifierLearner:
 
     def learn_one_iter(self, batch):
         texts, text_lengths = batch.text
-        texts = texts.to(self._device)
-        text_lengths = text_lengths.to(self._device)
+        # texts = texts.to(self._device)
+        # text_lengths = text_lengths.to(self._device)
+        data = self._cb_handler.on_batch_begin(
+            {"texts": texts, "text_lengths": text_lengths, "labels": batch.label}, True
+        )
+        texts, text_lengths, labels = data["texts"], data["text_lengths"], data["labels"]
 
         self._optimizer.zero_grad()
-        loss = self.compute_loss(texts, text_lengths, batch.label)
+        loss = self.compute_loss(texts, text_lengths, labels, True)
         loss.backward()
         self._optimizer.step()
-        # del texts, text_lengths
-        # torch.cuda.empty_cache()
-        # if self._device.type == 'cuda':
-        #     mem = torch.cuda.memory_allocated(self._device)
-        #     self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})
-        # else:
-        #     self._cb_handler.on_batch_end({"loss": loss.cpu()})
         self._cb_handler.on_batch_end({"loss": loss})
 
     @torch.no_grad()
@@ -62,13 +59,17 @@ class SequenceClassifierLearner:
 
         for batch in self._val_iterator:
             texts, text_lengths = batch.text
-            texts = texts.to(self._device)
-            text_lengths = text_lengths.to(self._device)
+            # texts = texts.to(self._device)
+            # text_lengths = text_lengths.to(self._device)
+            data = self._cb_handler.on_batch_begin(
+                {"texts": texts, "text_lengths": text_lengths, "labels": batch.label}, True
+            )
+            texts, text_lengths, labels = data["texts"], data["text_lengths"], data["labels"]
 
             outputs = self._model(texts, text_lengths)
             all_outputs.append(outputs)
-            all_labels.append(batch.label.unsqueeze(-1))
-            loss += float(self.compute_loss(texts, text_lengths, batch.label)) * len(outputs)
+            all_labels.append(labels.unsqueeze(-1))
+            loss += float(self.compute_loss(texts, text_lengths, labels, False)) * len(outputs)
             total_data += len(outputs)
 
         loss /= total_data
@@ -79,6 +80,6 @@ class SequenceClassifierLearner:
 
         return self._cb_handler.on_epoch_end(logs)
 
-    def compute_loss(self, texts, text_lengths, labels):
-        outputs = self._model(texts, text_lengths)
-        return self._criterion(outputs, labels.long())
+    def compute_loss(self, texts, text_lengths, labels, train: bool):
+        output = self._cb_handler.after_outputs({"output": self._model(texts, text_lengths)}, train)["output"]
+        return self._cb_handler.after_losses({"loss": self._criterion(output, labels.long())}, train)["loss"]
