@@ -120,6 +120,7 @@ class CoordConvolutionalLayer(nn.Sequential):
             )
         )
 
+
 class HighwayConvolutionalLayer(HighwayLayer):
     """
     Highway layer (for images):
@@ -183,12 +184,13 @@ class PixelShuffleConvolutionLayer(nn.Sequential):
         conv = nn.Conv2d(
             in_channels=in_channels,
             out_channels=out_channels * (upscale_factor ** 2),
-            kernel_size=3,
+            # kernel_size=3,
+            kernel_size=1,
             padding=0,
         )
         self.initialize_conv(conv, in_channels, out_channels, upscale_factor)
         layers = [
-            nn.ReplicationPad2d(1),
+            # nn.ReplicationPad2d(1),
             conv,
             activation(),
             normalization(num_features=out_channels * (upscale_factor ** 2)),
@@ -210,7 +212,7 @@ class PixelShuffleConvolutionLayer(nn.Sequential):
         """
         from torch.nn.init import kaiming_uniform_
         import math
-        weight_tensor = torch.rand(out_channels, in_channels, 3, 3)
+        weight_tensor = torch.rand(out_channels, in_channels, 1, 1)
         kaiming_uniform_(weight_tensor, a=math.sqrt(5))
         weight_tensor = weight_tensor.repeat((upscale_factor ** 2, 1, 1, 1))
         conv.weight.data.copy_(weight_tensor)
@@ -232,14 +234,9 @@ class InputNormalization(nn.Module):
         # .view the mean and std to make them [C x 1 x 1] so that they can
         # directly work with image Tensor of shape [B x C x H x W].
         # B is batch size. C is number of channels. H is height and W is width.
-        self._mean = torch.tensor(mean).view(-1, 1, 1)
-        self._std = torch.tensor(std).view(-1, 1, 1)
+        self._mean = nn.Parameter(torch.tensor(mean).view(-1, 1, 1), requires_grad=False)
+        self._std = nn.Parameter(torch.tensor(std).view(-1, 1, 1), requires_grad=False)
 
     def forward(self, img):
         # normalize img
         return (img - self._mean) / self._std
-
-    def to(self, *args, **kwargs):
-        self._mean = self._mean.to(*args, **kwargs)
-        self._std = self._std.to(*args, **kwargs)
-        super().to(*args, **kwargs)

@@ -7,12 +7,13 @@ import torch
 from torch.optim import Optimizer
 from nntoolbox.callbacks import Callback
 from apex.fp16_utils import convert_network, model_grads_to_master_grads, master_params_to_model_params
+from apex import amp
 from typing import Dict, Any
 from torch import Tensor, float32, float16
 from typing import List, Tuple
 
 
-__all__ = ['MixedPrecision']
+__all__ = ['MixedPrecision', 'MixedPrecisionV2']
 
 
 class MixedPrecision(Callback):
@@ -138,6 +139,50 @@ class MixedPrecision(Callback):
         self.learner._model = self.learner._model.float()
 
 
+class MixedPrecisionV2(Callback):
+    """
+    Callback for mixed precision training to accomodate new apex api
+    """
+    def __init__(self, loss_scale: int=512, dynamic: bool=True):
+        """
+        :param loss_scale: loss scale (if not dynamic)
+        :param dynamic: whether to scale loss dynamically
+        """
+        assert torch.backends.cudnn.enabled
+        self.loss_scale = loss_scale
+        self.dynamic = dynamic
+        self.learner = None
+
+    def on_train_begin(self):
+        """Convert network to float16"""
+        self.learner._model, self.optimizer = amp.initialize(
+            self.learner._model, self.learner._optimizer,
+            opt_level="O1", loss_scale='dynamic' if self.dynamic else self.loss_scale
+        )
+        self.learner._optimizer = DummyOptimizer()
+
+    def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
+        """
+        Call amp functionality
+        """
+        if train:
+            total_loss = 0
+            for key in losses:
+                total_loss += losses[key]
+            with amp.scale_loss(total_loss, self.optimizer) as scaled_loss:
+                scaled_loss.backward()
+            self.optimizer.step()
+        return losses
+
+    def on_backward_begin(self): return False
+
+    def after_backward(self):
+        self.optimizer.zero_grad()
+        return True
+
+    def after_step(self) -> bool: return False
+
+
 def get_param_groups(optimizer: Optimizer) -> Tuple[List[List[Tensor]], List[List[Tensor]]]:
     """
     Store lists (grouped) params of a float16 model and its float32 version
@@ -198,3 +243,12 @@ def check_grad_overflow(param_groups: List[List[Tensor]]) -> bool:
                 grad_sum = float(param.grad.data.float().sum())
                 if grad_sum == float('-inf') or grad_sum == float('inf') or grad_sum != grad_sum: return True
     return False
+
+
+class DummyOptimizer:
+    """
+    Destroy original optimizer
+    """
+    def step(self): pass
+
+    def zero_grad(self): pass

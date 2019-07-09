@@ -1,7 +1,7 @@
 from ..losses import FeatureLoss, StyleLoss, TotalVariationLoss, INStatisticsMatchingStyleLoss
 from ..components import FeatureExtractor
 from ..utils import tensor_to_pil, PairedDataset
-from ...utils import save_model, load_model
+from ...utils import save_model, load_model, is_valid
 from ...callbacks import Callback, CallbackHandler
 
 from torch.optim import Adam, Optimizer
@@ -118,7 +118,7 @@ class MultipleStylesTransferLearner:
     ):
         self._device = device
         self._feature_extractor = feature_extractor.to(device)
-        self._content_style_imgs = content_style_imgs
+        self._train_data = self._content_style_imgs = content_style_imgs
         self._content_style_val = content_style_val
         self._model = model.to(self._device)
         self._content_weight = content_weight
@@ -129,33 +129,39 @@ class MultipleStylesTransferLearner:
         self._total_variation_loss = TotalVariationLoss().to(device)
         self._optimizer = Adam(model.parameters()) if optimizer is None else optimizer
 
-    def learn(self, n_epoch: int, callbacks: Iterable[Callback], eval_every: int=1):
+    def learn(self, n_iter: int, callbacks: Iterable[Callback], eval_every: int=1):
         print("Begin training")
-        self._cb_handler = CallbackHandler(self, callbacks=callbacks)
+        n_epoch = n_iter // eval_every
+        self._cb_handler = CallbackHandler(self, callbacks=callbacks, n_epoch=n_epoch)
         self._cb_handler.on_train_begin()
-        for e in range(n_epoch):
+        for iter in range(n_iter):
             self._model.train()
             for content_batch, style_batch in self._content_style_imgs:
                 data = self._cb_handler.on_batch_begin({"content": content_batch, "style": style_batch}, True)
                 content_batch, style_batch = data["content"], data["style"]
                 self.learn_one_iter(content_batch, style_batch)
-            if e % eval_every == 0:
+            if iter % eval_every == 0:
                 stop_training = self.evaluate()
                 if stop_training:
                     break
+        self._cb_handler.on_train_end()
 
     def learn_one_iter(self, content_batch: Tensor, style_batch: Tensor):
         content_loss, style_loss, total_variation_loss = self.compute_losses(content_batch, style_batch)
         total_loss = content_loss + style_loss + total_variation_loss
-        self._optimizer.zero_grad()
-        total_loss.backward()
-        self._optimizer.step()
-        logs = {
-            'content_loss': content_loss,
-            'style_loss': style_loss, 'total_variation_loss': total_variation_loss,
-            'loss': total_loss
-        }
-        self._cb_handler.on_batch_end(logs)
+
+        if self._cb_handler.on_backward_begin():
+            total_loss.backward()
+        if self._cb_handler.after_backward():
+            self._optimizer.step()
+            if self._cb_handler.after_step():
+                self._optimizer.zero_grad()
+            logs = {
+                'content_loss': content_loss,
+                'style_loss': style_loss, 'total_variation_loss': total_variation_loss,
+                'loss': total_loss
+            }
+            self._cb_handler.on_batch_end(logs)
 
     @torch.no_grad()
     def evaluate(self):
@@ -166,6 +172,11 @@ class MultipleStylesTransferLearner:
 
             self._model.set_style(style_batch)
             styled_imgs = self._model(content_batch).cpu().detach()
+            outputs = self._cb_handler.after_outputs(
+                {"content_batch": content_batch, "style_batch": style_batch, "styled_imgs": styled_imgs}, False
+            )
+            content_batch, style_batch, styled_imgs = \
+                outputs["content_batch"], outputs["style_batch"], outputs["styled_imgs"]
             imgs = torch.cat((content_batch.cpu(), style_batch.cpu(), styled_imgs), dim=0)
             tag = \
                 ["content_" + str(i) for i in range(len(content_batch))] + \
@@ -178,9 +189,20 @@ class MultipleStylesTransferLearner:
         t = self._model.style_encode(content_batch) # t = AdaIn(f(c), f(s))
         output = self._model.decode(t) # g(t)
         fgt = self._model.encode(output) # f(g(t))
+
+        outputs = self._cb_handler.after_outputs(
+            {"output": output, "fgt": fgt, "t": t, "style_batch": style_batch},
+            True
+        )
+        output, fgt, t, style_batch = outputs["output"], outputs["fgt"], outputs["t"], outputs["style_batch"]
+
         content_loss = self._content_weight * self._content_loss(t, fgt)
         style_loss = self._style_weight * self._style_loss(output, style_batch)
         total_variation_loss = self._total_variation_weight * self._total_variation_loss(output)
+        losses = self._cb_handler.after_losses(
+            {"content": content_loss, "style": style_loss, "tv": total_variation_loss}, True
+        )
+        content_loss, style_loss, total_variation_loss = losses["content"], losses["style"], losses["tv"]
         return content_loss, style_loss, total_variation_loss
 
 

@@ -6,7 +6,52 @@ import numpy as np
 import time
 
 
-__all__ = ['StandAloneSelfAttention', 'StandAloneMultiheadAttention']
+__all__ = ['GlobalSelfAttention', 'StandAloneSelfAttention', 'StandAloneMultiheadAttention']
+
+
+# UNTESTED
+class GlobalSelfAttention(nn.Module):
+    """
+    Implement attention module as described by
+    https://arxiv.org/pdf/1805.08318.pdf
+    """
+    def __init__(self, in_channels: int, reduction_ratio: int=8):
+        super(GlobalSelfAttention, self).__init__()
+        self.key_transform = nn.Conv2d(
+            in_channels=in_channels,
+            out_channels= in_channels // reduction_ratio,
+            kernel_size=1, bias=False
+        )
+        self.query_transform = nn.Conv2d(
+            in_channels=in_channels,
+            out_channels= in_channels // reduction_ratio,
+            kernel_size=1, bias=False
+        )
+        self.value_transform = nn.Conv2d(
+            in_channels=in_channels,
+            out_channels= in_channels // reduction_ratio,
+            kernel_size=1, bias=False
+        )
+        self.softmax = nn.Softmax(dim=1)
+        self.op_transform = nn.Conv2d(
+            in_channels=in_channels // reduction_ratio,
+            out_channels=in_channels,
+            kernel_size=1, bias=False
+        )
+        self.scale = nn.Parameter(torch.zeros(1))
+
+    def forward(self, input: Tensor) -> Tensor:
+        batch_size, in_channels, h, w = input.shape
+        key, query, value = self.key_transform(input), self.query_transform(input), self.value_transform(input)
+        attention_scores = key.view((batch_size, -1, h * w)).permute(0, 2, 1).bmm(
+            query.view((batch_size, -1, h * w))
+        )
+        attention_weights = self.softmax(attention_scores)
+        output = value.view(batch_size, value.shape[1], -1).bmm(attention_weights)
+        output = output.view(batch_size, output.shape[1], h, w)
+        output = self.op_transform(output)
+        return self.scale * output + input
+
 
 
 # UNTESTED
@@ -264,3 +309,19 @@ class Attention2D(nn.Module):
         :return: (batch_size,
         """
 
+
+# from time import time
+# total = 0
+# input = torch.rand(128, 16, 32, 32)
+# layer = StandAloneMultiheadAttention(num_heads=8, in_channels=16, out_channels=16, kernel_size=11)
+# # print(input)
+# # print()
+# # print(layer(input))
+#
+# for _ in range(10):
+#     start = time()
+#     print(layer(input).shape)
+#     end = time()
+#     # print(end - start)
+#     total += end - start
+# print(total / 10)
