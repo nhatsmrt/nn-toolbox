@@ -25,5 +25,5 @@ class InputProgressiveResizing(Callback):
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         if logs["epoch"] % self.upscale_every == 0 and self.size * self.upscale_factor <= self.max_size:
             self.size = int(self.initial_size * (self.upscale_factor ** (logs["epoch"] // self.upscale_every)))
-            print("Increasing the scale of input to " + str(self.size))
+            print("Increasing the scale of sinput to " + str(self.size))
         return False

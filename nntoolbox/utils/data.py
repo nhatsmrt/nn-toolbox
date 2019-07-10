@@ -4,10 +4,11 @@ import torch
 from numpy import ndarray
 from torch import float32, long, Tensor
 import pandas as pd
-from typing import Optional, List
+from typing import Optional, List, Iterable
+from torch.utils.data import DataLoader
 
 
-__all__ = ['SupervisedDataset']
+__all__ = ['SupervisedDataset', 'get_first_batch', 'grab_next_batch']
 
 
 class SupervisedDataset(Dataset):
@@ -42,9 +43,19 @@ class SupervisedDataset(Dataset):
         return tensor.to(dtype).to(self._device)
 
 
-class ItemList:
-    '''
-    Represent a list of path to items
-    '''
-    def __init__(self, path):
-        return
+def get_first_batch(data: DataLoader, callbacks: Optional[Iterable['Callback']]=None):
+    first_batch = next(iter(data))
+    if callbacks is None or len(callbacks) == 0:
+        return first_batch
+    else:
+        if isinstance(first_batch, tuple):
+            data = {"inputs": first_batch[0], "labels": first_batch[1]}
+        else:
+            data = {"inputs": first_batch[0], "labels": first_batch[1]}
+        for callback in callbacks:
+            data = callback.on_batch_begin(data, True)
+        return data["inputs"] if callbacks is None else data["inputs"], data["labels"]
+
+
+def grab_next_batch(data: DataLoader):
+    return next(iter(data))
