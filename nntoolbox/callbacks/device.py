@@ -24,16 +24,16 @@ class ToDeviceCallback(Callback):
 
 
 class ToGPipeDeviceCallback(Callback):
-    def __init__(self, input_keys, target_keys, partitions, rand_input: Tensor, chunks: int=8):
+    def __init__(self, input_keys, target_keys, partitions: int, sample: Tensor, chunks: int=8):
         self.learner = None
         self.input_keys = input_keys
         self.target_keys = target_keys
         self.partitions = partitions
-        self.rand_input = rand_input
+        self.sample = sample
         self.chunks = chunks
 
     def on_train_begin(self):
-        balance = balance_by_time(self.learner._model, self.rand_input, partitions=self.partitions)
+        balance = balance_by_time(self.learner._model, self.sample, partitions=self.partitions)
         self.learner._model = GPipe(self.learner._model, balance=balance, chunks=self.chunks)
 
     def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
