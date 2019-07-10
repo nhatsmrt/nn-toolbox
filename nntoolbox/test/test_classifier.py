@@ -17,6 +17,7 @@ from nntoolbox.vision.transforms import Cutout
 from nntoolbox.vision.models import ImageClassifier, EnsembleImageClassifier
 from nntoolbox.losses import SmoothedCrossEntropy
 from nntoolbox.init import lsuv_init
+import math
 
 from functools import partial
 
@@ -91,13 +92,13 @@ def run_classifier_test():
                                 activation=activation, normalization=normalization
                             ),
                             ConvolutionalLayer(
-                                in_channels // 4, in_channels // 4, kernel_size=3, padding=1,
+                                in_channels // 4, in_channels, kernel_size=3, padding=1,
                                 activation=activation, normalization=normalization
                             ),
-                            ConvolutionalLayer(
-                                in_channels // 4, in_channels, kernel_size=1, padding=0,
-                                activation=activation, normalization=normalization
-                            ),
+                            # ConvolutionalLayer(
+                            #     in_channels // 4, in_channels, kernel_size=1, padding=0,
+                            #     activation=activation, normalization=normalization
+                            # ),
                             SEBlock(in_channels, reduction_ratio)
                         ) for _ in range(cardinality)
                         ]
@@ -231,6 +232,7 @@ def run_classifier_test():
     callbacks = [
         # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
         ToDeviceCallback(),
+        InputProgressiveResizing(initial_size=80, max_size=160, upscale_every=10, upscale_factor=math.sqrt(2)),
         # MixedPrecisionV2(),
         Tensorboard(),
         NaNWarner(),
