@@ -16,7 +16,6 @@ spacy
 fastai
 ax-platform
 adabound
-apex
 
 six
 numpy
@@ -25,3 +24,5 @@ scikit-learn
 pandas
 
 tb-nightly
+
+future
