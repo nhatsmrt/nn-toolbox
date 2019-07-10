@@ -3,6 +3,7 @@ from torch import nn
 from torch.nn import functional as F
 import numpy as np
 
+
 class ContrastiveLoss(nn.Module):
     """
     Contrastive loss function.
@@ -124,8 +125,6 @@ class AngularLoss(nn.Module):
         return loss
 
 
-
-
 class NPairAngular(nn.Module):
     def __init__(self, alpha = 45, reg_lambda = 0.002, angular_lambda = 2):
         super(NPairAngular, self).__init__()
@@ -134,4 +133,4 @@ class NPairAngular(nn.Module):
         self._angular_lambda = angular_lambda
 
     def forward(self, anchors, positives):
-        return (self._npair_loss(anchors, positives) +  self._angular_lambda * self._angular_loss(anchors, positives)) / (1 + self._angular_lambda)
+        return (self._npair_loss(anchors, positives) + self._angular_lambda * self._angular_loss(anchors, positives)) / (1 + self._angular_lambda)

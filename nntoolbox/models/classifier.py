@@ -16,9 +16,9 @@ __all__ = ['Classifier']
 
 
 class Classifier:
-    '''
+    """
     Abstraction for an classifier
-    '''
+    """
     def __init__(self, model: Module, device=get_device(), metric: Metric=Accuracy()):
         self._model = model.to(device)
         self._model.eval()
@@ -27,12 +27,12 @@ class Classifier:
         self.metric = metric
 
     def predict(self, inputs: Tensor, return_probs: bool=False) -> ndarray:
-        '''
+        """
         Predict the classes or class probabilities of a batch of inputs
         :param inputs: inputs to be predicted
         :param return_probs: whether to return prob or classes
         :return:
-        '''
+        """
         probs = self._softmax(self._model(inputs.to(self._device)))
         if return_probs:
             return probs.cpu().detach().numpy()

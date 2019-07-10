@@ -114,7 +114,7 @@ class MultipleStylesTransferLearner:
     def __init__(
             self, content_style_imgs: DataLoader, content_style_val: DataLoader,
             model: Module, feature_extractor: FeatureExtractor, optimizer: Optimizer, style_layers,
-            style_weight:float, content_weight:float, total_variation_weight:float, device:torch.device
+            style_weight: float, content_weight: float, total_variation_weight: float, device: torch.device
     ):
         self._device = device
         self._feature_extractor = feature_extractor.to(device)
