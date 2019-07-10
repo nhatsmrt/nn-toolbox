@@ -1,16 +1,2 @@
-
-imgaug
-opencv-python
-imageio
-Shapely
-albumentations
-
-
-fastai
-ax-platform
-adabound
-
 six
-
-tb-nightly
 future
