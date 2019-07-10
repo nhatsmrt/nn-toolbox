@@ -19,7 +19,7 @@ class InputProgressiveResizing(Callback):
         self.mode = mode
 
     def on_batch_begin(self, data: Dict[str, Tensor], train) -> Dict[str, Tensor]:
-        data["inputs"] = F.interpolate(input, size=(self.size, self.size), mode=self.mode)
+        data["inputs"] = F.interpolate(data["inputs"], size=(self.size, self.size), mode=self.mode)
         return data
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
