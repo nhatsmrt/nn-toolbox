@@ -7,3 +7,4 @@ tar -xvzf imagenette-160.tgz
 cd ..
 
 mkdir weights
+mkdir runs
