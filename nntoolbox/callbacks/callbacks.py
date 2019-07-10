@@ -7,6 +7,8 @@ from torch import Tensor
 class Callback:
     def on_train_begin(self): pass
 
+    def on_epoch_begin(self): pass
+
     def on_batch_begin(self, data: Dict[str, Tensor], train) -> Dict[str, Tensor]: return data
 
     def after_outputs(self, outputs: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]: return outputs
@@ -54,6 +56,11 @@ class CallbackHandler:
         if self._callbacks is not None:
             for callback in self._callbacks:
                 callback.on_train_begin()
+
+    def on_epoch_begin(self):
+        if self._callbacks is not None:
+            for callback in self._callbacks:
+                callback.on_epoch_begin()
 
     def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         if self._callbacks is not None:
