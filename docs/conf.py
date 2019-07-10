@@ -43,6 +43,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'sphinx.ext.autosummary',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -160,38 +161,37 @@ texinfo_documents = [
 
 
 # -- Extension configuration -------------------------------------------------
-
+autosummary_generate = True
 # Exclude imports
-autodoc_mock_imports = [
-    "torch",
-    "torchgpipe",
-    "torchvision",
-
-    "albumentations",
-    "imgaug",
-    "opencv-python",
-    "imageio",
-    "Shapely",
-
-    "google",
-    "pydrive",
-
-    "fastai",
-    "ax-platform",
-    "adabound",
-
-    "torchtext",
-    "nltk",
-    "spacy",
-
-    "tb-nightly",
-
-    "skimage",
-    "scikit-learn",
-    "fastai",
-    "fastprogress",
-    "numpy",
-    "scipy",
-    "pandas",
-    "matplotlib",
-]
+# autodoc_mock_imports = [
+#     "torch",
+#     "torchgpipe",
+#     "torchvision",
+#
+#     "albumentations",
+#     "imgaug",
+#     "opencv-python",
+#     "imageio",
+#     "Shapely",
+#
+#     "google",
+#     "pydrive",
+#
+#     "fastai",
+#     "ax-platform",
+#     "adabound",
+#
+#     "torchtext",
+#     "nltk",
+#     "spacy",
+#
+#     "tb-nightly",
+#
+#     "skimage",
+#     "sklearn",
+#     "fastprogress",
+#     "Sizes",
+#     "scipy",
+#     "pandas",
+#     "matplotlib",
+# ]

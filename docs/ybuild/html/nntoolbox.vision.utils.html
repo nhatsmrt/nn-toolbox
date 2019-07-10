@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.vision.utils package &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nntoolbox-vision-utils-package">
+<h1>nntoolbox.vision.utils package<a class="headerlink" href="#nntoolbox-vision-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nntoolbox.vision.utils.data">
+<span id="nntoolbox-vision-utils-data-module"></span><h2>nntoolbox.vision.utils.data module<a class="headerlink" href="#module-nntoolbox.vision.utils.data" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.vision.utils.data.UnlabelledImageDataset">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.data.</code><code class="sig-name descname">UnlabelledImageDataset</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">img_dim=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/data.html#UnlabelledImageDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.data.UnlabelledImageDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.dataset.Dataset</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.vision.utils.data.UnsupervisedFromSupervisedDataset">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.data.</code><code class="sig-name descname">UnsupervisedFromSupervisedDataset</code><span class="sig-paren">(</span><em class="sig-param">dataset: torch.utils.data.dataset.Dataset</em>, <em class="sig-param">transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/data.html#UnsupervisedFromSupervisedDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.data.UnsupervisedFromSupervisedDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.dataset.Dataset</span></code></p>
+<p>Convert a supervisded dataset to an unsupervised dataset</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.vision.utils.data.PairedDataset">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.data.</code><code class="sig-name descname">PairedDataset</code><span class="sig-paren">(</span><em class="sig-param">data_1: torch.utils.data.dataset.Dataset</em>, <em class="sig-param">data_2: torch.utils.data.dataset.Dataset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/data.html#PairedDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.data.PairedDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.dataset.Dataset</span></code></p>
+<p>Pair up two datasets, and allow users to sample a pair, one from each dataset</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.vision.utils.data.UnlabelledImageListDataset">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.data.</code><code class="sig-name descname">UnlabelledImageListDataset</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">img_dim=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/data.html#UnlabelledImageListDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.data.UnlabelledImageListDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.dataset.Dataset</span></code></p>
+<p>Abstraction for a list of path to images without labels</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.vision.utils.utils">
+<span id="nntoolbox-vision-utils-utils-module"></span><h2>nntoolbox.vision.utils.utils module<a class="headerlink" href="#module-nntoolbox.vision.utils.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nntoolbox.vision.utils.utils.gram_matrix">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">gram_matrix</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#gram_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.gram_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.vision.utils.utils.is_image">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">is_image</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#is_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.is_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if filename has valid extension
+:param filename:
+:return: boolean indicating whether filename is a valid image filename</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.vision.utils.utils.pil_to_tensor">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">pil_to_tensor</code><span class="sig-paren">(</span><em class="sig-param">pil</em>, <em class="sig-param">device=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#pil_to_tensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.pil_to_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.vision.utils.utils.tensor_to_pil">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">tensor_to_pil</code><span class="sig-paren">(</span><em class="sig-param">tensor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#tensor_to_pil"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.tensor_to_pil" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.vision.utils.utils.cv2_read_image">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">cv2_read_image</code><span class="sig-paren">(</span><em class="sig-param">image_path</em>, <em class="sig-param">to_float: bool = False</em>, <em class="sig-param">flag: int = 1</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#cv2_read_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.cv2_read_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an image using cv2 and convert to RGB
+:param image_path:
+:param to_float: whether to convert image to float dats type:
+:param flag: indicate mode for cv2 read image
+:return:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.vision.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.vision.utils" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nntoolbox.vision.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

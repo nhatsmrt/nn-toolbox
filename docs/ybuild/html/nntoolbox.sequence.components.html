@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.sequence.components package &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nntoolbox-sequence-components-package">
+<h1>nntoolbox.sequence.components package<a class="headerlink" href="#nntoolbox-sequence-components-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nntoolbox.sequence.components.attention">
+<span id="nntoolbox-sequence-components-attention-module"></span><h2>nntoolbox.sequence.components.attention module<a class="headerlink" href="#module-nntoolbox.sequence.components.attention" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.sequence.components.attention.AdditiveAttention">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.attention.</code><code class="sig-name descname">AdditiveAttention</code><span class="sig-paren">(</span><em class="sig-param">key_dim: int</em>, <em class="sig-param">query_dim: int</em>, <em class="sig-param">value_dim: int</em>, <em class="sig-param">hidden_dim: int</em>, <em class="sig-param">return_summary: bool</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#AdditiveAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.AdditiveAttention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.sequence.components.attention.Attention" title="nntoolbox.sequence.components.attention.Attention"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.sequence.components.attention.Attention</span></code></a></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.attention.AdditiveAttention.compute_scores">
+<code class="sig-name descname">compute_scores</code><span class="sig-paren">(</span><em class="sig-param">keys</em>, <em class="sig-param">queries</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#AdditiveAttention.compute_scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.AdditiveAttention.compute_scores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the attention scores
+:param keys: a set of vectors with values’ info, to compute attention weights. (seq_length, n_batch, keys_dim)
+:param queries: query vectors. Shape (n_query, n_batch, query_dim)
+:return: The score for each time step. Shape (n_query, seq_length, n_batch, 1)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.attention.Attention">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.attention.</code><code class="sig-name descname">Attention</code><span class="sig-paren">(</span><em class="sig-param">key_dim: int</em>, <em class="sig-param">query_dim: int</em>, <em class="sig-param">value_dim: int</em>, <em class="sig-param">return_summary: bool</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#Attention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.Attention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.attention.Attention.compute_attn_weights">
+<code class="sig-name descname">compute_attn_weights</code><span class="sig-paren">(</span><em class="sig-param">keys: torch.Tensor</em>, <em class="sig-param">queries: torch.Tensor</em>, <em class="sig-param">mask=None</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#Attention.compute_attn_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.Attention.compute_attn_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the attention weights
+:param keys: a set of vectors with values’ info, to compute attention weights. (seq_length, n_batch, keys_dim)
+:param queries: query vectors. Shape (n_query, n_batch, query_dim)
+:param mask: binary, indicating which vector is padding. Shape (seq_length, n_batch). dtype: uint8
+:return: The weights for each time step. Shape (n_query, seq_length, n_batch, 1)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.sequence.components.attention.Attention.compute_scores">
+<code class="sig-name descname">compute_scores</code><span class="sig-paren">(</span><em class="sig-param">keys: torch.Tensor</em>, <em class="sig-param">queries: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#Attention.compute_scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.Attention.compute_scores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the attention scores
+:param keys: a set of vectors with values’ info, to compute attention weights. (seq_length, n_batch, keys_dim)
+:param queries: query vectors. Shape (n_query, n_batch, query_dim)
+:return: The score for each time step. Shape (n_query, seq_length, n_batch, 1)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.sequence.components.attention.Attention.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">keys: torch.Tensor</em>, <em class="sig-param">queries: torch.Tensor</em>, <em class="sig-param">values: torch.Tensor</em>, <em class="sig-param">mask=None</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.Tensor, Any]<a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#Attention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.Attention.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keys</strong> – a set of vectors with values’ info, to compute attention weights. (seq_length, n_batch, keys_dim)</p></li>
+<li><p><strong>queries</strong> – queries vector. Shape (n_query, n_batch, query_dim)</p></li>
+<li><p><strong>values</strong> – a set of vectors to be attended to. Shape (seq_length, n_batch, input_dim)</p></li>
+<li><p><strong>mask</strong> – binary, indicating which vector is padding. Shape (seq_length, n_batch). dtype: uint8</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a weighted sum of the inputs. (n_query, n_batch, input_dim) if return_summary, else (n_query, seq_length, n_batch)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.attention.MultiplicativeAttention">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.attention.</code><code class="sig-name descname">MultiplicativeAttention</code><span class="sig-paren">(</span><em class="sig-param">key_dim</em>, <em class="sig-param">query_dim</em>, <em class="sig-param">value_dim</em>, <em class="sig-param">return_summary</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#MultiplicativeAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.MultiplicativeAttention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.sequence.components.attention.Attention" title="nntoolbox.sequence.components.attention.Attention"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.sequence.components.attention.Attention</span></code></a></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.attention.MultiplicativeAttention.compute_scores">
+<code class="sig-name descname">compute_scores</code><span class="sig-paren">(</span><em class="sig-param">keys</em>, <em class="sig-param">queries</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#MultiplicativeAttention.compute_scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.MultiplicativeAttention.compute_scores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the attention scores
+:param keys: a set of vectors with values’ info, to compute attention weights. (seq_length, n_batch, keys_dim)
+:param queries: query vectors. Shape (n_query, n_batch, query_dim)
+:return: The score for each time step. Shape (n_query, seq_length, n_batch, 1)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.attention.ScaledDotProductAttention">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.attention.</code><code class="sig-name descname">ScaledDotProductAttention</code><span class="sig-paren">(</span><em class="sig-param">key_dim</em>, <em class="sig-param">query_dim</em>, <em class="sig-param">value_dim</em>, <em class="sig-param">return_summary</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#ScaledDotProductAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.ScaledDotProductAttention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.sequence.components.attention.Attention" title="nntoolbox.sequence.components.attention.Attention"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.sequence.components.attention.Attention</span></code></a></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.attention.ScaledDotProductAttention.compute_scores">
+<code class="sig-name descname">compute_scores</code><span class="sig-paren">(</span><em class="sig-param">keys</em>, <em class="sig-param">queries</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#ScaledDotProductAttention.compute_scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.ScaledDotProductAttention.compute_scores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the attention scores:
+score(K, Q) = KQ^T / sqrt(d_k)
+:param keys: a set of vectors with values’ info, to compute attention weights. (seq_length, batch_size, key_dim)
+:param queries: query vectors. Shape (n_query, batch_size, query_dim = key_dim)
+:return: The score for each time step. Shape (n_query, seq_length, n_batch, 1)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.attention.SelfAttention">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.attention.</code><code class="sig-name descname">SelfAttention</code><span class="sig-paren">(</span><em class="sig-param">base_attention</em>, <em class="sig-param">in_features: int</em>, <em class="sig-param">key_dim: int</em>, <em class="sig-param">query_dim: int</em>, <em class="sig-param">value_dim: int</em>, <em class="sig-param">value_as_key: bool = False</em>, <em class="sig-param">transform: bool = True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#SelfAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.SelfAttention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.attention.SelfAttention.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">inputs: torch.Tensor</em>, <em class="sig-param">lengths: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.Tensor, Any]<a class="reference internal" href="_modules/nntoolbox/sequence/components/attention.html#SelfAttention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.attention.SelfAttention.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> – (seq_length, batch_size, input_dim)</p></li>
+<li><p><strong>lengths</strong> – (batch_size)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(seq_length, batch_size, input_dim) and mask (seq_len, batch_size)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.sequence.components.cells">
+<span id="nntoolbox-sequence-components-cells-module"></span><h2>nntoolbox.sequence.components.cells module<a class="headerlink" href="#module-nntoolbox.sequence.components.cells" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nntoolbox.sequence.components.embedding">
+<span id="nntoolbox-sequence-components-embedding-module"></span><h2>nntoolbox.sequence.components.embedding module<a class="headerlink" href="#module-nntoolbox.sequence.components.embedding" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.sequence.components.embedding.AdditiveContextEmbedding">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.embedding.</code><code class="sig-name descname">AdditiveContextEmbedding</code><span class="sig-paren">(</span><em class="sig-param">num_embeddings</em>, <em class="sig-param">embedding_dim</em>, <em class="sig-param">padding_idx=None</em>, <em class="sig-param">max_norm=None</em>, <em class="sig-param">norm_type=2.0</em>, <em class="sig-param">scale_grad_by_freq=False</em>, <em class="sig-param">sparse=False</em>, <em class="sig-param">_weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/embedding.html#AdditiveContextEmbedding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.embedding.AdditiveContextEmbedding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.sparse.Embedding</span></code></p>
+<p>The embedding weights are fixed, except for a context vector c shared by all embedding:
+embedding(x) = w_x + c</p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.embedding.AdditiveContextEmbedding.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/embedding.html#AdditiveContextEmbedding.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.embedding.AdditiveContextEmbedding.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.sequence.components.modifier">
+<span id="nntoolbox-sequence-components-modifier-module"></span><h2>nntoolbox.sequence.components.modifier module<a class="headerlink" href="#module-nntoolbox.sequence.components.modifier" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.sequence.components.modifier.ModifiedStackedRNN">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.modifier.</code><code class="sig-name descname">ModifiedStackedRNN</code><span class="sig-paren">(</span><em class="sig-param">base_rnn</em>, <em class="sig-param">num_layers: int</em>, <em class="sig-param">input_size: int</em>, <em class="sig-param">hidden_size: int</em>, <em class="sig-param">bidirectional: bool</em>, <em class="sig-param">dropout: float = 0.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/modifier.html#ModifiedStackedRNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.modifier.ModifiedStackedRNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.modifier.ModifiedStackedRNN.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em>, <em class="sig-param">h_0=None</em>, <em class="sig-param">lengths=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/modifier.html#ModifiedStackedRNN.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.modifier.ModifiedStackedRNN.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.modifier.ResidualRNN">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.modifier.</code><code class="sig-name descname">ResidualRNN</code><span class="sig-paren">(</span><em class="sig-param">base_rnn</em>, <em class="sig-param">num_layers: int</em>, <em class="sig-param">input_size: int</em>, <em class="sig-param">bidirectional: bool</em>, <em class="sig-param">dropout: float = 0.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/modifier.html#ResidualRNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.modifier.ResidualRNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.sequence.components.modifier.ModifiedStackedRNN" title="nntoolbox.sequence.components.modifier.ModifiedStackedRNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.sequence.components.modifier.ModifiedStackedRNN</span></code></a></p>
+<p>StackedRNN with residual connections:
+i_{l + 1} = o_l + i_l = i_l + f(i_l, h_{l - 1})
+o_{l + 1} = f(i_{l + 1}, h_l)</p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.modifier.ResidualRNN.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em>, <em class="sig-param">h_0=None</em>, <em class="sig-param">lengths=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/components/modifier.html#ResidualRNN.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.modifier.ResidualRNN.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.sequence.components">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.sequence.components" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nntoolbox.sequence.components.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

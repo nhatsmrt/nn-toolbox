@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.sequence.utils package &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nntoolbox-sequence-utils-package">
+<h1>nntoolbox.sequence.utils package<a class="headerlink" href="#nntoolbox-sequence-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nntoolbox.sequence.utils.utils">
+<span id="nntoolbox-sequence-utils-utils-module"></span><h2>nntoolbox.sequence.utils.utils module<a class="headerlink" href="#module-nntoolbox.sequence.utils.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nntoolbox.sequence.utils.utils.unicode_to_ascii">
+<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">unicode_to_ascii</code><span class="sig-paren">(</span><em class="sig-param">s: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/utils/utils.html#unicode_to_ascii"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.unicode_to_ascii" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.sequence.utils.utils.create_mask">
+<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">create_mask</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">pad_token</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/utils/utils.html#create_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.create_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a binary mask to indicate whether a token is pad or not
+:param inputs: (seq_len, batch_size)
+:param pad_token: token for padding
+:return: mask: (seq_len, batch_size)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.sequence.utils.utils.create_mask_from_lengths">
+<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">create_mask_from_lengths</code><span class="sig-paren">(</span><em class="sig-param">inputs: torch.Tensor</em>, <em class="sig-param">lengths: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/sequence/utils/utils.html#create_mask_from_lengths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.create_mask_from_lengths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a binary mask to indicate whether a token is pad or not
+:param inputs: (seq_len, batch_size)
+:param lengths: lengths of each sequence. (batch size)
+:return: mask: (seq_len, batch_size)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.sequence.utils.utils.get_lengths">
+<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">get_lengths</code><span class="sig-paren">(</span><em class="sig-param">mask</em>, <em class="sig-param">return_tensor: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/utils/utils.html#get_lengths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.get_lengths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a 1D array indicating the length of each sequence in batch
+:param mask: binary mask indicating whether an element is pad token (seq_len, batch_size)
+:param return_tensor: whether to return as a pytorch tensor
+:return: lengths (n_batch)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.sequence.utils.utils.extract_last">
+<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">extract_last</code><span class="sig-paren">(</span><em class="sig-param">sequences: torch.Tensor</em>, <em class="sig-param">sequence_lengths: torch.Tensor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/sequence/utils/utils.html#extract_last"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.extract_last" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sequences</strong> – (seq_length, batch_size, n_features)</p></li>
+<li><p><strong>sequence_lengths</strong> – (batch_size)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(batch_size, n_features)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.sequence.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.sequence.utils" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nntoolbox.sequence.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

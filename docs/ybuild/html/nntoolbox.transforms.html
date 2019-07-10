@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.transforms package &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nntoolbox-transforms-package">
+<h1>nntoolbox.transforms package<a class="headerlink" href="#nntoolbox-transforms-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nntoolbox.transforms.mixup">
+<span id="nntoolbox-transforms-mixup-module"></span><h2>nntoolbox.transforms.mixup module<a class="headerlink" href="#module-nntoolbox.transforms.mixup" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.transforms.mixup.MixupTransformer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.transforms.mixup.</code><code class="sig-name descname">MixupTransformer</code><span class="sig-paren">(</span><em class="sig-param">alpha: float = 0.4</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/transforms/mixup.html#MixupTransformer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.transforms.mixup.MixupTransformer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Implement mixup data augmentation:
+x = tau x_1 + (1 - tau) x_2
+y = tau y_1 + (1 - tau) y_2
+Reference: <a class="reference external" href="https://arxiv.org/pdf/1710.09412.pdf">https://arxiv.org/pdf/1710.09412.pdf</a>
+Based on fastai implementation: <a class="reference external" href="https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py">https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py</a></p>
+<dl class="method">
+<dt id="nntoolbox.transforms.mixup.MixupTransformer.transform_data">
+<code class="sig-name descname">transform_data</code><span class="sig-paren">(</span><em class="sig-param">images: torch.Tensor</em>, <em class="sig-param">labels: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.Tensor, torch.Tensor]<a class="reference internal" href="_modules/nntoolbox/transforms/mixup.html#MixupTransformer.transform_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.transforms.mixup.MixupTransformer.transform_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.transforms.mixup.MixupTransformer.transform_loss">
+<code class="sig-name descname">transform_loss</code><span class="sig-paren">(</span><em class="sig-param">criterion</em>, <em class="sig-param">train</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/transforms/mixup.html#MixupTransformer.transform_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.transforms.mixup.MixupTransformer.transform_loss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.transforms.scale">
+<span id="nntoolbox-transforms-scale-module"></span><h2>nntoolbox.transforms.scale module<a class="headerlink" href="#module-nntoolbox.transforms.scale" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.transforms.scale.StandardScalerTransform">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.transforms.scale.</code><code class="sig-name descname">StandardScalerTransform</code><span class="sig-paren">(</span><em class="sig-param">scaler: sklearn.preprocessing.data.StandardScaler = None</em>, <em class="sig-param">device=device(type='cpu')</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/transforms/scale.html#StandardScalerTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.transforms.scale.StandardScalerTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.transforms.scale.StandardScalerTransform.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">inputs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/transforms/scale.html#StandardScalerTransform.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.transforms.scale.StandardScalerTransform.fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.transforms.transforms">
+<span id="nntoolbox-transforms-transforms-module"></span><h2>nntoolbox.transforms.transforms module<a class="headerlink" href="#module-nntoolbox.transforms.transforms" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.transforms.transforms.ToNumpyArray">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.transforms.transforms.</code><code class="sig-name descname">ToNumpyArray</code><a class="reference internal" href="_modules/nntoolbox/transforms/transforms.html#ToNumpyArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.transforms.transforms.ToNumpyArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.transforms">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.transforms" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nntoolbox.transforms.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

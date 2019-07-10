@@ -1,0 +1,374 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.test.test_classifier &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nntoolbox.test.test_classifier</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torchvision</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">torchvision.datasets</span> <span class="k">import</span> <span class="n">ImageFolder</span><span class="p">,</span> <span class="n">CIFAR10</span>
+<span class="kn">from</span> <span class="nn">torchvision.transforms</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">torch.optim</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">torch.optim.lr_scheduler</span> <span class="k">import</span> <span class="n">CosineAnnealingLR</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.optim</span> <span class="k">import</span> <span class="n">AdamW</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="k">import</span> <span class="n">random_split</span>
+<span class="c1"># from adabound import AdaBound</span>
+
+<span class="kn">from</span> <span class="nn">nntoolbox.vision.components</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.vision.learner</span> <span class="k">import</span> <span class="n">SupervisedImageLearner</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.utils</span> <span class="k">import</span> <span class="n">load_model</span><span class="p">,</span> <span class="n">LRFinder</span><span class="p">,</span> <span class="n">get_first_batch</span><span class="p">,</span> <span class="n">get_device</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.callbacks</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.metrics</span> <span class="k">import</span> <span class="n">Accuracy</span><span class="p">,</span> <span class="n">Loss</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.vision.transforms</span> <span class="k">import</span> <span class="n">Cutout</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.vision.models</span> <span class="k">import</span> <span class="n">ImageClassifier</span><span class="p">,</span> <span class="n">EnsembleImageClassifier</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.losses</span> <span class="k">import</span> <span class="n">SmoothedCrossEntropy</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.init</span> <span class="k">import</span> <span class="n">lsuv_init</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span> <span class="nn">.prog_bar</span> <span class="k">import</span> <span class="n">progress_bar_test</span>
+
+
+<div class="viewcode-block" id="run_classifier_test"><a class="viewcode-back" href="../../../nntoolbox.test.html#nntoolbox.test.test_classifier.run_classifier_test">[docs]</a><span class="k">def</span> <span class="nf">run_classifier_test</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting classifier test&quot;</span><span class="p">)</span>
+    <span class="c1"># progress_bar_test()</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># data = CIFAR10(&#39;data/&#39;, train=True, download=True, transform=ToTensor())</span>
+    <span class="c1"># train_size = int(0.8 * len(data))</span>
+    <span class="c1"># val_size = len(data) - train_size</span>
+    <span class="c1"># train_dataset, val_dataset = torch.utils.data.random_split(data, [train_size, val_size])</span>
+    <span class="c1"># train_dataset.dataset.transform = Compose(</span>
+    <span class="c1">#     [</span>
+    <span class="c1">#         RandomHorizontalFlip(),</span>
+    <span class="c1">#         RandomResizedCrop(size=32, scale=(0.95, 1.0)),</span>
+    <span class="c1">#         # Cutout(length=16, n_holes=1),</span>
+    <span class="c1">#         ToTensor()</span>
+    <span class="c1">#     ]</span>
+    <span class="c1"># )</span>
+    <span class="c1">#</span>
+    <span class="c1"># test_dataset = torchvision.datasets.CIFAR10(&#39;data/&#39;, train=False, download=True, transform=ToTensor())</span>
+    <span class="c1"># kernel = partial(PolynomialKernel, dp=3, cp=2.0)</span>
+
+
+    <span class="n">train_val_dataset</span> <span class="o">=</span> <span class="n">ImageFolder</span><span class="p">(</span>
+        <span class="s1">&#39;data/imagenette-160/train&#39;</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">Resize</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)),</span>
+            <span class="n">ToTensor</span><span class="p">()</span>
+        <span class="p">])</span>
+    <span class="p">)</span>
+
+    <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">ImageFolder</span><span class="p">(</span>
+        <span class="s1">&#39;data/imagenette-160/val&#39;</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">Resize</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)),</span>
+            <span class="n">ToTensor</span><span class="p">()</span>
+        <span class="p">])</span>
+    <span class="p">)</span>
+
+    <span class="n">train_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.8</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_val_dataset</span><span class="p">))</span>
+    <span class="n">val_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_val_dataset</span><span class="p">)</span> <span class="o">-</span> <span class="n">train_size</span>
+
+    <span class="n">train_dataset</span><span class="p">,</span> <span class="n">val_dataset</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span><span class="n">train_val_dataset</span><span class="p">,</span> <span class="p">[</span><span class="n">train_size</span><span class="p">,</span> <span class="n">val_size</span><span class="p">])</span>
+
+    <span class="n">train_dataset</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">Compose</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">RandomHorizontalFlip</span><span class="p">(),</span>
+            <span class="n">RandomResizedCrop</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)),</span>
+            <span class="c1"># Cutout(length=16, n_holes=1),</span>
+            <span class="n">ToTensor</span><span class="p">()</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">train_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">val_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">val_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">test_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">SEResNeXtShakeShake</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">reduction_ratio</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">cardinality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span>
+                     <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">SEResNeXtShakeShake</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+                <span class="n">branches</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                            <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+                                <span class="n">in_channels</span><span class="p">,</span> <span class="n">in_channels</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                            <span class="p">),</span>
+                            <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+                                <span class="n">in_channels</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                            <span class="p">),</span>
+                            <span class="c1"># ConvolutionalLayer(</span>
+                            <span class="c1">#     in_channels // 4, in_channels, kernel_size=1, padding=0,</span>
+                            <span class="c1">#     activation=activation, normalization=normalization</span>
+                            <span class="c1"># ),</span>
+                            <span class="n">SEBlock</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">reduction_ratio</span><span class="p">)</span>
+                        <span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cardinality</span><span class="p">)</span>
+                        <span class="p">]</span>
+                <span class="p">),</span>
+                <span class="n">use_shake_shake</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">StandAloneMultiheadAttentionLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="n">num_heads</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span>
+        <span class="p">):</span>
+            <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">StandAloneMultiheadAttention</span><span class="p">(</span>
+                    <span class="n">num_heads</span><span class="o">=</span><span class="n">num_heads</span><span class="p">,</span>
+                    <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+                    <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+                    <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span>
+                    <span class="n">stride</span><span class="o">=</span><span class="n">stride</span><span class="p">,</span>
+                    <span class="n">padding</span><span class="o">=</span><span class="n">padding</span><span class="p">,</span>
+                    <span class="n">bias</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">),</span>
+                <span class="n">activation</span><span class="p">(),</span>
+                <span class="n">normalization</span><span class="p">(</span><span class="n">num_features</span><span class="o">=</span><span class="n">out_channels</span><span class="p">),</span>
+            <span class="p">]</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">StandAloneMultiheadAttentionLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">layers</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">SEResNeXtShakeShakeAttention</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_heads</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">reduction_ratio</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">cardinality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span>
+                     <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">SEResNeXtShakeShakeAttention</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+                <span class="n">branches</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                            <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+                                <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+                                <span class="n">out_channels</span><span class="o">=</span><span class="n">in_channels</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+                                <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span>
+                                <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                            <span class="p">),</span>
+                            <span class="n">StandAloneMultiheadAttentionLayer</span><span class="p">(</span>
+                                <span class="n">num_heads</span><span class="o">=</span><span class="n">num_heads</span><span class="p">,</span>
+                                <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+                                <span class="n">out_channels</span><span class="o">=</span><span class="n">in_channels</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+                                <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span>
+                                <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                            <span class="p">),</span>
+                            <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+                                <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+                                <span class="n">out_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+                                <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span>
+                                <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                            <span class="p">),</span>
+                            <span class="n">SEBlock</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">reduction_ratio</span><span class="p">)</span>
+                        <span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cardinality</span><span class="p">)</span>
+                        <span class="p">]</span>
+                <span class="p">),</span>
+                <span class="n">use_shake_shake</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+    <span class="c1"># layer_1 = ManifoldMixupModule(ConvolutionalLayer(in_channels=3, out_channels=16, kernel_size=3, activation=nn.ReLU))</span>
+    <span class="c1"># block_1 = ManifoldMixupModule(SEResNeXtShakeShake(in_channels=16, activation=nn.ReLU))</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span>
+        <span class="n">ConvolutionalLayer</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">),</span>
+        <span class="n">SEResNeXtShakeShake</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">),</span>
+        <span class="c1"># layer_1,</span>
+        <span class="c1"># block_1,</span>
+        <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+            <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">),</span>
+        <span class="n">SEResNeXtShakeShake</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">),</span>
+        <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">),</span>
+        <span class="n">SEResNeXtShakeShake</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">),</span>
+        <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">),</span>
+        <span class="n">SEResNeXtShakeShake</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">128</span><span class="p">),</span>
+        <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">),</span>
+        <span class="n">SEResNeXtShakeShake</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">256</span><span class="p">),</span>
+        <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+            <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">),</span>
+        <span class="n">SEResNeXtShakeShake</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">512</span><span class="p">),</span>
+        <span class="c1"># SEResNeXtShakeShakeAttention(num_heads=8, in_channels=512),</span>
+        <span class="n">FeedforwardBlock</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+            <span class="n">out_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">pool_output_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">get_device</span><span class="p">())</span>
+
+    <span class="c1"># lsuv_init(module=model, input=get_first_batch(train_loader, callbacks = [ToDeviceCallback()])[0])</span>
+
+    <span class="c1"># print(count_trainable_parameters(model)) # 14437816 3075928</span>
+
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">weight_decay</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.30</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+    <span class="n">learner</span> <span class="o">=</span> <span class="n">SupervisedImageLearner</span><span class="p">(</span>
+        <span class="n">train_data</span><span class="o">=</span><span class="n">train_loader</span><span class="p">,</span>
+        <span class="n">val_data</span><span class="o">=</span><span class="n">val_loader</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">criterion</span><span class="o">=</span><span class="n">SmoothedCrossEntropy</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">get_device</span><span class="p">()),</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+        <span class="n">mixup</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="c1"># lr_finder = LRFinder(</span>
+    <span class="c1">#     model=model,</span>
+    <span class="c1">#     train_data=train_loader,</span>
+    <span class="c1">#     criterion=SmoothedCrossEntropy(),</span>
+    <span class="c1">#     optimizer=partial(SGD, lr=0.074, weight_decay=0.0001, momentum=0.9),</span>
+    <span class="c1">#     device=get_device()</span>
+    <span class="c1"># )</span>
+    <span class="c1"># lr_finder.find_lr(warmup=100, callbacks=[ToDeviceCallback()])</span>
+
+    <span class="n">swa</span> <span class="o">=</span> <span class="n">StochasticWeightAveraging</span><span class="p">(</span><span class="n">learner</span><span class="p">,</span> <span class="n">average_after</span><span class="o">=</span><span class="mi">5025</span><span class="p">,</span> <span class="n">update_every</span><span class="o">=</span><span class="mi">670</span><span class="p">)</span>
+    <span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),</span>
+        <span class="n">ToDeviceCallback</span><span class="p">(),</span>
+        <span class="n">InputProgressiveResizing</span><span class="p">(</span><span class="n">initial_size</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">160</span><span class="p">,</span> <span class="n">upscale_every</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">upscale_factor</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+        <span class="c1"># MixedPrecisionV2(),</span>
+        <span class="n">Tensorboard</span><span class="p">(),</span>
+        <span class="n">NaNWarner</span><span class="p">(),</span>
+        <span class="c1"># ReduceLROnPlateauCB(optimizer, monitor=&#39;accuracy&#39;, mode=&#39;max&#39;, patience=10),</span>
+        <span class="n">LRSchedulerCB</span><span class="p">(</span><span class="n">CosineAnnealingLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">eta_min</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span> <span class="n">T_max</span><span class="o">=</span><span class="mi">335</span><span class="p">)),</span>
+        <span class="n">swa</span><span class="p">,</span>
+        <span class="n">LossLogger</span><span class="p">(),</span>
+        <span class="n">ModelCheckpoint</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">learner</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;weights/model.pt&quot;</span><span class="p">,</span> <span class="n">monitor</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">),</span>
+        <span class="n">ProgressBarCB</span><span class="p">()</span>
+    <span class="p">]</span>
+
+    <span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="n">Accuracy</span><span class="p">(),</span>
+        <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">Loss</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="n">final</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span>
+        <span class="n">n_epoch</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="p">,</span>
+        <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span>
+        <span class="n">final_metric</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">final</span><span class="p">)</span>
+    <span class="n">load_model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;weights/model.pt&quot;</span><span class="p">)</span>
+    <span class="n">classifier</span> <span class="o">=</span> <span class="n">ImageClassifier</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tta_transform</span><span class="o">=</span><span class="n">Compose</span><span class="p">([</span>
+        <span class="n">ToPILImage</span><span class="p">(),</span>
+        <span class="n">RandomHorizontalFlip</span><span class="p">(),</span>
+        <span class="n">RandomResizedCrop</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)),</span>
+        <span class="n">ToTensor</span><span class="p">()</span>
+    <span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">classifier</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_loader</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test SWA:&quot;</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">swa</span><span class="o">.</span><span class="n">get_averaged_model</span><span class="p">()</span>
+    <span class="n">classifier</span> <span class="o">=</span> <span class="n">ImageClassifier</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tta_transform</span><span class="o">=</span><span class="n">Compose</span><span class="p">([</span>
+        <span class="n">ToPILImage</span><span class="p">(),</span>
+        <span class="n">RandomHorizontalFlip</span><span class="p">(),</span>
+        <span class="n">RandomResizedCrop</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)),</span>
+        <span class="n">ToTensor</span><span class="p">()</span>
+    <span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">classifier</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_loader</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.optim package &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nntoolbox-optim-package">
+<h1>nntoolbox.optim package<a class="headerlink" href="#nntoolbox-optim-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nntoolbox.optim.adamW">
+<span id="nntoolbox-optim-adamw-module"></span><h2>nntoolbox.optim.adamW module<a class="headerlink" href="#module-nntoolbox.optim.adamW" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.optim.adamW.AdamW">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.optim.adamW.</code><code class="sig-name descname">AdamW</code><span class="sig-paren">(</span><em class="sig-param">params</em>, <em class="sig-param">lr: float = 0.001</em>, <em class="sig-param">betas: Tuple[float</em>, <em class="sig-param">float] = (0.9</em>, <em class="sig-param">0.999)</em>, <em class="sig-param">eps: float = 1e-08</em>, <em class="sig-param">weight_decay: float = 0.0001</em>, <em class="sig-param">amsgrad: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/adamW.html#AdamW"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.adamW.AdamW" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.adam.Adam</span></code></p>
+<p>Implement decoupled weight decay for Adam</p>
+<dl class="method">
+<dt id="nntoolbox.optim.adamW.AdamW.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">closure=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/adamW.html#AdamW.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.adamW.AdamW.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single optimization step.</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><dl class="simple">
+<dt>closure (callable, optional): A closure that reevaluates the model</dt><dd><p>and returns the loss.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.optim.lr_scheduler">
+<span id="nntoolbox-optim-lr-scheduler-module"></span><h2>nntoolbox.optim.lr_scheduler module<a class="headerlink" href="#module-nntoolbox.optim.lr_scheduler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.optim.lr_scheduler.CyclicalTriangularLR">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.optim.lr_scheduler.</code><code class="sig-name descname">CyclicalTriangularLR</code><span class="sig-paren">(</span><em class="sig-param">optimizer: torch.optim.optimizer.Optimizer</em>, <em class="sig-param">min_lr: float</em>, <em class="sig-param">max_lr: float</em>, <em class="sig-param">cycle_length: int</em>, <em class="sig-param">inc_fraction: float</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/lr_scheduler.html#CyclicalTriangularLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.lr_scheduler.CyclicalTriangularLR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.lr_scheduler.LambdaLR</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.optim.lr_scheduler.TriangularLR">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.optim.lr_scheduler.</code><code class="sig-name descname">TriangularLR</code><span class="sig-paren">(</span><em class="sig-param">optimizer: torch.optim.optimizer.Optimizer</em>, <em class="sig-param">min_lr: float</em>, <em class="sig-param">max_lr: float</em>, <em class="sig-param">cycle_length: int</em>, <em class="sig-param">inc_fraction: float</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/lr_scheduler.html#TriangularLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.lr_scheduler.TriangularLR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.lr_scheduler.LambdaLR</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.optim.lr_scheduler.TriangularLR.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">iter: Optional[int] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/lr_scheduler.html#TriangularLR.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.lr_scheduler.TriangularLR.step" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.optim.utils">
+<span id="nntoolbox-optim-utils-module"></span><h2>nntoolbox.optim.utils module<a class="headerlink" href="#module-nntoolbox.optim.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nntoolbox.optim.utils.change_lr">
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">change_lr</code><span class="sig-paren">(</span><em class="sig-param">optim: torch.optim.optimizer.Optimizer</em>, <em class="sig-param">lr: float</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/utils.html#change_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.utils.change_lr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.optim.utils.plot_schedule">
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">plot_schedule</code><span class="sig-paren">(</span><em class="sig-param">schedule_fn: Callable[int, float], iterations: int = 30</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/utils.html#plot_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.utils.plot_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the learning rate schedule function
+:param schedule_fn: a function that returns a learning rate given an iteration
+:param iterations: maximum number of iterations (or epochs)
+:return:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.optim">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.optim" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nntoolbox.optim.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.init package &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nntoolbox-init-package">
+<h1>nntoolbox.init package<a class="headerlink" href="#nntoolbox-init-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nntoolbox.init.lsuv">
+<span id="nntoolbox-init-lsuv-module"></span><h2>nntoolbox.init.lsuv module<a class="headerlink" href="#module-nntoolbox.init.lsuv" title="Permalink to this headline">¶</a></h2>
+<p>Implement LSUV initialization from “ALL YOU NEED IS A GOOD INIT”
+<a class="reference external" href="https://arxiv.org/pdf/1511.06422.pdf">https://arxiv.org/pdf/1511.06422.pdf</a>
+Adopt from fastai</p>
+<dl class="function">
+<dt id="nntoolbox.init.lsuv.lsuv_init">
+<code class="sig-prename descclassname">nntoolbox.init.lsuv.</code><code class="sig-name descname">lsuv_init</code><span class="sig-paren">(</span><em class="sig-param">module: torch.nn.modules.module.Module</em>, <em class="sig-param">input: torch.Tensor</em>, <em class="sig-param">tol: float = 0.001</em>, <em class="sig-param">Tmax: int = 100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/init/lsuv.html#lsuv_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.init.lsuv.lsuv_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>LSUV initialization
+:param module:
+:param input:
+:param tol: maximum tolerance
+:param Tmax: maximum iterations to attempt to demean and normalize weight
+:return: final mean and std of each layer’s output</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.init">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.init" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nntoolbox.init.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
