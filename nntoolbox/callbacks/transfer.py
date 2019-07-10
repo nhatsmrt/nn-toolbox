@@ -9,7 +9,7 @@ BN_TYPE = [BatchNorm1d, BatchNorm2d, BatchNorm3d]
 # UNTESTED
 class FreezeBN(Callback):
     """
-    Freeze non trainable batch norms so that it won't accumulate statistics
+    Freeze statistics of non trainable batch norms so that it won't accumulate statistics
     """
     def on_epoch_begin(self):
         freeze_bn(self.learner._model)

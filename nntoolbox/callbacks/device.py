@@ -12,8 +12,8 @@ class ToDeviceCallback(Callback):
         self._device = device
         self.learner = None
 
-    def on_train_begin(self):
-        self.learner._model = self.learner._model.to(self._device)
+    # def on_train_begin(self):
+    #     self.learner._model = self.learner._model.to(self._device)
 
     def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         for key in data:
