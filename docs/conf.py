@@ -160,3 +160,23 @@ texinfo_documents = [
 
 
 # -- Extension configuration -------------------------------------------------
+
+# Exclude imports
+autodoc_mock_imports = [
+    "torch",
+    "torchgpipe",
+    "torchvision",
+
+    "torchtext",
+    "nltk",
+    "spacy",
+
+    "skimage",
+    "scikit-learn",
+    "fastai",
+    "fastprogress",
+    "numpy",
+    "scipy",
+    "pandas",
+    "matplotlib",
+]
