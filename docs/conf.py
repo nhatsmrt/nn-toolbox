@@ -30,6 +30,14 @@ release = '0.0.1'
 
 
 # -- General configuration ---------------------------------------------------
+autoclass_content = "both"
+autodoc_default_flags = [
+    "members",
+    # "inherited-members",
+    # "private-members",
+    "show-inheritance",
+    "undoc-members",
+]
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
@@ -39,11 +47,15 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.napoleon',
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    # 'sphinx.ext.autosectionlabel',
 ]
+autosummary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['ytemplates']
@@ -160,38 +172,36 @@ texinfo_documents = [
 
 
 # -- Extension configuration -------------------------------------------------
-
 # Exclude imports
-autodoc_mock_imports = [
-    "torch",
-    "torchgpipe",
-    "torchvision",
-
-    "albumentations",
-    "imgaug",
-    "opencv-python",
-    "imageio",
-    "Shapely",
-
-    "google",
-    "pydrive",
-
-    "fastai",
-    "ax-platform",
-    "adabound",
-
-    "torchtext",
-    "nltk",
-    "spacy",
-
-    "tb-nightly",
-
-    "skimage",
-    "scikit-learn",
-    "fastai",
-    "fastprogress",
-    "numpy",
-    "scipy",
-    "pandas",
-    "matplotlib",
-]
+# autodoc_mock_imports = [
+#     "torch",
+#     "torchgpipe",
+#     "torchvision",
+#
+#     "albumentations",
+#     "imgaug",
+#     "opencv-python",
+#     "imageio",
+#     "Shapely",
+#
+#     "google",
+#     "pydrive",
+#
+#     "fastai",
+#     "ax-platform",
+#     "adabound",
+#
+#     "torchtext",
+#     "nltk",
+#     "spacy",
+#
+#     "tb-nightly",
+#
+#     "skimage",
+#     "sklearn",
+#     "fastprogress",
+#     "Sizes",
+#     "scipy",
+#     "pandas",
+#     "matplotlib",
+# ]

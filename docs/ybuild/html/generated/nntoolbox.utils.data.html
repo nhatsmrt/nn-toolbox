@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.utils.data &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nntoolbox.utils.data">
+<span id="nntoolbox-utils-data"></span><h1>nntoolbox.utils.data<a class="headerlink" href="#module-nntoolbox.utils.data" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.data.get_first_batch" title="nntoolbox.utils.data.get_first_batch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_first_batch</span></code></a>(data[, callbacks])</p></td>
+<td><p>Get the first batch from dataloader</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nntoolbox.utils.data.grab_next_batch" title="nntoolbox.utils.data.grab_next_batch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grab_next_batch</span></code></a>(data)</p></td>
+<td><p>Grab the next batch from dataloader</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.data.SupervisedDataset" title="nntoolbox.utils.data.SupervisedDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SupervisedDataset</span></code></a>(inputs, labels[, device, …])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="nntoolbox.utils.data.SupervisedDataset">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.data.</code><code class="sig-name descname">SupervisedDataset</code><span class="sig-paren">(</span><em class="sig-param">inputs: numpy.ndarray</em>, <em class="sig-param">labels: numpy.ndarray</em>, <em class="sig-param">device=device(type='cpu')</em>, <em class="sig-param">transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#SupervisedDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.SupervisedDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.dataset.Dataset</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.utils.data.SupervisedDataset.from_csv">
+<em class="property">classmethod </em><code class="sig-name descname">from_csv</code><span class="sig-paren">(</span><em class="sig-param">path: str</em>, <em class="sig-param">label_name: str</em>, <em class="sig-param">data_fields: Optional[List[str]] = None</em>, <em class="sig-param">device=device(type='cpu')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#SupervisedDataset.from_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.SupervisedDataset.from_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a supervised dataset from csv file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.utils.data.SupervisedDataset.prepare_arr">
+<code class="sig-name descname">prepare_arr</code><span class="sig-paren">(</span><em class="sig-param">tensor: torch.Tensor</em>, <em class="sig-param">dtype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#SupervisedDataset.prepare_arr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.SupervisedDataset.prepare_arr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.data.get_first_batch">
+<code class="sig-prename descclassname">nntoolbox.utils.data.</code><code class="sig-name descname">get_first_batch</code><span class="sig-paren">(</span><em class="sig-param">data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">callbacks: Optional[Iterable[Callback]] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#get_first_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.get_first_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the first batch from dataloader</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – the dataloader</p></li>
+<li><p><strong>callbacks</strong> – the list of callbacks to applied to data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.data.grab_next_batch">
+<code class="sig-prename descclassname">nntoolbox.utils.data.</code><code class="sig-name descname">grab_next_batch</code><span class="sig-paren">(</span><em class="sig-param">data: torch.utils.data.dataloader.DataLoader</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#grab_next_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.grab_next_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grab the next batch from dataloader</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.html">nntoolbox package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/generated/nntoolbox.utils.data.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

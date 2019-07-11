@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.utils.sampler &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nntoolbox.utils.sampler">
+<span id="nntoolbox-utils-sampler"></span><h1>nntoolbox.utils.sampler<a class="headerlink" href="#module-nntoolbox.utils.sampler" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Classes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.sampler.MultiRandomSampler" title="nntoolbox.utils.sampler.MultiRandomSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiRandomSampler</span></code></a>(data_source, batch_size)</p></td>
+<td><p>Samples elements randomly to form multiple batches</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="nntoolbox.utils.sampler.MultiRandomSampler">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.sampler.</code><code class="sig-name descname">MultiRandomSampler</code><span class="sig-paren">(</span><em class="sig-param">data_source</em>, <em class="sig-param">batch_size: int</em>, <em class="sig-param">replacement=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/sampler.html#MultiRandomSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.sampler.MultiRandomSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.sampler.Sampler</span></code></p>
+<p>Samples elements randomly to form multiple batches</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_source</strong> (<em>Dataset</em>) – dataset to sample from</p></li>
+<li><p><strong>replacement</strong> (<em>bool</em>) – samples are drawn with replacement if <code class="docutils literal notranslate"><span class="pre">True</span></code>, default=``False``</p></li>
+<li><p><strong>num_samples</strong> (<em>int</em>) – number of samples to draw, default=`len(dataset)`. This argument
+is supposed to be specified only when <cite>replacement</cite> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.html">nntoolbox package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/generated/nntoolbox.utils.sampler.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
