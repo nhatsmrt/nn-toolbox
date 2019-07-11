@@ -11,3 +11,5 @@ To use the codes here, simply clone this repository and add it to your favourite
 Alternatively, you can just select a piece of code that you need and copy it to your project. No need to ask for permission (unless it's something that's not originally mine either, such as the codes adapted from fastai library courses). However, do be aware that the one function might requires another function from another directory to work.
 ## Some Examples:
 I am currently doing some projects with this toolbox. Some of them are still work in progress, but you can visit my [implementation](https://github.com/nhatsmrt/torch-styletransfer) of arbitrary style transfer for some example usage, or look at some [tests](https://github.com/nhatsmrt/nn-toolbox/tree/experimental/nntoolbox/test).
+## Documentation
+Please visit https://nhatsmrt.github.io/nn-toolbox/
