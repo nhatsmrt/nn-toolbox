@@ -17,6 +17,7 @@ __all__ = [
 def compute_num_batch(data_size: int, batch_size: int):
     """
     Compute number of batches per epoch
+    
     :param data_size: number of datapoints
     :param batch_size: number of datapoints per batch
     :return:
@@ -27,6 +28,7 @@ def compute_num_batch(data_size: int, batch_size: int):
 def copy_model(model: Module) -> Module:
     """
     Return an exact copy of the model (both architecture and initial weights, without tying the weights)
+    
     :param model: model to be copied
     :return: a copy of the model
     """
@@ -35,6 +37,8 @@ def copy_model(model: Module) -> Module:
 
 def save_model(model: Module, path: str):
     """
+    Save a model
+    
     :param model:
     :param path: path to save model at
     """
@@ -45,6 +49,7 @@ def save_model(model: Module, path: str):
 def load_model(model: Module, path: str):
     """
     Load the model from path
+    
     :param model
     :param path: path of saved model
     """
@@ -54,6 +59,8 @@ def load_model(model: Module, path: str):
 
 def get_device():
     """
+    Convenient helper for getting device
+    
     :return: a torch device object (gpu if exists)
     """
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -66,6 +73,7 @@ def get_trainable_parameters(model: Module) -> List[Tensor]:
 def count_trainable_parameters(model: Module) -> int:
     """
     Based on https://discuss.pytorch.org/t/how-do-i-check-the-number-of-parameters-of-a-model/4325/8
+    
     :param model:
     :return:
     """
@@ -75,6 +83,7 @@ def count_trainable_parameters(model: Module) -> int:
 def to_onehot(label: Tensor, n_class: Optional[int]=None) -> Tensor:
     """
     Return one hot encoding of label
+    
     :param label:
     :param n_class:
     :return:
@@ -90,6 +99,7 @@ def to_onehot(label: Tensor, n_class: Optional[int]=None) -> Tensor:
 def is_nan(tensor: Tensor) -> bool:
     """
     Check if any element of a tensor is NaN
+    
     :param tensor:
     :return: whether any element of the tensor is NaN
     """
@@ -99,6 +109,7 @@ def is_nan(tensor: Tensor) -> bool:
 def is_valid(tensor: Tensor) -> bool:
     """
     Check if a tensor is valid (not inf + not nan)
+    
     :param tensor:
     :return: whether a tensor is valid
     """
@@ -108,6 +119,7 @@ def is_valid(tensor: Tensor) -> bool:
 
 def get_children(model: Module) -> List[Module]:
     """
+
     :param model:
     :return: list of all children of a model
     """
@@ -115,8 +127,10 @@ def get_children(model: Module) -> List[Module]:
 
 
 def get_all_submodules(module: Module) -> List[Module]:
-    '''
+    """
+    Get all submodules of a module
+
     :param model:
     :return: list of all submodules of a model
-    '''
+    """
     return [submodule for submodule in module.modules() if type(submodule) != nn.Sequential]
