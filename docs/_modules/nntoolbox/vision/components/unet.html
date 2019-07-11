@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.vision.components.unet &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nntoolbox.vision.components.unet</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Modified version of UNet that allows for decoder extraction and a little bit more customization</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">fastai.torch_core</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fastai.layers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fastai.vision.models.unet</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fastai.callbacks.hooks</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.hooks</span> <span class="k">import</span> <span class="n">InputHook</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DynamicUnetV2&#39;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_get_sfs_idxs</span><span class="p">(</span><span class="n">sizes</span><span class="p">:</span><span class="n">Sizes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="s2">&quot;Get the indexes of the layers where the size of the activation changes.&quot;</span>
+    <span class="n">feature_szs</span> <span class="o">=</span> <span class="p">[</span><span class="n">size</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">size</span> <span class="ow">in</span> <span class="n">sizes</span><span class="p">]</span>
+    <span class="n">sfs_idxs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">feature_szs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">feature_szs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">feature_szs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">feature_szs</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">sfs_idxs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">sfs_idxs</span>
+    <span class="k">return</span> <span class="n">sfs_idxs</span>
+
+
+<span class="k">class</span> <span class="nc">CustomMergeLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Merge a shortcut with the result of the module by adding them or concatenating thme if `dense=True`.</span>
+<span class="sd">    Use hook instead of .orig</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_hook</span><span class="p">:</span> <span class="n">InputHook</span><span class="p">,</span> <span class="n">dense</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">remove_store</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dense</span> <span class="o">=</span> <span class="n">dense</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_hook</span> <span class="o">=</span> <span class="n">input_hook</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_store</span> <span class="o">=</span> <span class="n">remove_store</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_hook</span><span class="o">.</span><span class="n">store</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense</span> <span class="k">else</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_hook</span><span class="o">.</span><span class="n">store</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_store</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_hook</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">op</span>
+
+
+<span class="k">def</span> <span class="nf">custom_conv_layer</span><span class="p">(</span><span class="n">ni</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">nf</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">ks</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bias</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">is_1d</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">norm_type</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">,</span>  <span class="n">use_activ</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">leaky</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">transpose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">init</span><span class="p">:</span><span class="n">Callable</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">kaiming_normal_</span><span class="p">,</span> <span class="n">self_attention</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="s2">&quot;Create a sequence of convolutional (`ni` to `nf`), ReLU (if `use_activ`) and batchnorm (if `bn`) layers.&quot;</span>
+    <span class="k">if</span> <span class="n">padding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">ks</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">transpose</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">bn</span> <span class="o">=</span> <span class="n">norm_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">bias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">bias</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">bn</span>
+    <span class="n">conv_func</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose2d</span> <span class="k">if</span> <span class="n">transpose</span> <span class="k">else</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span> <span class="k">if</span> <span class="n">is_1d</span> <span class="k">else</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">init_default</span><span class="p">(</span><span class="n">conv_func</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">ks</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="n">stride</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="n">padding</span><span class="p">),</span> <span class="n">init</span><span class="p">)</span>
+    <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">conv</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">use_activ</span><span class="p">:</span> <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">relu</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">leaky</span><span class="o">=</span><span class="n">leaky</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">bn</span><span class="p">:</span> <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">norm_type</span><span class="p">(</span><span class="n">nf</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">self_attention</span><span class="p">:</span> <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SelfAttention</span><span class="p">(</span><span class="n">nf</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">layers</span><span class="p">)</span>
+
+
+
+<span class="k">def</span> <span class="nf">custom_res_block</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span> <span class="n">dense</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">norm_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">,</span> <span class="n">bottle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+              <span class="o">**</span><span class="n">conv_kwargs</span><span class="p">):</span>
+    <span class="s2">&quot;Resnet block of `nf` features. `conv_kwargs` are passed to `conv_layer`.&quot;</span>
+    <span class="n">norm2</span> <span class="o">=</span> <span class="n">norm_type</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dense</span> <span class="ow">and</span> <span class="p">(</span><span class="n">norm_type</span> <span class="o">==</span> <span class="n">NormType</span><span class="o">.</span><span class="n">Batch</span><span class="p">):</span> <span class="n">norm2</span> <span class="o">=</span> <span class="n">NormType</span><span class="o">.</span><span class="n">BatchZero</span>
+    <span class="n">nf_inner</span> <span class="o">=</span> <span class="n">nf</span> <span class="o">//</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">bottle</span> <span class="k">else</span> <span class="n">nf</span>
+    <span class="k">return</span> <span class="n">SequentialEx</span><span class="p">(</span><span class="n">custom_conv_layer</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span> <span class="n">nf_inner</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">norm_type</span><span class="p">,</span> <span class="o">**</span><span class="n">conv_kwargs</span><span class="p">),</span>
+                        <span class="n">custom_conv_layer</span><span class="p">(</span><span class="n">nf_inner</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">norm2</span><span class="p">,</span> <span class="o">**</span><span class="n">conv_kwargs</span><span class="p">),</span>
+                        <span class="n">MergeLayer</span><span class="p">(</span><span class="n">dense</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">CustomPixelShuffle_ICNR</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">    Upsample by `scale` from `ni` filters to `nf` (default `ni`),</span>
+<span class="sd">    using `nn.PixelShuffle`, `icnr` init, and `weight_norm`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ni</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nf</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">blur</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">,</span>
+                 <span class="n">leaky</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">nf</span> <span class="o">=</span> <span class="n">ifnone</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span> <span class="n">ni</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">custom_conv_layer</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">nf</span> <span class="o">*</span> <span class="p">(</span><span class="n">scale</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span> <span class="n">ks</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">norm_type</span><span class="p">,</span> <span class="n">use_activ</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">icnr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuf</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">PixelShuffle</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+        <span class="c1"># Blurring over (h*w) kernel</span>
+        <span class="c1"># &quot;Super-Resolution using Convolutional Neural Networks without Any Checkerboard Artifacts&quot;</span>
+        <span class="c1"># - https://arxiv.org/abs/1806.02658</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pad</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReplicationPad2d</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blur</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">AvgPool2d</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">relu</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">leaky</span><span class="o">=</span><span class="n">leaky</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blur</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">blur</span> <span class="k">else</span> <span class="n">x</span>
+
+
+<span class="k">class</span> <span class="nc">CustomUnetBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="s2">&quot;A quasi-UNet block, using `PixelShuffle_ICNR upsampling`.&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">up_in_c</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">x_in_c</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">hook</span><span class="p">:</span><span class="n">Hook</span><span class="p">,</span> <span class="n">final_div</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blur</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">leaky</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">self_attention</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">batchnorm_2d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="n">hook</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuf</span> <span class="o">=</span> <span class="n">CustomPixelShuffle_ICNR</span><span class="p">(</span><span class="n">up_in_c</span><span class="p">,</span> <span class="n">up_in_c</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">blur</span><span class="o">=</span><span class="n">blur</span><span class="p">,</span> <span class="n">leaky</span><span class="o">=</span><span class="n">leaky</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">normalization</span><span class="p">(</span><span class="n">x_in_c</span><span class="p">)</span>
+        <span class="n">ni</span> <span class="o">=</span> <span class="n">up_in_c</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x_in_c</span>
+        <span class="n">nf</span> <span class="o">=</span> <span class="n">ni</span> <span class="k">if</span> <span class="n">final_div</span> <span class="k">else</span> <span class="n">ni</span><span class="o">//</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">custom_conv_layer</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">leaky</span><span class="o">=</span><span class="n">leaky</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">normalization</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">custom_conv_layer</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">leaky</span><span class="o">=</span><span class="n">leaky</span><span class="p">,</span> <span class="n">self_attention</span><span class="o">=</span><span class="n">self_attention</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">normalization</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">relu</span><span class="p">(</span><span class="n">leaky</span><span class="o">=</span><span class="n">leaky</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">up_in</span><span class="p">:</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">stored</span>
+        <span class="n">up_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuf</span><span class="p">(</span><span class="n">up_in</span><span class="p">)</span>
+        <span class="n">ssh</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">ssh</span> <span class="o">!=</span> <span class="n">up_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]:</span>
+            <span class="n">up_out</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">up_out</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">)</span>
+        <span class="n">cat_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">up_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn</span><span class="p">(</span><span class="n">s</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">cat_x</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="DynamicUnetV2"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.unet.DynamicUnetV2">[docs]</a><span class="k">class</span> <span class="nc">DynamicUnetV2</span><span class="p">(</span><span class="n">SequentialEx</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Modified version of UNet that allows for decoder extraction</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoder</span><span class="p">:</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">n_classes</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">blur</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">blur_final</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">self_attention</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">normalization</span><span class="o">=</span><span class="n">batchnorm_2d</span><span class="p">,</span> <span class="n">y_range</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span><span class="nb">float</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">last_cross</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bottle</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">imsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">)</span>
+        <span class="n">sfs_szs</span> <span class="o">=</span> <span class="n">model_sizes</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">imsize</span><span class="p">)</span>
+        <span class="n">sfs_idxs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">_get_sfs_idxs</span><span class="p">(</span><span class="n">sfs_szs</span><span class="p">)))</span>
+        <span class="n">input_hook</span> <span class="o">=</span> <span class="n">InputHook</span><span class="p">(</span><span class="n">encoder</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sfs</span> <span class="o">=</span> <span class="n">hook_outputs</span><span class="p">([</span><span class="n">encoder</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sfs_idxs</span><span class="p">])</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">dummy_eval</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">imsize</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+
+        <span class="n">ni</span> <span class="o">=</span> <span class="n">sfs_szs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">middle_conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">custom_conv_layer</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">ni</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">normalization</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+                                    <span class="n">custom_conv_layer</span><span class="p">(</span><span class="n">ni</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ni</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">normalization</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">middle_conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="p">[</span><span class="n">encoder</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="p">[</span><span class="n">normalization</span><span class="p">(</span><span class="n">num_features</span><span class="o">=</span><span class="n">ni</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="n">middle_conv</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sfs_idxs</span><span class="p">):</span>
+            <span class="n">not_final</span> <span class="o">=</span> <span class="n">i</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">sfs_idxs</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+            <span class="n">up_in_c</span><span class="p">,</span> <span class="n">x_in_c</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">sfs_szs</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">do_blur</span> <span class="o">=</span> <span class="n">blur</span> <span class="ow">and</span> <span class="p">(</span><span class="n">not_final</span> <span class="ow">or</span> <span class="n">blur_final</span><span class="p">)</span>
+            <span class="n">sa</span> <span class="o">=</span> <span class="n">self_attention</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">sfs_idxs</span><span class="p">)</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">unet_block</span> <span class="o">=</span> <span class="n">CustomUnetBlock</span><span class="p">(</span><span class="n">up_in_c</span><span class="p">,</span> <span class="n">x_in_c</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">final_div</span><span class="o">=</span><span class="n">not_final</span><span class="p">,</span> <span class="n">blur</span><span class="o">=</span><span class="n">do_blur</span><span class="p">,</span> <span class="n">self_attention</span><span class="o">=</span><span class="n">sa</span><span class="p">,</span>
+                                   <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unet_block</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">unet_block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">ni</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">imsize</span> <span class="o">!=</span> <span class="n">sfs_szs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">:]:</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CustomPixelShuffle_ICNR</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">normalization</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">last_cross</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CustomMergeLayer</span><span class="p">(</span><span class="n">input_hook</span><span class="o">=</span><span class="n">input_hook</span><span class="p">,</span> <span class="n">dense</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="n">ni</span> <span class="o">+=</span> <span class="n">in_channels</span><span class="p">(</span><span class="n">encoder</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">custom_res_block</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">bottle</span><span class="o">=</span><span class="n">bottle</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">normalization</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">+=</span> <span class="p">[</span><span class="n">custom_conv_layer</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">n_classes</span><span class="p">,</span> <span class="n">ks</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_activ</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="n">normalization</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">y_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SigmoidRange</span><span class="p">(</span><span class="o">*</span><span class="n">y_range</span><span class="p">))</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;sfs&quot;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfs</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DynamicUnetV2.get_decoder"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.unet.DynamicUnetV2.get_decoder">[docs]</a>    <span class="k">def</span> <span class="nf">get_decoder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SequentialEx</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.graph.html">nntoolbox.graph package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.init.html">nntoolbox.init package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.losses.html">nntoolbox.losses package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.models.html">nntoolbox.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

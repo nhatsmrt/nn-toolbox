@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.utils.gradient &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nntoolbox.utils.gradient">
+<span id="nntoolbox-utils-gradient"></span><h1>nntoolbox.utils.gradient<a class="headerlink" href="#module-nntoolbox.utils.gradient" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.gradient.accumulate_gradient" title="nntoolbox.utils.gradient.accumulate_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">accumulate_gradient</span></code></a>(gradients, model[, fn])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nntoolbox.utils.gradient.compute_gradient" title="nntoolbox.utils.gradient.compute_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_gradient</span></code></a>(output, model)</p></td>
+<td><p>Comput gradient of the output of a model</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.gradient.compute_gradient_norm" title="nntoolbox.utils.gradient.compute_gradient_norm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_gradient_norm</span></code></a>(output, model)</p></td>
+<td><p>Compute the norm of the gradient of an output (e.g a loss) with respect to a model parameters</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nntoolbox.utils.gradient.compute_jacobian" title="nntoolbox.utils.gradient.compute_jacobian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_jacobian</span></code></a>(input, fn[, is_batch])</p></td>
+<td><p>Compute the jacobian of function(input) with respect to input</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.gradient.update_gradient" title="nntoolbox.utils.gradient.update_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_gradient</span></code></a>(gradients, model[, fn])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.compute_gradient">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">compute_gradient</code><span class="sig-paren">(</span><em class="sig-param">output: torch.Tensor</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; List[torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#compute_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.compute_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Comput gradient of the output of a model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – </p></li>
+<li><p><strong>model</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of gradients of model parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.compute_jacobian">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">compute_jacobian</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor, fn: Callable[torch.Tensor, torch.Tensor], is_batch: bool = True</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#compute_jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.compute_jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the jacobian of function(input) with respect to input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – </p></li>
+<li><p><strong>input</strong> – assume that input require_grad = True</p></li>
+<li><p><strong>fn</strong> – </p></li>
+<li><p><strong>batch</strong> – whether to compute gradient by batch</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.update_gradient">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">update_gradient</code><span class="sig-paren">(</span><em class="sig-param">gradients: torch.Tensor</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">fn: Callable[torch.Tensor</em>, <em class="sig-param">torch.Tensor] = &lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#update_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.update_gradient" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.accumulate_gradient">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">accumulate_gradient</code><span class="sig-paren">(</span><em class="sig-param">gradients</em>, <em class="sig-param">model</em>, <em class="sig-param">fn=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#accumulate_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.accumulate_gradient" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.compute_gradient_norm">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">compute_gradient_norm</code><span class="sig-paren">(</span><em class="sig-param">output: torch.Tensor</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#compute_gradient_norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.compute_gradient_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the norm of the gradient of an output (e.g a loss) with respect to a model parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – </p></li>
+<li><p><strong>model</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.html">nntoolbox package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/generated/nntoolbox.utils.gradient.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
