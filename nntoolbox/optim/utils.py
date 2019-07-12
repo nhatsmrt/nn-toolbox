@@ -1,10 +1,11 @@
+import torch
 from torch.optim import Optimizer
 from typing import Callable, Union, List
 import numpy as np
 import matplotlib.pyplot as plt
 
 
-__all__ = ['change_lr', 'plot_schedule']
+__all__ = ['change_lr', 'plot_schedule', 'save_optimizer', 'load_optimizer']
 
 
 # UNTESTED
@@ -38,3 +39,28 @@ def plot_schedule(schedule_fn: Callable[[int], float], iterations: int=30):
     plt.xlabel("Iterations")
     plt.ylabel("Learning Rate")
     plt.show()
+
+
+# UNTESTED
+def save_optimizer(optimizer: Optimizer, path: str):
+    """
+    Save optimizer state for resuming training
+
+    :param optimizer:
+    :param path:
+    """
+    torch.save(optimizer.state_dict(), path)
+    print("Optimizer state saved.")
+
+
+# UNTESTED
+def load_optimizer(optimizer: Optimizer, path: str):
+    """
+    Load optimizer state for resuming training
+
+    :param optimizer:
+    :param path:
+    """
+    optimizer.load_state_dict(torch.load(path))
+    print("Optimizer state loaded.")
+

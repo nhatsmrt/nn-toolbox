@@ -1,5 +1,4 @@
 from typing import Iterable, Dict, Any, Tuple
-from ..utils import save_model
 from ..metrics import Metric
 from torch import Tensor
 
@@ -136,38 +135,6 @@ class CallbackHandler:
             return 0.0
         else:
             return self._metrics[self._final_metric].get_best()
-
-
-class ModelCheckpoint(Callback):
-    def __init__(
-            self, learner, filepath: str, monitor: str='loss',
-            save_best_only: bool=True, mode: str='min', period: int=1
-    ):
-        self._learner = learner
-        self._filepath = filepath
-        self._monitor = monitor
-        self._period = period
-        self._mode = mode
-        self._save_best_only = save_best_only
-        self._metrics = []
-
-    def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
-        if self._save_best_only:
-            epoch_metrics = logs['epoch_metrics']
-
-            assert self._monitor in epoch_metrics
-            self._metrics.append(epoch_metrics[self._monitor])
-
-            if self._mode == "min":
-                if epoch_metrics[self._monitor] == min(self._metrics):
-                    save_model(self._learner._model, self._filepath)
-            else:
-                if epoch_metrics[self._monitor] == max(self._metrics):
-                    save_model(self._learner._model, self._filepath)
-        else:
-            save_model(self._learner._model, self._filepath)
-
-        return False
 
 
 class EarlyStoppingCB(Callback):
