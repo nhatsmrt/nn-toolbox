@@ -18,22 +18,24 @@ def unicode_to_ascii(s: str):
 
 
 def create_mask(inputs, pad_token):
-    '''
+    """
     Create a binary mask to indicate whether a token is pad or not
+
     :param inputs: (seq_len, batch_size)
     :param pad_token: token for padding
     :return: mask: (seq_len, batch_size)
-    '''
+    """
     return inputs != pad_token
 
 
 def create_mask_from_lengths(inputs: Tensor, lengths: Tensor) -> Tensor:
-    '''
+    """
     Create a binary mask to indicate whether a token is pad or not
+
     :param inputs: (seq_len, batch_size)
     :param lengths: lengths of each sequence. (batch size)
     :return: mask: (seq_len, batch_size)
-    '''
+    """
     mask = torch.ones(size=(inputs.shape[0], inputs.shape[1])).int()
     for i in range(len(lengths)):
         mask[lengths[i]:, i] = 0
@@ -41,12 +43,13 @@ def create_mask_from_lengths(inputs: Tensor, lengths: Tensor) -> Tensor:
 
 
 def get_lengths(mask, return_tensor: bool=False):
-    '''
+    """
     Return a 1D array indicating the length of each sequence in batch
+
     :param mask: binary mask indicating whether an element is pad token (seq_len, batch_size)
     :param return_tensor: whether to return as a pytorch tensor
     :return: lengths (n_batch)
-    '''
+    """
     if return_tensor:
         return torch.sum(mask, dim=0).int()
     else:
@@ -54,11 +57,13 @@ def get_lengths(mask, return_tensor: bool=False):
 
 
 def extract_last(sequences: Tensor, sequence_lengths: Tensor):
-    '''
+    """
+    Extract the last token of each padded sequence, given its length
+
     :param sequences: (seq_length, batch_size, n_features)
     :param sequence_lengths: (batch_size)
     :return: (batch_size, n_features)
-    '''
+    """
     return sequences.gather(
         dim=0,
         index=(sequence_lengths - 1).view(1, -1).unsqueeze(-1).repeat(1, 1, sequences.shape[2])
