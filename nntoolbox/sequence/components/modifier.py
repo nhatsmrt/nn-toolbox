@@ -3,6 +3,7 @@ from torch import nn, Tensor
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence, PackedSequence
 import torch.jit as jit
 from typing import Tuple
+from .rnn import FastRNNSequential, FastRNNDropout
 
 __all__ = ['ModifiedStackedRNN', 'ResidualRNN', 'FastModifiedStackedRNN', 'FastResidualRNN']
 
@@ -88,36 +89,9 @@ class ResidualRNN(ModifiedStackedRNN):
             return output_unpacked, torch.cat(hiddens, dim=0)
 
 
-class RNNDropout(nn.Module):
-    def __init__(self, p):
-        super(RNNDropout, self).__init__()
-        self.dropout = nn.Dropout(p)
-
-    def forward(self, input_unpacked: Tensor, h_0: Tensor):
-        return self.dropout(input_unpacked), h_0
-
-
-from collections import OrderedDict
-class RNNSequential(nn.Module):
-    def __init__(self, *layers):
-        super(RNNSequential, self).__init__()
-        if len(layers) == 1 and isinstance(layers[0], OrderedDict):
-            for key, module in layers[0].items():
-                self.add_module(key, module)
-        else:
-            for idx, module in enumerate(layers):
-                self.add_module(str(idx), module)
-
-    def forward(self, input, h_0):
-        for module in self._modules.values():
-            input, h_0 = module(input, h_0)
-        return input, h_0
-
-
-
 class FastModifiedStackedRNN(jit.ScriptModule):
     """
-    Faster implementation using ScriptModule (UNTESTED)
+    Faster implementation using ScriptModule. Currently only works with GRU
     """
 
     __constants__ = ['_layers', '_num_directions']
@@ -135,8 +109,8 @@ class FastModifiedStackedRNN(jit.ScriptModule):
             )
         ]
         layers += [
-            RNNSequential(
-                RNNDropout(dropout),
+            FastRNNSequential(
+                FastRNNDropout(dropout),
                 base_rnn(
                     num_layers=1, input_size=hidden_size, hidden_size=hidden_size,
                     bidirectional=bidirectional, **kwargs
@@ -146,14 +120,8 @@ class FastModifiedStackedRNN(jit.ScriptModule):
             for _ in range(num_layers - 1)
         ]
         self._layers = nn.ModuleList(layers)
-        # self._dropouts = nn.ModuleList([nn.Dropout(dropout) for _ in range(num_layers - 1) if dropout > 0.0])
-        # self._dropouts = nn.ModuleList([nn.Dropout(dropout) for _ in range(num_layers - 1)])
-        # self._layers_dropouts = zip(self._layers, self._dropouts)
         self._num_layers = num_layers
         self._num_directions = 2 if bidirectional else 1
-
-        # @jit.script_method
-        # def forward(self, input, h_0=None, lengths=None): pass
 
 
 class FastResidualRNN(FastModifiedStackedRNN):
@@ -164,7 +132,7 @@ class FastResidualRNN(FastModifiedStackedRNN):
 
     o_{l + 1} = f(i_{l + 1}, h_l)
 
-    Faster implementation using ScriptModule (UNTESTED)
+    Faster implementation using ScriptModule. Currently only works with GRU
     """
 
     def __init__(self, base_rnn, num_layers: int, input_size: int, bidirectional: bool, dropout: float = 0.0, **kwargs):
@@ -202,9 +170,10 @@ class FastResidualRNN(FastModifiedStackedRNN):
     def fast_forward(self, input_unpacked: Tensor, h_0: Tensor) -> Tuple[Tensor, Tensor]:
         hiddens = []
         l = 0
-        output_unpacked = torch.zeros(input_unpacked.shape).to(input_unpacked.dtype).to(input_unpacked.get_device())
+        output_unpacked = jit.annotate(
+            Tensor,
+            torch.zeros(input_unpacked.shape).to(input_unpacked.dtype).to(input_unpacked.get_device()))
 
-        # pairs = zip(self._layers, self._dropouts)
         for layer in self._layers:
             if l > 0:
                 input_unpacked = input_unpacked + output_unpacked
