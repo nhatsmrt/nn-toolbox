@@ -1,8 +1,8 @@
 import torch
-from torch import nn
+from torch import nn, Tensor
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence, PackedSequence
 import torch.jit as jit
-
+from typing import Tuple
 
 __all__ = ['ModifiedStackedRNN', 'ResidualRNN', 'FastModifiedStackedRNN', 'FastResidualRNN']
 
@@ -10,7 +10,7 @@ __all__ = ['ModifiedStackedRNN', 'ResidualRNN', 'FastModifiedStackedRNN', 'FastR
 class ModifiedStackedRNN(nn.Module):
     def __init__(
             self, base_rnn, num_layers: int, input_size: int, hidden_size: int,
-            bidirectional: bool, dropout: float=0.0, **kwargs
+            bidirectional: bool, dropout: float = 0.0, **kwargs
     ):
         super(ModifiedStackedRNN, self).__init__()
         layers = [base_rnn(
@@ -28,12 +28,13 @@ class ModifiedStackedRNN(nn.Module):
 class ResidualRNN(ModifiedStackedRNN):
     """
     StackedRNN with residual connections:
-    
+
     i_{l + 1} = o_l + i_l = i_l + f(i_l, h_{l - 1})
-    
+
     o_{l + 1} = f(i_{l + 1}, h_l)
     """
-    def __init__(self, base_rnn, num_layers: int, input_size: int, bidirectional: bool, dropout: float=0.0, **kwargs):
+
+    def __init__(self, base_rnn, num_layers: int, input_size: int, bidirectional: bool, dropout: float = 0.0, **kwargs):
         assert 'hidden_size' not in kwargs
         assert num_layers > 0
         super(ResidualRNN, self).__init__(
@@ -61,6 +62,8 @@ class ResidualRNN(ModifiedStackedRNN):
         hiddens = []
         for l in range(len(self._layers)):
             if l > 0:
+                # print(input_unpacked.shape)
+                # print(output_unpacked.shape)
                 input_unpacked = input_unpacked + output_unpacked
                 if len(self._dropouts) > 0:
                     input_unpacked = self._dropouts[l - 1](input_unpacked)
@@ -85,26 +88,72 @@ class ResidualRNN(ModifiedStackedRNN):
             return output_unpacked, torch.cat(hiddens, dim=0)
 
 
+class RNNDropout(nn.Module):
+    def __init__(self, p):
+        super(RNNDropout, self).__init__()
+        self.dropout = nn.Dropout(p)
+
+    def forward(self, input_unpacked: Tensor, h_0: Tensor):
+        return self.dropout(input_unpacked), h_0
+
+
+from collections import OrderedDict
+class RNNSequential(nn.Module):
+    def __init__(self, *layers):
+        super(RNNSequential, self).__init__()
+        if len(layers) == 1 and isinstance(layers[0], OrderedDict):
+            for key, module in layers[0].items():
+                self.add_module(key, module)
+        else:
+            for idx, module in enumerate(layers):
+                self.add_module(str(idx), module)
+
+    def forward(self, input, h_0):
+        for module in self._modules.values():
+            input, h_0 = module(input, h_0)
+        return input, h_0
+
+
+
 class FastModifiedStackedRNN(jit.ScriptModule):
     """
     Faster implementation using ScriptModule (UNTESTED)
     """
+
+    __constants__ = ['_layers', '_num_directions']
+
     def __init__(
             self, base_rnn, num_layers: int, input_size: int, hidden_size: int,
             bidirectional: bool, dropout: float = 0.0, **kwargs
     ):
         super(FastModifiedStackedRNN, self).__init__()
-        layers = [base_rnn(
-            num_layers=1, input_size=input_size if l == 0 else hidden_size, hidden_size=hidden_size,
-            bidirectional=bidirectional, **kwargs
-        ) for l in range(num_layers)]
+        layers = [
+            base_rnn(
+                num_layers=1, input_size=input_size, hidden_size=hidden_size,
+                bidirectional=bidirectional, **kwargs
+
+            )
+        ]
+        layers += [
+            RNNSequential(
+                RNNDropout(dropout),
+                base_rnn(
+                    num_layers=1, input_size=hidden_size, hidden_size=hidden_size,
+                    bidirectional=bidirectional, **kwargs
+
+                )
+            )
+            for _ in range(num_layers - 1)
+        ]
         self._layers = nn.ModuleList(layers)
-        self._dropouts = nn.ModuleList([nn.Dropout(dropout) for _ in range(num_layers - 1) if dropout > 0.0])
+        # self._dropouts = nn.ModuleList([nn.Dropout(dropout) for _ in range(num_layers - 1) if dropout > 0.0])
+        # self._dropouts = nn.ModuleList([nn.Dropout(dropout) for _ in range(num_layers - 1)])
+        # self._layers_dropouts = zip(self._layers, self._dropouts)
         self._num_layers = num_layers
         self._num_directions = 2 if bidirectional else 1
 
-    @jit.script_method
-    def forward(self, input, h_0=None, lengths=None): pass
+        # @jit.script_method
+        # def forward(self, input, h_0=None, lengths=None): pass
 
 
 class FastResidualRNN(FastModifiedStackedRNN):
@@ -121,12 +170,11 @@ class FastResidualRNN(FastModifiedStackedRNN):
     def __init__(self, base_rnn, num_layers: int, input_size: int, bidirectional: bool, dropout: float = 0.0, **kwargs):
         assert 'hidden_size' not in kwargs
         assert num_layers > 0
-        super(ResidualRNN, self).__init__(
+        super(FastResidualRNN, self).__init__(
             base_rnn, num_layers, input_size, input_size,
             bidirectional, dropout, **kwargs
         )
 
-    @jit.script_method
     def forward(self, input, h_0=None, lengths=None):
         if isinstance(input, PackedSequence):
             input_unpacked, lengths = pad_packed_sequence(input)
@@ -142,17 +190,26 @@ class FastResidualRNN(FastModifiedStackedRNN):
             h_0 = torch.zeros(
                 size=(self._num_layers, self._num_directions, input_unpacked.shape[1], input_unpacked.shape[2])
             ).to(input_unpacked.device)
+
+        output_unpacked, hiddens = self.fast_forward(input_unpacked, h_0)
+        if isinstance(input, PackedSequence):
+            output_packed = pack_padded_sequence(output_unpacked, lengths)
+            return output_packed, hiddens
+        else:
+            return output_unpacked, hiddens
+
+    @jit.script_method
+    def fast_forward(self, input_unpacked: Tensor, h_0: Tensor) -> Tuple[Tensor, Tensor]:
         hiddens = []
-        for l in range(len(self._layers)):
+        l = 0
+        output_unpacked = torch.zeros(input_unpacked.shape).to(input_unpacked.dtype).to(input_unpacked.get_device())
+
+        # pairs = zip(self._layers, self._dropouts)
+        for layer in self._layers:
             if l > 0:
                 input_unpacked = input_unpacked + output_unpacked
-                if len(self._dropouts) > 0:
-                    input_unpacked = self._dropouts[l - 1](input_unpacked)
 
-            output_unpacked, hidden = self._layers[l](input_unpacked, h_0[l])
-            if l == self._num_layers - 1:
-                output_packed = pack_padded_sequence(output_unpacked, lengths)
-
+            output_unpacked, hidden = layer(input_unpacked, h_0[l])
             output_unpacked = torch.mean(
                 output_unpacked.view(
                     output_unpacked.shape[0], output_unpacked.shape[1], self._num_directions, -1
@@ -160,8 +217,6 @@ class FastResidualRNN(FastModifiedStackedRNN):
                 dim=-2
             )
             hiddens.append(hidden)
+            l += 1
 
-        if isinstance(input, PackedSequence):
-            return output_packed, torch.cat(hiddens, dim=0)
-        else:
-            return output_unpacked, torch.cat(hiddens, dim=0)
+        return output_unpacked, torch.cat(hiddens, dim=0)

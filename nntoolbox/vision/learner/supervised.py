@@ -8,20 +8,20 @@ from typing import Iterable, Dict
 from ...callbacks import CallbackHandler, Callback
 from ...metrics import Metric
 from ...transforms import MixupTransformer
+from ...learner import Learner
 
 
-class SupervisedImageLearner:
+class SupervisedImageLearner(Learner):
 
     def __init__(
             self, train_data: DataLoader, val_data: DataLoader, model: Module,
             criterion: Module, optimizer: Optimizer,
             mixup: bool=False, mixup_alpha: float=0.4, device=get_device()
     ):
-        self._train_data = train_data
-        self._val_data = val_data
-        self._model = model
-        self._criterion = criterion
-        self._optimizer = optimizer
+        super(SupervisedImageLearner, self).__init__(
+            train_data=train_data, val_data=val_data, model=model,
+            criterion=criterion, optimizer=optimizer
+        )
         self._device = device
         self._mixup = mixup
         if mixup:
