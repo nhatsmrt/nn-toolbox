@@ -7,7 +7,7 @@ __all__ = ['MultiRandomSampler']
 
 
 class MultiRandomSampler(Sampler):
-    r"""Samples elements randomly to form multiple batches
+    """Samples elements randomly to form multiple batches
 
     Arguments:
         data_source (Dataset): dataset to sample from

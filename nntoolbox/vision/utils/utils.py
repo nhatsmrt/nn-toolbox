@@ -41,6 +41,7 @@ def tensor_to_pil(tensor):
 def cv2_read_image(image_path, to_float: bool=False, flag: int=cv2.IMREAD_COLOR) -> ndarray:
     """
     Read an image using cv2 and convert to RGB
+
     :param image_path:
     :param to_float: whether to convert image to float dats type:
     :param flag: indicate mode for cv2 read image

@@ -12,3 +12,4 @@ from .resizing import *
 from .gradient import *
 from .transfer import *
 from .colab import *
+from .checkpoint import *

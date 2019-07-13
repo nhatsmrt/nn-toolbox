@@ -17,8 +17,10 @@ __all__ = ['LRFinder']
 
 class LRFinder:
     '''
-    Leslie Smith's learning rate range finder
+    Leslie Smith's learning rate range finder.
+
     Adapt from https://sgugger.github.io/how-do-you-find-a-good-learning-rate.html
+
     https://arxiv.org/pdf/1506.01186.pdf
     '''
     def __init__(

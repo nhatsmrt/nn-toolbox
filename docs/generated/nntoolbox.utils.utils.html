@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.utils.utils &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nntoolbox.utils.utils">
+<span id="nntoolbox-utils-utils"></span><h1>nntoolbox.utils.utils<a class="headerlink" href="#module-nntoolbox.utils.utils" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.compute_num_batch" title="nntoolbox.utils.utils.compute_num_batch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_num_batch</span></code></a>(data_size, batch_size)</p></td>
+<td><p>Compute number of batches per epoch</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.copy_model" title="nntoolbox.utils.utils.copy_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy_model</span></code></a>(model)</p></td>
+<td><p>Return an exact copy of the model (both architecture and initial weights, without tying the weights)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.count_trainable_parameters" title="nntoolbox.utils.utils.count_trainable_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count_trainable_parameters</span></code></a>(model)</p></td>
+<td><p>Based on <a class="reference external" href="https://discuss.pytorch.org/t/how-do-i-check-the-number-of-parameters-of-a-model/4325/8">https://discuss.pytorch.org/t/how-do-i-check-the-number-of-parameters-of-a-model/4325/8</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.get_all_submodules" title="nntoolbox.utils.utils.get_all_submodules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_submodules</span></code></a>(module)</p></td>
+<td><p>Get all submodules of a module</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.get_children" title="nntoolbox.utils.utils.get_children"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_children</span></code></a>(model)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param model</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.get_device" title="nntoolbox.utils.utils.get_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_device</span></code></a>()</p></td>
+<td><p>Convenient helper for getting device</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.get_trainable_parameters" title="nntoolbox.utils.utils.get_trainable_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_trainable_parameters</span></code></a>(model)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.is_nan" title="nntoolbox.utils.utils.is_nan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_nan</span></code></a>(tensor)</p></td>
+<td><p>Check if any element of a tensor is NaN</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.is_valid" title="nntoolbox.utils.utils.is_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid</span></code></a>(tensor)</p></td>
+<td><p>Check if a tensor is valid (not inf + not nan)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.load_model" title="nntoolbox.utils.utils.load_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_model</span></code></a>(model, path)</p></td>
+<td><p>Load the model from path</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.save_model" title="nntoolbox.utils.utils.save_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_model</span></code></a>(model, path)</p></td>
+<td><p>Save a model</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nntoolbox.utils.utils.to_onehot" title="nntoolbox.utils.utils.to_onehot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_onehot</span></code></a>(label[, n_class])</p></td>
+<td><p>Return one hot encoding of label</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="nntoolbox.utils.utils.compute_num_batch">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">compute_num_batch</code><span class="sig-paren">(</span><em class="sig-param">data_size: int</em>, <em class="sig-param">batch_size: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#compute_num_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.compute_num_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute number of batches per epoch</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_size</strong> – number of datapoints</p></li>
+<li><p><strong>batch_size</strong> – number of datapoints per batch</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.copy_model">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">copy_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; torch.nn.modules.module.Module<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#copy_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.copy_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an exact copy of the model (both architecture and initial weights, without tying the weights)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – model to be copied</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a copy of the model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.save_model">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">save_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">path: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#save_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – </p></li>
+<li><p><strong>path</strong> – path to save model at</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.load_model">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">load_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">path: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#load_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the model from path</p>
+<p>:param model
+:param path: path of saved model</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.get_device">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">get_device</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#get_device"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.get_device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenient helper for getting device</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a torch device object (gpu if exists)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.get_trainable_parameters">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">get_trainable_parameters</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; List[torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#get_trainable_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.get_trainable_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.count_trainable_parameters">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">count_trainable_parameters</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#count_trainable_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.count_trainable_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Based on <a class="reference external" href="https://discuss.pytorch.org/t/how-do-i-check-the-number-of-parameters-of-a-model/4325/8">https://discuss.pytorch.org/t/how-do-i-check-the-number-of-parameters-of-a-model/4325/8</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.to_onehot">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">to_onehot</code><span class="sig-paren">(</span><em class="sig-param">label: torch.Tensor</em>, <em class="sig-param">n_class: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#to_onehot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.to_onehot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return one hot encoding of label</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> – </p></li>
+<li><p><strong>n_class</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.is_nan">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">is_nan</code><span class="sig-paren">(</span><em class="sig-param">tensor: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#is_nan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.is_nan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if any element of a tensor is NaN</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tensor</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether any element of the tensor is NaN</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.is_valid">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><em class="sig-param">tensor: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a tensor is valid (not inf + not nan)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tensor</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether a tensor is valid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.get_children">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">get_children</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; List[torch.nn.modules.module.Module]<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#get_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of all children of a model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.get_all_submodules">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">get_all_submodules</code><span class="sig-paren">(</span><em class="sig-param">module: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; List[torch.nn.modules.module.Module]<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#get_all_submodules"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.get_all_submodules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all submodules of a module</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of all submodules of a model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.html">nntoolbox package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/generated/nntoolbox.utils.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

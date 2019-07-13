@@ -11,13 +11,13 @@ __all__ = ['FastGeometricEnsembling']
 # UNTESTED
 class FastGeometricEnsembling(Callback):
     def __init__(self, model: Module, max_n_model: int, save_after: int, save_every: int=1, timescale: str="iter"):
-        '''
+        """
         https://arxiv.org/pdf/1802.10026.pdf
         https://arxiv.org/pdf/1704.00109.pdf
         :param model: the model currently being trained
         :param average_after: the first epoch to start averaging
         :param update_every: how many epochs/iters between each average update
-        '''
+        """
         assert timescale == "epoch" or timescale == "iter"
         self._model = model
         self.models = deque()
@@ -49,8 +49,8 @@ class FastGeometricEnsembling(Callback):
         self.models = [model.to(self.learner.device) for model in self.models]
 
     def get_models(self) -> List[Module]:
-        '''
+        """
         Return the post-training average model
         :return: the averaged model
-        '''
+        """
         return list(self.models)

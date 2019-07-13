@@ -10,6 +10,9 @@ from ..models import Encoder, Decoder
 
 
 class Seq2SeqLearner:
+    """
+    INCOMPLETE
+    """
     def __init__(
             self, encoder:Encoder, decoder:Decoder,
             X, Y, X_val, Y_val, device,
@@ -34,13 +37,13 @@ class Seq2SeqLearner:
         self._device = device
 
     def learn(self, n_epoch, batch_size, print_every, eval_every):
-        '''
+        """
         :param n_epoch: number of epoch to train
         :param batch_size: size of each batch
         :param print_every
         :param eval_every
         :return:
-        '''
+        """
         indices = np.arange(self._X.shape[1])
         n_batch = compute_num_batch(self._X.shape[1], batch_size)
 
@@ -82,13 +85,13 @@ class Seq2SeqLearner:
 
     @torch.no_grad()
     def evaluate(self, X_val, Y_val, mask_X_val, lengths_X_val, mask_Y_val):
-        '''
+        """
         :param X_val:
         :param Y_val:
         :param mask_X_val:
         :param lengths_X_val:
         :return:
-        '''
+        """
         self._encoder.eval()
         self._decoder.eval()
 
@@ -180,10 +183,10 @@ class Seq2SeqLearner:
         return loss.item()
 
     def prepare_input(self, X):
-        '''
+        """
         :param X: sequence length of shape (seq_length, batch_size)
         :return: mask and lengths
-        '''
+        """
         mask = create_mask(X, self._pad_token)
 
         lengths = get_lengths(mask)

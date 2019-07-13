@@ -9,5 +9,12 @@ I organize the codes into core elements (callbacks, components, losses, metrics,
 To use the codes here, simply clone this repository and add it to your favourite project. Then do a simple import call, and have fun deep learning!
 <br />
 Alternatively, you can just select a piece of code that you need and copy it to your project. No need to ask for permission (unless it's something that's not originally mine either, such as the codes adapted from fastai library courses). However, do be aware that the one function might requires another function from another directory to work.
+<br />
+Note that I have released the codes as a package on PyPI, but right now the everything is still highly experimental and volatile. Nevertheless, you can install it with:
+```
+pip install nn-toolbox
+```
 ## Some Examples:
 I am currently doing some projects with this toolbox. Some of them are still work in progress, but you can visit my [implementation](https://github.com/nhatsmrt/torch-styletransfer) of arbitrary style transfer for some example usage, or look at some [tests](https://github.com/nhatsmrt/nn-toolbox/tree/experimental/nntoolbox/test).
+## Documentation
+Please visit https://nhatsmrt.github.io/nn-toolbox/

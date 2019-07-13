@@ -3,7 +3,6 @@ from torch import nn, Tensor
 from typing import Tuple
 import torch.nn.functional as F
 import numpy as np
-import time
 
 
 __all__ = ['GlobalSelfAttention', 'StandAloneSelfAttention', 'StandAloneMultiheadAttention']
@@ -308,20 +307,3 @@ class Attention2D(nn.Module):
         :param queries: (batch_size, query_dim, H, W)
         :return: (batch_size,
         """
-
-
-# from time import time
-# total = 0
-# input = torch.rand(128, 16, 32, 32)
-# layer = StandAloneMultiheadAttention(num_heads=8, in_channels=16, out_channels=16, kernel_size=11)
-# # print(input)
-# # print()
-# # print(layer(input))
-#
-# for _ in range(10):
-#     start = time()
-#     print(layer(input).shape)
-#     end = time()
-#     # print(end - start)
-#     total += end - start
-# print(total / 10)

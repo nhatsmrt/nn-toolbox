@@ -9,12 +9,13 @@ __all__ = ['compute_gradient', 'compute_jacobian', 'update_gradient', 'accumulat
 
 
 def compute_gradient(output: Tensor, model: Module) -> List[Tensor]:
-    '''
+    """
     Comput gradient of the output of a model
+
     :param output:
     :param model:
     :return: list of gradients of model parameters
-    '''
+    """
     ret = []
     output.backward(retain_graph=True)
     for parameter in model.parameters():
@@ -24,14 +25,15 @@ def compute_gradient(output: Tensor, model: Module) -> List[Tensor]:
 
 
 def compute_jacobian(input: Tensor, fn: Callable[[Tensor], Tensor], is_batch: bool=True) -> Tensor:
-    '''
+    """
     Compute the jacobian of function(input) with respect to input
+
     :param output:
     :param input: assume that input require_grad = True
     :param fn:
     :param batch: whether to compute gradient by batch
     :return:
-    '''
+    """
     if is_batch:
         return torch.stack([compute_jacobian(input[ind], fn, False) for ind in range(len(input))], dim=0)
     else:
@@ -54,12 +56,13 @@ def accumulate_gradient(gradients, model, fn=lambda x:x):
 
 
 def compute_gradient_norm(output: Tensor, model: Module):
-    '''
+    """
     Compute the norm of the gradient of an output (e.g a loss) with respect to a model parameters
+
     :param output:
     :param model:
     :return:
-    '''
+    """
     ret = 0
     output.backward(retain_graph=True)
     for parameter in model.parameters():

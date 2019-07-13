@@ -21,6 +21,7 @@ class SupervisedDataset(Dataset):
 
     @classmethod
     def from_csv(cls, path: str, label_name: str, data_fields: Optional[List[str]]=None, device=get_device()):
+        """Create a supervised dataset from csv file"""
         assert path.endswith(".csv")
         df = pd.read_csv(path)
         labels = df[label_name].values
@@ -44,6 +45,12 @@ class SupervisedDataset(Dataset):
 
 
 def get_first_batch(data: DataLoader, callbacks: Optional[Iterable['Callback']]=None):
+    """
+    Get the first batch from dataloader
+
+    :param data: the dataloader
+    :param callbacks: the list of callbacks to applied to data
+    """
     first_batch = next(iter(data))
     if callbacks is None or len(callbacks) == 0:
         return first_batch
@@ -58,4 +65,5 @@ def get_first_batch(data: DataLoader, callbacks: Optional[Iterable['Callback']]=
 
 
 def grab_next_batch(data: DataLoader):
+    """Grab the next batch from dataloader"""
     return next(iter(data))

@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nntoolbox">
+<h1>nntoolbox<a class="headerlink" href="#nntoolbox" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.html">nntoolbox package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.bs_scheduler">nntoolbox.callbacks.bs_scheduler module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.callbacks">nntoolbox.callbacks.callbacks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.checkpoint">nntoolbox.callbacks.checkpoint module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.colab">nntoolbox.callbacks.colab module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.debug">nntoolbox.callbacks.debug module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.device">nntoolbox.callbacks.device module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.fge">nntoolbox.callbacks.fge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.gradient">nntoolbox.callbacks.gradient module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.logger">nntoolbox.callbacks.logger module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.lr_scheduler">nntoolbox.callbacks.lr_scheduler module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.mixed_precision">nntoolbox.callbacks.mixed_precision module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.mixup">nntoolbox.callbacks.mixup module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.nan">nntoolbox.callbacks.nan module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.progress_bar">nntoolbox.callbacks.progress_bar module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.resizing">nntoolbox.callbacks.resizing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.swa">nntoolbox.callbacks.swa module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks.transfer">nntoolbox.callbacks.transfer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.callbacks.html#module-nntoolbox.callbacks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.components.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.components.html#module-nntoolbox.components.activation">nntoolbox.components.activation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.components.html#module-nntoolbox.components.components">nntoolbox.components.components module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.components.html#module-nntoolbox.components.maxout">nntoolbox.components.maxout module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.components.html#module-nntoolbox.components.pool">nntoolbox.components.pool module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.components.html#module-nntoolbox.components.self_normalizing">nntoolbox.components.self_normalizing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.components.html#module-nntoolbox.components">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.graph.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.graph.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.graph.html#module-nntoolbox.graph.utils">nntoolbox.graph.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.graph.html#module-nntoolbox.graph">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.hooks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.hooks.html#module-nntoolbox.hooks.hooks">nntoolbox.hooks.hooks module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.hooks.html#module-nntoolbox.hooks.inputs">nntoolbox.hooks.inputs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.hooks.html#module-nntoolbox.hooks.stats">nntoolbox.hooks.stats module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.hooks.html#module-nntoolbox.hooks.utils">nntoolbox.hooks.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.hooks.html#module-nntoolbox.hooks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.init.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.init.html#module-nntoolbox.init.lsuv">nntoolbox.init.lsuv module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.init.html#module-nntoolbox.init">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.losses.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.losses.html#module-nntoolbox.losses.losses">nntoolbox.losses.losses module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.losses.html#module-nntoolbox.losses.smooth">nntoolbox.losses.smooth module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.losses.html#module-nntoolbox.losses">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.metrics.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.metrics.html#module-nntoolbox.metrics.metrics">nntoolbox.metrics.metrics module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.metrics.html#module-nntoolbox.metrics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.models.html#module-nntoolbox.models.classifier">nntoolbox.models.classifier module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.models.html#module-nntoolbox.models.ensemble">nntoolbox.models.ensemble module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.models.html#module-nntoolbox.models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.optim.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.optim.html#module-nntoolbox.optim.adamW">nntoolbox.optim.adamW module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.optim.html#module-nntoolbox.optim.lr_scheduler">nntoolbox.optim.lr_scheduler module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.optim.html#module-nntoolbox.optim.utils">nntoolbox.optim.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.optim.html#module-nntoolbox.optim">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.sequence.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.sequence.html#module-nntoolbox.sequence">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.test.html">nntoolbox.test package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.test.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.test.html#module-nntoolbox.test.prog_bar">nntoolbox.test.prog_bar module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.test.html#module-nntoolbox.test.test_classifier">nntoolbox.test.test_classifier module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.test.html#module-nntoolbox.test">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.transforms.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.transforms.html#module-nntoolbox.transforms.mixup">nntoolbox.transforms.mixup module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.transforms.html#module-nntoolbox.transforms.scale">nntoolbox.transforms.scale module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.transforms.html#module-nntoolbox.transforms.transforms">nntoolbox.transforms.transforms module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.transforms.html#module-nntoolbox.transforms">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.utils.html#module-nntoolbox.utils.colab">nntoolbox.utils.colab module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.utils.html#module-nntoolbox.utils.data">nntoolbox.utils.data module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.utils.html#module-nntoolbox.utils.gradient">nntoolbox.utils.gradient module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.utils.html#module-nntoolbox.utils.lr_finder">nntoolbox.utils.lr_finder module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.utils.html#module-nntoolbox.utils.sampler">nntoolbox.utils.sampler module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.utils.html#module-nntoolbox.utils.transfer">nntoolbox.utils.transfer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.utils.html#module-nntoolbox.utils.utils">nntoolbox.utils.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.utils.html#module-nntoolbox.utils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.vision.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nntoolbox.vision.html#module-nntoolbox.vision">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#module-nntoolbox.learner">nntoolbox.learner module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#module-nntoolbox">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/generated/modules.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

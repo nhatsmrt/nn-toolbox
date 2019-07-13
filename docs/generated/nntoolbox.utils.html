@@ -1,0 +1,484 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.utils package &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="nntoolbox.vision package" href="nntoolbox.vision.html" />
+    <link rel="prev" title="nntoolbox.transforms package" href="nntoolbox.transforms.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nntoolbox-utils-package">
+<h1>nntoolbox.utils package<a class="headerlink" href="#nntoolbox-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nntoolbox.utils.colab">
+<span id="nntoolbox-utils-colab-module"></span><h2>nntoolbox.utils.colab module<a class="headerlink" href="#module-nntoolbox.utils.colab" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nntoolbox.utils.colab.download">
+<code class="sig-prename descclassname">nntoolbox.utils.colab.</code><code class="sig-name descname">download</code><span class="sig-paren">(</span><em class="sig-param">drive</em>, <em class="sig-param">id</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/colab.html#download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.colab.download" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.colab.download_folder">
+<code class="sig-prename descclassname">nntoolbox.utils.colab.</code><code class="sig-name descname">download_folder</code><span class="sig-paren">(</span><em class="sig-param">drive</em>, <em class="sig-param">id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/colab.html#download_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.colab.download_folder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.utils.data">
+<span id="nntoolbox-utils-data-module"></span><h2>nntoolbox.utils.data module<a class="headerlink" href="#module-nntoolbox.utils.data" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.utils.data.SupervisedDataset">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.data.</code><code class="sig-name descname">SupervisedDataset</code><span class="sig-paren">(</span><em class="sig-param">inputs: numpy.ndarray</em>, <em class="sig-param">labels: numpy.ndarray</em>, <em class="sig-param">device=device(type='cpu')</em>, <em class="sig-param">transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#SupervisedDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.SupervisedDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.dataset.Dataset</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.utils.data.SupervisedDataset.from_csv">
+<em class="property">classmethod </em><code class="sig-name descname">from_csv</code><span class="sig-paren">(</span><em class="sig-param">path: str</em>, <em class="sig-param">label_name: str</em>, <em class="sig-param">data_fields: Optional[List[str]] = None</em>, <em class="sig-param">device=device(type='cpu')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#SupervisedDataset.from_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.SupervisedDataset.from_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a supervised dataset from csv file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.utils.data.SupervisedDataset.prepare_arr">
+<code class="sig-name descname">prepare_arr</code><span class="sig-paren">(</span><em class="sig-param">tensor: torch.Tensor</em>, <em class="sig-param">dtype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#SupervisedDataset.prepare_arr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.SupervisedDataset.prepare_arr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.data.get_first_batch">
+<code class="sig-prename descclassname">nntoolbox.utils.data.</code><code class="sig-name descname">get_first_batch</code><span class="sig-paren">(</span><em class="sig-param">data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">callbacks: Optional[Iterable[Callback]] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#get_first_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.get_first_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the first batch from dataloader</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – the dataloader</p></li>
+<li><p><strong>callbacks</strong> – the list of callbacks to applied to data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.data.grab_next_batch">
+<code class="sig-prename descclassname">nntoolbox.utils.data.</code><code class="sig-name descname">grab_next_batch</code><span class="sig-paren">(</span><em class="sig-param">data: torch.utils.data.dataloader.DataLoader</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#grab_next_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.grab_next_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grab the next batch from dataloader</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.utils.gradient">
+<span id="nntoolbox-utils-gradient-module"></span><h2>nntoolbox.utils.gradient module<a class="headerlink" href="#module-nntoolbox.utils.gradient" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.compute_gradient">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">compute_gradient</code><span class="sig-paren">(</span><em class="sig-param">output: torch.Tensor</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; List[torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#compute_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.compute_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Comput gradient of the output of a model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – </p></li>
+<li><p><strong>model</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of gradients of model parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.compute_jacobian">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">compute_jacobian</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor, fn: Callable[torch.Tensor, torch.Tensor], is_batch: bool = True</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#compute_jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.compute_jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the jacobian of function(input) with respect to input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – </p></li>
+<li><p><strong>input</strong> – assume that input require_grad = True</p></li>
+<li><p><strong>fn</strong> – </p></li>
+<li><p><strong>batch</strong> – whether to compute gradient by batch</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.update_gradient">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">update_gradient</code><span class="sig-paren">(</span><em class="sig-param">gradients: torch.Tensor</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">fn: Callable[torch.Tensor</em>, <em class="sig-param">torch.Tensor] = &lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#update_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.update_gradient" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.accumulate_gradient">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">accumulate_gradient</code><span class="sig-paren">(</span><em class="sig-param">gradients</em>, <em class="sig-param">model</em>, <em class="sig-param">fn=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#accumulate_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.accumulate_gradient" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.compute_gradient_norm">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">compute_gradient_norm</code><span class="sig-paren">(</span><em class="sig-param">output: torch.Tensor</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#compute_gradient_norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.compute_gradient_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the norm of the gradient of an output (e.g a loss) with respect to a model parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – </p></li>
+<li><p><strong>model</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.utils.lr_finder">
+<span id="nntoolbox-utils-lr-finder-module"></span><h2>nntoolbox.utils.lr_finder module<a class="headerlink" href="#module-nntoolbox.utils.lr_finder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.utils.lr_finder.LRFinder">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.lr_finder.</code><code class="sig-name descname">LRFinder</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module, train_data: torch.utils.data.dataloader.DataLoader, criterion: torch.nn.modules.module.Module, optimizer: Callable[..., torch.optim.optimizer.Optimizer], device: torch.device</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/lr_finder.html#LRFinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.lr_finder.LRFinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Leslie Smith’s learning rate range finder.</p>
+<p>Adapt from <a class="reference external" href="https://sgugger.github.io/how-do-you-find-a-good-learning-rate.html">https://sgugger.github.io/how-do-you-find-a-good-learning-rate.html</a></p>
+<p><a class="reference external" href="https://arxiv.org/pdf/1506.01186.pdf">https://arxiv.org/pdf/1506.01186.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.utils.lr_finder.LRFinder.find_lr">
+<code class="sig-name descname">find_lr</code><span class="sig-paren">(</span><em class="sig-param">lr0: float = 1e-07</em>, <em class="sig-param">lr_final: float = 10.0</em>, <em class="sig-param">warmup: int = 15</em>, <em class="sig-param">beta: float = 0.98</em>, <em class="sig-param">verbose: bool = True</em>, <em class="sig-param">display: bool = True</em>, <em class="sig-param">callbacks: Optional[List[Callback]] = None</em><span class="sig-paren">)</span> &#x2192; Tuple[float, float]<a class="reference internal" href="../_modules/nntoolbox/utils/lr_finder.html#LRFinder.find_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.lr_finder.LRFinder.find_lr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start from a very low initial learning rate, then gradually increases it up to a big lr until loss blows up
+:param lr0: intitial learning rate
+:param lr_final: final (max) learning rate
+:param warmup: how many iterations to warmup
+:param beta: smoothing coefficient for loss
+:param verbose: whether to print out the progress
+:param display: whether to graph
+:param callbacks: an optional list of callbacks to process input
+:return: a base_lr and the best lr (base_lr = best_lr / 4)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.utils.sampler">
+<span id="nntoolbox-utils-sampler-module"></span><h2>nntoolbox.utils.sampler module<a class="headerlink" href="#module-nntoolbox.utils.sampler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.utils.sampler.MultiRandomSampler">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.sampler.</code><code class="sig-name descname">MultiRandomSampler</code><span class="sig-paren">(</span><em class="sig-param">data_source</em>, <em class="sig-param">batch_size: int</em>, <em class="sig-param">replacement=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/sampler.html#MultiRandomSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.sampler.MultiRandomSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.sampler.Sampler</span></code></p>
+<p>Samples elements randomly to form multiple batches</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_source</strong> (<em>Dataset</em>) – dataset to sample from</p></li>
+<li><p><strong>replacement</strong> (<em>bool</em>) – samples are drawn with replacement if <code class="docutils literal notranslate"><span class="pre">True</span></code>, default=``False``</p></li>
+<li><p><strong>num_samples</strong> (<em>int</em>) – number of samples to draw, default=`len(dataset)`. This argument
+is supposed to be specified only when <cite>replacement</cite> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.utils.transfer">
+<span id="nntoolbox-utils-transfer-module"></span><h2>nntoolbox.utils.transfer module<a class="headerlink" href="#module-nntoolbox.utils.transfer" title="Permalink to this headline">¶</a></h2>
+<p>Some utility functions for transfer learning</p>
+<dl class="function">
+<dt id="nntoolbox.utils.transfer.cut_model">
+<code class="sig-prename descclassname">nntoolbox.utils.transfer.</code><code class="sig-name descname">cut_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.container.Sequential</em>, <em class="sig-param">layer_type: Callable[...</em>, <em class="sig-param">torch.nn.modules.module.Module] = &lt;class 'torch.nn.modules.pooling.AdaptiveAvgPool2d'&gt;</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.nn.modules.container.Sequential, torch.nn.modules.container.Sequential]<a class="reference internal" href="../_modules/nntoolbox/utils/transfer.html#cut_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.transfer.cut_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cut a sequential model at the first instance of layer type
+:param model:
+:param layer_type:
+:return:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.utils.utils">
+<span id="nntoolbox-utils-utils-module"></span><h2>nntoolbox.utils.utils module<a class="headerlink" href="#module-nntoolbox.utils.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nntoolbox.utils.utils.compute_num_batch">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">compute_num_batch</code><span class="sig-paren">(</span><em class="sig-param">data_size: int</em>, <em class="sig-param">batch_size: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#compute_num_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.compute_num_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute number of batches per epoch</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_size</strong> – number of datapoints</p></li>
+<li><p><strong>batch_size</strong> – number of datapoints per batch</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.copy_model">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">copy_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; torch.nn.modules.module.Module<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#copy_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.copy_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an exact copy of the model (both architecture and initial weights, without tying the weights)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – model to be copied</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a copy of the model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.save_model">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">save_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">path: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#save_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – </p></li>
+<li><p><strong>path</strong> – path to save model at</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.load_model">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">load_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">path: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#load_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the model from path</p>
+<p>:param model
+:param path: path of saved model</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.get_device">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">get_device</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#get_device"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.get_device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenient helper for getting device</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a torch device object (gpu if exists)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.get_trainable_parameters">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">get_trainable_parameters</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; List[torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#get_trainable_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.get_trainable_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.count_trainable_parameters">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">count_trainable_parameters</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#count_trainable_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.count_trainable_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Based on <a class="reference external" href="https://discuss.pytorch.org/t/how-do-i-check-the-number-of-parameters-of-a-model/4325/8">https://discuss.pytorch.org/t/how-do-i-check-the-number-of-parameters-of-a-model/4325/8</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.to_onehot">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">to_onehot</code><span class="sig-paren">(</span><em class="sig-param">label: torch.Tensor</em>, <em class="sig-param">n_class: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#to_onehot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.to_onehot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return one hot encoding of label</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> – </p></li>
+<li><p><strong>n_class</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.is_nan">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">is_nan</code><span class="sig-paren">(</span><em class="sig-param">tensor: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#is_nan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.is_nan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if any element of a tensor is NaN</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tensor</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether any element of the tensor is NaN</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.is_valid">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><em class="sig-param">tensor: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a tensor is valid (not inf + not nan)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tensor</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether a tensor is valid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.get_children">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">get_children</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; List[torch.nn.modules.module.Module]<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#get_children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of all children of a model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.get_all_submodules">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">get_all_submodules</code><span class="sig-paren">(</span><em class="sig-param">module: torch.nn.modules.module.Module</em><span class="sig-paren">)</span> &#x2192; List[torch.nn.modules.module.Module]<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#get_all_submodules"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.get_all_submodules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all submodules of a module</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of all submodules of a model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.utils" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.html">nntoolbox package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nntoolbox.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.test.html">nntoolbox.test package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">nntoolbox.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.utils.colab">nntoolbox.utils.colab module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.utils.data">nntoolbox.utils.data module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.utils.gradient">nntoolbox.utils.gradient module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.utils.lr_finder">nntoolbox.utils.lr_finder module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.utils.sampler">nntoolbox.utils.sampler module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.utils.transfer">nntoolbox.utils.transfer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.utils.utils">nntoolbox.utils.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.utils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#module-nntoolbox.learner">nntoolbox.learner module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#module-nntoolbox">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="nntoolbox.html">nntoolbox package</a><ul>
+      <li>Previous: <a href="nntoolbox.transforms.html" title="previous chapter">nntoolbox.transforms package</a></li>
+      <li>Next: <a href="nntoolbox.vision.html" title="next chapter">nntoolbox.vision package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/generated/nntoolbox.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

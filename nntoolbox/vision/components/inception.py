@@ -5,6 +5,7 @@ from torch import nn
 class FactoredConvolutionalLayer(nn.Sequential):
     """
     Factor a k x k convolution into 1 x k and k x 1 inception style
+
     Help reduce memory footprint
     """
     def __init__(
