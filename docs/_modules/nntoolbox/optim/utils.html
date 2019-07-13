@@ -33,22 +33,35 @@
   <h1>Source code for nntoolbox.optim.utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch.optim</span> <span class="k">import</span> <span class="n">Optimizer</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;change_lr&#39;</span><span class="p">,</span> <span class="s1">&#39;plot_schedule&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;change_lr&#39;</span><span class="p">,</span> <span class="s1">&#39;plot_schedule&#39;</span><span class="p">,</span> <span class="s1">&#39;save_optimizer&#39;</span><span class="p">,</span> <span class="s1">&#39;load_optimizer&#39;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="change_lr"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.utils.change_lr">[docs]</a><span class="k">def</span> <span class="nf">change_lr</span><span class="p">(</span><span class="n">optim</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">param_group</span> <span class="ow">in</span> <span class="n">optim</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
+<span class="c1"># UNTESTED</span>
+<div class="viewcode-block" id="change_lr"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.utils.change_lr">[docs]</a><span class="k">def</span> <span class="nf">change_lr</span><span class="p">(</span><span class="n">optim</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">lrs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Change the learning rate of an optimizer</span>
+
+<span class="sd">    :param optim: optimizer</span>
+<span class="sd">    :param lrs: target learning rate</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lrs</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">lrs</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">optim</span><span class="o">.</span><span class="n">param_groups</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">lrs</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">optim</span><span class="o">.</span><span class="n">param_groups</span><span class="p">))]</span>
+
+    <span class="k">for</span> <span class="n">param_group</span><span class="p">,</span> <span class="n">lr</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">optim</span><span class="o">.</span><span class="n">param_groups</span><span class="p">,</span> <span class="n">lrs</span><span class="p">):</span>
         <span class="n">param_group</span><span class="p">[</span><span class="s1">&#39;lr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lr</span></div>
 
 
 <div class="viewcode-block" id="plot_schedule"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.utils.plot_schedule">[docs]</a><span class="k">def</span> <span class="nf">plot_schedule</span><span class="p">(</span><span class="n">schedule_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span> <span class="n">iterations</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot the learning rate schedule function</span>
+
 <span class="sd">    :param schedule_fn: a function that returns a learning rate given an iteration</span>
 <span class="sd">    :param iterations: maximum number of iterations (or epochs)</span>
 <span class="sd">    :return:</span>
@@ -59,6 +72,31 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iterations&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Learning Rate&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<span class="c1"># UNTESTED</span>
+<div class="viewcode-block" id="save_optimizer"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.utils.save_optimizer">[docs]</a><span class="k">def</span> <span class="nf">save_optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save optimizer state for resuming training</span>
+
+<span class="sd">    :param optimizer:</span>
+<span class="sd">    :param path:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">optimizer</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimizer state saved.&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># UNTESTED</span>
+<div class="viewcode-block" id="load_optimizer"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.utils.load_optimizer">[docs]</a><span class="k">def</span> <span class="nf">load_optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load optimizer state for resuming training</span>
+
+<span class="sd">    :param optimizer:</span>
+<span class="sd">    :param path:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimizer state loaded.&quot;</span><span class="p">)</span></div>
+
 </pre></div>
 
           </div>

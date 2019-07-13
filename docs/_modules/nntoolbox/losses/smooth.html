@@ -42,14 +42,19 @@
 
 
 <div class="viewcode-block" id="SmoothedCrossEntropy"><a class="viewcode-back" href="../../../generated/nntoolbox.losses.html#nntoolbox.losses.smooth.SmoothedCrossEntropy">[docs]</a><span class="k">class</span> <span class="nc">SmoothedCrossEntropy</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Drop-in replacement for cross entropy loss with label smoothing:</span>
+
 <span class="sd">    loss(y_hat, y) = -sum_c p_c * log y_hat_c</span>
+
 <span class="sd">    where p_c = 1 - epsilon if c = y and epsilon / (C - 1) otherwise</span>
+
 <span class="sd">    Based on:</span>
+
 <span class="sd">    http://openaccess.thecvf.com/content_CVPR_2019/papers/He_Bag_of_Tricks_for_Image_Classification_with_Convolutional_Neural_Networks_CVPR_2019_paper.pdf</span>
+
 <span class="sd">    Note that deprecated arguments of CrossEntropyLoss are not included</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">reduction</span> <span class="o">==</span> <span class="s1">&#39;mean&#39;</span> <span class="ow">or</span> <span class="n">reduction</span> <span class="o">==</span><span class="s1">&#39;sum&#39;</span> <span class="ow">or</span> <span class="n">reduction</span> <span class="o">==</span> <span class="s1">&#39;none&#39;</span>
         <span class="k">if</span> <span class="n">weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -60,11 +65,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">reduction</span> <span class="o">=</span> <span class="n">reduction</span>
 
 <div class="viewcode-block" id="SmoothedCrossEntropy.forward"><a class="viewcode-back" href="../../../generated/nntoolbox.losses.html#nntoolbox.losses.smooth.SmoothedCrossEntropy.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param output: Predicted class scores. (batch_size, C, *)</span>
 <span class="sd">        :param label: The true label. (batch_size, *)</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span> <span class="o">==</span> <span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -84,12 +89,13 @@
             <span class="k">return</span> <span class="n">loss</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SmoothedCrossEntropy.smooth_label"><a class="viewcode-back" href="../../../generated/nntoolbox.losses.html#nntoolbox.losses.smooth.SmoothedCrossEntropy.smooth_label">[docs]</a>    <span class="k">def</span> <span class="nf">smooth_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">n_class</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Smooth the label</span>
+
 <span class="sd">        :param label: (batch_size, *)</span>
 <span class="sd">        :param n_class: number of class of the output</span>
 <span class="sd">        :return: (batch_size, C, *)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">label_oh</span> <span class="o">=</span> <span class="n">to_onehot</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">n_class</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span> <span class="o">*</span> <span class="n">label_oh</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_class</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">label_oh</span><span class="p">)</span></div></div>
 </pre></div>

@@ -28,10 +28,26 @@ nntoolbox.sequence.components.embedding module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.sequence.components.hierarchical module
+-------------------------------------------------
+
+.. automodule:: nntoolbox.sequence.components.hierarchical
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.sequence.components.modifier module
 ---------------------------------------------
 
 .. automodule:: nntoolbox.sequence.components.modifier
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.sequence.components.rnn module
+----------------------------------------
+
+.. automodule:: nntoolbox.sequence.components.rnn
    :members:
    :undoc-members:
    :show-inheritance:

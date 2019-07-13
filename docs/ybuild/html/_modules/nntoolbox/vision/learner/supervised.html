@@ -41,20 +41,20 @@
 <span class="kn">from</span> <span class="nn">...callbacks</span> <span class="k">import</span> <span class="n">CallbackHandler</span><span class="p">,</span> <span class="n">Callback</span>
 <span class="kn">from</span> <span class="nn">...metrics</span> <span class="k">import</span> <span class="n">Metric</span>
 <span class="kn">from</span> <span class="nn">...transforms</span> <span class="k">import</span> <span class="n">MixupTransformer</span>
+<span class="kn">from</span> <span class="nn">...learner</span> <span class="k">import</span> <span class="n">Learner</span>
 
 
-<div class="viewcode-block" id="SupervisedImageLearner"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.supervised.SupervisedImageLearner">[docs]</a><span class="k">class</span> <span class="nc">SupervisedImageLearner</span><span class="p">:</span>
+<div class="viewcode-block" id="SupervisedImageLearner"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.supervised.SupervisedImageLearner">[docs]</a><span class="k">class</span> <span class="nc">SupervisedImageLearner</span><span class="p">(</span><span class="n">Learner</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">train_data</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">val_data</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span>
             <span class="n">criterion</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span>
             <span class="n">mixup</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mixup_alpha</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">get_device</span><span class="p">()</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_train_data</span> <span class="o">=</span> <span class="n">train_data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_val_data</span> <span class="o">=</span> <span class="n">val_data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_criterion</span> <span class="o">=</span> <span class="n">criterion</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SupervisedImageLearner</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">train_data</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="o">=</span><span class="n">val_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">device</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mixup</span> <span class="o">=</span> <span class="n">mixup</span>
         <span class="k">if</span> <span class="n">mixup</span><span class="p">:</span>

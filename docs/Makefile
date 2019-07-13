@@ -20,5 +20,6 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 github:
-  @make html
-  @cp -a ybuild/html/. ../docs
+	@sphinx-apidoc -o generated/ ../nntoolbox/ -f
+	@make html
+	@cp -a ybuild/html/. ../docs

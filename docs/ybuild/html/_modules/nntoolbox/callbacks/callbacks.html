@@ -32,7 +32,6 @@
             
   <h1>Source code for nntoolbox.callbacks.callbacks</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">save_model</span>
 <span class="kn">from</span> <span class="nn">..metrics</span> <span class="k">import</span> <span class="n">Metric</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">Tensor</span>
 
@@ -169,38 +168,6 @@
             <span class="k">return</span> <span class="mf">0.0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metrics</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_final_metric</span><span class="p">]</span><span class="o">.</span><span class="n">get_best</span><span class="p">()</span></div></div>
-
-
-<div class="viewcode-block" id="ModelCheckpoint"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.callbacks.ModelCheckpoint">[docs]</a><span class="k">class</span> <span class="nc">ModelCheckpoint</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">learner</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">monitor</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;loss&#39;</span><span class="p">,</span>
-            <span class="n">save_best_only</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">period</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span>
-    <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_learner</span> <span class="o">=</span> <span class="n">learner</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_filepath</span> <span class="o">=</span> <span class="n">filepath</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_monitor</span> <span class="o">=</span> <span class="n">monitor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_period</span> <span class="o">=</span> <span class="n">period</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">mode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_save_best_only</span> <span class="o">=</span> <span class="n">save_best_only</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_metrics</span> <span class="o">=</span> <span class="p">[]</span>
-
-<div class="viewcode-block" id="ModelCheckpoint.on_epoch_end"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.callbacks.ModelCheckpoint.on_epoch_end">[docs]</a>    <span class="k">def</span> <span class="nf">on_epoch_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_best_only</span><span class="p">:</span>
-            <span class="n">epoch_metrics</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="s1">&#39;epoch_metrics&#39;</span><span class="p">]</span>
-
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor</span> <span class="ow">in</span> <span class="n">epoch_metrics</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch_metrics</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_monitor</span><span class="p">])</span>
-
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">epoch_metrics</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_monitor</span><span class="p">]</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metrics</span><span class="p">):</span>
-                    <span class="n">save_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_learner</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filepath</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">epoch_metrics</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_monitor</span><span class="p">]</span> <span class="o">==</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metrics</span><span class="p">):</span>
-                    <span class="n">save_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_learner</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filepath</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">save_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_learner</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filepath</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="kc">False</span></div></div>
 
 
 <div class="viewcode-block" id="EarlyStoppingCB"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.callbacks.EarlyStoppingCB">[docs]</a><span class="k">class</span> <span class="nc">EarlyStoppingCB</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>

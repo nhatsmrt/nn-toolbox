@@ -110,7 +110,7 @@
 <dl class="class">
 <dt id="nntoolbox.vision.learner.supervised.SupervisedImageLearner">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.learner.supervised.</code><code class="sig-name descname">SupervisedImageLearner</code><span class="sig-paren">(</span><em class="sig-param">train_data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">val_data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">criterion: torch.nn.modules.module.Module</em>, <em class="sig-param">optimizer: torch.optim.optimizer.Optimizer</em>, <em class="sig-param">mixup: bool = False</em>, <em class="sig-param">mixup_alpha: float = 0.4</em>, <em class="sig-param">device=device(type='cpu')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/learner/supervised.html#SupervisedImageLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.supervised.SupervisedImageLearner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="nntoolbox.html#nntoolbox.learner.Learner" title="nntoolbox.learner.Learner"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.learner.Learner</span></code></a></p>
 <dl class="method">
 <dt id="nntoolbox.vision.learner.supervised.SupervisedImageLearner.compute_loss">
 <code class="sig-name descname">compute_loss</code><span class="sig-paren">(</span><em class="sig-param">images: torch.Tensor</em>, <em class="sig-param">labels: torch.Tensor</em>, <em class="sig-param">train: bool</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/learner/supervised.html#SupervisedImageLearner.compute_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.supervised.SupervisedImageLearner.compute_loss" title="Permalink to this definition">¶</a></dt>
@@ -157,45 +157,37 @@
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.html">nntoolbox package</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="nntoolbox.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.test.html">nntoolbox.test package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a><ul class="current">
-<li class="toctree-l4 current"><a class="reference internal" href="nntoolbox.vision.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l5"><a class="reference internal" href="nntoolbox.vision.components.html">nntoolbox.vision.components package</a></li>
-<li class="toctree-l5 current"><a class="current reference internal" href="#">nntoolbox.vision.learner package</a><ul>
-<li class="toctree-l6"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l6"><a class="reference internal" href="#module-nntoolbox.vision.learner.style">nntoolbox.vision.learner.style module</a></li>
-<li class="toctree-l6"><a class="reference internal" href="#module-nntoolbox.vision.learner.supervised">nntoolbox.vision.learner.supervised module</a></li>
-<li class="toctree-l6"><a class="reference internal" href="#module-nntoolbox.vision.learner">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nntoolbox.vision.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.components.html">nntoolbox.vision.components package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">nntoolbox.vision.learner package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.learner.style">nntoolbox.vision.learner.style module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.learner.supervised">nntoolbox.vision.learner.supervised module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.learner">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l5"><a class="reference internal" href="nntoolbox.vision.losses.html">nntoolbox.vision.losses package</a></li>
-<li class="toctree-l5"><a class="reference internal" href="nntoolbox.vision.models.html">nntoolbox.vision.models package</a></li>
-<li class="toctree-l5"><a class="reference internal" href="nntoolbox.vision.transforms.html">nntoolbox.vision.transforms package</a></li>
-<li class="toctree-l5"><a class="reference internal" href="nntoolbox.vision.utils.html">nntoolbox.vision.utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.losses.html">nntoolbox.vision.losses package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.models.html">nntoolbox.vision.models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.transforms.html">nntoolbox.vision.transforms package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.utils.html">nntoolbox.vision.utils package</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="nntoolbox.vision.html#module-nntoolbox.vision">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#module-nntoolbox.learner">nntoolbox.learner module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#module-nntoolbox">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.vision.html#module-nntoolbox.vision">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -204,11 +196,9 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="nntoolbox.html">nntoolbox package</a><ul>
   <li><a href="nntoolbox.vision.html">nntoolbox.vision package</a><ul>
       <li>Previous: <a href="nntoolbox.vision.components.html" title="previous chapter">nntoolbox.vision.components package</a></li>
       <li>Next: <a href="nntoolbox.vision.losses.html" title="next chapter">nntoolbox.vision.losses package</a></li>
-  </ul></li>
   </ul></li>
   </ul></li>
 </ul>

@@ -47,13 +47,12 @@
 
 <div class="viewcode-block" id="Learner"><a class="viewcode-back" href="../../generated/nntoolbox.html#nntoolbox.learner.Learner">[docs]</a><span class="k">class</span> <span class="nc">Learner</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span> <span class="n">criterion</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">mixup</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mixup_alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">get_device</span><span class="p">()</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">train_data</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">val_data</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span>
+            <span class="n">model</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span> <span class="n">criterion</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_criterion</span> <span class="o">=</span> <span class="n">criterion</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">device</span></div>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_train_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val_data</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_criterion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="o">=</span> <span class="n">model</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span></div>
+
         
 <span class="k">class</span> <span class="nc">SupervisedLearner</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
@@ -66,7 +65,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">get_device</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_criterion</span> <span class="o">=</span> <span class="n">criterion</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
-    
+
     <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">n_epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">callbacks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Callback</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>

@@ -43,6 +43,9 @@
 
 
 <div class="viewcode-block" id="Seq2SeqLearner"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearner">[docs]</a><span class="k">class</span> <span class="nc">Seq2SeqLearner</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    INCOMPLETE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">encoder</span><span class="p">:</span><span class="n">Encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">:</span><span class="n">Decoder</span><span class="p">,</span>
             <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">Y_val</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span>
@@ -67,13 +70,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">device</span>
 
 <div class="viewcode-block" id="Seq2SeqLearner.learn"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearner.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_epoch</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">print_every</span><span class="p">,</span> <span class="n">eval_every</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param n_epoch: number of epoch to train</span>
 <span class="sd">        :param batch_size: size of each batch</span>
 <span class="sd">        :param print_every</span>
 <span class="sd">        :param eval_every</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">n_batch</span> <span class="o">=</span> <span class="n">compute_num_batch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">batch_size</span><span class="p">)</span>
 
@@ -115,13 +118,13 @@
 
 <div class="viewcode-block" id="Seq2SeqLearner.evaluate"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearner.evaluate">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">Y_val</span><span class="p">,</span> <span class="n">mask_X_val</span><span class="p">,</span> <span class="n">lengths_X_val</span><span class="p">,</span> <span class="n">mask_Y_val</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param X_val:</span>
 <span class="sd">        :param Y_val:</span>
 <span class="sd">        :param mask_X_val:</span>
 <span class="sd">        :param lengths_X_val:</span>
 <span class="sd">        :return:</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_encoder</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_decoder</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
@@ -213,10 +216,10 @@
         <span class="k">return</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Seq2SeqLearner.prepare_input"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearner.prepare_input">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param X: sequence length of shape (seq_length, batch_size)</span>
 <span class="sd">        :return: mask and lengths</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pad_token</span><span class="p">)</span>
 
         <span class="n">lengths</span> <span class="o">=</span> <span class="n">get_lengths</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>

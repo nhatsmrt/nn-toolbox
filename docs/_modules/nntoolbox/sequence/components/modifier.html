@@ -32,14 +32,19 @@
             
   <h1>Source code for nntoolbox.sequence.components.modifier</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
 <span class="kn">from</span> <span class="nn">torch.nn.utils.rnn</span> <span class="k">import</span> <span class="n">pack_padded_sequence</span><span class="p">,</span> <span class="n">pad_packed_sequence</span><span class="p">,</span> <span class="n">PackedSequence</span>
+<span class="kn">import</span> <span class="nn">torch.jit</span> <span class="k">as</span> <span class="nn">jit</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">.rnn</span> <span class="k">import</span> <span class="n">FastRNNSequential</span><span class="p">,</span> <span class="n">FastRNNDropout</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ModifiedStackedRNN&#39;</span><span class="p">,</span> <span class="s1">&#39;ResidualRNN&#39;</span><span class="p">,</span> <span class="s1">&#39;FastModifiedStackedRNN&#39;</span><span class="p">,</span> <span class="s1">&#39;FastResidualRNN&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="ModifiedStackedRNN"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.ModifiedStackedRNN">[docs]</a><span class="k">class</span> <span class="nc">ModifiedStackedRNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">base_rnn</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-            <span class="n">bidirectional</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="n">bidirectional</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ModifiedStackedRNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">base_rnn</span><span class="p">(</span>
@@ -55,13 +60,15 @@
 
 
 <div class="viewcode-block" id="ResidualRNN"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.ResidualRNN">[docs]</a><span class="k">class</span> <span class="nc">ResidualRNN</span><span class="p">(</span><span class="n">ModifiedStackedRNN</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    StackedRNN with residual connections:</span>
-<span class="sd">    i_{l + 1} = o_l + i_l = i_l + f(i_l, h_{l - 1})</span>
-<span class="sd">    o_{l + 1} = f(i_{l + 1}, h_l)</span>
 
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_rnn</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bidirectional</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="sd">    i_{l + 1} = o_l + i_l = i_l + f(i_l, h_{l - 1})</span>
+
+<span class="sd">    o_{l + 1} = f(i_{l + 1}, h_l)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_rnn</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bidirectional</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">assert</span> <span class="s1">&#39;hidden_size&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span>
         <span class="k">assert</span> <span class="n">num_layers</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ResidualRNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -89,6 +96,8 @@
         <span class="n">hiddens</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># print(input_unpacked.shape)</span>
+                <span class="c1"># print(output_unpacked.shape)</span>
                 <span class="n">input_unpacked</span> <span class="o">=</span> <span class="n">input_unpacked</span> <span class="o">+</span> <span class="n">output_unpacked</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dropouts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">input_unpacked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dropouts</span><span class="p">[</span><span class="n">l</span> <span class="o">-</span> <span class="mi">1</span><span class="p">](</span><span class="n">input_unpacked</span><span class="p">)</span>
@@ -111,6 +120,108 @@
             <span class="k">return</span> <span class="n">output_packed</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">hiddens</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">output_unpacked</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">hiddens</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FastModifiedStackedRNN"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.FastModifiedStackedRNN">[docs]</a><span class="k">class</span> <span class="nc">FastModifiedStackedRNN</span><span class="p">(</span><span class="n">jit</span><span class="o">.</span><span class="n">ScriptModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Faster implementation using ScriptModule. Currently only works with GRU</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_layers&#39;</span><span class="p">,</span> <span class="s1">&#39;_num_directions&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">base_rnn</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">bidirectional</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FastModifiedStackedRNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">base_rnn</span><span class="p">(</span>
+                <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
+                <span class="n">bidirectional</span><span class="o">=</span><span class="n">bidirectional</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="n">FastRNNSequential</span><span class="p">(</span>
+                <span class="n">FastRNNDropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">),</span>
+                <span class="n">base_rnn</span><span class="p">(</span>
+                    <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">input_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
+                    <span class="n">bidirectional</span><span class="o">=</span><span class="n">bidirectional</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_layers</span> <span class="o">=</span> <span class="n">num_layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_directions</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">bidirectional</span> <span class="k">else</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="FastResidualRNN"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.FastResidualRNN">[docs]</a><span class="k">class</span> <span class="nc">FastResidualRNN</span><span class="p">(</span><span class="n">FastModifiedStackedRNN</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    StackedRNN with residual connections:</span>
+
+<span class="sd">    i_{l + 1} = o_l + i_l = i_l + f(i_l, h_{l - 1})</span>
+
+<span class="sd">    o_{l + 1} = f(i_{l + 1}, h_l)</span>
+
+<span class="sd">    Faster implementation using ScriptModule. Currently only works with GRU</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_rnn</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bidirectional</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="s1">&#39;hidden_size&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span>
+        <span class="k">assert</span> <span class="n">num_layers</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FastResidualRNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">base_rnn</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span>
+            <span class="n">bidirectional</span><span class="p">,</span> <span class="n">dropout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="FastResidualRNN.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.FastResidualRNN.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">h_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lengths</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">PackedSequence</span><span class="p">):</span>
+            <span class="n">input_unpacked</span><span class="p">,</span> <span class="n">lengths</span> <span class="o">=</span> <span class="n">pad_packed_sequence</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="n">lengths</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+
+            <span class="n">input_unpacked</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+
+        <span class="k">if</span> <span class="n">h_0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">h_0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_layers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_directions</span><span class="p">,</span> <span class="n">input_unpacked</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">input_unpacked</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">input_unpacked</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">output_unpacked</span><span class="p">,</span> <span class="n">hiddens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fast_forward</span><span class="p">(</span><span class="n">input_unpacked</span><span class="p">,</span> <span class="n">h_0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">PackedSequence</span><span class="p">):</span>
+            <span class="n">output_packed</span> <span class="o">=</span> <span class="n">pack_padded_sequence</span><span class="p">(</span><span class="n">output_unpacked</span><span class="p">,</span> <span class="n">lengths</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">output_packed</span><span class="p">,</span> <span class="n">hiddens</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">output_unpacked</span><span class="p">,</span> <span class="n">hiddens</span></div>
+
+    <span class="nd">@jit</span><span class="o">.</span><span class="n">script_method</span>
+    <span class="k">def</span> <span class="nf">fast_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_unpacked</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">h_0</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
+        <span class="n">hiddens</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">output_unpacked</span> <span class="o">=</span> <span class="n">jit</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+            <span class="n">Tensor</span><span class="p">,</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">input_unpacked</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">input_unpacked</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">input_unpacked</span><span class="o">.</span><span class="n">get_device</span><span class="p">()))</span>
+
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">input_unpacked</span> <span class="o">=</span> <span class="n">input_unpacked</span> <span class="o">+</span> <span class="n">output_unpacked</span>
+
+            <span class="n">output_unpacked</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">input_unpacked</span><span class="p">,</span> <span class="n">h_0</span><span class="p">[</span><span class="n">l</span><span class="p">])</span>
+            <span class="n">output_unpacked</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+                <span class="n">output_unpacked</span><span class="o">.</span><span class="n">view</span><span class="p">(</span>
+                    <span class="n">output_unpacked</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">output_unpacked</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_directions</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="p">),</span>
+                <span class="n">dim</span><span class="o">=-</span><span class="mi">2</span>
+            <span class="p">)</span>
+            <span class="n">hiddens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span>
+            <span class="n">l</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">output_unpacked</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">hiddens</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 </pre></div>
 
           </div>

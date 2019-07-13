@@ -20,10 +20,26 @@ nntoolbox.callbacks.callbacks module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.callbacks.checkpoint module
+-------------------------------------
+
+.. automodule:: nntoolbox.callbacks.checkpoint
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.callbacks.colab module
 --------------------------------
 
 .. automodule:: nntoolbox.callbacks.colab
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.callbacks.debug module
+--------------------------------
+
+.. automodule:: nntoolbox.callbacks.debug
    :members:
    :undoc-members:
    :show-inheritance:

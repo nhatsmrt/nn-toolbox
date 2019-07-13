@@ -31,17 +31,33 @@
           <div class="body" role="main">
             
   <h1>Source code for nntoolbox.optim.lr_scheduler</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">torch.optim.lr_scheduler</span> <span class="k">import</span> <span class="n">LambdaLR</span><span class="p">,</span> <span class="n">Optimizer</span>
+<span></span><span class="kn">from</span> <span class="nn">torch.optim.lr_scheduler</span> <span class="k">import</span> <span class="n">LambdaLR</span><span class="p">,</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">_LRScheduler</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">plot_schedule</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FunctionalLR&#39;</span><span class="p">,</span> <span class="s1">&#39;CyclicalTriangularLR&#39;</span><span class="p">,</span> <span class="s1">&#39;TriangularLR&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="FunctionalLR"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.lr_scheduler.FunctionalLR">[docs]</a><span class="k">class</span> <span class="nc">FunctionalLR</span><span class="p">(</span><span class="n">LambdaLR</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate learning rate based on a function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">schedule_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span> <span class="n">last_epoch</span><span class="p">:</span> <span class="nb">int</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FunctionalLR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">lr_lambda</span><span class="o">=</span><span class="n">schedule_fn</span><span class="p">,</span> <span class="n">last_epoch</span><span class="o">=</span><span class="n">last_epoch</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FunctionalLR.get_lr"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.lr_scheduler.FunctionalLR.get_lr">[docs]</a>    <span class="k">def</span> <span class="nf">get_lr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">lmbda</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_epoch</span><span class="p">)</span> <span class="k">for</span> <span class="n">lmbda</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr_lambdas</span><span class="p">]</span></div></div>
 
 
 <span class="c1"># UNTESTED</span>
-<div class="viewcode-block" id="CyclicalTriangularLR"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.lr_scheduler.CyclicalTriangularLR">[docs]</a><span class="k">class</span> <span class="nc">CyclicalTriangularLR</span><span class="p">(</span><span class="n">LambdaLR</span><span class="p">):</span>
+<div class="viewcode-block" id="CyclicalTriangularLR"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.lr_scheduler.CyclicalTriangularLR">[docs]</a><span class="k">class</span> <span class="nc">CyclicalTriangularLR</span><span class="p">(</span><span class="n">FunctionalLR</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">min_lr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">max_lr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cycle_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">inc_fraction</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Cyclical (slanted) triangular LR, based on:</span>
+
 <span class="sd">        https://mxnet.incubator.apache.org/versions/master/tutorials/gluon/learning_rate_schedules_advanced.html</span>
+
 <span class="sd">        :param optimizer: pytorch optimizer</span>
 <span class="sd">        :param min_lr: minimum learning rate</span>
 <span class="sd">        :param max_lr: maximum learning rate</span>
@@ -58,16 +74,18 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">unit_cycle</span> <span class="o">=</span> <span class="p">(</span><span class="n">cycle_length</span> <span class="o">-</span> <span class="nb">iter</span><span class="p">)</span> <span class="o">/</span> <span class="n">cycle_length</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">inc_fraction</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">unit_cycle</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_lr</span> <span class="o">-</span> <span class="n">min_lr</span><span class="p">)</span> <span class="o">+</span> <span class="n">min_lr</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CyclicalTriangularLR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">lr_lambda</span><span class="o">=</span><span class="n">schedule_fn</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">iter</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CyclicalTriangularLR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">schedule_fn</span><span class="o">=</span><span class="n">schedule_fn</span><span class="p">)</span></div>
+        <span class="c1"># self.iter = 0</span>
 
 
 <span class="c1"># UNTESTED</span>
-<div class="viewcode-block" id="TriangularLR"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.lr_scheduler.TriangularLR">[docs]</a><span class="k">class</span> <span class="nc">TriangularLR</span><span class="p">(</span><span class="n">LambdaLR</span><span class="p">):</span>
+<div class="viewcode-block" id="TriangularLR"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.lr_scheduler.TriangularLR">[docs]</a><span class="k">class</span> <span class="nc">TriangularLR</span><span class="p">(</span><span class="n">FunctionalLR</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">min_lr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">max_lr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cycle_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">inc_fraction</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        One cycle (slanted) triangular LR, based on:</span>
+
 <span class="sd">        https://mxnet.incubator.apache.org/versions/master/tutorials/gluon/learning_rate_schedules_advanced.html</span>
+
 <span class="sd">        :param optimizer: pytorch optimizer</span>
 <span class="sd">        :param min_lr: minimum learning rate</span>
 <span class="sd">        :param max_lr: maximum learning rate</span>
@@ -85,15 +103,17 @@
             <span class="k">else</span><span class="p">:</span> <span class="n">unit_cycle</span> <span class="o">=</span> <span class="mf">0.0</span>
             <span class="k">return</span> <span class="n">unit_cycle</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_lr</span> <span class="o">-</span> <span class="n">min_lr</span><span class="p">)</span> <span class="o">+</span> <span class="n">min_lr</span>
 
-        <span class="nb">super</span><span class="p">(</span><span class="n">TriangularLR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">lr_lambda</span><span class="o">=</span><span class="n">schedule_fn</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">iter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TriangularLR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">schedule_fn</span><span class="o">=</span><span class="n">schedule_fn</span><span class="p">)</span></div>
+    <span class="c1">#     self.iter = 0</span>
+    <span class="c1">#</span>
+    <span class="c1"># def step(self, iter: Optional[int] = None):</span>
+    <span class="c1">#     if iter is not None:</span>
+    <span class="c1">#         super().step(iter)</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         self.iter += 1</span>
+    <span class="c1">#         super().step(self.iter)</span>
 
-<div class="viewcode-block" id="TriangularLR.step"><a class="viewcode-back" href="../../../generated/nntoolbox.optim.html#nntoolbox.optim.lr_scheduler.TriangularLR.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">iter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">iter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">iter</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iter</span><span class="p">)</span></div></div>
+
 
 </pre></div>
 
