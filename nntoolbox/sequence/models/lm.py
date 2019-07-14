@@ -24,8 +24,8 @@ class LanguageModel(nn.Module):
         :param input: (seq_length, batch_size, input_dim)
         :return: (seq_length, batch_size, vocab_size)
         """
-        output = self.encoder(input) # (seq_length, batch_size, output_dim)
-        return self.classifier_head(output) # (seq_length, batch_size, vocab_size)
+        output = self.encoder(input)[0] # (seq_length, batch_size, output_dim)
+        return self.head(output) # (seq_length, batch_size, vocab_size)
 
     def get_encoder(self) -> nn.Module:
         """

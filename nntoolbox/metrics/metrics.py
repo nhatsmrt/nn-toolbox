@@ -2,7 +2,6 @@ from sklearn.metrics import accuracy_score, roc_auc_score
 import torch
 from typing import Dict, Any
 from torch.nn import Softmax
-import numpy as np
 
 
 class Metric:
