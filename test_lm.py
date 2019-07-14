@@ -19,7 +19,9 @@ LABEL = data.LabelField(dtype=torch.float)
 # for tmp in train_iterator:
 #     print(tmp)
 
-def id_to_text(sequence, vocab):
+
+from torchtext.vocab import Vocab
+def id_to_text(sequence, vocab: Vocab):
     ret = []
     for token in sequence:
         ret.append(vocab.itos[token])
@@ -45,18 +47,20 @@ val_iterator = data.BPTTIterator(
     # shuffle=True
 )
 TEXT.build_vocab(train_data, max_size=MAX_VOCAB_SIZE, vectors="glove.6B.100d")
+embedding = nn.Embedding(num_embeddings=len(TEXT.vocab), embedding_dim=100)
+embedding.weight.data.copy_(TEXT.vocab.vectors)
 # print(id_to_text(next(iter(train_iterator)).target[:, 1:2], TEXT.vocab))
 # print(id_to_text(next(iter(train_iterator)).text[:, 1], TEXT.vocab))
 
 model = LanguageModel(
     encoder=nn.Sequential(
-        nn.Embedding(num_embeddings=MAX_VOCAB_SIZE, embedding_dim=128),
-        nn.GRU(input_size=128, hidden_size=256)
+        embedding,
+        nn.GRU(input_size=100, hidden_size=256)
     ),
     head=nn.Sequential(
         nn.Linear(256, 1024),
         nn.ReLU(),
-        nn.Linear(1024, MAX_VOCAB_SIZE)
+        nn.Linear(1024, len(TEXT.vocab))
     )
 )
 # output = model(next(iter(train_iterator)).target[:, 1:2])
@@ -85,4 +89,4 @@ metrics = {
 }
 
 
-learner.learn(1, callbacks, metrics)
+learner.learn(10, callbacks, metrics)

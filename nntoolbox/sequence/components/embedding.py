@@ -3,10 +3,10 @@ import torch
 
 
 class AdditiveContextEmbedding(nn.Embedding):
-    '''
+    """
     The embedding weights are fixed, except for a context vector c shared by all embedding:
     embedding(x) = w_x + c
-    '''
+    """
     def __init__(
             self, num_embeddings, embedding_dim, padding_idx=None, max_norm=None,
             norm_type=2.0, scale_grad_by_freq=False, sparse=False, _weight=None
