@@ -1,17 +1,16 @@
 try:
     from google.colab import auth
+    from pydrive.auth import GoogleAuth
+    from pydrive.drive import GoogleDrive
+    from oauth2client.client import GoogleCredentials
 except:
     __all__ = []
 else:
     from .callbacks import Callback
     from .checkpoint import ModelCheckpoint
     from ..utils import save_model
-    from pydrive.auth import GoogleAuth
-    from pydrive.drive import GoogleDrive
     import datetime as dt
     from typing import Dict, Any
-    from oauth2client.client import GoogleCredentials
-
 
     __all__ = ['ColabCheckpoint']
 
