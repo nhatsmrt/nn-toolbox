@@ -3,8 +3,9 @@ try:
 except:
     __all__ = []
 else:
-    from nntoolbox.callbacks import Callback, ModelCheckpoint
-    from nntoolbox.utils import save_model
+    from .callbacks import Callback
+    from .checkpoint import ModelCheckpoint
+    from ..utils import save_model
     from pydrive.auth import GoogleAuth
     from pydrive.drive import GoogleDrive
     import datetime as dt
