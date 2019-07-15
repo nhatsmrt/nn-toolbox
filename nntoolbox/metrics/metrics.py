@@ -23,8 +23,8 @@ class Accuracy(Metric):
             labels = logs["labels"]
 
         acc = accuracy_score(
-            y_true=labels,
-            y_pred=predictions
+            y_true=labels.ravel(),
+            y_pred=predictions.ravel()
         )
 
         if acc >= self._best:
