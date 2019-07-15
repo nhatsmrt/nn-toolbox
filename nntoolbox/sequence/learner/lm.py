@@ -57,28 +57,40 @@ class LanguageModelLearner:
     @torch.no_grad()
     def evaluate(self) -> bool:
         self._model.eval()
-        all_outputs = []
-        all_labels = []
-        total_data = 0
-        loss = 0
+        example = next(iter(self._val_iterator))
+        inputs = self._cb_handler.on_batch_begin({'text': example.text, 'target': example.target}, True)
+        text, target = inputs['text'], inputs['target']
+        output = self.compute_output(text, False)
+        loss = self.compute_loss(output, target, False).cpu().detach().item()
+        return self._cb_handler.on_epoch_end({
+            "loss": loss,
+            "outputs": output.cpu().detach(),
+            "labels": target.cpu()
+        })
 
-        for example in self._val_iterator:
-            inputs = self._cb_handler.on_batch_begin({'text': example.text, 'target': example.target}, True)
-            text, target = inputs['text'], inputs['target']
-            output = self.compute_output(text, False)
 
-            all_outputs.append(output.cpu().detach())
-            all_labels.append(target.cpu())
-            loss += self.compute_loss(output, target, False).cpu().detach().item() * text.shape[1]
-            total_data += text.shape[1]
+        # all_outputs = []
+        # all_labels = []
+        # total_data = 0
+        # loss = 0
 
-        loss /= total_data
-        logs = dict()
-        logs["loss"] = loss
-        logs["outputs"] = torch.cat(all_outputs, dim=1)
-        logs["labels"] = torch.cat(all_labels, dim=0)
-
-        return self._cb_handler.on_epoch_end(logs)
+        # for example in self._val_iterator:
+        #     inputs = self._cb_handler.on_batch_begin({'text': example.text, 'target': example.target}, True)
+        #     text, target = inputs['text'], inputs['target']
+        #     output = self.compute_output(text, False)
+        #
+        #     all_outputs.append(output.cpu().detach())
+        #     all_labels.append(target.cpu())
+        #     loss += self.compute_loss(output, target, False).cpu().detach().item() * text.shape[1]
+        #     total_data += text.shape[1]
+        #
+        # loss /= total_data
+        # logs = dict()
+        # logs["loss"] = loss
+        # logs["outputs"] = torch.cat(all_outputs, dim=1)
+        # logs["labels"] = torch.cat(all_labels, dim=0)
+        #
+        # return self._cb_handler.on_epoch_end(logs)
 
     def compute_output(self, text: Tensor, train: bool) -> Tensor:
         return self._cb_handler.after_outputs({'output': self._model(text).permute(0, 2, 1)}, train)['output']
