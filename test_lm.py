@@ -30,7 +30,7 @@ train_iterator = data.BPTTIterator(
     sort_within_batch=True,
     device=get_device(),
     bptt_len=35,
-    # shuffle=True
+    shuffle=True
 )
 
 val_iterator = data.BPTTIterator(
@@ -39,7 +39,7 @@ val_iterator = data.BPTTIterator(
     sort_within_batch=True,
     device=get_device(),
     bptt_len=35,
-    # shuffle=True
+    shuffle=True
 )
 
 TEXT.build_vocab(train_data, max_size=MAX_VOCAB_SIZE, vectors="glove.6B.100d")
@@ -76,7 +76,7 @@ callbacks = [
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     # swa,
     LossLogger(),
-    ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
+    ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='perplexity', mode='min'),
     # ProgressBarCB()
 ]
 

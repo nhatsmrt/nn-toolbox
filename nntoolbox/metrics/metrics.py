@@ -74,7 +74,7 @@ class Loss(Metric):
 
 class Perplexity(Metric):
     """
-    Perplexity metric to evaluate a language model (UNTESTED):
+    Perplexity metric to evaluate a language model:
 
     perplexity(language_model, sentence) = exp(-log language_model(sentence))
     """
