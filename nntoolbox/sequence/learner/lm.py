@@ -5,6 +5,7 @@ import torch
 from torch import Tensor, nn
 from torch.optim import Optimizer
 from typing import List, Optional
+from torchtext.data import Iterator
 
 
 __all__ = ['LanguageModelLearner']
@@ -14,7 +15,10 @@ class LanguageModelLearner:
     """
     Train a language model (predicting the next word given the previous word)
     """
-    def __init__(self, train_iterator, val_iterator, model: LanguageModel, optimizer: Optimizer, criterion: nn.Module):
+    def __init__(
+            self, train_iterator: Iterator, val_iterator: Iterator,
+            model: LanguageModel, optimizer: Optimizer, criterion: nn.Module
+    ):
         self._train_iterator = train_iterator
         self._val_iterator = val_iterator
         self._model = model

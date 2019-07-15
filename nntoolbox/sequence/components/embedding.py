@@ -5,6 +5,7 @@ import torch
 class AdditiveContextEmbedding(nn.Embedding):
     """
     The embedding weights are fixed, except for a context vector c shared by all embedding:
+
     embedding(x) = w_x + c
     """
     def __init__(

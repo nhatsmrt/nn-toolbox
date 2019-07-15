@@ -3,6 +3,7 @@ from torchtext import data
 from nntoolbox.utils import get_device
 from nntoolbox.sequence.models import LanguageModel
 from nntoolbox.sequence.learner import LanguageModelLearner
+from nntoolbox.sequence.components import AdditiveContextEmbedding
 from torch import nn
 from torch.optim import Adam
 from nntoolbox.callbacks import *
@@ -47,7 +48,7 @@ val_iterator = data.BPTTIterator(
     # shuffle=True
 )
 TEXT.build_vocab(train_data, max_size=MAX_VOCAB_SIZE, vectors="glove.6B.100d")
-embedding = nn.Embedding(num_embeddings=len(TEXT.vocab), embedding_dim=100)
+embedding = AdditiveContextEmbedding(num_embeddings=len(TEXT.vocab), embedding_dim=100)
 embedding.weight.data.copy_(TEXT.vocab.vectors)
 # print(id_to_text(next(iter(train_iterator)).target[:, 1:2], TEXT.vocab))
 # print(id_to_text(next(iter(train_iterator)).text[:, 1], TEXT.vocab))
@@ -87,6 +88,5 @@ metrics = {
     "accuracy": Accuracy(),
     "loss": Loss()
 }
-
 
 learner.learn(10, callbacks, metrics)
