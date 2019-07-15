@@ -2,6 +2,10 @@ from sklearn.metrics import accuracy_score, roc_auc_score
 import torch
 from typing import Dict, Any
 from torch.nn import Softmax
+from torch.nn.functional import log_softmax, nll_loss
+
+
+__all__ = ['Metric', 'Accuracy', 'ROCAUCScore', 'Loss', 'Perplexity']
 
 
 class Metric:
@@ -70,7 +74,7 @@ class Loss(Metric):
 
 class Perplexity(Metric):
     """
-    Perplexity metric to evaluate a language model:
+    Perplexity metric to evaluate a language model (UNTESTED):
 
     perplexity(language_model, sentence) = exp(-log language_model(sentence))
     """
@@ -78,4 +82,12 @@ class Perplexity(Metric):
         self._best = float('inf')
 
     def __call__(self, logs: Dict[str, Any]) -> float:
-        return
+        labels = logs["labels"].cpu()
+        predictions_prob = log_softmax(logs["outputs"], dim=1)
+        entropy = nll_loss(predictions_prob, labels)
+        perplexity = torch.exp(entropy).cpu().numpy().item()
+
+        if perplexity < self._best:
+            self._best = perplexity
+
+        return perplexity

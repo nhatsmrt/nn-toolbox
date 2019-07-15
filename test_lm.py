@@ -7,6 +7,7 @@ from nntoolbox.sequence.components import AdditiveContextEmbedding
 from nntoolbox.sequence.utils import load_embedding
 from torch import nn
 from torch.optim import Adam
+import torch
 from nntoolbox.callbacks import *
 from nntoolbox.metrics import *
 
@@ -20,14 +21,6 @@ LABEL = data.LabelField(dtype=torch.float)
 # train_iterator, val_iterator, test_iterator = WikiText2.iters()
 # for tmp in train_iterator:
 #     print(tmp)
-
-
-from torchtext.vocab import Vocab
-def id_to_text(sequence, vocab: Vocab):
-    ret = []
-    for token in sequence:
-        ret.append(vocab.itos[token])
-    return ret
 
 
 train_data, val_data, test_data = WikiText2.splits(TEXT)
@@ -49,7 +42,6 @@ val_iterator = data.BPTTIterator(
     # shuffle=True
 )
 
-print(len(val_iterator))
 TEXT.build_vocab(train_data, max_size=MAX_VOCAB_SIZE, vectors="glove.6B.100d")
 embedding = AdditiveContextEmbedding(num_embeddings=len(TEXT.vocab), embedding_dim=100)
 load_embedding(embedding, TEXT.vocab.vectors)
@@ -74,7 +66,7 @@ model = LanguageModel(
 # print(id_to_text(output, TEXT.vocab))
 
 optimizer = Adam(model.parameters())
-learner = LanguageModelLearner(val_iterator, val_iterator, model, optimizer, criterion=nn.CrossEntropyLoss())
+learner = LanguageModelLearner(train_iterator, val_iterator, model, optimizer, criterion=nn.CrossEntropyLoss())
 
 callbacks = [
     ToDeviceCallback(),
@@ -90,7 +82,8 @@ callbacks = [
 
 metrics = {
     "accuracy": Accuracy(),
-    "loss": Loss()
+    "loss": Loss(),
+    "perplexity": Perplexity()
 }
 
 learner.learn(10, callbacks, metrics)
