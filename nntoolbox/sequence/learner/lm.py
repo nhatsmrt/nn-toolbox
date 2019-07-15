@@ -35,7 +35,7 @@ class LanguageModelLearner:
             for example in self._train_iterator:
                 self.learn_one_iter(example)
                 break
-                
+
             stop_training = self.evaluate()
             if stop_training:
                 break

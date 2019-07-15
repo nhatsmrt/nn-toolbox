@@ -1,9 +1,11 @@
+import torch
 from torch import nn
 from torchtext.data import Iterator
 from nntoolbox.utils import get_device
 from nntoolbox.callbacks import *
 from nntoolbox.metrics import *
 from torch.optim import Optimizer
+from typing import Optional, List
 
 
 # UNTESTED
@@ -19,7 +21,10 @@ class SequenceClassifierLearner:
         self._criterion = criterion.to(device)
         self._device = device
 
-    def learn(self, n_epoch, callbacks, metrics, final_metric):
+    def learn(
+            self, n_epoch: int, callbacks: Optional[List[Callback]]=None,
+            metrics: Optional[List[Metric]]=None, final_metric: str='accuracy'
+    ) -> float:
         self._cb_handler = CallbackHandler(self, n_epoch, callbacks, metrics, final_metric)
 
         for e in range(n_epoch):
