@@ -2,15 +2,24 @@ from __future__ import unicode_literals, print_function, division
 import unicodedata
 import numpy as np
 import torch
-from torch import Tensor
+from torch import Tensor, nn
 
 
-__all__ = ['unicode_to_ascii', 'create_mask', 'create_mask_from_lengths', 'get_lengths', 'extract_last']
+__all__ = [
+    'unicode_to_ascii', 'create_mask', 'create_mask_from_lengths',
+    'get_lengths', 'extract_last', 'load_embedding'
+]
 
 
-# Turn a Unicode string to plain ASCII, thanks to
-# https://stackoverflow.com/a/518232/2809427
 def unicode_to_ascii(s: str):
+    """
+    Turn a Unicode string to plain ASCII
+
+    From: https://stackoverflow.com/a/518232/2809427
+
+    :param s: string (in unicode)
+    :return: ASCII form of string
+    """
     return ''.join(
         c for c in unicodedata.normalize('NFD', s)
         if unicodedata.category(c) != 'Mn'
@@ -69,3 +78,12 @@ def extract_last(sequences: Tensor, sequence_lengths: Tensor):
         index=(sequence_lengths - 1).view(1, -1).unsqueeze(-1).repeat(1, 1, sequences.shape[2])
     ).squeeze(0)
 
+
+def load_embedding(embedding: nn.Embedding, weight: Tensor):
+    """
+    Copy weight into embedding layer
+
+    :param embedding:
+    :param weight:
+    """
+    embedding.weight.data.copy_(weight)

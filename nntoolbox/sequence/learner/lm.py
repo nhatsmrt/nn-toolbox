@@ -54,6 +54,7 @@ class LanguageModelLearner:
 
             self._cb_handler.on_batch_end({'loss': loss.cpu().detach()})
 
+    @torch.no_grad()
     def evaluate(self) -> bool:
         self._model.eval()
         all_outputs = []
@@ -66,9 +67,9 @@ class LanguageModelLearner:
             text, target = inputs['text'], inputs['target']
             output = self.compute_output(text, False)
 
-            all_outputs.append(output)
+            all_outputs.append(output.cpu().detach())
             all_labels.append(target.cpu())
-            loss += self.compute_loss(output, target, False).cpu().item() * text.shape[1]
+            loss += self.compute_loss(output, target, False).cpu().detach().item() * text.shape[1]
             total_data += text.shape[1]
 
         loss /= total_data

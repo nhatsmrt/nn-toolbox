@@ -66,3 +66,16 @@ class Loss(Metric):
             self._best = logs['loss']
 
         return logs["loss"]
+
+
+class Perplexity(Metric):
+    """
+    Perplexity metric to evaluate a language model:
+
+    perplexity(language_model, sentence) = exp(-log language_model(sentence))
+    """
+    def __init__(self):
+        self._best = float('inf')
+
+    def __call__(self, logs: Dict[str, Any]) -> float:
+        return
