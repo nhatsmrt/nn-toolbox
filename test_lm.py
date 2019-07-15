@@ -4,6 +4,7 @@ from nntoolbox.utils import get_device
 from nntoolbox.sequence.models import LanguageModel
 from nntoolbox.sequence.learner import LanguageModelLearner
 from nntoolbox.sequence.components import AdditiveContextEmbedding
+from nntoolbox.sequence.utils import load_embedding
 from torch import nn
 from torch.optim import Adam
 from nntoolbox.callbacks import *
@@ -47,9 +48,12 @@ val_iterator = data.BPTTIterator(
     bptt_len=35,
     # shuffle=True
 )
+
+print(len(val_iterator))
 TEXT.build_vocab(train_data, max_size=MAX_VOCAB_SIZE, vectors="glove.6B.100d")
 embedding = AdditiveContextEmbedding(num_embeddings=len(TEXT.vocab), embedding_dim=100)
-embedding.weight.data.copy_(TEXT.vocab.vectors)
+load_embedding(embedding, TEXT.vocab.vectors)
+
 # print(id_to_text(next(iter(train_iterator)).target[:, 1:2], TEXT.vocab))
 # print(id_to_text(next(iter(train_iterator)).text[:, 1], TEXT.vocab))
 
@@ -70,7 +74,7 @@ model = LanguageModel(
 # print(id_to_text(output, TEXT.vocab))
 
 optimizer = Adam(model.parameters())
-learner = LanguageModelLearner(train_iterator, val_iterator, model, optimizer, criterion=nn.CrossEntropyLoss())
+learner = LanguageModelLearner(val_iterator, val_iterator, model, optimizer, criterion=nn.CrossEntropyLoss())
 
 callbacks = [
     ToDeviceCallback(),
