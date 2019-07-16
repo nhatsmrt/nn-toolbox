@@ -13,6 +13,6 @@ def normal_init(module: Module, mean: float, std: float):
     :param: mean of distribution
     :param: std: standard deviation of the distribution
     """
-    normal_(module.weight, mean=mean, std=std)
+    normal_(module.weight.data, mean=mean, std=std)
     if module.bias is not None:
-        constant_(module.bias, val=0.0)
+        constant_(module.bias.data, val=0.0)
