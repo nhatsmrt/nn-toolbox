@@ -1,6 +1,6 @@
 from torch.utils.tensorboard import SummaryWriter
 from .callbacks import Callback
-from typing import Sequence
+from typing import Sequence, Dict, Any
 
 
 __all__ = ['Tensorboard', 'LossLogger', 'MultipleMetricLogger']
@@ -27,7 +27,7 @@ class Tensorboard(Callback):
                     global_step=logs["iter_cnt"]
                 )
 
-    def on_epoch_end(self, logs):
+    def on_epoch_end(self, logs: Dict[str, Any]):
         if logs["epoch"] % self._every_epoch == 0:
             if "epoch_metrics" in logs:
                 for metric in logs["epoch_metrics"]:
@@ -43,6 +43,7 @@ class Tensorboard(Callback):
                         img_tensor=logs["draw"][i],
                         global_step=logs["epoch"]
                     )
+        return False
 
 
 class LossLogger(Callback):
@@ -67,8 +68,9 @@ class MultipleMetricLogger(Callback):
                 assert metric in logs
                 print(metric + ": " + str(logs[metric]))
 
-    def on_epoch_end(self, logs):
+    def on_epoch_end(self, logs) -> bool:
         print("Epoch " + str(logs["epoch"]) + " with:")
         for metric in self._epoch_metrics:
             assert metric in logs
             print(metric + ": " + str(logs[metric]))
+        return False
