@@ -3,10 +3,12 @@ import torch
 from typing import Dict, Any
 from torch.nn import Softmax
 from torch.nn.functional import log_softmax, nll_loss
+import numpy as np
 from .metrics import Metric
+from ..utils import find_index
 
 
-__all__ = ['Accuracy', 'ROCAUCScore', 'Perplexity']
+__all__ = ['Accuracy', 'ROCAUCScore', 'MAPAtK', 'Perplexity']
 
 
 class Accuracy(Metric):
@@ -54,6 +56,31 @@ class ROCAUCScore(Metric):
             self._best = rocauc
 
         return rocauc
+
+
+class MAPAtK(Metric):
+    def __init__(self, k: int=5):
+        self._k = k
+        self._best = 0.0
+
+    def __call__(self, logs: Dict[str, Any]) -> float:
+        assert "best" in logs
+        assert len(logs["best"][0]) == self._k
+
+        if isinstance(logs["labels"], torch.Tensor):
+            labels = logs["labels"].cpu().numpy()
+        else:
+            labels = logs["labels"]
+
+        return self.map_at_k(logs["best"], labels)
+
+    def map_at_k(self, best, labels) -> float:
+        return np.mean(
+            [
+                (1.0 / (find_index(best[i], labels[i]) + 1)) if labels[i] in best[i] else 0.0
+                for i in range(len(best))
+            ]
+        )
 
 
 class Perplexity(Metric):
