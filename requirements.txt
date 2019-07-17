@@ -2,12 +2,12 @@ torch
 torchvision
 torchgpipe
 
+
 imgaug
 scikit-image
 opencv-python
 imageio
 Shapely
-albumentations
 
 torchtext
 nltk
@@ -15,7 +15,6 @@ spacy
 
 fastai
 ax-platform
-adabound
 
 six
 numpy
@@ -24,5 +23,6 @@ scikit-learn
 pandas
 
 tb-nightly
+hiddenlayer
 
 future
