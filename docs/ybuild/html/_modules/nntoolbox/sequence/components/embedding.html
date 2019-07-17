@@ -36,10 +36,11 @@
 
 
 <div class="viewcode-block" id="AdditiveContextEmbedding"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.AdditiveContextEmbedding">[docs]</a><span class="k">class</span> <span class="nc">AdditiveContextEmbedding</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The embedding weights are fixed, except for a context vector c shared by all embedding:</span>
+
 <span class="sd">    embedding(x) = w_x + c</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">num_embeddings</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">padding_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">norm_type</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">scale_grad_by_freq</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">_weight</span><span class="o">=</span><span class="kc">None</span>

@@ -55,12 +55,47 @@
 
 <dl class="method">
 <dt id="nntoolbox.sequence.learner.classification.SequenceClassifierLearner.learn">
-<code class="sig-name descname">learn</code><span class="sig-paren">(</span><em class="sig-param">n_epoch</em>, <em class="sig-param">callbacks</em>, <em class="sig-param">metrics</em>, <em class="sig-param">final_metric</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/learner/classification.html#SequenceClassifierLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.learner.classification.SequenceClassifierLearner.learn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">learn</code><span class="sig-paren">(</span><em class="sig-param">n_epoch: int</em>, <em class="sig-param">callbacks: Optional[List[nntoolbox.callbacks.callbacks.Callback]] = None</em>, <em class="sig-param">metrics: Optional[List[nntoolbox.metrics.metrics.Metric]] = None</em>, <em class="sig-param">final_metric: str = 'accuracy'</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/nntoolbox/sequence/learner/classification.html#SequenceClassifierLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.learner.classification.SequenceClassifierLearner.learn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="nntoolbox.sequence.learner.classification.SequenceClassifierLearner.learn_one_iter">
 <code class="sig-name descname">learn_one_iter</code><span class="sig-paren">(</span><em class="sig-param">batch</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/learner/classification.html#SequenceClassifierLearner.learn_one_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.learner.classification.SequenceClassifierLearner.learn_one_iter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.sequence.learner.lm">
+<span id="nntoolbox-sequence-learner-lm-module"></span><h2>nntoolbox.sequence.learner.lm module<a class="headerlink" href="#module-nntoolbox.sequence.learner.lm" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.sequence.learner.lm.LanguageModelLearner">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.learner.lm.</code><code class="sig-name descname">LanguageModelLearner</code><span class="sig-paren">(</span><em class="sig-param">train_iterator: torchtext.data.iterator.Iterator</em>, <em class="sig-param">val_iterator: torchtext.data.iterator.Iterator</em>, <em class="sig-param">model: nntoolbox.sequence.models.lm.LanguageModel</em>, <em class="sig-param">optimizer: torch.optim.optimizer.Optimizer</em>, <em class="sig-param">criterion: torch.nn.modules.module.Module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/learner/lm.html#LanguageModelLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.learner.lm.LanguageModelLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Train a language model (predicting the next word given the previous word)</p>
+<dl class="method">
+<dt id="nntoolbox.sequence.learner.lm.LanguageModelLearner.compute_loss">
+<code class="sig-name descname">compute_loss</code><span class="sig-paren">(</span><em class="sig-param">output: torch.Tensor</em>, <em class="sig-param">target: torch.Tensor</em>, <em class="sig-param">train: bool</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/learner/lm.html#LanguageModelLearner.compute_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.learner.lm.LanguageModelLearner.compute_loss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.sequence.learner.lm.LanguageModelLearner.compute_output">
+<code class="sig-name descname">compute_output</code><span class="sig-paren">(</span><em class="sig-param">text: torch.Tensor</em>, <em class="sig-param">train: bool</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/learner/lm.html#LanguageModelLearner.compute_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.learner.lm.LanguageModelLearner.compute_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.sequence.learner.lm.LanguageModelLearner.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/sequence/learner/lm.html#LanguageModelLearner.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.learner.lm.LanguageModelLearner.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.sequence.learner.lm.LanguageModelLearner.learn">
+<code class="sig-name descname">learn</code><span class="sig-paren">(</span><em class="sig-param">n_epoch: int</em>, <em class="sig-param">callbacks: Optional[List[nntoolbox.callbacks.callbacks.Callback]] = None</em>, <em class="sig-param">metrics: Optional[List[nntoolbox.metrics.metrics.Metric]] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/learner/lm.html#LanguageModelLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.learner.lm.LanguageModelLearner.learn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.sequence.learner.lm.LanguageModelLearner.learn_one_iter">
+<code class="sig-name descname">learn_one_iter</code><span class="sig-paren">(</span><em class="sig-param">example</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/learner/lm.html#LanguageModelLearner.learn_one_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.learner.lm.LanguageModelLearner.learn_one_iter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -167,6 +202,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">nntoolbox.sequence.learner package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.learner.classification">nntoolbox.sequence.learner.classification module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.learner.lm">nntoolbox.sequence.learner.lm module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.learner.seq2seq">nntoolbox.sequence.learner.seq2seq module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.learner">Module contents</a></li>
 </ul>

@@ -20,6 +20,7 @@ Subpackages
    nntoolbox.transforms
    nntoolbox.utils
    nntoolbox.vision
+   nntoolbox.visualization
 
 Submodules
 ----------

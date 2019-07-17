@@ -4,6 +4,14 @@ nntoolbox.metrics package
 Submodules
 ----------
 
+nntoolbox.metrics.classification module
+---------------------------------------
+
+.. automodule:: nntoolbox.metrics.classification
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.metrics.metrics module
 --------------------------------
 
