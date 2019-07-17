@@ -10,7 +10,7 @@ __all__ = [
     'compute_num_batch', 'copy_model', 'save_model',
     'load_model', 'get_device', 'get_trainable_parameters',
     'count_trainable_parameters', 'to_onehot', 'is_nan', 'is_valid',
-    'get_children', 'get_all_submodules'
+    'get_children', 'get_all_submodules', 'find_index'
 ]
 
 
@@ -134,3 +134,8 @@ def get_all_submodules(module: Module) -> List[Module]:
     :return: list of all submodules of a model
     """
     return [submodule for submodule in module.modules() if type(submodule) != nn.Sequential]
+
+
+def find_index(array, value):
+    return np.where(array == value)[0][0]
+

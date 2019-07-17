@@ -6,10 +6,11 @@ import torch
 
 
 class ResNeXtBlock(nn.Module):
-    '''
+    """
     Implement a resnext block:
+
     y = x + sum_i branch_i
-    '''
+    """
     def __init__(self, branches, use_shake_shake):
         super(ResNeXtBlock, self).__init__()
         self._use_shake_shake = use_shake_shake
@@ -28,10 +29,9 @@ class ResNeXtBlock(nn.Module):
 
 
 class _ResidualBlockNoBN(nn.Module):
-    '''
+    """
     Residual Block without the final Batch Normalization layer
-    '''
-
+    """
     def __init__(self, in_channels):
         super(_ResidualBlockNoBN, self).__init__()
         self._main = nn.Sequential(

@@ -12,6 +12,14 @@ nntoolbox.sequence.learner.classification module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.sequence.learner.lm module
+------------------------------------
+
+.. automodule:: nntoolbox.sequence.learner.lm
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.sequence.learner.seq2seq module
 -----------------------------------------
 

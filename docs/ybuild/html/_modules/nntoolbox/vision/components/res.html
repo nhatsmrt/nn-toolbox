@@ -39,10 +39,11 @@
 
 
 <div class="viewcode-block" id="ResNeXtBlock"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.res.ResNeXtBlock">[docs]</a><span class="k">class</span> <span class="nc">ResNeXtBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Implement a resnext block:</span>
+
 <span class="sd">    y = x + sum_i branch_i</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branches</span><span class="p">,</span> <span class="n">use_shake_shake</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_use_shake_shake</span> <span class="o">=</span> <span class="n">use_shake_shake</span>
@@ -61,10 +62,9 @@
 
 
 <span class="k">class</span> <span class="nc">_ResidualBlockNoBN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Residual Block without the final Batch Normalization layer</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">_ResidualBlockNoBN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_main</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>

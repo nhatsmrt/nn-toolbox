@@ -12,6 +12,14 @@ nntoolbox.init.lsuv module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.init.normal module
+----------------------------
+
+.. automodule:: nntoolbox.init.normal
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

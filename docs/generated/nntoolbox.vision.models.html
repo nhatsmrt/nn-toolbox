@@ -52,9 +52,37 @@
 <dl class="method">
 <dt id="nntoolbox.vision.models.classifier.ImageClassifier.predict">
 <code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param">images: torch.Tensor</em>, <em class="sig-param">return_probs: bool = False</em>, <em class="sig-param">tries: int = 5</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#ImageClassifier.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.ImageClassifier.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the classes or class probabilities of a batch of images</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> – images to be predicted</p></li>
+<li><p><strong>return_probs</strong> – whether to return prob or classes</p></li>
+<li><p><strong>tries</strong> – number of tries for augmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.vision.models.classifier.KNNClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.models.classifier.</code><code class="sig-name descname">KNNClassifier</code><span class="sig-paren">(</span><em class="sig-param">database: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">n_neighbors: int = 5</em>, <em class="sig-param">tta_transform=None</em>, <em class="sig-param">tta_beta: float = 0.4</em>, <em class="sig-param">device=device(type='cpu')</em>, <em class="sig-param">threshold=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#KNNClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.KNNClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.vision.models.classifier.KNNClassifier.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param">test_loader: torch.utils.data.dataloader.DataLoader, metrics: Dict[str, nntoolbox.metrics.metrics.Metric], top: int = 5, tries: int = 5</em><span class="sig-paren">)</span> &#x2192; Dict[str, float]<a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#KNNClassifier.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.KNNClassifier.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.vision.models.classifier.KNNClassifier.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param">images: torch.Tensor</em>, <em class="sig-param">top: int = 5</em>, <em class="sig-param">tries: int = 5</em><span class="sig-paren">)</span> &#x2192; Union[numpy.ndarray, Tuple[numpy.ndarray]]<a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#KNNClassifier.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.KNNClassifier.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict the classes or class probabilities of a batch of images
 :param images: images to be predicted
-:param return_probs: whether to return prob or classes
 :param tries: number of tries for augmentation
 :return:</p>
 </dd></dl>
@@ -68,11 +96,19 @@
 <dl class="method">
 <dt id="nntoolbox.vision.models.classifier.EnsembleImageClassifier.predict">
 <code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param">images: torch.Tensor</em>, <em class="sig-param">return_probs: bool = False</em>, <em class="sig-param">tries: int = 5</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#EnsembleImageClassifier.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.EnsembleImageClassifier.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the classes or class probabilities of a batch of images
-:param images: images to be predicted
-:param return_probs: whether to return prob or classes
-:param tries: number of tries for augmentation
-:return:</p>
+<dd><p>Predict the classes or class probabilities of a batch of images</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> – images to be predicted</p></li>
+<li><p><strong>return_probs</strong> – whether to return prob or classes</p></li>
+<li><p><strong>tries</strong> – number of tries for augmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -101,44 +137,36 @@
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.html">nntoolbox package</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="nntoolbox.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.test.html">nntoolbox.test package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a><ul class="current">
-<li class="toctree-l4 current"><a class="reference internal" href="nntoolbox.vision.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l5"><a class="reference internal" href="nntoolbox.vision.components.html">nntoolbox.vision.components package</a></li>
-<li class="toctree-l5"><a class="reference internal" href="nntoolbox.vision.learner.html">nntoolbox.vision.learner package</a></li>
-<li class="toctree-l5"><a class="reference internal" href="nntoolbox.vision.losses.html">nntoolbox.vision.losses package</a></li>
-<li class="toctree-l5 current"><a class="current reference internal" href="#">nntoolbox.vision.models package</a><ul>
-<li class="toctree-l6"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l6"><a class="reference internal" href="#module-nntoolbox.vision.models.classifier">nntoolbox.vision.models.classifier module</a></li>
-<li class="toctree-l6"><a class="reference internal" href="#module-nntoolbox.vision.models">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nntoolbox.vision.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.components.html">nntoolbox.vision.components package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.learner.html">nntoolbox.vision.learner package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.losses.html">nntoolbox.vision.losses package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">nntoolbox.vision.models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.models.classifier">nntoolbox.vision.models.classifier module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.models">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l5"><a class="reference internal" href="nntoolbox.vision.transforms.html">nntoolbox.vision.transforms package</a></li>
-<li class="toctree-l5"><a class="reference internal" href="nntoolbox.vision.utils.html">nntoolbox.vision.utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.transforms.html">nntoolbox.vision.transforms package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.utils.html">nntoolbox.vision.utils package</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="nntoolbox.vision.html#module-nntoolbox.vision">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#module-nntoolbox.learner">nntoolbox.learner module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nntoolbox.html#module-nntoolbox">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.vision.html#module-nntoolbox.vision">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -147,11 +175,9 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="nntoolbox.html">nntoolbox package</a><ul>
   <li><a href="nntoolbox.vision.html">nntoolbox.vision package</a><ul>
       <li>Previous: <a href="nntoolbox.vision.losses.html" title="previous chapter">nntoolbox.vision.losses package</a></li>
       <li>Next: <a href="nntoolbox.vision.transforms.html" title="next chapter">nntoolbox.vision.transforms package</a></li>
-  </ul></li>
   </ul></li>
   </ul></li>
 </ul>

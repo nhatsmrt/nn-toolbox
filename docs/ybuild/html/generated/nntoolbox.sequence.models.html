@@ -148,6 +148,60 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-nntoolbox.sequence.models.lm">
+<span id="nntoolbox-sequence-models-lm-module"></span><h2>nntoolbox.sequence.models.lm module<a class="headerlink" href="#module-nntoolbox.sequence.models.lm" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.sequence.models.lm.LanguageModel">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.models.lm.</code><code class="sig-name descname">LanguageModel</code><span class="sig-paren">(</span><em class="sig-param">encoder: torch.nn.modules.module.Module</em>, <em class="sig-param">head: torch.nn.modules.module.Module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>General Language Model (UNTESTED):</p>
+<p>p(x_t|x_{&lt;t}) = prod_{t’ &lt; t} p(x_{t’} | x_{&lt;t’})</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoder</strong> – encoding the hidden states of words up to now</p></li>
+<li><p><strong>head</strong> – compute score for each word given the input</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="nntoolbox.sequence.models.lm.LanguageModel.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – (seq_length, batch_size, input_dim)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(seq_length, batch_size, vocab_size)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.sequence.models.lm.LanguageModel.get_encoder">
+<code class="sig-name descname">get_encoder</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; torch.nn.modules.module.Module<a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel.get_encoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel.get_encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the encoder for downstream task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>encoder</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.sequence.models.lm.LanguageModel.replace_head">
+<code class="sig-name descname">replace_head</code><span class="sig-paren">(</span><em class="sig-param">head: torch.nn.modules.module.Module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel.replace_head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel.replace_head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the head (e.g for fine-tuning on another domain)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>head</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-nntoolbox.sequence.models">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.sequence.models" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -189,6 +243,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.models.decoder">nntoolbox.sequence.models.decoder module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.models.encoder">nntoolbox.sequence.models.encoder module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.models.lm">nntoolbox.sequence.models.lm module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.models">Module contents</a></li>
 </ul>
 </li>

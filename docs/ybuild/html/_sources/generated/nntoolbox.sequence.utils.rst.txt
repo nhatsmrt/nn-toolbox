@@ -4,6 +4,14 @@ nntoolbox.sequence.utils package
 Submodules
 ----------
 
+nntoolbox.sequence.utils.data module
+------------------------------------
+
+.. automodule:: nntoolbox.sequence.utils.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.sequence.utils.utils module
 -------------------------------------
 
