@@ -15,9 +15,9 @@ __all__ = ['ImageClassifier', 'EnsembleImageClassifier']
 
 
 class ImageClassifier:
-    '''
+    """
     Abstraction for an image classifier. Support user defined test time augmentation
-    '''
+    """
     def __init__(self, model: Module, tta_transform=None, tta_beta: float=0.4, device=get_device()):
         self._model = model.to(device)
         self._model.eval()
@@ -27,13 +27,14 @@ class ImageClassifier:
         self._softmax = nn.Softmax(dim=1)
 
     def predict(self, images: Tensor, return_probs: bool=False, tries: int=5) -> ndarray:
-        '''
+        """
         Predict the classes or class probabilities of a batch of images
+
         :param images: images to be predicted
         :param return_probs: whether to return prob or classes
         :param tries: number of tries for augmentation
         :return:
-        '''
+        """
         if self._tta_transform is not None:
             probs = [
                 self._softmax(self._model(images.to(self._device))).cpu().detach().numpy() * self._tta_beta
