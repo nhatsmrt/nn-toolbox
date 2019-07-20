@@ -48,6 +48,26 @@ model = nn.Sequential(
 from typing import List
 
 
+def unfreeze(module: Sequential, optimizer: Optimizer, unfreeze_from: int):
+    """
+    Unfreeze a model from ind
+
+    :param module:
+    :param optimizer
+    :param ind:
+    :return:
+    """
+    for ind in range(len(module)):
+        submodule = module._modules[str(ind)]
+        if ind < unfreeze_from:
+            for param in submodule.parameters():
+                param.requires_grad = False
+        else:
+            for param in submodule.parameters():
+                param.requires_grad = True
+            optimizer.add_param_group({'params': module.parameters()})
+
+
 class GradualUnfreezing(Callback):
     def __init__(self, freeze_inds: List[int], unfreeze_every: int):
         self._freeze_inds = freeze_inds
@@ -61,17 +81,18 @@ class GradualUnfreezing(Callback):
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         if logs['epoch'] % self._unfreeze_every == 0 and logs['epoch'] < len(self._freeze_inds) * self._unfreeze_every:
-            freeze_to = self._freeze_inds[logs['epoch'] // self._unfreeze_every]
-            for ind in range(len(self.learner._model._modules['0'])):
-                module = self.learner._model._modules['0']._modules[str(ind)]
-                if ind < freeze_to:
-                    for param in module.parameters():
-                        param.requires_grad = False
-                else:
-                    for param in module.parameters():
-                        param.requires_grad = True
-                    self.learner._optimizer.add_param_group({'params': module.parameters()})
-            print("Unfreeze feature after " + str(freeze_to))
+            unfreeze_from = self._freeze_inds[logs['epoch'] // self._unfreeze_every]
+            # for ind in range(len(self.learner._model._modules['0'])):
+            #     module = self.learner._model._modules['0']._modules[str(ind)]
+            #     if ind < unfreeze_from:
+            #         for param in module.parameters():
+            #             param.requires_grad = False
+            #     else:
+            #         for param in module.parameters():
+            #             param.requires_grad = True
+            #         self.learner._optimizer.add_param_group({'params': module.parameters()})
+            unfreeze(self.learner._model._modules['0'], self.learner._optimizer, unfreeze_from)
+            print("Unfreeze feature after " + str(unfreeze_from))
         return False
 
 
