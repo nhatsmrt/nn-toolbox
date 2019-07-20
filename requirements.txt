@@ -12,6 +12,7 @@ Shapely
 torchtext
 nltk
 spacy
+pytorch-transformers
 
 fastai
 ax-platform

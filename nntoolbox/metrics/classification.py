@@ -72,7 +72,9 @@ class MAPAtK(Metric):
         else:
             labels = logs["labels"]
 
-        return self.map_at_k(logs["best"], labels)
+        map = self.map_at_k(logs["best"], labels)
+        self._best = max(map, self._best)
+        return map
 
     def map_at_k(self, best, labels) -> float:
         return np.mean(
