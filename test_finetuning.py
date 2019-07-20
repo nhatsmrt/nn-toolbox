@@ -48,7 +48,7 @@ model = nn.Sequential(
 from typing import List
 
 
-def unfreeze(module: Sequential, optimizer: Optimizer, unfreeze_from: int):
+def unfreeze(module: Sequential, optimizer: Optimizer, unfreeze_from: int, unfreeze_to: int):
     """
     Unfreeze a model from ind
 
@@ -62,10 +62,10 @@ def unfreeze(module: Sequential, optimizer: Optimizer, unfreeze_from: int):
         if ind < unfreeze_from:
             for param in submodule.parameters():
                 param.requires_grad = False
-        else:
+        elif ind < unfreeze_to:
             for param in submodule.parameters():
                 param.requires_grad = True
-            optimizer.add_param_group({'params': module.parameters()})
+            optimizer.add_param_group({'params': submodule.parameters()})
 
 
 class GradualUnfreezing(Callback):
@@ -74,14 +74,26 @@ class GradualUnfreezing(Callback):
         self._unfreeze_every = unfreeze_every
 
     # def on_train_begin(self):
+    #     self._freeze_inds = [len(self.learner._model._modules['0'])] + self._freeze_inds
+    #
+    #     for i in range(1, len(self._freeze_inds)):
+    #         unfreeze_from = self._freeze_inds[i]
+    #         unfreeze_to = self._freeze_inds[i - 1]
+    #
+    #         unfreeze(self.learner._model._modules['0'], self.learner._optimizer, unfreeze_from, unfreeze_to)
+    #         print("Unfreeze feature after " + str(unfreeze_from))
+
     #     for ind in range(len(self.learner._model._modules['0'])):
     #         for param in self.learner._model._modules['0']._modules[str(ind)].parameters():
     #             param.requires_grad = False
     #     print("Unfreeze feature after " + str(freeze_to))
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
-        if logs['epoch'] % self._unfreeze_every == 0 and logs['epoch'] < len(self._freeze_inds) * self._unfreeze_every:
+        if logs['epoch'] % self._unfreeze_every == 0 \
+                and logs['epoch'] > 0 \
+                and logs['epoch'] // self._unfreeze_every < len(self._freeze_inds):
             unfreeze_from = self._freeze_inds[logs['epoch'] // self._unfreeze_every]
+            unfreeze_to = self._freeze_inds[logs['epoch'] // self._unfreeze_every - 1]
             # for ind in range(len(self.learner._model._modules['0'])):
             #     module = self.learner._model._modules['0']._modules[str(ind)]
             #     if ind < unfreeze_from:
@@ -91,12 +103,12 @@ class GradualUnfreezing(Callback):
             #         for param in module.parameters():
             #             param.requires_grad = True
             #         self.learner._optimizer.add_param_group({'params': module.parameters()})
-            unfreeze(self.learner._model._modules['0'], self.learner._optimizer, unfreeze_from)
+            unfreeze(self.learner._model._modules['0'], self.learner._optimizer, unfreeze_from, unfreeze_to)
             print("Unfreeze feature after " + str(unfreeze_from))
         return False
 
 
-unfreeze = GradualUnfreezing([6, 4, 2, 0], 10)
+unfreezer = GradualUnfreezing([6, 4, 2, 0], 10)
 
 
 
@@ -176,7 +188,7 @@ callbacks = [
     ToDeviceCallback(),
     # MixedPrecisionV2(),
     # InputProgressiveResizing(initial_size=80, max_size=160, upscale_every=10, upscale_factor=math.sqrt(2)),
-    unfreeze,
+    # unfreezer,
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.10, T_max=335)),
