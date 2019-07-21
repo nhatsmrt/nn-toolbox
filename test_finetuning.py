@@ -44,7 +44,7 @@ model = nn.Sequential(
 )
 
 # unfreezer = GradualUnfreezing([6, 4, 2, 0], 7)
-tuner = FineTuning(7)
+tuner = FineTuning(7, [7, 6])
 
 # data = CIFAR10('data/', train=True, download=True, transform=ToTensor())
 # train_size = int(0.8 * len(data))
