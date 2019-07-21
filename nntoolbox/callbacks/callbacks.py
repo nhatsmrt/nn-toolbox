@@ -101,8 +101,13 @@ class CallbackHandler:
 
         if callbacks is not None:
             for callback in callbacks:
-                callback.learner = learner
-                callback.n_epoch = n_epoch
+                if isinstance(callback, GroupCallback):
+                    for subcb in callback._callbacks:
+                        subcb.learner = learner
+                        subcb.n_epoch = n_epoch
+                else:
+                    callback.learner = learner
+                    callback.n_epoch = n_epoch
 
         self._callbacks = callbacks
         self._metrics = metrics
