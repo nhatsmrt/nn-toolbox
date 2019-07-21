@@ -54,7 +54,8 @@ def unfreeze(module: Sequential, optimizer: Optimizer, unfreeze_from: int, unfre
 
     :param module:
     :param optimizer
-    :param ind:
+    :param unfreeze_from:
+    :param unfreeze_to:
     :return:
     """
     for ind in range(len(module)):
