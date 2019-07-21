@@ -1,7 +1,7 @@
 from .callbacks import Callback, GroupCallback
 from torch.nn import BatchNorm1d, BatchNorm2d, BatchNorm3d, Module, Sequential
 from torch.optim import Optimizer
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 
 __all__ = ['FreezeBN', 'GradualUnfreezing', 'FineTuning']
@@ -51,12 +51,15 @@ class GradualUnfreezing(Callback):
     Gradually unfreezing pretrained layers (UNTESTED)
     """
 
-    def __init__(self, freeze_inds: List[int], unfreeze_every: int):
+    def __init__(self, unfreeze_every: int, freeze_inds: Optional[List[int]]=None):
         self._freeze_inds = freeze_inds
         self._unfreeze_every = unfreeze_every
 
     def on_train_begin(self):
-        self._freeze_inds = [len(self.learner._model)] + self._freeze_inds
+        n_layer = len(self.learner._model._modules['0'])
+        if self._freeze_inds is None:
+            self._freeze_inds = [n_layer - 1 - i for i in range(n_layer)]
+        self._freeze_inds = [n_layer] + self._freeze_inds
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         if logs['epoch'] % self._unfreeze_every == 0 \
@@ -73,10 +76,10 @@ class FineTuning(GroupCallback):
     """
     Combining freezing batch norm and gradual unfreezing of layer
     """
-    def __init__(self, freeze_inds: List[int], unfreeze_every: int):
+    def __init__(self, unfreeze_every: int, freeze_inds: Optional[List[int]]=None):
         super(FineTuning, self).__init__(
             [
-                GradualUnfreezing(freeze_inds, unfreeze_every),
+                GradualUnfreezing(unfreeze_every, freeze_inds),
                 FreezeBN()
             ]
         )
