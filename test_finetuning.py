@@ -43,7 +43,7 @@ model = nn.Sequential(
     )
 )
 
-unfreezer = GradualUnfreezing([6, 4, 2, 0], 5)
+unfreezer = GradualUnfreezing([6, 4, 2, 0], 7)
 
 # data = CIFAR10('data/', train=True, download=True, transform=ToTensor())
 # train_size = int(0.8 * len(data))

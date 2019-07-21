@@ -1,10 +1,10 @@
-from .callbacks import Callback
+from .callbacks import Callback, GroupCallback
 from torch.nn import BatchNorm1d, BatchNorm2d, BatchNorm3d, Module, Sequential
 from torch.optim import Optimizer
 from typing import List, Dict, Any
 
 
-__all__ = ['FreezeBN', 'GradualUnfreezing']
+__all__ = ['FreezeBN', 'GradualUnfreezing', 'FineTuning']
 BN_TYPE = [BatchNorm1d, BatchNorm2d, BatchNorm3d]
 
 
@@ -67,3 +67,16 @@ class GradualUnfreezing(Callback):
             unfreeze(self.learner._model._modules['0'], self.learner._optimizer, unfreeze_from, unfreeze_to)
             print("Unfreeze feature after " + str(unfreeze_from))
         return False
+
+
+class FineTuning(GroupCallback):
+    """
+    Combining freezing batch norm and gradual unfreezing of layer
+    """
+    def __init__(self, freeze_inds: List[int], unfreeze_every: int):
+        super(FineTuning, self).__init__(
+            [
+                GradualUnfreezing(freeze_inds, unfreeze_every),
+                FreezeBN()
+            ]
+        )
