@@ -22,7 +22,7 @@ def freeze_bn(module: Module):
             if isinstance(submodule, bn_type):
                 if not next(submodule.parameters()).requires_grad:
                     submodule.eval()
-        freeze_bn(submodule)
+        # freeze_bn(submodule)
 
 
 def unfreeze(module: Sequential, optimizer: Optimizer, unfreeze_from: int, unfreeze_to: int):
