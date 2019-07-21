@@ -47,9 +47,16 @@ def unfreeze(module: Sequential, optimizer: Optimizer, unfreeze_from: int, unfre
 
 
 class GradualUnfreezing(Callback):
+    """
+    Gradually unfreezing pretrained layers (UNTESTED)
+    """
+
     def __init__(self, freeze_inds: List[int], unfreeze_every: int):
         self._freeze_inds = freeze_inds
         self._unfreeze_every = unfreeze_every
+
+    def on_train_begin(self):
+        self._freeze_inds = [len(self.learner._model)] + self._freeze_inds
 
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         if logs['epoch'] % self._unfreeze_every == 0 \
