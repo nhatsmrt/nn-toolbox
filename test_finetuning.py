@@ -24,7 +24,7 @@ import math
 
 torch.backends.cudnn.benchmark=True
 
-pretrained_model = resnet18()
+pretrained_model = resnet18(True)
 
 # print(modules)
 from nntoolbox.utils import cut_model, get_trainable_parameters
