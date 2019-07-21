@@ -43,7 +43,8 @@ model = nn.Sequential(
     )
 )
 
-unfreezer = GradualUnfreezing([6, 4, 2, 0], 7)
+# unfreezer = GradualUnfreezing([6, 4, 2, 0], 7)
+tuner = FineTuning([6, 4, 2, 0], 7)
 
 # data = CIFAR10('data/', train=True, download=True, transform=ToTensor())
 # train_size = int(0.8 * len(data))
@@ -121,8 +122,9 @@ callbacks = [
     ToDeviceCallback(),
     # MixedPrecisionV2(),
     # InputProgressiveResizing(initial_size=80, max_size=160, upscale_every=10, upscale_factor=math.sqrt(2)),
-    unfreezer,
+    # unfreezer,
     # FreezeBN(),
+    tuner,
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
     LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.10, T_max=335)),
