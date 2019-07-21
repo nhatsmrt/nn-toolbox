@@ -51,36 +51,12 @@ class GradualUnfreezing(Callback):
         self._freeze_inds = freeze_inds
         self._unfreeze_every = unfreeze_every
 
-    # def on_train_begin(self):
-    #     self._freeze_inds = [len(self.learner._model._modules['0'])] + self._freeze_inds
-    #
-    #     for i in range(1, len(self._freeze_inds)):
-    #         unfreeze_from = self._freeze_inds[i]
-    #         unfreeze_to = self._freeze_inds[i - 1]
-    #
-    #         unfreeze(self.learner._model._modules['0'], self.learner._optimizer, unfreeze_from, unfreeze_to)
-    #         print("Unfreeze feature after " + str(unfreeze_from))
-
-    #     for ind in range(len(self.learner._model._modules['0'])):
-    #         for param in self.learner._model._modules['0']._modules[str(ind)].parameters():
-    #             param.requires_grad = False
-    #     print("Unfreeze feature after " + str(freeze_to))
-
     def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
         if logs['epoch'] % self._unfreeze_every == 0 \
                 and logs['epoch'] > 0 \
                 and logs['epoch'] // self._unfreeze_every < len(self._freeze_inds):
             unfreeze_from = self._freeze_inds[logs['epoch'] // self._unfreeze_every]
             unfreeze_to = self._freeze_inds[logs['epoch'] // self._unfreeze_every - 1]
-            # for ind in range(len(self.learner._model._modules['0'])):
-            #     module = self.learner._model._modules['0']._modules[str(ind)]
-            #     if ind < unfreeze_from:
-            #         for param in module.parameters():
-            #             param.requires_grad = False
-            #     else:
-            #         for param in module.parameters():
-            #             param.requires_grad = True
-            #         self.learner._optimizer.add_param_group({'params': module.parameters()})
             unfreeze(self.learner._model._modules['0'], self.learner._optimizer, unfreeze_from, unfreeze_to)
             print("Unfreeze feature after " + str(unfreeze_from))
         return False
