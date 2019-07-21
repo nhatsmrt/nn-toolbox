@@ -41,6 +41,7 @@ class SupervisedImageLearner(Learner):
         for e in range(n_epoch):
             print("Epoch " + str(e))
             self._model.train()
+            self._cb_handler.on_epoch_begin()
 
             for images, labels in self._train_data:
                 self.learn_one_iter(images, labels)
