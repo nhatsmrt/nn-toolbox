@@ -1,15 +1,20 @@
 import torch
-from torch import nn
+from torch import nn, Tensor
 from torch.nn import functional as F
 import numpy as np
+
+
+__all__ = ['ContrastiveLoss', 'TripletSoftMarginLoss', 'AngularLoss', 'NPairLoss', 'NPairAngular']
 
 
 class ContrastiveLoss(nn.Module):
     """
     Contrastive loss function.
-    Based on: https://github.com/delijati/pytorch-siamese/blob/master/contrastive.py#L20
+    
+    Based on: 
+    
+    https://github.com/delijati/pytorch-siamese/blob/master/contrastive.py#L20
     """
-
     def __init__(self, margin=1.0):
         super(ContrastiveLoss, self).__init__()
         self.margin = margin
@@ -25,8 +30,9 @@ class ContrastiveLoss(nn.Module):
         assert x1_type.dim() == 2
         assert y_type.dim() == 1
 
-    def forward(self, x0, x1, y):
+    def forward(self, x0: Tensor, x1: Tensor, y: Tensor) -> Tensor:
         self.check_type_forward((x0, x1, y))
+        y = y.to(x0.dtype)
 
         # euclidian distance
         dist = self.dist(x0, x1, squared=False)
@@ -37,7 +43,6 @@ class ContrastiveLoss(nn.Module):
         loss = y * dist_sq + (1 - y) * cl_dist.pow(2)
         loss = torch.sum(loss) / 2.0 / x0.shape[0]
         return loss
-
 
     def dist(self, x_0, x_1, eps = 1e-8, squared = False):
         interaction = x_0.mm(torch.t(x_1))
@@ -82,12 +87,10 @@ class NPairLoss(nn.Module):
         return nn.CrossEntropyLoss()(interaction, labels) + l2_reg
 
 
-
-
 class AngularLoss(nn.Module):
-    '''
+    """
     Based on https://github.com/leeesangwon/PyTorch-Image-Retrieval/blob/public/losses.py
-    '''
+    """
     def __init__(self, alpha = 45):
         super(AngularLoss, self).__init__()
         self._alpha = torch.from_numpy(np.deg2rad([alpha])).float()
