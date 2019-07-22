@@ -9,7 +9,7 @@ __all__ = ['DropConnect']
 
 class DropConnect(nn.Module):
     """
-    Implementation based on fastai's WeightDropout (from course 2 v3 notebook) (UNTESTED)
+    Implementation based on fastai's WeightDropout (from course 2 v3 notebook)
 
     Reference:
 

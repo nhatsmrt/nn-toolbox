@@ -16,13 +16,13 @@ __all__ = ['LRFinder']
 
 
 class LRFinder:
-    '''
+    """
     Leslie Smith's learning rate range finder.
 
     Adapt from https://sgugger.github.io/how-do-you-find-a-good-learning-rate.html
 
     https://arxiv.org/pdf/1506.01186.pdf
-    '''
+    """
     def __init__(
             self, model: Module, train_data: DataLoader,
             criterion: Module, optimizer: Callable[..., Optimizer], device: device
@@ -35,10 +35,11 @@ class LRFinder:
 
     def find_lr(
             self, lr0: float=1e-7, lr_final: float=10.0, warmup: int=15,
-            beta: float=0.98, verbose: bool=True, display: bool=True, callbacks: Optional[List['Callback']]=None
+            beta: float=0.67, verbose: bool=True, display: bool=True, callbacks: Optional[List['Callback']]=None
     ) -> Tuple[float, float]:
-        '''
+        """
         Start from a very low initial learning rate, then gradually increases it up to a big lr until loss blows up
+
         :param lr0: intitial learning rate
         :param lr_final: final (max) learning rate
         :param warmup: how many iterations to warmup
@@ -47,8 +48,9 @@ class LRFinder:
         :param display: whether to graph
         :param callbacks: an optional list of callbacks to process input
         :return: a base_lr and the best lr (base_lr = best_lr / 4)
-        '''
+        """
         assert warmup > 0
+
         model_state_dict = deepcopy(self.model.state_dict())
         lr = lr0
         num = len(self.train_data) - 1
@@ -56,14 +58,14 @@ class LRFinder:
         self.optimizer.param_groups[0]['lr'] = lr
 
         avg_loss = 0.0
-        smoothed_loss = 0.0
+        # smoothed_loss = 0.0
         iter = 0
         losses = []
         best_loss = 0.0
         log_lrs = []
-        changes = []
+
+        # changes = []
         for inputs, labels in self.train_data:
-            iter += 1
             if callbacks is None:
                 outputs = self.model(inputs.to(self._device))
                 loss = self.criterion(outputs, labels.to(self._device))
@@ -80,15 +82,19 @@ class LRFinder:
                     loss = callback.after_losses({"loss": loss}, True)["loss"]
 
             if not is_nan(loss):
-                avg_loss = beta * avg_loss + (1 - beta) * loss.cpu().item()
-                changes.append(avg_loss / (1 + beta ** iter) - smoothed_loss)
+                if iter == 0:
+                    avg_loss = loss.cpu().item()
+                else:
+                    avg_loss = beta * avg_loss + (1 - beta) * loss.cpu().item()
                 smoothed_loss = avg_loss / (1 + beta ** iter)
+
+                # changes.append(avg_loss / (1 + beta ** iter) - smoothed_loss)
                 losses.append(smoothed_loss)
                 log_lrs.append(log10(lr))
 
                 if verbose:
                     print("LR: " + str(lr))
-                    print("Loss Change: " + str(changes[-1]))
+                    # print("Loss Change: " + str(changes[-1]))
                     print("Loss: " + str(loss.cpu().item()))
                     print("Smoothed loss: " + str(smoothed_loss))
                     print()
@@ -105,6 +111,7 @@ class LRFinder:
                 self.optimizer.step()
 
                 lr *= mult
+                iter += 1
                 self.optimizer.param_groups[0]['lr'] = lr
             else:
                 print("Loss becomes NaN")
@@ -112,11 +119,18 @@ class LRFinder:
 
         self.model.load_state_dict(model_state_dict)
         # logs, losses = find_lr()
+        log_lrs, losses = log_lrs[5:-1], losses[5:-1]
         if display:
-            plt.plot(log_lrs, losses)
+            plt.plot(np.power(10, log_lrs), losses)
+            plt.title('LR Range Plot')
+            plt.xlabel('Learning rate (log scale)')
+            plt.ylabel('Losses')
+            plt.show()
 
-        best_ind = np.argmin(changes)
+        # best_ind = np.argmin(changes)
+        best_ind = np.argmin(losses)
         max_lr = 10 ** log_lrs[best_ind]
-        print("Largest Loss Decrease: " + str(changes[best_ind]))
+        # print("Largest Loss Decrease: " + str(changes[best_ind]))
+        print("Minimum (smoothed) loss: " + str(losses[best_ind]))
         print("Corresponding LR: " + str(max_lr))
         return max_lr / 4, max_lr
