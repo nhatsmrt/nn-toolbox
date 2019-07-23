@@ -2,9 +2,39 @@ import torch
 from torch import nn, Tensor
 from torch.nn import functional as F
 import numpy as np
+from ...components import MLP
 
 
-__all__ = ['ContrastiveLoss', 'TripletSoftMarginLoss', 'AngularLoss', 'NPairLoss', 'NPairAngular']
+__all__ = [
+    'VerificationLoss', 'ContrastiveLoss', 'TripletSoftMarginLoss',
+    'AngularLoss', 'NPairLoss', 'NPairAngular'
+]
+
+
+class VerificationLoss(nn.Module):
+    """
+    Verify if two embeddings belong to the same class
+    """
+
+    def __init__(self, embedding_dim: int):
+        super(VerificationLoss, self).__init__()
+        self.embedding_dim = embedding_dim
+        self.verifier = MLP(in_features=embedding_dim, out_features=1, hidden_layer_sizes=[embedding_dim // 2])
+        self.loss = nn.BCEWithLogitsLoss()
+
+    def forward(self, x0: Tensor, x1: Tensor, y: Tensor) -> Tensor:
+        assert x0.shape[-1] == x1.shape[-1] == self.embedding_dim
+        assert len(x0) == len(x1) == len(y)
+
+        y = y.float()
+        if len(x0.shape) == len(y.shape) + 1:
+            y = y.unsqueeze(-1)
+
+        score = self.verifier(torch.abs(x0 - x1))
+        return self.loss(score, y)
+
+    def get_verifier(self):
+        return self.verifier
 
 
 class ContrastiveLoss(nn.Module):

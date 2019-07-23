@@ -1,4 +1,3 @@
-import torch
 from torch.optim import Optimizer
 from torch.nn import Module
 from torch.utils.data import DataLoader
@@ -58,13 +57,11 @@ class LRFinder:
         self.optimizer.param_groups[0]['lr'] = lr
 
         avg_loss = 0.0
-        # smoothed_loss = 0.0
         iter = 0
         losses = []
         best_loss = 0.0
         log_lrs = []
 
-        # changes = []
         for inputs, labels in self.train_data:
             if callbacks is None:
                 outputs = self.model(inputs.to(self._device))
@@ -88,13 +85,11 @@ class LRFinder:
                     avg_loss = beta * avg_loss + (1 - beta) * loss.cpu().item()
                 smoothed_loss = avg_loss / (1 + beta ** iter)
 
-                # changes.append(avg_loss / (1 + beta ** iter) - smoothed_loss)
                 losses.append(smoothed_loss)
                 log_lrs.append(log10(lr))
 
                 if verbose:
                     print("LR: " + str(lr))
-                    # print("Loss Change: " + str(changes[-1]))
                     print("Loss: " + str(loss.cpu().item()))
                     print("Smoothed loss: " + str(smoothed_loss))
                     print()
@@ -102,7 +97,6 @@ class LRFinder:
                 if iter > warmup and smoothed_loss > best_loss * 4:
                     print("Loss blows up")
                     break
-                    # return log_lrs, losses
                 if smoothed_loss < best_loss or iter == warmup:
                     best_loss = smoothed_loss
 
@@ -118,7 +112,6 @@ class LRFinder:
                 break
 
         self.model.load_state_dict(model_state_dict)
-        # logs, losses = find_lr()
         log_lrs, losses = log_lrs[5:-1], losses[5:-1]
         if display:
             plt.plot(np.power(10, log_lrs), losses)
@@ -127,10 +120,8 @@ class LRFinder:
             plt.ylabel('Losses')
             plt.show()
 
-        # best_ind = np.argmin(changes)
         best_ind = np.argmin(losses)
         max_lr = 10 ** log_lrs[best_ind]
-        # print("Largest Loss Decrease: " + str(changes[best_ind]))
         print("Minimum (smoothed) loss: " + str(losses[best_ind]))
         print("Corresponding LR: " + str(max_lr))
         return max_lr / 4, max_lr
