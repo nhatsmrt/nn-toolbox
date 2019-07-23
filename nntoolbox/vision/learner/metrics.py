@@ -1,10 +1,9 @@
-import torch
 from torch import Tensor
 from nntoolbox.learner import Learner
 from ...callbacks import Callback, CallbackHandler
 from ...metrics import Metric
 from ..utils import PairSelector
-from typing import Tuple, List, Dict
+from typing import List, Dict
 
 
 __all__ = ['SiameseLearner']
@@ -42,7 +41,7 @@ class SiameseLearner(Learner):
         images, labels = data
         data = self._cb_handler.on_batch_begin({"inputs": images, "labels": labels}, True)
         images, labels = data["inputs"], data["labels"]
-        embeddings = self._cb_handler.after_outputs({"embeddings": self._model(images)}, True)["embeddings"]
+        embeddings = self.compute_embeddings(images, True)
         embeddings_1, embeddings_2, labels = self._selector.return_pairs(embeddings, labels)
 
         loss = self.compute_loss(embeddings_1, embeddings_2, labels, True)
@@ -54,6 +53,9 @@ class SiameseLearner(Learner):
                 self._optimizer.zero_grad()
 
             self._cb_handler.on_batch_end({"loss": loss})
+
+    def compute_embeddings(self, images: Tensor, train: bool) -> Tensor:
+        return self._cb_handler.after_outputs({"embeddings": self._model(images)}, train)["embeddings"]
 
     def compute_loss(self, embeddings_1, embeddings_2, labels, train: bool) -> Tensor:
         return self._cb_handler.after_losses(
