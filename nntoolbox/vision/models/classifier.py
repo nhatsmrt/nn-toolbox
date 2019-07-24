@@ -76,7 +76,8 @@ class ImageClassifier:
 class KNNClassifier:
     def __init__(
             self, database: DataLoader, model: Module, n_neighbors: int=5,
-            tta_transform=None, tta_beta: float=0.4, device=get_device(), threshold=0.0
+            tta_transform=None, tta_beta: float=0.4,
+            device=get_device(), threshold=0.0
     ):
         self._knn = KNeighborsClassifier(
             n_neighbors=n_neighbors, weights='distance'

@@ -70,6 +70,7 @@ class ContrastiveLoss(nn.Module):
 
         mdist = self.margin - dist
         cl_dist = torch.clamp(mdist, min=0.0)
+        # print(dist)
         loss = y * dist_sq + (1 - y) * cl_dist.pow(2)
         loss = torch.sum(loss) / 2.0 / x0.shape[0]
         return loss
@@ -82,7 +83,7 @@ class ContrastiveLoss(nn.Module):
         if squared:
             return dist_squared
         else:
-            return torch.sqrt(dist_squared + eps)
+            return torch.sqrt(torch.clamp(dist_squared, 0.0) + eps)
 
 
 class TripletSoftMarginLoss(nn.Module):
@@ -125,7 +126,6 @@ class AngularLoss(nn.Module):
         super(AngularLoss, self).__init__()
         self._alpha = torch.from_numpy(np.deg2rad([alpha])).float()
 
-
     def forward(self, anchors, positives):
         if anchors.is_cuda:
             self._alpha = self._alpha.cuda()
@@ -159,6 +159,9 @@ class AngularLoss(nn.Module):
 
 
 class NPairAngular(nn.Module):
+    """
+    Combining N-Pair loss and Angular loss
+    """
     def __init__(self, alpha = 45, reg_lambda = 0.002, angular_lambda = 2):
         super(NPairAngular, self).__init__()
         self._angular_loss = AngularLoss(alpha)

@@ -45,7 +45,7 @@ class SiameseLearner(Learner):
         embeddings_1, embeddings_2, labels = self._selector.return_pairs(embeddings, labels)
 
         loss = self.compute_loss(embeddings_1, embeddings_2, labels, True)
-        print(loss)
+        # print(loss)
         loss.backward()
         if self._cb_handler.after_backward():
             self._optimizer.step()
