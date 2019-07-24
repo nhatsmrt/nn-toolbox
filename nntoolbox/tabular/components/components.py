@@ -6,7 +6,9 @@ import math
 class CrossLayer(nn.Module):
     """
     Implement a (residual) crossing layer for Deep and Cross Net (DCN):
+
     x_{l+1} = x_0 x^T_l w + b + x_l
+
     Based on: https://arxiv.org/pdf/1708.05123.pdf
     """
     def __init__(self, n_hidden, bias=True, return_first=False):
