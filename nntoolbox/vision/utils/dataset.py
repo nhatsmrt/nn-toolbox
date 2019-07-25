@@ -6,9 +6,59 @@ from torchvision.transforms import ToTensor
 from PIL import Image
 from warnings import warn
 from ...utils import download_from_url
+import os
 
 
-__all__ = ['FaceScrub']
+__all__ = ['FaceScrub', 'download_facescrub']
+
+
+def download_facescrub(root: str, data_path: str, max_size: int=128):
+    df_male = pd.read_csv(root + "/facescrub_actors.txt", sep='\t')
+    n_image = 0
+    n_ppl = 0
+
+    for i in range(len(df_male)):
+        try:
+            url = df_male['url'][i]
+            name = df_male['name'][i]
+
+            folder = data_path + "/" + name
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+                n_ppl += 1
+
+            path = folder + "/face_" + str(n_image) + url[:-4]
+            download_from_url(url, path, max_size)
+            # Image.open(path)
+        except:
+            warn("Image corrupted or URL error. Skip to next image.")
+        else:
+            n_image += 1
+
+            if n_image >= 1: break
+
+    df_female = pd.read_csv(root + "/facescrub_actresses.txt", sep='\t')
+    for i in range(len(df_female)):
+        try:
+            url = df_female['url'][i]
+            name = df_female['name'][i]
+
+            folder = data_path + "/" + name
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+                n_ppl += 1
+
+            path = folder + "/face_" + str(n_image) + url[:-4]
+            download_from_url(url, path, max_size)
+            # Image.open(path)
+        except:
+            warn("Image corrupted or URL error. Skip to next image.")
+        else:
+            n_image += 1
+
+            if n_image >= 2: break
+
+    print("Finish downloading " + str(n_image) + " images of " + str(n_ppl) + " people.")
 
 
 class FaceScrub(Dataset):
