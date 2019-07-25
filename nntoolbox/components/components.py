@@ -3,6 +3,9 @@ from torch import nn, Tensor
 from typing import Sequence, Callable
 
 
+__all__ = ['ResidualLinearBlock', 'LinearlyAugmentedFF', 'HighwayLayer', 'SquareUnitLinear', 'MLP']
+
+
 class ResidualLinearBlock(nn.Module):
     """
     A two-layer linear block with residual connection:
@@ -77,7 +80,28 @@ class HighwayLayer(nn.Module):
         return gate * self._main(input) + (1 - gate) * input
 
 
+class SquareUnitLinear(nn.Linear):
+    """
+    Augment input with square units:
+
+    g(x) = W concat([x, x^2]) + b
+
+    Reference:
+
+    Flake, Gary. "Square Unit Augmented, Radially Extended, Multilayer Perceptrons". Neural Network: Tricks of the Trade
+    """
+    def __init__(self, in_features, out_features, bias: bool=True):
+        super(SquareUnitLinear, self).__init__(in_features=in_features * 2, out_features=out_features, bias=bias)
+
+    def forward(self, input):
+        input = torch.cat([input, input * input], dim=-1)
+        return super(SquareUnitLinear, self).forward(input)
+
+
 class MLP(nn.Sequential):
+    """
+    Implement a generic multilayer perceptron
+    """
     def __init__(
             self, in_features: int, out_features: int, hidden_layer_sizes: Sequence[int]=(512,),
             activation: Callable[..., Tensor]=nn.ReLU, bn_final: bool=False,

@@ -14,11 +14,16 @@ def download_from_url(url: str, filename: str, max_size: int=50):
     :return:
     """
     max_size *= 1024
-    req = requests.get(url)
+    print(url)
+    req = requests.get(url, stream=True)
+    print(req)
     if req.status_code == 404:
         raise ConnectionError("Request invalid")
-    elif int(req.headers.get('Content-Length')) > max_size:
+    elif int(req.headers.get('content-Length')) > max_size:
         raise ConnectionError("File too large")
     else:
         with open(filename, 'wb') as f:
+            # for chunk in req:
+            #     f.write(chunk)
             f.write(req.content)
+

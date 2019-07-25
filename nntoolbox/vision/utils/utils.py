@@ -14,13 +14,18 @@ def gram_matrix(x):
 
 
 def is_image(filename):
-    '''
+    """
     Check if filename has valid extension
+
     :param filename:
     :return: boolean indicating whether filename is a valid image filename
-    '''
+    """
     filename = filename.lower()
-    return filename.endswith(".jpg") or filename.endswith(".png") or filename.endswith(".jpeg")
+    return filename.endswith(".jpg") \
+           or filename.endswith(".png") \
+           or filename.endswith(".jpeg") \
+           or filename.endswith(".gif") \
+           or filename.endswith(".bmp")
 
 
 def pil_to_tensor(pil, device=None):
