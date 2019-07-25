@@ -48,9 +48,8 @@ def unfreeze(module: Sequential, optimizer: Optimizer, unfreeze_from: int, unfre
 
 class GradualUnfreezing(Callback):
     """
-    Gradually unfreezing pretrained layers (UNTESTED)
+    Gradually unfreezing pretrained layers, with discriminative learning rates (UNTESTED)
     """
-
     def __init__(
             self, unfreeze_every: int, freeze_inds: Optional[List[int]]=None,
             lr: Optional[Union[List[float], float]]=None
@@ -84,7 +83,7 @@ class GradualUnfreezing(Callback):
                     self.learner._model._modules['0'],
                     self.learner._optimizer,
                     unfreeze_from, unfreeze_to,
-                    lr = self.lr[logs['epoch'] // self._unfreeze_every - 1]
+                    lr=self.lr[logs['epoch'] // self._unfreeze_every - 1]
                 )
             else:
                 unfreeze(

@@ -6,6 +6,7 @@ from typing import Sequence, Callable
 class ResidualLinearBlock(nn.Module):
     """
     A two-layer linear block with residual connection:
+
     y = f(w_2f(w_1 x + b_1) + b_2) + x
     """
     def __init__(self, in_features, activation=nn.ReLU, bias=True, use_dropout=False, drop_rate=0.5):
@@ -29,21 +30,14 @@ class LinearlyAugmentedFF(nn.Module):
     """
     Based on https://link.springer.com/chapter/10.1007/978-3-642-35289-8_13
     """
-
-    def __init__(self, in_features, out_features, activation = None):
+    def __init__(self, in_features, out_features, activation: nn.Module=nn.Identity):
         super(LinearlyAugmentedFF, self).__init__()
         self._fc = nn.Linear(in_features, out_features)
-        if activation is not None:
-            self._a = activation()
-        else:
-            self._a = None
-
+        self._a = activation()
 
     def forward(self, x):
-        op = self._fc(x) + torch.sum(x, dim = -1, keepdim = True)
-
-        if self._a is not None:
-            op = self._a(op)
+        op = self._fc(x) + torch.sum(x, dim=-1, keepdim=True)
+        op = self._a(op)
 
         return op
 
@@ -51,7 +45,11 @@ class LinearlyAugmentedFF(nn.Module):
 class HighwayLayer(nn.Module):
     """
     Highway layer:
+
     y = T(x) * H(x) + (1 - T(x)) * x
+
+    Reference:
+
     https://arxiv.org/pdf/1505.00387.pdf
     """
     def __init__(self, in_features, main, gate=None):
