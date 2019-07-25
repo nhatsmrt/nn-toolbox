@@ -10,6 +10,10 @@ class CompetitiveMOELoss(nn.Module):
     Encourage expert specialization:
 
     loss(expert_op, expert_weight, target) = sum_e weight_e * base_loss(op_e, target)
+
+    Reference:
+
+    https://www.cs.toronto.edu/~hinton/absps/jjnh91.pdf
     """
     def __init__(self, base_loss: nn.Module=nn.MSELoss(reduction='none')):
         super(CompetitiveMOELoss, self).__init__()

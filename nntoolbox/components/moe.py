@@ -23,6 +23,11 @@ class MixtureOfExpert(Module):
         self.return_mixture = return_mixture
 
     def forward(self, input: Tensor) -> Union[Tuple[Tensor, Tensor], Tensor]:
+        """
+        :param input:
+        :return: if return_mixture, return the mixture of expert output; else return both expert score and expert output
+        (with the n_expert channel coming last)
+        """
         expert_scores = self.softmax(self.gate(input))
         expert_outputs = torch.stack([expert(input) for expert in self.experts], dim=-1)
         expert_scores = expert_scores.view(
