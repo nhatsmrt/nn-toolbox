@@ -1,4 +1,5 @@
 from torch import nn, Tensor
+from typing import Tuple
 
 
 __all__ = ['CompetitiveMOELoss']
@@ -15,13 +16,13 @@ class CompetitiveMOELoss(nn.Module):
         self.base_loss = base_loss
         setattr(self.base_loss, 'reduction', 'none')
 
-    def forward(self, expert_output: Tensor, expert_score: Tensor, targets: Tensor) -> Tensor:
+    def forward(self, experts: Tuple[Tensor, Tensor], targets: Tensor) -> Tensor:
         """
-        :param expert_output: (batch_size, *, n_expert)
-        :param expert_score: (batch_size, *, n_expert)
+        :param experts: expert_output: (batch_size, *, n_expert), expert_score: (batch_size, *, n_expert)
         :param targets: (batch_size, *)
         :return:
         """
+        expert_outputs, expert_scores = experts
         targets = targets.unsqueeze(-1)
-        loss = self.base_loss(expert_output, targets) # (batch_size, *, n_expert)
-        return (loss * expert_score).sum(-1)
+        loss = self.base_loss(expert_outputs, targets) # (batch_size, *, n_expert)
+        return (loss * expert_scores).sum(-1)

@@ -23,17 +23,17 @@ class MixtureOfExpert(Module):
         self.return_mixture = return_mixture
 
     def forward(self, input: Tensor) -> Union[Tuple[Tensor, Tensor], Tensor]:
-        expert_score = self.softmax(self.gate(input))
-        expert_output = torch.stack([expert(input) for expert in self.experts], dim=-1)
-        expert_score = expert_score.view(
-            list(expert_score.shape)[:-1] + [1 for _ in range(len(expert_output.shape) - len(expert_score.shape))]
-            + list(expert_score.shape)[-1:]
+        expert_scores = self.softmax(self.gate(input))
+        expert_outputs = torch.stack([expert(input) for expert in self.experts], dim=-1)
+        expert_scores = expert_scores.view(
+            list(expert_scores.shape)[:-1] + [1 for _ in range(len(expert_outputs.shape) - len(expert_scores.shape))]
+            + list(expert_scores.shape)[-1:]
         )
 
         if self.return_mixture:
-            return torch.sum(expert_output * expert_score, dim=-1)
+            return torch.sum(expert_outputs * expert_scores, dim=-1)
         else:
-            return expert_output, expert_score
+            return expert_outputs, expert_scores
 
 
 # class DiscreteGaussianMOE(MixtureOfExpert):
