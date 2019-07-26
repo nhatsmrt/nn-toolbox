@@ -12,7 +12,6 @@ from ...learner import Learner
 
 
 class SupervisedImageLearner(Learner):
-
     def __init__(
             self, train_data: DataLoader, val_data: DataLoader, model: Module,
             criterion: Module, optimizer: Optimizer,

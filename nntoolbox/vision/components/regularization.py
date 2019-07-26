@@ -8,14 +8,19 @@ __all__ = ['ShakeShake', 'DoubleBackpropagation']
 
 
 class ShakeShake(nn.Module):
-    '''
+    """
     Implement shake-shake regularizer:
+
     y = x + sum_i alpha_i branch_i
+
     (alpha_i > 0 are random variables such that sum_i alpha_i = 1)
+
     At test time:
+
     y = x + 1 / n_branch sum_i branch_i
+
     Based on https://arxiv.org/abs/1705.07485
-    '''
+    """
     def __init__(self, keep: str='shake'):
         super(ShakeShake, self).__init__()
         self._keep = keep
@@ -27,14 +32,14 @@ class ShakeShake(nn.Module):
 class ShakeShakeFunction(torch.autograd.Function):
     @staticmethod
     def forward(ctx, branches: Tensor, training: bool, mode: str) -> Tensor:
-        '''
+        """
         :param ctx: context (to save info for backward pass)
         :param branches: outputs of all branches concatenated (cardinality, batch_size, n_channel, h, w)
         :param training: boolean, true if is training
         :param mode: 'keep': keep the forward weights for backward; 'even': backward with 1/n_branch weight;
                       'shake': randomly choose new weights
         :return: weighted sum of all branches' outputs
-        '''
+        """
         if training:
             branch_weights = ShakeShakeFunction.get_branch_weights(
                 len(branches), branches[0].shape[0]
@@ -77,11 +82,13 @@ class ShakeShakeFunction(torch.autograd.Function):
 
 
 class DoubleBackpropagation(nn.Module):
-    '''
+    """
     Double backpropagation regularizer to penalize slight perturbation in input
+
     https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf
+
     http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf
-    '''
+    """
     def __init__(self, model: nn.Module, criterion: nn.Module):
         super(DoubleBackpropagation, self).__init__()
         self.main = model

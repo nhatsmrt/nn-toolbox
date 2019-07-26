@@ -88,7 +88,7 @@ class SquareUnitLinear(nn.Linear):
 
     Reference:
 
-    Flake, Gary. "Square Unit Augmented, Radially Extended, Multilayer Perceptrons". Neural Network: Tricks of the Trade
+    Flake, Gary. "Square Unit Augmented, Radially Extended, Multilayer Perceptrons." Neural Network: Tricks of the Trade
     """
     def __init__(self, in_features, out_features, bias: bool=True):
         super(SquareUnitLinear, self).__init__(in_features=in_features * 2, out_features=out_features, bias=bias)
