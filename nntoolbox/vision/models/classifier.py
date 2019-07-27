@@ -10,7 +10,7 @@ import torch
 from torch import Tensor, nn
 import numpy as np
 from numpy import ndarray
-from typing import List, Optional, Union, Tuple, Dict
+from typing import List, Optional, Union, Tuple, Dict, Callable
 
 from sklearn.neighbors import KNeighborsClassifier
 
@@ -76,11 +76,11 @@ class ImageClassifier:
 class KNNClassifier:
     def __init__(
             self, database: DataLoader, model: Module, n_neighbors: int=5,
-            tta_transform=None, tta_beta: float=0.4,
+            tta_transform=None, tta_beta: float=0.4, weights: Union[str, Callable]='distance',
             device=get_device(), threshold=0.0
     ):
         self._knn = KNeighborsClassifier(
-            n_neighbors=n_neighbors, weights='distance'
+            n_neighbors=n_neighbors, weights=weights
         )
         self._model = model.to(device)
         self._model.eval()

@@ -8,7 +8,7 @@ from typing import Tuple
 import torch
 
 
-__all__ = ['Selector', 'PairSelector', 'AllPairSelector', 'AllTripletSelector']
+__all__ = ['Selector', 'PairSelector', 'AllPairSelector', 'TripletSelector', 'AllTripletSelector']
 
 
 class Selector:
@@ -17,6 +17,7 @@ class Selector:
 
 
 class PairSelector(Selector):
+    @torch.no_grad()
     def get_pairs(self, embeddings: Tensor, labels: Tensor) -> Tuple[ndarray, ndarray]:
         raise NotImplementedError
 
@@ -45,11 +46,13 @@ class PairSelector(Selector):
 
 class AllPairSelector(PairSelector):
     """Select all pair from the batch"""
+    @torch.no_grad()
     def get_pairs(self, embeddings: Tensor, labels: Tensor) -> Tuple[ndarray, ndarray]:
         return get_all_pairs(labels.cpu().detach().numpy())
 
 
 class TripletSelector(Selector):
+    @torch.no_grad()
     def get_triplets(self, embeddings: Tensor, labels: Tensor) -> ndarray:
         raise NotImplementedError
 
@@ -62,6 +65,7 @@ class TripletSelector(Selector):
 
 
 class AllTripletSelector(TripletSelector):
+    @torch.no_grad()
     def get_triplets(self, embeddings: Tensor, labels: Tensor) -> ndarray:
         return get_all_triplets(labels.cpu().detach().numpy())
 

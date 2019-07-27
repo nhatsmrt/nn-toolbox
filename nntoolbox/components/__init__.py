@@ -5,3 +5,5 @@ from .activation import *
 from .self_normalizing import *
 from .regularization import *
 from .moe import *
+from .kernel import *
+from .rbf import *
