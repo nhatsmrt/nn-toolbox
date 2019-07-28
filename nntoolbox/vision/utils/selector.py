@@ -11,7 +11,8 @@ from ...utils import emb_pairwise_dist
 
 __all__ = [
     'Selector', 'PairSelector', 'AllPairSelector',
-    'TripletSelector', 'AllTripletSelector', 'BatchHardTripletSelector'
+    'TripletSelector', 'AllTripletSelector', 'BatchHardTripletSelector',
+    'HardTripletSelector'
 ]
 
 
@@ -80,6 +81,23 @@ class BatchHardTripletSelector(TripletSelector):
         return get_batch_hard_triplets(embeddings, labels.cpu().detach().numpy())
 
 
+class HardTripletSelector(TripletSelector):
+    def __init__(
+            self, margin: float=1.0, n_neg_per_ap: int=1,
+            mode: str="semi-hard"
+    ):
+        self._margin = margin
+        self._n_neg_per_ap = n_neg_per_ap
+        self._mode = mode
+
+    @torch.no_grad()
+    def get_triplets(self, embeddings: Tensor, labels: Tensor) -> ndarray:
+        return get_hard_triplets(
+            embeddings, labels.cpu().detach().numpy(),
+            self._margin, self._n_neg_per_ap, self._mode
+        )
+
+
 def get_all_pairs(labels: ndarray) -> Tuple[ndarray, ndarray]:
     """Select all possible pairs from batch"""
     labels_flat = labels.ravel()
@@ -138,5 +156,56 @@ def get_batch_hard_triplets(embeddings: Tensor, labels: ndarray) -> ndarray:
             hardest_neg = torch.argmin(neg_pair_dist) # nearest negative
 
             triplets.append([an, pos_pairs[hardest_pos, 1], neg_pairs[hardest_neg, 1]])
+
+    return np.array(triplets)
+
+
+def get_hard_triplets(
+        embeddings: Tensor, labels: ndarray, margin: float=1.0,
+        n_neg_per_ap: int=1, mode: str="semi-hard",
+) -> ndarray:
+    """
+    Hard and semi-hard triplet selecting strategy:
+
+    Hard: for each anchor, select negative and positive such that positive is still further to anchor than negative.
+
+    Semi-hard: for each anchor, select negative and positive such that positive is still closer to anchor than negative,
+    but the difference is less than desired margin
+
+    :param embeddings:
+    :param labels:
+    :param margin:
+    :param n_neg_per_ap: number of negatives to choose per anchor-positive pair
+    :param mode
+    :return:
+    """
+    triplets = []
+    dist_mat = emb_pairwise_dist(embeddings, False)
+
+    unique_class = set(labels.ravel())
+    for c in unique_class:
+        c_idx = np.where(labels == c)[0]
+        if len(c_idx) < 2:
+            continue
+
+        other_idx = np.where(labels != c)[0]
+        if len(other_idx) < 1:
+            continue
+
+        pos_pairs = np.array(list(combinations(c_idx, 2)))
+        pos_pair_dist = dist_mat[pos_pairs[:, 0], pos_pairs[:, 1]]
+        for pos_pair, dist in zip(pos_pairs, pos_pair_dist):
+            losses = (dist - dist_mat[pos_pair[0], other_idx] + margin).cpu().detach().numpy()
+
+            if mode == 'hard':
+                hard = np.where(losses > 0)[0]
+            if mode == 'semi-hard':
+                hard = np.where(np.logical_and(losses > 0, losses < margin))[0]
+
+            if len(hard) > 0:
+                chosen = np.random.choice(hard, min(len(hard), n_neg_per_ap))
+                neg_ind = other_idx[chosen]
+                for neg in neg_ind:
+                    triplets.append([pos_pair[0], pos_pair[1], neg])
 
     return np.array(triplets)
