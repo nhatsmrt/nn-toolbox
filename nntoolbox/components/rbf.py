@@ -1,6 +1,7 @@
 from typing import Optional
 from torch import nn, Tensor
 from sklearn.cluster import KMeans
+from sklearn.neighbors import NearestCentroid
 from .kernel import DistKernel
 import torch
 
@@ -43,12 +44,23 @@ class RBFLayer(nn.Linear):
     def cluster_initialize(self, input: Tensor):
         """
         (Re-)initialize the centers based on k-mean clustering on the input
-        
+
         :param input:
         """
         model = KMeans(self.out_features)
         model.fit(input.cpu().detach().numpy())
-        self.weight.data.copy_(torch.Tensor(model.cluster_centers_))
+        self.weight.data.copy_(torch.Tensor(model.cluster_centers_).to(self.weight.data.device))
+
+    def centroids_initialize(self, input: Tensor, labels: Tensor):
+        """
+        (Re-)initialize the centers based on nearest centroids algorithm
+
+        :param input:
+        :param labels:
+        """
+        model = NearestCentroid()
+        model.fit(input.cpu().detach().numpy(), labels.cpu().detach().numpy().ravel())
+        self.weight.data.copy_(torch.Tensor(model.centroids_).to(self.weight.data.device))
 
     def forward(self, input: Tensor) -> Tensor:
         dists = pairwise_dist(input, self.centers, squared=True)

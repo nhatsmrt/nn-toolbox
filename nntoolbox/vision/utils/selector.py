@@ -6,9 +6,13 @@ from numpy import ndarray
 from itertools import combinations
 from typing import Tuple
 import torch
+from ...utils import emb_pairwise_dist
 
 
-__all__ = ['Selector', 'PairSelector', 'AllPairSelector', 'TripletSelector', 'AllTripletSelector']
+__all__ = [
+    'Selector', 'PairSelector', 'AllPairSelector',
+    'TripletSelector', 'AllTripletSelector', 'BatchHardTripletSelector'
+]
 
 
 class Selector:
@@ -70,6 +74,12 @@ class AllTripletSelector(TripletSelector):
         return get_all_triplets(labels.cpu().detach().numpy())
 
 
+class BatchHardTripletSelector(TripletSelector):
+    @torch.no_grad()
+    def get_triplets(self, embeddings: Tensor, labels: Tensor) -> ndarray:
+        return get_batch_hard_triplets(embeddings, labels.cpu().detach().numpy())
+
+
 def get_all_pairs(labels: ndarray) -> Tuple[ndarray, ndarray]:
     """Select all possible pairs from batch"""
     labels_flat = labels.ravel()
@@ -91,3 +101,42 @@ def get_all_triplets(labels: ndarray) -> ndarray:
                 triplets.append([pos[0], pos[1], neg[1]])
     return np.array(triplets)
 
+
+def get_batch_hard_triplets(embeddings: Tensor, labels: ndarray) -> ndarray:
+    """
+    Implement the batch-hard strategy: For each anchor, select the corresponding hardest (furthest) positive
+    and hardest (nearest) negative
+
+    References:
+
+    https://arxiv.org/pdf/1703.07737.pdf
+
+    :param embeddings:
+    :param labels:
+    :return: array of triplet indices
+    """
+    triplets = []
+    dist_mat = emb_pairwise_dist(embeddings, False)
+
+    unique_class = set(labels.ravel())
+    for c in unique_class:
+        c_idx = np.where(labels == c)[0]
+        if len(c_idx) < 2:
+            continue
+
+        other_idx = np.where(labels != c)[0]
+        if len(other_idx) < 1:
+            continue
+
+        for an in c_idx:
+            pos_pairs = np.array([[an, p] for p in c_idx if p != an])
+            neg_pairs = np.array([[an, n] for n in other_idx])
+
+            pos_pair_dist = dist_mat[pos_pairs[:, 0], pos_pairs[:, 1]]
+            neg_pair_dist = dist_mat[neg_pairs[:, 0], neg_pairs[:, 1]]
+            hardest_pos = torch.argmax(pos_pair_dist) # furthest positive
+            hardest_neg = torch.argmin(neg_pair_dist) # nearest negative
+
+            triplets.append([an, pos_pairs[hardest_pos, 1], neg_pairs[hardest_neg, 1]])
+
+    return np.array(triplets)
