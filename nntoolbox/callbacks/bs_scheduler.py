@@ -29,10 +29,11 @@ class BatchSizeScheduler(Callback):
 
 # UNTESTED
 class BatchSizeIncreaser(Callback):
-    '''
+    """
     Implement a callback to increase batch size during training
+    
     https://arxiv.org/pdf/1711.00489.pdf
-    '''
+    """
     def __init__(
             self, train_data: DataLoader, update_after: int, update_every: int,
             bs_init: int, lr_scheduler, bs_max: int, bs_inc_rate: float=5.0

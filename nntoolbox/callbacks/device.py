@@ -1,8 +1,8 @@
 from .callbacks import Callback
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Union, Optional, Callable
 from torch import Tensor, device
-from torch.nn import DataParallel
-from ..utils import get_device
+from torch.nn import DataParallel, Module, AdaptiveAvgPool2d, Sequential
+from ..utils import get_device, cut_model
 from torchgpipe import GPipe
 from torchgpipe_balancing import balance_by_time
 
@@ -65,10 +65,37 @@ class DataParallelismCallback(Callback):
             self, device_ids: Optional[List[Union[int, device]]]=None,
             output_device: Optional[Union[int, device]]=None, dim: int=0
     ):
-        self.learner = None
         self.device_ids = device_ids
         self.ouput_device = output_device
         self.dim = dim
 
     def on_train_begin(self):
-        self._learner.model = DataParallel(self._learner.model, self.device_ids, self.ouput_device, self.dim)
+        self.learner._model = DataParallel(self.learner._model, self.device_ids, self.ouput_device, self.dim)
+
+
+class MixedParallelismCB(Callback):
+    """
+    Callback for mixed parallelism: data parallelism for convolution/feature layers, and model parallelism for head
+    (UNTESTED)
+
+    References:
+
+    https://discuss.pytorch.org/t/why-not-giving-the-whole-model-to-dataparallel-in-the-imagenet-example/4092
+
+    https://arxiv.org/pdf/1404.5997.pdf
+    """
+    def __init__(
+            self, device_ids: Optional[List[Union[int, device]]]=None,
+            output_device: Optional[Union[int, device]]=None, dim: int=0,
+            sep: Callable[..., Module]=AdaptiveAvgPool2d
+    ):
+        self.device_ids = device_ids
+        self.ouput_device = output_device
+        self.dim = dim
+        self.sep = sep
+
+    def on_train_begin(self):
+        features, head = cut_model(self.learner._model, sep=self.sep)
+        features = DataParallel(features, self.device_ids, self.ouput_device, self.dim)
+        self.learner._model = Sequential(features, head).to(self.ouput_device)
+
