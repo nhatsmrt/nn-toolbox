@@ -1,6 +1,6 @@
 import torch
 from torch import nn, Tensor
-from typing import Sequence, Callable
+from typing import Sequence, Callable, Optional
 
 
 __all__ = ['ResidualLinearBlock', 'LinearlyAugmentedFF', 'HighwayLayer', 'SquareUnitLinear', 'MLP']
@@ -12,7 +12,10 @@ class ResidualLinearBlock(nn.Module):
 
     y = f(w_2f(w_1 x + b_1) + b_2) + x
     """
-    def __init__(self, in_features, activation=nn.ReLU, bias=True, use_dropout=False, drop_rate=0.5):
+    def __init__(
+            self, in_features: int, activation: Callable[..., nn.Module]=nn.ReLU,
+            bias: bool=True, use_dropout: bool=False, drop_rate: float=0.5
+    ):
         super(ResidualLinearBlock, self).__init__()
         self.add_module(
             "main",
@@ -33,7 +36,7 @@ class LinearlyAugmentedFF(nn.Module):
     """
     Based on https://link.springer.com/chapter/10.1007/978-3-642-35289-8_13
     """
-    def __init__(self, in_features, out_features, activation: nn.Module=nn.Identity):
+    def __init__(self, in_features: int, out_features: int, activation: Callable[..., nn.Module]=nn.Identity):
         super(LinearlyAugmentedFF, self).__init__()
         self._fc = nn.Linear(in_features, out_features)
         self._a = activation()
@@ -55,7 +58,7 @@ class HighwayLayer(nn.Module):
 
     https://arxiv.org/pdf/1505.00387.pdf
     """
-    def __init__(self, in_features, main, gate=None):
+    def __init__(self, in_features: int, main: nn.Module, gate: Optional[nn.Module]=None):
         """
         :param in_features: Number of features of each input
         :param main: The main network H(x). Take input of with in_features and return output with in_features

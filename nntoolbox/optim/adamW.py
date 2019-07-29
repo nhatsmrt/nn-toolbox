@@ -4,9 +4,16 @@ import torch
 from typing import Tuple
 
 
+__all__ = ['AdamW']
+
+
 class AdamW(Adam):
     """
     Implement decoupled weight decay for Adam
+
+    References:
+
+        https://arxiv.org/abs/1711.05101
     """
     def __init__(
             self, params, lr: float=1e-3, betas: Tuple[float, float]=(0.9, 0.999),

@@ -5,6 +5,8 @@ __all__ = ['Metric', 'Loss']
 
 
 class Metric:
+    _best: float
+
     def __call__(self, logs: Dict[str, Any]): pass
 
     def get_best(self) -> float: return self._best
