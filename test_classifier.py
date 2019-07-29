@@ -73,7 +73,7 @@ train_dataset.dataset.transform = Compose(
         ToTensor()
     ]
 )
-train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=1024, shuffle=True)
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=512, shuffle=True)
 val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=512, shuffle=False)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=128, shuffle=False)
 
