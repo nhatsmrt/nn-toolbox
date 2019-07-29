@@ -43,10 +43,11 @@ class LARS(SGD):
 
                 data_norm = p.data.norm(2)
                 grad_norm = p.grad.data.norm(2)
-                print(grad_norm)
                 local_lr = (self.trust_coefficient * data_norm / (grad_norm + weight_decay * data_norm)).detach()
-                print(local_lr)
-                print()
+
+                # print(grad_norm)
+                # print(local_lr)
+                # print()
 
                 if weight_decay != 0:
                     d_p.add_(weight_decay, p.data)
