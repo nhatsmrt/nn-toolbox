@@ -15,11 +15,14 @@ class LARS(SGD):
         https://arxiv.org/pdf/1708.03888.pdf
     """
 
-    def __init__(self, params, lr: float,  momentum: float=0.0, weight_decay: float=0.0, trust_coefficient: float=0.02):
+    def __init__(
+            self, params, lr: float,  momentum: float=0.0, weight_decay: float=0.0,
+            trust_coefficient: float=0.02, eps: float=1e-8
+    ):
         super(LARS, self).__init__(
             params, lr, momentum, 0.0, weight_decay, False
         )
-        self.trust_coefficient = trust_coefficient
+        self.trust_coefficient, self.eps = trust_coefficient, eps
 
     def step(self, closure=None):
         """Performs a single optimization step.
@@ -43,12 +46,9 @@ class LARS(SGD):
 
                 data_norm = p.data.norm(2)
                 grad_norm = p.grad.data.norm(2)
-                local_lr = (self.trust_coefficient * data_norm / (grad_norm + weight_decay * data_norm)).detach()
-
-                # print(grad_norm)
-                # print(data_norm)
-                # print(local_lr)
-                # print()
+                local_lr = (
+                    self.trust_coefficient * data_norm / (grad_norm + weight_decay * data_norm + self.eps)
+                ).detach()
 
                 if weight_decay != 0:
                     d_p.add_(weight_decay, p.data)
