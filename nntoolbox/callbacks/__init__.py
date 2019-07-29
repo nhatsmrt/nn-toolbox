@@ -1,3 +1,4 @@
+"""Implementations of training procedures"""
 from .callbacks import  *
 from .logger import *
 from .lr_scheduler import *

@@ -1,3 +1,4 @@
+"""General components for neural networks"""
 from .components import *
 from .pool import *
 from .maxout import *
