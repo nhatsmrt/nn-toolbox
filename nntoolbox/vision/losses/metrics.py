@@ -186,4 +186,8 @@ class NPairAngular(nn.Module):
 
     def forward(self, data: Tuple[Tensor, Tensor]) -> Tensor:
         anchors, positives = data
-        return (self._npair_loss(anchors, positives) + self._angular_lambda * self._angular_loss(anchors, positives)) / (1 + self._angular_lambda)
+        return (
+                   self._npair_loss(anchors, positives)
+                   + self._angular_lambda * self._angular_loss(anchors, positives)
+               ) / (1 + self._angular_lambda)
+

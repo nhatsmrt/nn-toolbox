@@ -1,6 +1,9 @@
+"""Scaling the learning rate layerwise (HIGHLY EXPERIMENTAL)"""
+
+
 from torch.optim import SGD, Adam
 import torch
-from typing import Callable
+from typing import Callable, Tuple
 from torch import Tensor
 
 
@@ -18,7 +21,7 @@ class LARS(SGD):
 
     def __init__(
             self, params, lr: float,  momentum: float=0.0, weight_decay: float=0.0,
-            trust_coefficient: float=0.02, eps: float=1e-8
+            trust_coefficient: float=0.001, eps: float=1e-8
     ):
         super(LARS, self).__init__(
             params, lr, momentum, 0.0, weight_decay, False
@@ -80,10 +83,10 @@ class LAMB(Adam):
         https://arxiv.org/pdf/1904.00962.pdf
     """
     def __init__(
-            self, params, lr=1e-3, betas=(0.9, 0.999),
-            eps=1e-8, weight_decay=0,
+            self, params, lr: float=1e-3, betas: Tuple[float, float]=(0.9, 0.999),
+            eps: float=1e-8, weight_decay: float=0,
             scaling_fn: Callable[[Tensor], Tensor] = lambda x: x,
-            amsgrad=False, correct_bias: bool=True
+            amsgrad: bool=False, correct_bias: bool=True
     ):
         super(LAMB, self).__init__(params, lr, betas, eps, weight_decay, amsgrad)
         self.scaling_fn = scaling_fn
@@ -106,7 +109,7 @@ class LAMB(Adam):
                     continue
                 grad = p.grad.data
                 if grad.is_sparse:
-                    raise RuntimeError('Adam does not support sparse gradients, please consider SparseAdam instead')
+                    raise RuntimeError('LAMB does not support sparse gradients.')
                 amsgrad = group['amsgrad']
 
                 state = self.state[p]

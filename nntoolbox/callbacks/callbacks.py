@@ -4,6 +4,8 @@ from torch import Tensor
 
 
 class Callback:
+    order: int=0
+
     def on_train_begin(self): pass
 
     def on_epoch_begin(self): pass
