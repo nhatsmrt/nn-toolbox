@@ -221,14 +221,14 @@ learner = SupervisedImageLearner(
     mixup=True
 )
 
-# lr_finder = LRFinder(
-#     model=model,
-#     train_data=train_loader,
-#     criterion=SmoothedCrossEntropy(),
-#     optimizer=partial(LARS, lr=0.074, weight_decay=0.0001, momentum=0.9),
-#     device=get_device()
-# )
-# lr_finder.find_lr(warmup=100, callbacks=[ToDeviceCallback()])
+lr_finder = LRFinder(
+    model=model,
+    train_data=train_loader,
+    criterion=SmoothedCrossEntropy(),
+    optimizer=partial(LARS, lr=0.074, weight_decay=0.0001, momentum=0.9),
+    device=get_device()
+)
+lr_finder.find_lr(warmup=100, callbacks=[ToDeviceCallback()])
 
 # swa = StochasticWeightAveraging(learner, average_after=2255, update_every=410)
 # callbacks = [
