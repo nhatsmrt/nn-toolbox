@@ -1,6 +1,5 @@
 from torch.optim import SGD, Adam
 import torch
-import math
 from typing import Callable
 from torch import Tensor
 
@@ -90,7 +89,6 @@ class LAMB(Adam):
         self.scaling_fn = scaling_fn
         self.correct_bias = correct_bias
 
-
     def step(self, closure=None):
         """Performs a single optimization step.
 
@@ -131,10 +129,7 @@ class LAMB(Adam):
 
                 state['step'] += 1
 
-                # if group['weight_decay'] != 0:
-                #     grad.add_(group['weight_decay'], p.data)
-
-                weight_decay_term = group['weight_decay'] * p.data # decouple the weight decay
+                weight_decay_term = group['weight_decay'] * p.data  # decouple the weight decay
 
                 # Decay the first and second moment running average coefficient
                 exp_avg.mul_(beta1).add_(1 - beta1, grad)
@@ -154,11 +149,9 @@ class LAMB(Adam):
 
                 direction = exp_avg / denom + weight_decay_term
                 # step_size = group['lr'] * math.sqrt(bias_correction2) / bias_correction1
-                step_size = group['lr'] * self.scaling_fn(p.data.norm()) / direction.norm()
+                step_size = group['lr'] * self.scaling_fn(p.data.norm()) / (direction.norm() + group['eps'])
 
                 p.data.add_(-step_size, direction)
-
-                # p.data.addcdiv_(-step_size, exp_avg, denom)
 
         return loss
 
