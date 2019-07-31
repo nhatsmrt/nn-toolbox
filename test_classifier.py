@@ -207,28 +207,31 @@ model = Sequential(
     )
 ).to(get_device())
 
-# lsuv_init(module=model, input=get_first_batch(train_loader, callbacks = [ToDeviceCallback()])[0])
-
-# print(count_trainable_parameters(model)) # 14437816 3075928
-
-optimizer = LAMB(model.parameters(), weight_decay=0.0001, lr=0.10, momentum=0.9)
-learner = SupervisedImageLearner(
-    train_data=train_loader,
-    val_data=val_loader,
-    model=model,
-    criterion=SmoothedCrossEntropy().to(get_device()),
-    optimizer=optimizer,
-    mixup=True
-)
-
 lr_finder = LRFinder(
     model=model,
     train_data=train_loader,
     criterion=SmoothedCrossEntropy(),
-    optimizer=partial(LARS, lr=0.074, weight_decay=0.0001, momentum=0.9),
+    optimizer=partial(LAMB, lr=0.074, weight_decay=0.0001),
     device=get_device()
 )
 lr_finder.find_lr(warmup=100, callbacks=[ToDeviceCallback()])
+
+
+# lsuv_init(module=model, input=get_first_batch(train_loader, callbacks = [ToDeviceCallback()])[0])
+
+# print(count_trainable_parameters(model)) # 14437816 3075928
+
+# optimizer = LARS(model.parameters(), weight_decay=0.0001, lr=0.10, momentum=0.9)
+# optimizer = LAMB(model.parameters(), weight_decay=0.0001, lr=0.10)
+# learner = SupervisedImageLearner(
+#     train_data=train_loader,
+#     val_data=val_loader,
+#     model=model,
+#     criterion=SmoothedCrossEntropy().to(get_device()),
+#     optimizer=optimizer,
+#     mixup=True
+# )
+
 
 # swa = StochasticWeightAveraging(learner, average_after=2255, update_every=410)
 # callbacks = [
