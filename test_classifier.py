@@ -222,7 +222,7 @@ model = Sequential(
 # print(count_trainable_parameters(model)) # 14437816 3075928
 
 # optimizer = LARS(model.parameters(), weight_decay=0.0001, lr=0.10, momentum=0.9)
-optimizer = LAMB(model.parameters(), weight_decay=0.0001, lr=0.15)
+optimizer = LAMB(model.parameters(), weight_decay=0.0001, lr=0.015)
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
@@ -241,7 +241,7 @@ callbacks = [
     # InputProgressiveResizing(initial_size=80, max_size=160, upscale_every=10, upscale_factor=math.sqrt(2)),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.05, T_max=205)),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.005, T_max=205)),
     swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
