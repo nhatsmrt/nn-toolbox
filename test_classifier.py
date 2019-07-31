@@ -17,7 +17,7 @@ from nntoolbox.vision.transforms import Cutout
 from nntoolbox.vision.models import ImageClassifier, EnsembleImageClassifier
 from nntoolbox.losses import SmoothedCrossEntropy
 from nntoolbox.init import lsuv_init
-from nntoolbox.optim import LARS
+from nntoolbox.optim import LARS, LAMB
 
 from functools import partial
 import math
@@ -211,7 +211,7 @@ model = Sequential(
 
 # print(count_trainable_parameters(model)) # 14437816 3075928
 
-optimizer = LARS(model.parameters(), weight_decay=0.0001, lr=0.10, momentum=0.9)
+optimizer = LAMB(model.parameters(), weight_decay=0.0001, lr=0.10, momentum=0.9)
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
@@ -230,49 +230,49 @@ learner = SupervisedImageLearner(
 # )
 # lr_finder.find_lr(warmup=100, callbacks=[ToDeviceCallback()])
 
-swa = StochasticWeightAveraging(learner, average_after=2255, update_every=410)
-callbacks = [
-    # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
-    ToDeviceCallback(),
-    # MixedPrecisionV2(),
-    # InputProgressiveResizing(initial_size=80, max_size=160, upscale_every=10, upscale_factor=math.sqrt(2)),
-    Tensorboard(),
-    # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.03, T_max=205)),
-    swa,
-    LossLogger(),
-    ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
-]
-
-metrics = {
-    "accuracy": Accuracy(),
-    "loss": Loss()
-}
-
-final = learner.learn(
-    n_epoch=500,
-    callbacks=callbacks,
-    metrics=metrics,
-    final_metric='accuracy'
-)
-
-
-print(final)
-load_model(model=model, path="weights/model.pt")
-classifier = ImageClassifier(model, tta_transform=Compose([
-    ToPILImage(),
-    RandomHorizontalFlip(),
-    RandomResizedCrop(size=(128, 128), scale=(0.95, 1.0)),
-    ToTensor()
-]))
-print(classifier.evaluate(test_loader))
-
-print("Test SWA:")
-model = swa.get_averaged_model()
-classifier = ImageClassifier(model, tta_transform=Compose([
-    ToPILImage(),
-    RandomHorizontalFlip(),
-    RandomResizedCrop(size=(128, 128), scale=(0.95, 1.0)),
-    ToTensor()
-]))
-print(classifier.evaluate(test_loader))
+# swa = StochasticWeightAveraging(learner, average_after=2255, update_every=410)
+# callbacks = [
+#     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
+#     ToDeviceCallback(),
+#     # MixedPrecisionV2(),
+#     # InputProgressiveResizing(initial_size=80, max_size=160, upscale_every=10, upscale_factor=math.sqrt(2)),
+#     Tensorboard(),
+#     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
+#     LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.03, T_max=205)),
+#     swa,
+#     LossLogger(),
+#     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
+# ]
+#
+# metrics = {
+#     "accuracy": Accuracy(),
+#     "loss": Loss()
+# }
+#
+# final = learner.learn(
+#     n_epoch=500,
+#     callbacks=callbacks,
+#     metrics=metrics,
+#     final_metric='accuracy'
+# )
+#
+#
+# print(final)
+# load_model(model=model, path="weights/model.pt")
+# classifier = ImageClassifier(model, tta_transform=Compose([
+#     ToPILImage(),
+#     RandomHorizontalFlip(),
+#     RandomResizedCrop(size=(128, 128), scale=(0.95, 1.0)),
+#     ToTensor()
+# ]))
+# print(classifier.evaluate(test_loader))
+#
+# print("Test SWA:")
+# model = swa.get_averaged_model()
+# classifier = ImageClassifier(model, tta_transform=Compose([
+#     ToPILImage(),
+#     RandomHorizontalFlip(),
+#     RandomResizedCrop(size=(128, 128), scale=(0.95, 1.0)),
+#     ToTensor()
+# ]))
+# print(classifier.evaluate(test_loader))
