@@ -4,6 +4,9 @@ from typing import Tuple
 from ..components import ResidualRNN
 
 
+__all__ = ['Encoder', 'RNNEncoder', 'GRUEncoder']
+
+
 class Encoder(nn.Module):
     def __init__(self, input_size, hidden_size, embedding_dim, num_layers, bidirectional, device, pad_token=0, drop_rate=0.1):
         super(Encoder, self).__init__()
@@ -85,7 +88,6 @@ class GRUEncoder(RNNEncoder):
         return (torch.zeros(first_dim, batch_size, self._hidden_size, device=self._device),)
 
 
-
 class LSTMEncoder(RNNEncoder):
     def __init__(
             self, input_size, hidden_size, embedding_dim, device, bias=False,
@@ -133,15 +135,15 @@ class ResidualRNNEncoder(RNNEncoder):
         )
 
 
-class ResidualGRUEncoder(RNNEncoder, GRUEncoder):
-    def __init__(
-            self, input_size, hidden_size, embedding_dim, device, bias=False,
-            num_layers=1, dropout=0, bidirectional=False, pad_token=0, drop_rate=0.1
-    ):
-        super(ResidualGRUEncoder, self).__init__(
-            nn.GRU, input_size, hidden_size, embedding_dim, num_layers, bidirectional,
-            device, bias, num_layers, dropout, bidirectional, pad_token, drop_rate
-        )
+# class ResidualGRUEncoder(RNNEncoder, GRUEncoder):
+#     def __init__(
+#             self, input_size, hidden_size, embedding_dim, device, bias=False,
+#             num_layers=1, dropout=0, bidirectional=False, pad_token=0, drop_rate=0.1
+#     ):
+#         super(ResidualGRUEncoder, self).__init__(
+#             nn.GRU, input_size, hidden_size, embedding_dim, num_layers, bidirectional,
+#             device, bias, num_layers, dropout, bidirectional, pad_token, drop_rate
+#         )
 
 #
 # class GRUEncoder(Encoder):
