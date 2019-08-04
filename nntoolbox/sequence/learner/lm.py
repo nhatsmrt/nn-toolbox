@@ -1,6 +1,7 @@
 from ...callbacks import Callback, CallbackHandler
 from ...metrics import Metric
 from ..models import LanguageModel
+from ...utils import grab_next_batch
 import torch
 from torch import Tensor, nn
 from torch.optim import Optimizer
@@ -58,7 +59,7 @@ class LanguageModelLearner:
     @torch.no_grad()
     def evaluate(self) -> bool:
         self._model.eval()
-        example = next(iter(self._val_iterator))
+        example = grab_next_batch(self._val_iterator)
         inputs = self._cb_handler.on_batch_begin({'text': example.text, 'target': example.target}, True)
         text, target = inputs['text'], inputs['target']
         output = self.compute_output(text, False)

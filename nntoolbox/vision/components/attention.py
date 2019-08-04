@@ -11,7 +11,8 @@ __all__ = ['GlobalSelfAttention', 'StandAloneSelfAttention', 'StandAloneMultihea
 # UNTESTED
 class GlobalSelfAttention(nn.Module):
     """
-    Implement attention module as described by
+    Implement attention module as described by:
+
     https://arxiv.org/pdf/1805.08318.pdf
     """
     def __init__(self, in_channels: int, reduction_ratio: int=8):
@@ -49,11 +50,11 @@ class GlobalSelfAttention(nn.Module):
         return self.scale * output + input
 
 
-
 # UNTESTED
 class StandAloneSelfAttention(nn.Conv2d):
     """
-    Implement a single head of self attention
+    Implement a single head of self attention:
+
     https://arxiv.org/pdf/1906.05909v1.pdf
     """
     def __init__(
@@ -177,15 +178,6 @@ class StandAloneMultiheadAttention(nn.Module):
     def forward(self, input: Tensor) -> Tensor:
         heads = [head(input) for head in self.heads]
         return torch.cat(heads, dim=1)
-
-
-# input = torch.rand(2, 3, 16, 16)
-# layer = StandAloneMultiheadAttention(4, 3, 8, 7, stride=2)
-# layer_2 = nn.Conv2d(3, 8, 7, stride=2)
-# layer(input)
-# print(layer(input).shape)
-# print(layer_2(input).shape)
-
 
 
 #INCOMPLETE

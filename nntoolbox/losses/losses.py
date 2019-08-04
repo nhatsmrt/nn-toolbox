@@ -1,9 +1,6 @@
-from torch.nn import Module, MSELoss
+from torch.nn import MSELoss
 from torch import Tensor
-from nntoolbox.utils import to_onehot
 import torch
-import torch.nn.functional as F
-from typing import Optional
 
 
 __all__ = ['RMSELoss']

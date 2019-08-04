@@ -17,13 +17,13 @@ class Attention(nn.Module):
         self._softmax = nn.Softmax(dim=1)
 
     def forward(self, keys: Tensor, queries: Tensor, values: Tensor, mask=None) -> Tuple[Tensor, Any]:
-        '''
+        """
         :param keys: a set of vectors with values' info, to compute attention weights. (seq_length, n_batch, keys_dim)
         :param queries: queries vector. Shape (n_query, n_batch, query_dim)
         :param values: a set of vectors to be attended to. Shape (seq_length, n_batch, input_dim)
         :param mask: binary, indicating which vector is padding. Shape (seq_length, n_batch). dtype: uint8
         :return: a weighted sum of the inputs. (n_query, n_batch, input_dim) if return_summary, else (n_query, seq_length, n_batch)
-        '''
+        """
         attn_weights = self.compute_attn_weights(keys, queries, mask) # Shape (n_query, seq_length, n_batch, 1)
 
         if self._return_summary:
@@ -32,13 +32,14 @@ class Attention(nn.Module):
             return attn_weights * values.unsqueeze(0), mask
 
     def compute_attn_weights(self, keys: Tensor, queries: Tensor, mask=None) -> Tensor:
-        '''
+        """
         Compute the attention weights
+
         :param keys: a set of vectors with values' info, to compute attention weights. (seq_length, n_batch, keys_dim)
         :param queries: query vectors. Shape (n_query, n_batch, query_dim)
         :param mask: binary, indicating which vector is padding. Shape (seq_length, n_batch). dtype: uint8
         :return: The weights for each time step. Shape (n_query, seq_length, n_batch, 1)
-        '''
+        """
         scores = self.compute_scores(keys, queries) # (n_query, seq_length, n_batch, 1)
         if mask is not None:
             scores[np.logical_not(mask.unsqueeze(0).unsqueeze(-1).repeat(scores.shape[0], 1, 1, 1))] = float('-inf')
@@ -47,12 +48,13 @@ class Attention(nn.Module):
         return weights
 
     def compute_scores(self, keys: Tensor, queries: Tensor) -> Tensor:
-        '''
+        """
         Compute the attention scores
+
         :param keys: a set of vectors with values' info, to compute attention weights. (seq_length, n_batch, keys_dim)
         :param queries: query vectors. Shape (n_query, n_batch, query_dim)
         :return: The score for each time step. Shape (n_query, seq_length, n_batch, 1)
-        '''
+        """
         raise NotImplementedError
 
 
@@ -64,12 +66,13 @@ class AdditiveAttention(Attention):
         self._score_linear = nn.Linear(hidden_dim, 1)
 
     def compute_scores(self, keys, queries):
-        '''
+        """
         Compute the attention scores
+
         :param keys: a set of vectors with values' info, to compute attention weights. (seq_length, n_batch, keys_dim)
         :param queries: query vectors. Shape (n_query, n_batch, query_dim)
         :return: The score for each time step. Shape (n_query, seq_length, n_batch, 1)
-        '''
+        """
         return self._score_linear(
             torch.tanh(self._key_linear(keys).unsqueeze(0) + self._query_linear(queries).unsqueeze(1))
         )
@@ -86,12 +89,12 @@ class MultiplicativeAttention(Attention):
         )
 
     def compute_scores(self, keys, queries):
-        '''
+        """
         Compute the attention scores
         :param keys: a set of vectors with values' info, to compute attention weights. (seq_length, n_batch, keys_dim)
         :param queries: query vectors. Shape (n_query, n_batch, query_dim)
         :return: The score for each time step. Shape (n_query, seq_length, n_batch, 1)
-        '''
+        """
         return self._bilinear(
             keys.unsqueeze(0).repeat(queries.shape[0], 1, 1, 1),
             queries.unsqueeze(1).repeat(1, keys.shape[0], 1, 1)
@@ -104,13 +107,13 @@ class ScaledDotProductAttention(Attention):
         super(ScaledDotProductAttention, self).__init__(key_dim, key_dim, value_dim, return_summary)
 
     def compute_scores(self, keys, queries):
-        '''
+        """
         Compute the attention scores:
         score(K, Q) = KQ^T / sqrt(d_k)
         :param keys: a set of vectors with values' info, to compute attention weights. (seq_length, batch_size, key_dim)
         :param queries: query vectors. Shape (n_query, batch_size, query_dim = key_dim)
         :return: The score for each time step. Shape (n_query, seq_length, n_batch, 1)
-        '''
+        """
         return queries.permute(1, 0, 2).bmm(keys.permute(1, 2, 0)).permute(1, 2, 0).unsqueeze(-1) / (self._key_dim ** 0.5)
 
 
@@ -137,11 +140,11 @@ class SelfAttention(nn.Module):
             assert in_features == value_dim
 
     def forward(self, inputs: Tensor, lengths: Tensor) -> Tuple[Tensor, Any]:
-        '''
+        """
         :param inputs: (seq_length, batch_size, input_dim)
         :param lengths: (batch_size)
         :return: (seq_length, batch_size, input_dim) and mask (seq_len, batch_size)
-        '''
+        """
         mask = create_mask_from_lengths(inputs, lengths)
 
         if self._transform:

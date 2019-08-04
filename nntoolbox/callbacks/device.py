@@ -16,7 +16,11 @@ class ToDeviceCallback(Callback):
         self.learner = None
 
     def on_train_begin(self):
-        self.learner._model = self.learner._model.to(self._device)
+        if hasattr(self.learner, '_model'):
+            self.learner._model = self.learner._model.to(self._device)
+        elif hasattr(self.learner, '_models'):
+            for i in range(len(self.learner._models)):
+                self.learner._models[i] = self.learner._models[i].to(self._device)
 
     def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         for key in data:

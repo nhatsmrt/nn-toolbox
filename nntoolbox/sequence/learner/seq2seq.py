@@ -1,12 +1,50 @@
 import torch
 from torch import nn
-from torch.optim import Adam, SGD
+from torch.optim import Adam, Optimizer
 from nntoolbox.utils import compute_num_batch
 from nntoolbox.sequence.utils import create_mask, get_lengths
+from nntoolbox.callbacks import CallbackHandler, Callback
+from nntoolbox.metrics import Metric
 import random
 import numpy as np
 from tqdm import trange
+from typing import Optional, Iterable, Dict
 from ..models import Encoder, Decoder
+
+
+class Seq2SeqLearnerV2:
+    def __init__(
+            self, train_iterator, val_iterator, encoder: Encoder, decoder: Decoder,
+            criterion: Optional[nn.Module], optimizer: Optimizer, teacher_forcing_ratio: float=1.0,
+            pad_token: int=0, SOS_token: int=1, EOS_token: int=2
+    ):
+        self._models = [encoder, decoder]
+        self._train_iterator, self._val_iterator = train_iterator, val_iterator
+        self._criterion, self._optimizer = criterion, optimizer
+        self._teacher_forcing_ratio = teacher_forcing_ratio
+        self._pad_token, self._SOS_token, self._EOS_token = pad_token, SOS_token, EOS_token
+
+    def learn(
+            self, n_epoch: int, callbacks: Iterable[Callback]=None,
+            metrics: Dict[str, Metric]=None, final_metric: str='accuracy'
+    ) -> float:
+        self._cb_handler = CallbackHandler(self, n_epoch, callbacks, metrics, final_metric)
+        self._cb_handler.on_train_begin()
+
+        for e in range(n_epoch):
+            for model in self._models: model.train()
+            self._cb_handler.on_epoch_begin()
+
+            # train step
+
+            stop_training = self.evaluate()
+            if stop_training:
+                break
+
+        return self._cb_handler.on_train_end()
+
+    def evaluate(self) -> bool:
+        return False
 
 
 class Seq2SeqLearner:
@@ -14,7 +52,7 @@ class Seq2SeqLearner:
     INCOMPLETE
     """
     def __init__(
-            self, encoder:Encoder, decoder:Decoder,
+            self, encoder: Encoder, decoder: Decoder,
             X, Y, X_val, Y_val, device,
             teacher_forcing_ratio=1.0,
             pad_token=0, SOS_token=1, EOS_token=2

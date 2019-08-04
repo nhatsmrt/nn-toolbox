@@ -15,6 +15,7 @@ __all__ = [
 class LambdaLayer(nn.Module):
     """
     Implement a quick layer wrapper for a function
+
     Useful for stateless layer (e.g without parameters)
     """
     def __init__(self, fn: Callable[[Tensor], Tensor]):
@@ -124,6 +125,7 @@ class CoordConvolutionalLayer(nn.Sequential):
 class HighwayConvolutionalLayer(HighwayLayer):
     """
     Highway layer (for images):
+
     y = T(x) * H(x) + (1 - T(x)) * x
     """
     def __init__(self, in_channels, main):
@@ -166,8 +168,12 @@ class ResizeConvolutionalLayer(nn.Module):
 class PixelShuffleConvolutionLayer(nn.Sequential):
     """
     Upsample the image using normal convolution follow by pixel shuffling
-    https://arxiv.org/pdf/1609.05158.pdf
-    https://arxiv.org/pdf/1806.02658.pdf (additional blurring at the end)
+
+    References:
+
+        https://arxiv.org/pdf/1609.05158.pdf
+
+        https://arxiv.org/pdf/1806.02658.pdf (additional blurring at the end)
     """
     def __init__(
             self, in_channels: int, out_channels: int, upscale_factor: int, activation=nn.ReLU,
