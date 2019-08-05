@@ -3,6 +3,7 @@ from torchtext.data import Field
 from typing import Tuple
 from nntoolbox.utils import download_from_url
 import tarfile
+import os
 
 
 class Europarl(TranslationDataset):
@@ -25,11 +26,14 @@ class Europarl(TranslationDataset):
 
         path = root + "europarl-v7." + non_en + "-" + "en"
 
-        if download:
+        if download and not (os.path.exists(path + "." + non_en) and os.path.exists(path + ".en")):
+            print("Downloading data.")
             url = self.base_url + non_en + "-" + "en.tgz"
             tar_path = root + non_en + "-" + "en.tgz"
             download_from_url(url, tar_path, max_size=None)
             with tarfile.open(tar_path) as tar:
                 tar.extract_all()
+        else:
+            print("Data already downloaded.")
 
         super(Europarl, self).__init__(path, exts, fields)
