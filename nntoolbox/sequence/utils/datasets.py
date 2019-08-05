@@ -6,6 +6,9 @@ import tarfile
 import os
 
 
+__all__ = ['Europarl']
+
+
 class Europarl(TranslationDataset):
     """
     European Parliament Proceedings Parallel Corpus 1996-2011 (UNTESTED)
@@ -33,6 +36,7 @@ class Europarl(TranslationDataset):
             download_from_url(url, tar_path, max_size=None)
             with tarfile.open(tar_path) as tar:
                 tar.extract_all()
+            print("Finish downloading.")
         else:
             print("Data already downloaded.")
 
