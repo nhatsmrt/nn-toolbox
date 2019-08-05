@@ -14,7 +14,7 @@ def download_from_url(url: str, filename: str, max_size: Optional[int]=50):
     :param max_size: (in kbs)
     :return:
     """
-    max_size *= 1024
+    if max_size is not None: max_size *= 1024
     req = requests.get(url, stream=max_size is not None)
     if req.status_code == 404:
         raise ConnectionError("Request invalid")
