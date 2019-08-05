@@ -1,10 +1,11 @@
 import requests
+from typing import Optional
 
 
 __all__ = ['download_from_url']
 
 
-def download_from_url(url: str, filename: str, max_size: int=50):
+def download_from_url(url: str, filename: str, max_size: Optional[int]=50):
     """
     Download from a url, and save to filename
 
@@ -14,12 +15,10 @@ def download_from_url(url: str, filename: str, max_size: int=50):
     :return:
     """
     max_size *= 1024
-    print(url)
-    req = requests.get(url, stream=True)
-    print(req)
+    req = requests.get(url, stream=max_size is not None)
     if req.status_code == 404:
         raise ConnectionError("Request invalid")
-    elif int(req.headers.get('content-Length')) > max_size:
+    elif max_size is not None and int(req.headers.get('content-Length')) > max_size:
         raise ConnectionError("File too large")
     else:
         with open(filename, 'wb') as f:
