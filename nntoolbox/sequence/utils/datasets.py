@@ -35,8 +35,7 @@ class Europarl(TranslationDataset):
             tar_path = root + non_en + "-" + "en.tgz"
             download_from_url(url, tar_path, max_size=None)
             with tarfile.open(tar_path) as tar:
-                tar.extract_all()
-            print("Finish downloading.")
+                tar.extractall(root)
         else:
             print("Data already downloaded.")
 
