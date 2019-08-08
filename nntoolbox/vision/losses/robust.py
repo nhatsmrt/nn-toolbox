@@ -2,12 +2,12 @@
 from torch import nn, Tensor
 
 
-__all__ = ['GeneralizedCharbonierLoss', 'CharbonierLoss', 'CharbonierLossV2']
+__all__ = ['GeneralizedCharbonnierLoss', 'CharbonnierLoss', 'CharbonnierLossV2']
 
 
-class GeneralizedCharbonierLoss(nn.Module):
+class GeneralizedCharbonnierLoss(nn.Module):
     """
-    Generalized Charbonier Loss Function:
+    Generalized Charbonnier Loss Function:
 
     l(input, target) = (input - target)^2 + eps^2) ^ (alpha / 2)
 
@@ -17,7 +17,7 @@ class GeneralizedCharbonierLoss(nn.Module):
         http://cs.brown.edu/~dqsun/pubs/cvpr_2010_flow.pdf
     """
     def __init__(self, alpha: float=1.0, eps: float=1e-6):
-        super(GeneralizedCharbonierLoss, self).__init__()
+        super(GeneralizedCharbonnierLoss, self).__init__()
         self.alpha = alpha
         self.eps = eps
 
@@ -25,9 +25,9 @@ class GeneralizedCharbonierLoss(nn.Module):
         return ((input - target).pow(2) + self.eps ** 2).pow(self.alpha / 2).mean()
 
 
-class CharbonierLoss(GeneralizedCharbonierLoss):
+class CharbonnierLoss(GeneralizedCharbonnierLoss):
     """
-    Charbonier Loss Function:
+    Charbonnier Loss Function:
 
     l(input, target) = sqrt((input - target)^2 + eps^2)
 
@@ -37,12 +37,12 @@ class CharbonierLoss(GeneralizedCharbonierLoss):
         https://arxiv.org/pdf/1710.01992.pdf
     """
     def __init__(self, eps: float=1e-3):
-        super(CharbonierLoss, self).__init__(1.0, eps)
+        super(CharbonnierLoss, self).__init__(1.0, eps)
 
 
-class CharbonierLossV2(nn.Module):
+class CharbonnierLossV2(nn.Module):
     """
-    Charbonier Loss Function:
+    Charbonnier Loss Function:
 
     l(input, target) = sqrt((input - target)^2 + eps^2)
 
@@ -52,7 +52,7 @@ class CharbonierLossV2(nn.Module):
         https://arxiv.org/pdf/1710.01992.pdf
     """
     def __init__(self, eps: float=1e-3):
-        super(CharbonierLossV2, self).__init__()
+        super(CharbonnierLossV2, self).__init__()
         self.eps = eps
 
     def forward(self, input: Tensor, target: Tensor) -> Tensor:
