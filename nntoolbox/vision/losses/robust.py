@@ -2,6 +2,9 @@
 from torch import nn, Tensor
 
 
+__all__ = ['GeneralizedCharbonierLoss', 'CharbonierLoss', 'CharbonierLossV2']
+
+
 class GeneralizedCharbonierLoss(nn.Module):
     """
     Generalized Charbonier Loss Function:
@@ -35,3 +38,23 @@ class CharbonierLoss(GeneralizedCharbonierLoss):
     """
     def __init__(self, eps: float=1e-3):
         super(CharbonierLoss, self).__init__(1.0, eps)
+
+
+class CharbonierLossV2(nn.Module):
+    """
+    Charbonier Loss Function:
+
+    l(input, target) = sqrt((input - target)^2 + eps^2)
+
+    References:
+
+        Wei-Sheng Lai et al. "Fast and Accurate Image Super-Resolution with Deep Laplacian Pyramid Networks."
+        https://arxiv.org/pdf/1710.01992.pdf
+    """
+    def __init__(self, eps: float=1e-3):
+        super(CharbonierLossV2, self).__init__()
+        self.eps = eps
+
+    def forward(self, input: Tensor, target: Tensor) -> Tensor:
+        return ((input - target).pow(2) + self.eps ** 2).sqrt().mean()
+
