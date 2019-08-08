@@ -11,3 +11,4 @@ from .ff import *
 from .kervolution import *
 from .attention import *
 from .unet import *
+from .upsample import *

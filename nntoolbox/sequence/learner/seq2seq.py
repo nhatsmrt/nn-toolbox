@@ -1,14 +1,14 @@
 import torch
-from torch import nn
+from torch import nn, Tensor
 from torch.optim import Adam, Optimizer
-from nntoolbox.utils import compute_num_batch
+from nntoolbox.utils import compute_num_batch, grab_next_batch
 from nntoolbox.sequence.utils import create_mask, get_lengths
 from nntoolbox.callbacks import CallbackHandler, Callback
 from nntoolbox.metrics import Metric
 import random
 import numpy as np
 from tqdm import trange
-from typing import Optional, Iterable, Dict
+from typing import Optional, Iterable, Dict, Tuple
 from ..models import Encoder, Decoder
 
 
@@ -36,6 +36,9 @@ class Seq2SeqLearnerV2:
             self._cb_handler.on_epoch_begin()
 
             # train step
+            for batch in self._train_iterator:
+                src, trg = batch.src, batch.trg
+                self.learn_one_iter(src, trg)
 
             stop_training = self.evaluate()
             if stop_training:
@@ -43,8 +46,131 @@ class Seq2SeqLearnerV2:
 
         return self._cb_handler.on_train_end()
 
+    def learn_one_iter(self, src: Tensor, trg: Tensor):
+        use_teacher_forcing = True if random.random() < self._teacher_forcing_ratio else False
+        src_mask, src_lengths, src = self.prepare_input(src)
+        trg_mask, trg_lengths, trg = self.prepare_input(trg)
+        batch_size = src.shape[1]
+        sos = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]]))
+
+        data = self._cb_handler.on_batch_begin({
+            "src_mask": src_mask,
+            "src_lengths": src_lengths,
+            "src": src,
+            "trg_mask": trg_mask,
+            "trg_lengths": trg_lengths,
+            "trg": trg,
+            "sos": sos
+        }, True)
+
+        src_mask, src_lengths, src, trg_mask, trg_lengths, trg, sos = \
+            data["src_mask"], data["src_lengths"], data["src"], \
+            data["trg_mask"], data["trg_lengths"], data["trg"], data["sos"]
+
+        outputs = self.compute_output(
+            src_mask, src_lengths, src, trg_mask, trg_lengths, trg, sos, use_teacher_forcing, True
+        )
+
+        loss = self.compute_loss(outputs, trg, True)
+        loss.backward()
+        if self._cb_handler.after_backward():
+            self._optimizer.step()
+            if self._cb_handler.after_step():
+                self._optimizer.zero_grad()
+
+            self._cb_handler.on_batch_end({'loss': loss.cpu().detach()})
+
+    def compute_output(
+            self, src_mask: Tensor, src_lengths: Tensor, src: Tensor,
+            trg_mask: Tensor, trg_lengths: Tensor, trg: Tensor,
+            sos: Tensor, train: bool, use_teacher_forcing: bool
+    ) -> Tensor:
+        batch_size = src.shape[1]
+        encoder, decoder = self._models[0], self._models[1]
+
+        hidden = encoder.init_hidden(batch_size)
+        enc_outputs, hidden = encoder(src, hidden)
+
+        hidden = enc_outputs.gather(
+            dim=0,
+            index=(src_lengths - 1).view(1, -1).unsqueeze(-1).repeat(1, 1, enc_outputs.shape[2])
+        )
+        outputs = []
+        if train and use_teacher_forcing:
+            self._decoder_input = torch.cat(
+                (
+                    sos,
+                    trg[:len(trg) - 1]
+                ),
+                dim=0
+            )
+            outputs, hidden = decoder(self._decoder_input, hidden, enc_outputs, mask=src_mask)
+            outputs = outputs.permute(1, 2, 0)
+        else:
+            self._decoder_input = sos
+            for t in range(len(src)):
+                output, hidden = decoder(self._decoder_input, hidden, enc_outputs, mask=src_mask)
+                outputs.append(output)
+                # self._decoder_input = torch.argmax(output, dim=-1)
+                self._decoder_input = trg[t:t+1]
+            outputs = torch.cat(outputs, dim=0).permute(1, 2, 0)
+
+        return self._cb_handler.after_outputs({"outputs": outputs}, train)["outputs"]
+
+    def compute_loss(self, outputs: Tensor, trg: Tensor, train: bool) -> Tensor:
+        return self._cb_handler.after_losses({"loss": self._criterion(outputs, trg.permute(1, 0))}, train)["loss"]
+
+    @torch.no_grad()
     def evaluate(self) -> bool:
-        return False
+        for model in self._models: model.eval()
+        # for batch in self._val_iterator:
+        batch = grab_next_batch(self._val_iterator)
+        src, trg = batch.src, batch.trg
+        src_mask, src_lengths, src = self.prepare_input(src)
+        trg_mask, trg_lengths, trg = self.prepare_input(trg)
+        batch_size = src.shape[1]
+        sos = torch.from_numpy(np.array([[self._SOS_token for _ in range(batch_size)]]))
+
+        data = self._cb_handler.on_batch_begin({
+            "src_mask": src_mask,
+            "src_lengths": src_lengths,
+            "src": src,
+            "trg_mask": trg_mask,
+            "trg_lengths": trg_lengths,
+            "trg": trg,
+            "sos": sos
+        }, True)
+
+        src_mask, src_lengths, src, trg_mask, trg_lengths, trg, sos = \
+            data["src_mask"], data["src_lengths"], data["src"], \
+            data["trg_mask"], data["trg_lengths"], data["trg"], data["sos"]
+
+        outputs = self.compute_output(
+            src_mask, src_lengths, src, trg_mask, trg_lengths, trg, sos, False, False
+        )
+
+        loss = self.compute_loss(outputs, trg, False)
+
+        return self._cb_handler.on_epoch_end({
+            "loss": loss,
+            "outputs": outputs.cpu().detach(),
+            "labels": trg.cpu()
+        })
+
+    def prepare_input(self, X: Tensor) -> Tuple[Tensor, Tensor, Tensor]:
+        """
+        :param X: sequence length of shape (seq_length, batch_size)
+        :return: mask and lengths
+        """
+        mask = create_mask(X, self._pad_token)
+
+        lengths = get_lengths(mask)
+        outputs = (
+            torch.from_numpy(mask),
+            torch.from_numpy(lengths).long(),
+            torch.from_numpy(X).long()
+        )
+        return outputs
 
 
 class Seq2SeqLearner:

@@ -33,5 +33,5 @@ class CharbonierLoss(GeneralizedCharbonierLoss):
         Wei-Sheng Lai et al. "Fast and Accurate Image Super-Resolution with Deep Laplacian Pyramid Networks."
         https://arxiv.org/pdf/1710.01992.pdf
     """
-    def __init__(self, eps: float=1e-6):
+    def __init__(self, eps: float=1e-3):
         super(CharbonierLoss, self).__init__(1.0, eps)

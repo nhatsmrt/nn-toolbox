@@ -3,7 +3,6 @@ Modified version of UNet that allows for decoder extraction and a little bit mor
 """
 from fastai.torch_core import *
 from fastai.layers import *
-from fastai.vision.models.unet import *
 from fastai.callbacks.hooks import *
 from nntoolbox.hooks import InputHook
 
