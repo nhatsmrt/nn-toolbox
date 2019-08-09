@@ -61,6 +61,8 @@ class LRFinder:
         losses = []
         best_loss = 0.0
         log_lrs = []
+        changes = []
+        smoothed_loss = float('-inf')
 
         for inputs, labels in self.train_data:
             if callbacks is None:
@@ -83,7 +85,9 @@ class LRFinder:
                     avg_loss = loss.cpu().item()
                 else:
                     avg_loss = beta * avg_loss + (1 - beta) * loss.cpu().item()
-                smoothed_loss = avg_loss / (1 + beta ** iter)
+                new_smoothed_loss = avg_loss / (1 + beta ** iter)
+                changes.append(new_smoothed_loss - smoothed_loss)
+                smoothed_loss = new_smoothed_loss
 
                 losses.append(smoothed_loss)
                 log_lrs.append(log10(lr))
@@ -92,6 +96,7 @@ class LRFinder:
                     print("LR: " + str(lr))
                     print("Loss: " + str(loss.cpu().item()))
                     print("Smoothed loss: " + str(smoothed_loss))
+                    print("Change: " + str(changes[iter]))
                     print()
 
                 if iter > warmup and smoothed_loss > best_loss * 4:
@@ -112,7 +117,7 @@ class LRFinder:
                 break
 
         self.model.load_state_dict(model_state_dict)
-        log_lrs, losses = log_lrs[5:-1], losses[5:-1]
+        log_lrs, losses, changes = log_lrs[5:-1], losses[5:-1], changes[5:-1]
         if display:
             plt.plot(np.power(10, log_lrs), losses)
             plt.title('LR Range Plot')
@@ -120,8 +125,23 @@ class LRFinder:
             plt.ylabel('Losses')
             plt.show()
 
-        best_ind = np.argmin(losses)
+        # best_ind = np.argmin(losses)
+        best_ind = np.argmin(changes)
         max_lr = 10 ** log_lrs[best_ind]
-        print("Minimum (smoothed) loss: " + str(losses[best_ind]))
+        # print("Minimum (smoothed) loss: " + str(losses[best_ind]))
+        print("Largest change in (smoothed) loss: " + str(changes[best_ind]))
         print("Corresponding LR: " + str(max_lr))
         return max_lr / 4, max_lr
+
+
+# class LRFinderV2:
+#     """Adapt for any learner that has ONE optimizer and ONE loss (INCOMPLETE)"""
+#     def __int__(self, learner):
+#         self.learner = learner
+#
+#     def find_lr(
+#             self, lr0: float=1e-7, lr_final: float=10.0, warmup: int=15,
+#             beta: float=0.67, verbose: bool=True, display: bool=True,
+#             callbacks: Optional[List['Callback']]=None
+#     ):
+#         callbacks += []

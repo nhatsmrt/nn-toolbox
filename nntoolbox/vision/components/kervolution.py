@@ -39,11 +39,11 @@ class GaussianKernel(nn.Module):
         self.log_bandwidth = nn.Parameter(torch.tensor(np.log(bandwidth)), requires_grad=trainable)
 
     def forward(self, input: Tensor, weight: Tensor, bias: Tensor):
-        '''
+        """
         :param input: (batch_size, patch_size, n_patches)
         :param weight: (out_channels, in_channels, kernel_height, kernel_width)
         :return:
-        '''
+        """
         input = input.unsqueeze(-2)
         weight = weight.view(weight.shape[0], -1).t().unsqueeze(0).unsqueeze(-1)
         output = torch.exp(-torch.exp(self.log_bandwidth) * (input - weight).pow(2).sum(1))
@@ -93,9 +93,9 @@ class Kervolution2D(nn.Conv2d):
 
 
 class KervolutionalLayer(nn.Sequential):
-    '''
+    """
     Simple convolutional layer: input -> conv2d -> activation -> norm 2d
-    '''
+    """
     def __init__(
             self, in_channels, out_channels, kernel,
             kernel_size=3, stride=1, padding=0,
