@@ -9,7 +9,8 @@ __all__ = ['AdamW']
 
 class AdamW(Adam):
     """
-    Implement decoupled weight decay for Adam
+    Implement decoupled weight decay for Adam. This is no longer maintained, as pytorch already provides its own
+    implementation, which is most likely more efficient.
 
     References:
 

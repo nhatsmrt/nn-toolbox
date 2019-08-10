@@ -10,6 +10,9 @@ import numpy as np
 from typing import Union, Tuple
 
 
+__all__ = ['LocallyConnected2D']
+
+
 class LocallyConnected2D(nn.Module):
     """
     Works similarly to Conv2d, but does not share weight. Much more memory intensive, and slower
@@ -87,5 +90,4 @@ class LocallyConnected2D(nn.Module):
             1, self.out_channels, self.in_channels * self.kernel_size[0] * self.kernel_size[1], -1
         )).sum(2)
         return output.view(-1, output.shape[1], self.output_h, self.output_w) + self.bias[None, :]
-
 
