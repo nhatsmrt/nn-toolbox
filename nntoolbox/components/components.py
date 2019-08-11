@@ -4,8 +4,9 @@ from typing import Sequence, Callable, Optional
 
 
 __all__ = [
-    'LambdaLayer', 'ResidualLinearBlock', 'LinearlyAugmentedFF',
-    'HighwayLayer', 'SquareUnitLinear', 'QuadraticPolynomialLayer', 'MLP'
+    'LambdaLayer', 'ScalingLayer', 'ResidualLinearBlock',
+    'LinearlyAugmentedFF', 'HighwayLayer', 'SquareUnitLinear',
+    'QuadraticPolynomialLayer', 'MLP'
 ]
 
 
@@ -21,6 +22,17 @@ class LambdaLayer(nn.Module):
 
     def forward(self, input: Tensor) -> Tensor:
         return self.fn(input)
+
+
+class ScalingLayer(LambdaLayer):
+    """
+    References:
+
+        Christian Szegedy et al. "Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning."
+        https://arxiv.org/pdf/1602.07261.pdf
+    """
+    def __init__(self, scale: float=0.1):
+        super(ScalingLayer, self).__init__(lambda inp: inp * scale)
 
 
 class ResidualLinearBlock(nn.Module):
