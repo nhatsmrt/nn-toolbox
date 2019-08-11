@@ -4,9 +4,23 @@ from typing import Sequence, Callable, Optional
 
 
 __all__ = [
-    'ResidualLinearBlock', 'LinearlyAugmentedFF', 'HighwayLayer',
-    'SquareUnitLinear', 'QuadraticPolynomialLayer', 'MLP'
+    'LambdaLayer', 'ResidualLinearBlock', 'LinearlyAugmentedFF',
+    'HighwayLayer', 'SquareUnitLinear', 'QuadraticPolynomialLayer', 'MLP'
 ]
+
+
+class LambdaLayer(nn.Module):
+    """
+    Implement a quick layer wrapper for a function
+
+    Useful for stateless layer (e.g without parameters)
+    """
+    def __init__(self, fn: Callable[[Tensor], Tensor]):
+        super(LambdaLayer, self).__init__()
+        self.fn = fn
+
+    def forward(self, input: Tensor) -> Tensor:
+        return self.fn(input)
 
 
 class ResidualLinearBlock(nn.Module):

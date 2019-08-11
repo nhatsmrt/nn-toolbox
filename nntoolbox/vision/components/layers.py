@@ -5,23 +5,9 @@ from typing import Callable
 
 
 __all__ = [
-    'LambdaLayer', 'ConvolutionalLayer', 'CoordConv2D', 'CoordConvolutionalLayer',
+    'ConvolutionalLayer', 'CoordConv2D', 'CoordConvolutionalLayer',
     'HighwayConvolutionalLayer', 'Flatten', 'Reshape', 'InputNormalization'
 ]
-
-
-class LambdaLayer(nn.Module):
-    """
-    Implement a quick layer wrapper for a function
-
-    Useful for stateless layer (e.g without parameters)
-    """
-    def __init__(self, fn: Callable[[Tensor], Tensor]):
-        super(LambdaLayer, self).__init__()
-        self.fn = fn
-
-    def forward(self, input):
-        return self.fn(input)
 
 
 class ConvolutionalLayer(nn.Sequential):
