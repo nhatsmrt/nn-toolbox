@@ -211,7 +211,7 @@ model = Sequential(
 #     model=model,
 #     train_data=train_loader,
 #     criterion=SmoothedCrossEntropy(),
-#     optimizer=partial(LAMB, lr=0.074, weight_decay=0.01, correct_bias=False),
+#     optimizer=partial(LAMB, lr=0.074, weight_decay=0.01),
 #     device=get_device()
 # )
 # lr_finder.find_lr(warmup=100, callbacks=[ToDeviceCallback()])
@@ -222,7 +222,7 @@ model = Sequential(
 # print(count_trainable_parameters(model)) # 14437816 3075928
 
 # optimizer = LARS(model.parameters(), weight_decay=0.0001, lr=0.10, momentum=0.9)
-optimizer = LAMB(model.parameters(), weight_decay=0.01, lr=0.06, correct_bias=False)
+optimizer = LAMB(model.parameters(), weight_decay=0.01, lr=0.06)
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
