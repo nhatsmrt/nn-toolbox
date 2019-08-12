@@ -9,7 +9,7 @@ __all__ = ['RandomRescale']
 
 class RandomRescale:
     """Randomly downscale an image, then resize it back to original scale"""
-    def __init__(self, scale: Union[float, Tuple[float, float]]):
+    def __init__(self, scale: Union[float, Tuple[float, float]]=(0.5, 1.0)):
         self.scale = scale if isinstance(scale, tuple) else (scale, scale)
 
     def __call__(self, image: Image) -> Image:
