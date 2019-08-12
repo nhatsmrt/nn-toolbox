@@ -34,6 +34,7 @@
 <span></span><span class="kn">from</span> <span class="nn">...callbacks</span> <span class="k">import</span> <span class="n">Callback</span><span class="p">,</span> <span class="n">CallbackHandler</span>
 <span class="kn">from</span> <span class="nn">...metrics</span> <span class="k">import</span> <span class="n">Metric</span>
 <span class="kn">from</span> <span class="nn">..models</span> <span class="k">import</span> <span class="n">LanguageModel</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="k">import</span> <span class="n">grab_next_batch</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">nn</span>
 <span class="kn">from</span> <span class="nn">torch.optim</span> <span class="k">import</span> <span class="n">Optimizer</span>
@@ -91,7 +92,7 @@
 <div class="viewcode-block" id="LanguageModelLearner.evaluate"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.lm.LanguageModelLearner.evaluate">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-        <span class="n">example</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_val_iterator</span><span class="p">))</span>
+        <span class="n">example</span> <span class="o">=</span> <span class="n">grab_next_batch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_val_iterator</span><span class="p">)</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_begin</span><span class="p">({</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">target</span><span class="p">},</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">text</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
         <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_output</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
@@ -161,7 +162,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>

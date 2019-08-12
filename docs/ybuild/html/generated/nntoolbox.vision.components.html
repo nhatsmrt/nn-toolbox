@@ -43,8 +43,8 @@
 <dt id="nntoolbox.vision.components.activation.Swish">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.activation.</code><code class="sig-name descname">Swish</code><span class="sig-paren">(</span><em class="sig-param">beta_init: float = 1.0</em>, <em class="sig-param">trainable: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/activation.html#Swish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.activation.Swish" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Swish activation function:
-f(x) = x * sigmoid(eta x)</p>
+<p>Swish activation function:</p>
+<p>f(x) = x * sigmoid(eta x)</p>
 <dl class="method">
 <dt id="nntoolbox.vision.components.activation.Swish.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/activation.html#Swish.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.activation.Swish.forward" title="Permalink to this definition">¶</a></dt>
@@ -68,8 +68,8 @@ registered hooks while the latter silently ignores them.</p>
 <dt id="nntoolbox.vision.components.attention.GlobalSelfAttention">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.attention.</code><code class="sig-name descname">GlobalSelfAttention</code><span class="sig-paren">(</span><em class="sig-param">in_channels: int</em>, <em class="sig-param">reduction_ratio: int = 8</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/attention.html#GlobalSelfAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.GlobalSelfAttention" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Implement attention module as described by
-<a class="reference external" href="https://arxiv.org/pdf/1805.08318.pdf">https://arxiv.org/pdf/1805.08318.pdf</a></p>
+<p>Implement attention module as described by:</p>
+<p><a class="reference external" href="https://arxiv.org/pdf/1805.08318.pdf">https://arxiv.org/pdf/1805.08318.pdf</a></p>
 <dl class="method">
 <dt id="nntoolbox.vision.components.attention.GlobalSelfAttention.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/components/attention.html#GlobalSelfAttention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.GlobalSelfAttention.forward" title="Permalink to this definition">¶</a></dt>
@@ -90,8 +90,8 @@ registered hooks while the latter silently ignores them.</p>
 <dt id="nntoolbox.vision.components.attention.StandAloneSelfAttention">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.attention.</code><code class="sig-name descname">StandAloneSelfAttention</code><span class="sig-paren">(</span><em class="sig-param">in_channels: int</em>, <em class="sig-param">out_channels: int</em>, <em class="sig-param">kernel_size</em>, <em class="sig-param">stride=1</em>, <em class="sig-param">padding: int = 0</em>, <em class="sig-param">dilation: int = 1</em>, <em class="sig-param">bias: bool = True</em>, <em class="sig-param">padding_mode: str = 'zeros'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.conv.Conv2d</span></code></p>
-<p>Implement a single head of self attention
-<a class="reference external" href="https://arxiv.org/pdf/1906.05909v1.pdf">https://arxiv.org/pdf/1906.05909v1.pdf</a></p>
+<p>Implement a single head of self attention:</p>
+<p><a class="reference external" href="https://arxiv.org/pdf/1906.05909v1.pdf">https://arxiv.org/pdf/1906.05909v1.pdf</a></p>
 <dl class="method">
 <dt id="nntoolbox.vision.components.attention.StandAloneSelfAttention.compute_output_shape">
 <code class="sig-name descname">compute_output_shape</code><span class="sig-paren">(</span><em class="sig-param">height</em>, <em class="sig-param">width</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention.compute_output_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention.compute_output_shape" title="Permalink to this definition">¶</a></dt>
@@ -370,28 +370,6 @@ registered hooks while the latter silently ignores them.</p>
 <div class="section" id="module-nntoolbox.vision.components.layers">
 <span id="nntoolbox-vision-components-layers-module"></span><h2>nntoolbox.vision.components.layers module<a class="headerlink" href="#module-nntoolbox.vision.components.layers" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="nntoolbox.vision.components.layers.LambdaLayer">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">LambdaLayer</code><span class="sig-paren">(</span><em class="sig-param">fn: Callable[torch.Tensor, torch.Tensor]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/layers.html#LambdaLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.layers.LambdaLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Implement a quick layer wrapper for a function
-Useful for stateless layer (e.g without parameters)</p>
-<dl class="method">
-<dt id="nntoolbox.vision.components.layers.LambdaLayer.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/layers.html#LambdaLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.layers.LambdaLayer.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="nntoolbox.vision.components.layers.ConvolutionalLayer">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">ConvolutionalLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">kernel_size=3</em>, <em class="sig-param">stride=1</em>, <em class="sig-param">padding=0</em>, <em class="sig-param">bias=False</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">normalization=&lt;class 'torch.nn.modules.batchnorm.BatchNorm2d'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/layers.html#ConvolutionalLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.layers.ConvolutionalLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
@@ -439,8 +417,8 @@ registered hooks while the latter silently ignores them.</p>
 <dt id="nntoolbox.vision.components.layers.HighwayConvolutionalLayer">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">HighwayConvolutionalLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">main</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/layers.html#HighwayConvolutionalLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.layers.HighwayConvolutionalLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="nntoolbox.components.html#nntoolbox.components.components.HighwayLayer" title="nntoolbox.components.components.HighwayLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.components.components.HighwayLayer</span></code></a></p>
-<p>Highway layer (for images):
-y = T(x) * H(x) + (1 - T(x)) * x</p>
+<p>Highway layer (for images):</p>
+<p>y = T(x) * H(x) + (1 - T(x)) * x</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -467,62 +445,6 @@ this function, one should call the <code class="xref py py-class docutils litera
 instead of this since the former takes care of running the
 registered hooks while the latter silently ignores them.</p>
 </div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="nntoolbox.vision.components.layers.ResizeConvolutionalLayer">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">ResizeConvolutionalLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">normalization=&lt;class 'torch.nn.modules.batchnorm.BatchNorm2d'&gt;</em>, <em class="sig-param">mode='bilinear'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/layers.html#ResizeConvolutionalLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.layers.ResizeConvolutionalLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Upsample the image (using an interpolation algorithm), then pass to a conv layer</p>
-<dl class="method">
-<dt id="nntoolbox.vision.components.layers.ResizeConvolutionalLayer.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em>, <em class="sig-param">out_h</em>, <em class="sig-param">out_w</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/layers.html#ResizeConvolutionalLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.layers.ResizeConvolutionalLayer.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="nntoolbox.vision.components.layers.PixelShuffleConvolutionLayer">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">PixelShuffleConvolutionLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels: int</em>, <em class="sig-param">out_channels: int</em>, <em class="sig-param">upscale_factor: int</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">normalization=&lt;class 'torch.nn.modules.batchnorm.BatchNorm2d'&gt;</em>, <em class="sig-param">blur: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/layers.html#PixelShuffleConvolutionLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.layers.PixelShuffleConvolutionLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
-<p>Upsample the image using normal convolution follow by pixel shuffling
-<a class="reference external" href="https://arxiv.org/pdf/1609.05158.pdf">https://arxiv.org/pdf/1609.05158.pdf</a>
-<a class="reference external" href="https://arxiv.org/pdf/1806.02658.pdf">https://arxiv.org/pdf/1806.02658.pdf</a> (additional blurring at the end)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>in_channels</strong> – input channels</p></li>
-<li><p><strong>out_channels</strong> – output channels</p></li>
-<li><p><strong>upscale_factor</strong> – factor to increase spatial resolution by</p></li>
-<li><p><strong>activation</strong> – activation function</p></li>
-<li><p><strong>normalization</strong> – normalization function</p></li>
-</ul>
-</dd>
-<dt class="field-even">Param</dt>
-<dd class="field-even"><p>whether to blur at the end to remove checkerboard artifact</p>
-</dd>
-</dl>
-<dl class="method">
-<dt id="nntoolbox.vision.components.layers.PixelShuffleConvolutionLayer.initialize_conv">
-<code class="sig-name descname">initialize_conv</code><span class="sig-paren">(</span><em class="sig-param">conv</em>, <em class="sig-param">in_channels: int</em>, <em class="sig-param">out_channels: int</em>, <em class="sig-param">upscale_factor: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/layers.html#PixelShuffleConvolutionLayer.initialize_conv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.layers.PixelShuffleConvolutionLayer.initialize_conv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize according to:
-<a class="reference external" href="https://arxiv.org/pdf/1707.02937.pdf">https://arxiv.org/pdf/1707.02937.pdf</a>
-:param conv:
-:param in_channels:
-:param out_channels:
-:param upscale_factor:
-:return:</p>
 </dd></dl>
 
 </dd></dl>
@@ -566,6 +488,47 @@ instead of this since the former takes care of running the
 registered hooks while the latter silently ignores them.</p>
 </div>
 </dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.vision.components.local">
+<span id="nntoolbox-vision-components-local-module"></span><h2>nntoolbox.vision.components.local module<a class="headerlink" href="#module-nntoolbox.vision.components.local" title="Permalink to this headline">¶</a></h2>
+<p>Locally Connected Layer for 2D input</p>
+<dl class="class">
+<dt id="nntoolbox.vision.components.local.LocallyConnected2D">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.local.</code><code class="sig-name descname">LocallyConnected2D</code><span class="sig-paren">(</span><em class="sig-param">in_channels: int, out_channels: int, in_h: int, in_w: int, kernel_size: Union[int, Tuple[int, int]], stride: Union[int, Tuple[int, int]] = 1, padding: Union[int, Tuple[int, int]] = 0, dilation: Union[int, Tuple[int, int]] = 1, groups: int = 1, bias: bool = True, padding_mode: str = 'zeros'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/local.html#LocallyConnected2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.LocallyConnected2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Works similarly to Conv2d, but does not share weight. Much more memory intensive, and slower
+(due to suboptimal native pytorch implementation) (UNTESTED)</p>
+<p>Example usages:</p>
+<blockquote>
+<div><p>Yaniv Taigman et al. “DeepFace: Closing the Gap to Human-Level Performance in Face Verification”
+<a class="reference external" href="https://www.cs.toronto.edu/~ranzato/publications/taigman_cvpr14.pdf">https://www.cs.toronto.edu/~ranzato/publications/taigman_cvpr14.pdf</a></p>
+</div></blockquote>
+<dl class="method">
+<dt id="nntoolbox.vision.components.local.LocallyConnected2D.compute_output_shape">
+<code class="sig-name descname">compute_output_shape</code><span class="sig-paren">(</span><em class="sig-param">height: int</em>, <em class="sig-param">width: int</em><span class="sig-paren">)</span> &#x2192; Tuple[int, int]<a class="reference internal" href="../_modules/nntoolbox/vision/components/local.html#LocallyConnected2D.compute_output_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.LocallyConnected2D.compute_output_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.vision.components.local.LocallyConnected2D.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/components/local.html#LocallyConnected2D.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.LocallyConnected2D.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.vision.components.local.LocallyConnected2D.reset_parameters">
+<code class="sig-name descname">reset_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/local.html#LocallyConnected2D.reset_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.LocallyConnected2D.reset_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -633,7 +596,7 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="class">
 <dt id="nntoolbox.vision.components.normalization.SelfStabilizer">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">SelfStabilizer</code><span class="sig-paren">(</span><em class="sig-param">steepness: float = 4</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/normalization.html#SelfStabilizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.SelfStabilizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">SelfStabilizer</code><span class="sig-paren">(</span><em class="sig-param">steepness: float = 4.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/normalization.html#SelfStabilizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.SelfStabilizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Self stabilize layer, based on:
 <a class="reference external" href="https://www.cntk.ai/pythondocs/cntk.layers.blocks.html">https://www.cntk.ai/pythondocs/cntk.layers.blocks.html</a>
@@ -653,6 +616,37 @@ instead of this since the former takes care of running the
 registered hooks while the latter silently ignores them.</p>
 </div>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.vision.components.normalization.BatchRenorm2D">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">BatchRenorm2D</code><span class="sig-paren">(</span><em class="sig-param">num_features: int</em>, <em class="sig-param">r_max: float</em>, <em class="sig-param">d_max: float</em>, <em class="sig-param">eps: float = 1e-06</em>, <em class="sig-param">momentum: float = 0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/normalization.html#BatchRenorm2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.BatchRenorm2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Modified from batch norm implementation in FastAI course 2 v3’s notebook. Works better for smaller batches
+(UNTESTED)</p>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://github.com/fastai/course-v3/blob/master/nbs/dl2/07_batchnorm.ipynb">https://github.com/fastai/course-v3/blob/master/nbs/dl2/07_batchnorm.ipynb</a></p>
+<p>Ioffe, Sergey. “Batch Renormalization: Towards Reducing Minibatch Dependence in Batch-Normalized Models.”
+<a class="reference external" href="https://arxiv.org/pdf/1702.03275.pdf">https://arxiv.org/pdf/1702.03275.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.vision.components.normalization.BatchRenorm2D.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/components/normalization.html#BatchRenorm2D.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.BatchRenorm2D.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.vision.components.normalization.BatchRenorm2D.update_stats">
+<code class="sig-name descname">update_stats</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/vision/components/normalization.html#BatchRenorm2D.update_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.BatchRenorm2D.update_stats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -775,12 +769,12 @@ registered hooks while the latter silently ignores them.</p>
 <dt id="nntoolbox.vision.components.regularization.ShakeShake">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.regularization.</code><code class="sig-name descname">ShakeShake</code><span class="sig-paren">(</span><em class="sig-param">keep: str = 'shake'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/regularization.html#ShakeShake"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.regularization.ShakeShake" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Implement shake-shake regularizer:
-y = x + sum_i alpha_i branch_i
-(alpha_i &gt; 0 are random variables such that sum_i alpha_i = 1)
-At test time:
-y = x + 1 / n_branch sum_i branch_i
-Based on <a class="reference external" href="https://arxiv.org/abs/1705.07485">https://arxiv.org/abs/1705.07485</a></p>
+<p>Implement shake-shake regularizer:</p>
+<p>y = x + sum_i alpha_i branch_i</p>
+<p>(alpha_i &gt; 0 are random variables such that sum_i alpha_i = 1)</p>
+<p>At test time:</p>
+<p>y = x + 1 / n_branch sum_i branch_i</p>
+<p>Based on <a class="reference external" href="https://arxiv.org/abs/1705.07485">https://arxiv.org/abs/1705.07485</a></p>
 <dl class="method">
 <dt id="nntoolbox.vision.components.regularization.ShakeShake.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">branches: torch.Tensor</em>, <em class="sig-param">training: bool</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/components/regularization.html#ShakeShake.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.regularization.ShakeShake.forward" title="Permalink to this definition">¶</a></dt>
@@ -801,9 +795,9 @@ registered hooks while the latter silently ignores them.</p>
 <dt id="nntoolbox.vision.components.regularization.DoubleBackpropagation">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.regularization.</code><code class="sig-name descname">DoubleBackpropagation</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">criterion: torch.nn.modules.module.Module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/regularization.html#DoubleBackpropagation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.regularization.DoubleBackpropagation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Double backpropagation regularizer to penalize slight perturbation in input
-<a class="reference external" href="https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf">https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf</a>
-<a class="reference external" href="http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf">http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf</a></p>
+<p>Double backpropagation regularizer to penalize slight perturbation in input</p>
+<p><a class="reference external" href="https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf">https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf</a></p>
+<p><a class="reference external" href="http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf">http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf</a></p>
 <dl class="method">
 <dt id="nntoolbox.vision.components.regularization.DoubleBackpropagation.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em>, <em class="sig-param">label: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/components/regularization.html#DoubleBackpropagation.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.regularization.DoubleBackpropagation.forward" title="Permalink to this definition">¶</a></dt>
@@ -939,6 +933,75 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-nntoolbox.vision.components.structured">
+<span id="nntoolbox-vision-components-structured-module"></span><h2>nntoolbox.vision.components.structured module<a class="headerlink" href="#module-nntoolbox.vision.components.structured" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.vision.components.structured.O2PLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.structured.</code><code class="sig-name descname">O2PLayer</code><a class="reference internal" href="../_modules/nntoolbox/vision/components/structured.html#O2PLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.structured.O2PLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.vision.components.structured.O2PLayer.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/components/structured.html#O2PLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.structured.O2PLayer.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.vision.components.structured.O2PLayerV2">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.structured.</code><code class="sig-name descname">O2PLayerV2</code><a class="reference internal" href="../_modules/nntoolbox/vision/components/structured.html#O2PLayerV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.structured.O2PLayerV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Slightly more stable
+Recommended Use.</p>
+<dl class="method">
+<dt id="nntoolbox.vision.components.structured.O2PLayerV2.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/components/structured.html#O2PLayerV2.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.structured.O2PLayerV2.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.vision.components.structured.BilinearPooling">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.structured.</code><code class="sig-name descname">BilinearPooling</code><a class="reference internal" href="../_modules/nntoolbox/vision/components/structured.html#BilinearPooling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.structured.BilinearPooling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Bilinear pooling layer</p>
+<p class="rubric">References</p>
+<p>Lin et al. “Bilinear CNN Models for Fine-grained Visual Recognition”.
+<a class="reference external" href="http://vis-www.cs.umass.edu/bcnn/docs/bcnn_iccv15.pdf">http://vis-www.cs.umass.edu/bcnn/docs/bcnn_iccv15.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.vision.components.structured.BilinearPooling.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">inputA: torch.Tensor</em>, <em class="sig-param">inputB: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/components/structured.html#BilinearPooling.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.structured.BilinearPooling.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-nntoolbox.vision.components.unet">
 <span id="nntoolbox-vision-components-unet-module"></span><h2>nntoolbox.vision.components.unet module<a class="headerlink" href="#module-nntoolbox.vision.components.unet" title="Permalink to this headline">¶</a></h2>
 <p>Modified version of UNet that allows for decoder extraction and a little bit more customization</p>
@@ -951,6 +1014,66 @@ registered hooks while the latter silently ignores them.</p>
 <dt id="nntoolbox.vision.components.unet.DynamicUnetV2.get_decoder">
 <code class="sig-name descname">get_decoder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/unet.html#DynamicUnetV2.get_decoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.unet.DynamicUnetV2.get_decoder" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.vision.components.upsample">
+<span id="nntoolbox-vision-components-upsample-module"></span><h2>nntoolbox.vision.components.upsample module<a class="headerlink" href="#module-nntoolbox.vision.components.upsample" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.vision.components.upsample.ResizeConvolutionalLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.upsample.</code><code class="sig-name descname">ResizeConvolutionalLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">normalization=&lt;class 'torch.nn.modules.batchnorm.BatchNorm2d'&gt;</em>, <em class="sig-param">mode='bilinear'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/upsample.html#ResizeConvolutionalLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.upsample.ResizeConvolutionalLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Upsample the image (using an interpolation algorithm), then pass to a conv layer</p>
+<dl class="method">
+<dt id="nntoolbox.vision.components.upsample.ResizeConvolutionalLayer.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em>, <em class="sig-param">out_h</em>, <em class="sig-param">out_w</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/upsample.html#ResizeConvolutionalLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.upsample.ResizeConvolutionalLayer.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.vision.components.upsample.PixelShuffleConvolutionLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.upsample.</code><code class="sig-name descname">PixelShuffleConvolutionLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels: int</em>, <em class="sig-param">out_channels: int</em>, <em class="sig-param">upscale_factor: int</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">normalization=&lt;class 'torch.nn.modules.batchnorm.BatchNorm2d'&gt;</em>, <em class="sig-param">blur: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/upsample.html#PixelShuffleConvolutionLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.upsample.PixelShuffleConvolutionLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
+<p>Upsample the image using normal convolution follow by pixel shuffling</p>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://arxiv.org/pdf/1609.05158.pdf">https://arxiv.org/pdf/1609.05158.pdf</a></p>
+<p><a class="reference external" href="https://arxiv.org/pdf/1806.02658.pdf">https://arxiv.org/pdf/1806.02658.pdf</a> (additional blurring at the end)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> – input channels</p></li>
+<li><p><strong>out_channels</strong> – output channels</p></li>
+<li><p><strong>upscale_factor</strong> – factor to increase spatial resolution by</p></li>
+<li><p><strong>activation</strong> – activation function</p></li>
+<li><p><strong>normalization</strong> – normalization function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Param</dt>
+<dd class="field-even"><p>whether to blur at the end to remove checkerboard artifact</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="nntoolbox.vision.components.upsample.PixelShuffleConvolutionLayer.initialize_conv">
+<code class="sig-name descname">initialize_conv</code><span class="sig-paren">(</span><em class="sig-param">conv</em>, <em class="sig-param">in_channels: int</em>, <em class="sig-param">out_channels: int</em>, <em class="sig-param">upscale_factor: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/components/upsample.html#PixelShuffleConvolutionLayer.initialize_conv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.upsample.PixelShuffleConvolutionLayer.initialize_conv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize according to:
+<a class="reference external" href="https://arxiv.org/pdf/1707.02937.pdf">https://arxiv.org/pdf/1707.02937.pdf</a>
+:param conv:
+:param in_channels:
+:param out_channels:
+:param upscale_factor:
+:return:</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -989,7 +1112,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a><ul class="current">
@@ -1003,6 +1126,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.inception">nntoolbox.vision.components.inception module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.kervolution">nntoolbox.vision.components.kervolution module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.layers">nntoolbox.vision.components.layers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.local">nntoolbox.vision.components.local module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.normalization">nntoolbox.vision.components.normalization module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.pool">nntoolbox.vision.components.pool module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.pretrain">nntoolbox.vision.components.pretrain module</a></li>
@@ -1010,7 +1134,9 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.res">nntoolbox.vision.components.res module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.se">nntoolbox.vision.components.se module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.stn">nntoolbox.vision.components.stn module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.structured">nntoolbox.vision.components.structured module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.unet">nntoolbox.vision.components.unet module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components.upsample">nntoolbox.vision.components.upsample module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.components">Module contents</a></li>
 </ul>
 </li>

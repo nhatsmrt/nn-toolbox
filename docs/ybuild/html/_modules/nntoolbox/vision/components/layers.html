@@ -33,29 +33,14 @@
   <h1>Source code for nntoolbox.vision.components.layers</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
-<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">from</span> <span class="nn">...components</span> <span class="k">import</span> <span class="n">HighwayLayer</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Callable</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;LambdaLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;ConvolutionalLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;CoordConv2D&#39;</span><span class="p">,</span> <span class="s1">&#39;CoordConvolutionalLayer&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;HighwayConvolutionalLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;Flatten&#39;</span><span class="p">,</span> <span class="s1">&#39;ResizeConvolutionalLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;PixelShuffleConvolutionLayer&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Reshape&#39;</span><span class="p">,</span> <span class="s1">&#39;InputNormalization&#39;</span>
+    <span class="s1">&#39;ConvolutionalLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;CoordConv2D&#39;</span><span class="p">,</span> <span class="s1">&#39;CoordConvolutionalLayer&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;HighwayConvolutionalLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;Flatten&#39;</span><span class="p">,</span> <span class="s1">&#39;Reshape&#39;</span><span class="p">,</span> <span class="s1">&#39;InputNormalization&#39;</span>
 <span class="p">]</span>
-
-
-<div class="viewcode-block" id="LambdaLayer"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.LambdaLayer">[docs]</a><span class="k">class</span> <span class="nc">LambdaLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Implement a quick layer wrapper for a function</span>
-<span class="sd">    Useful for stateless layer (e.g without parameters)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LambdaLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span>
-
-<div class="viewcode-block" id="LambdaLayer.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.LambdaLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="ConvolutionalLayer"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.ConvolutionalLayer">[docs]</a><span class="k">class</span> <span class="nc">ConvolutionalLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
@@ -157,6 +142,7 @@
 <div class="viewcode-block" id="HighwayConvolutionalLayer"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.HighwayConvolutionalLayer">[docs]</a><span class="k">class</span> <span class="nc">HighwayConvolutionalLayer</span><span class="p">(</span><span class="n">HighwayLayer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Highway layer (for images):</span>
+
 <span class="sd">    y = T(x) * H(x) + (1 - T(x)) * x</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">main</span><span class="p">):</span>
@@ -174,81 +160,6 @@
 <div class="viewcode-block" id="Flatten"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.Flatten">[docs]</a><span class="k">class</span> <span class="nc">Flatten</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 <div class="viewcode-block" id="Flatten.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.Flatten.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">input</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="ResizeConvolutionalLayer"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.ResizeConvolutionalLayer">[docs]</a><span class="k">class</span> <span class="nc">ResizeConvolutionalLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Upsample the image (using an interpolation algorithm), then pass to a conv layer</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">ResizeConvolutionalLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">mode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">ConvolutionalLayer</span><span class="p">(</span>
-            <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
-            <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
-            <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span>
-            <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
-        <span class="p">)</span>
-
-<div class="viewcode-block" id="ResizeConvolutionalLayer.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.ResizeConvolutionalLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">out_h</span><span class="p">,</span> <span class="n">out_w</span><span class="p">):</span>
-        <span class="n">upsampled</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">out_h</span><span class="p">,</span> <span class="n">out_w</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">upsampled</span><span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="PixelShuffleConvolutionLayer"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.PixelShuffleConvolutionLayer">[docs]</a><span class="k">class</span> <span class="nc">PixelShuffleConvolutionLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Upsample the image using normal convolution follow by pixel shuffling</span>
-<span class="sd">    https://arxiv.org/pdf/1609.05158.pdf</span>
-<span class="sd">    https://arxiv.org/pdf/1806.02658.pdf (additional blurring at the end)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">upscale_factor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span>
-            <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">,</span> <span class="n">blur</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :param in_channels: input channels</span>
-<span class="sd">        :param out_channels: output channels</span>
-<span class="sd">        :param upscale_factor: factor to increase spatial resolution by</span>
-<span class="sd">        :param activation: activation function</span>
-<span class="sd">        :param normalization: normalization function</span>
-<span class="sd">        :param: whether to blur at the end to remove checkerboard artifact</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
-            <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
-            <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span> <span class="o">*</span> <span class="p">(</span><span class="n">upscale_factor</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span>
-            <span class="c1"># kernel_size=3,</span>
-            <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_conv</span><span class="p">(</span><span class="n">conv</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">upscale_factor</span><span class="p">)</span>
-        <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="c1"># nn.ReplicationPad2d(1),</span>
-            <span class="n">conv</span><span class="p">,</span>
-            <span class="n">activation</span><span class="p">(),</span>
-            <span class="n">normalization</span><span class="p">(</span><span class="n">num_features</span><span class="o">=</span><span class="n">out_channels</span> <span class="o">*</span> <span class="p">(</span><span class="n">upscale_factor</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)),</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">PixelShuffle</span><span class="p">(</span><span class="n">upscale_factor</span><span class="p">)</span>
-        <span class="p">]</span>
-        <span class="k">if</span> <span class="n">blur</span><span class="p">:</span>
-            <span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">ReplicationPad2d</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">nn</span><span class="o">.</span><span class="n">AvgPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PixelShuffleConvolutionLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">layers</span><span class="p">)</span>
-
-<div class="viewcode-block" id="PixelShuffleConvolutionLayer.initialize_conv"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.PixelShuffleConvolutionLayer.initialize_conv">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_conv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conv</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">upscale_factor</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize according to:</span>
-<span class="sd">        https://arxiv.org/pdf/1707.02937.pdf</span>
-<span class="sd">        :param conv:</span>
-<span class="sd">        :param in_channels:</span>
-<span class="sd">        :param out_channels:</span>
-<span class="sd">        :param upscale_factor:</span>
-<span class="sd">        :return:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">torch.nn.init</span> <span class="k">import</span> <span class="n">kaiming_uniform_</span>
-        <span class="kn">import</span> <span class="nn">math</span>
-        <span class="n">weight_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">out_channels</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">kaiming_uniform_</span><span class="p">(</span><span class="n">weight_tensor</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-        <span class="n">weight_tensor</span> <span class="o">=</span> <span class="n">weight_tensor</span><span class="o">.</span><span class="n">repeat</span><span class="p">((</span><span class="n">upscale_factor</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">weight_tensor</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="Reshape"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.Reshape">[docs]</a><span class="k">class</span> <span class="nc">Reshape</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -303,7 +214,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>

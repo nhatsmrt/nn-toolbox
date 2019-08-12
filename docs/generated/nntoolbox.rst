@@ -16,6 +16,7 @@ Subpackages
    nntoolbox.models
    nntoolbox.optim
    nntoolbox.sequence
+   nntoolbox.tabular
    nntoolbox.test
    nntoolbox.transforms
    nntoolbox.utils

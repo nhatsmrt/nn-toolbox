@@ -20,6 +20,14 @@ nntoolbox.sequence.components.cells module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.sequence.components.conv module
+-----------------------------------------
+
+.. automodule:: nntoolbox.sequence.components.conv
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.sequence.components.embedding module
 ----------------------------------------------
 
@@ -40,6 +48,14 @@ nntoolbox.sequence.components.modifier module
 ---------------------------------------------
 
 .. automodule:: nntoolbox.sequence.components.modifier
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.sequence.components.pool module
+-----------------------------------------
+
+.. automodule:: nntoolbox.sequence.components.pool
    :members:
    :undoc-members:
    :show-inheritance:

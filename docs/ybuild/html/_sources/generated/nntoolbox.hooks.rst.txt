@@ -12,10 +12,10 @@ nntoolbox.hooks.hooks module
    :undoc-members:
    :show-inheritance:
 
-nntoolbox.hooks.inputs module
------------------------------
+nntoolbox.hooks.io module
+-------------------------
 
-.. automodule:: nntoolbox.hooks.inputs
+.. automodule:: nntoolbox.hooks.io
    :members:
    :undoc-members:
    :show-inheritance:

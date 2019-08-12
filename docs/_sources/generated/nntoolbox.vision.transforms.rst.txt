@@ -12,6 +12,14 @@ nntoolbox.vision.transforms.imgaug module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.vision.transforms.scale module
+----------------------------------------
+
+.. automodule:: nntoolbox.vision.transforms.scale
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.vision.transforms.transforms module
 ---------------------------------------------
 

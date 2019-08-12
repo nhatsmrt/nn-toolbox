@@ -1,5 +1,6 @@
 torch
 torchvision
+torchaudio
 torchgpipe
 pretrainedmodels
 
@@ -13,6 +14,7 @@ Shapely
 torchtext
 nltk
 spacy
+sentencepiece
 pytorch-transformers
 
 fastai
@@ -23,6 +25,7 @@ numpy
 scipy
 scikit-learn
 pandas
+networkx
 
 tb-nightly
 hiddenlayer

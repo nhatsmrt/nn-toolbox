@@ -20,6 +20,14 @@ nntoolbox.utils.data module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.utils.download module
+-------------------------------
+
+.. automodule:: nntoolbox.utils.download
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.utils.gradient module
 -------------------------------
 
@@ -32,6 +40,14 @@ nntoolbox.utils.lr\_finder module
 ---------------------------------
 
 .. automodule:: nntoolbox.utils.lr_finder
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.utils.norm\_dist module
+---------------------------------
+
+.. automodule:: nntoolbox.utils.norm_dist
    :members:
    :undoc-members:
    :show-inheritance:

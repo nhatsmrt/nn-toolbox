@@ -32,17 +32,54 @@
             
   <h1>Source code for nntoolbox.vision.losses.metrics</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">...components</span> <span class="k">import</span> <span class="n">MLP</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;VerificationLoss&#39;</span><span class="p">,</span> <span class="s1">&#39;ContrastiveLoss&#39;</span><span class="p">,</span> <span class="s1">&#39;TripletSoftMarginLoss&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TripletMarginLossV2&#39;</span><span class="p">,</span> <span class="s1">&#39;AngularLoss&#39;</span><span class="p">,</span> <span class="s1">&#39;NPairLoss&#39;</span><span class="p">,</span> <span class="s1">&#39;NPairAngular&#39;</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="VerificationLoss"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.VerificationLoss">[docs]</a><span class="k">class</span> <span class="nc">VerificationLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Verify if two embeddings belong to the same class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">VerificationLoss</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span> <span class="o">=</span> <span class="n">embedding_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verifier</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="n">embedding_dim</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">[</span><span class="n">embedding_dim</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BCEWithLogitsLoss</span><span class="p">()</span>
+
+<div class="viewcode-block" id="VerificationLoss.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.VerificationLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">assert</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">x1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verifier</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VerificationLoss.get_verifier"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.VerificationLoss.get_verifier">[docs]</a>    <span class="k">def</span> <span class="nf">get_verifier</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">verifier</span></div></div>
 
 
 <div class="viewcode-block" id="ContrastiveLoss"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.ContrastiveLoss">[docs]</a><span class="k">class</span> <span class="nc">ContrastiveLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Contrastive loss function.</span>
-<span class="sd">    Based on: https://github.com/delijati/pytorch-siamese/blob/master/contrastive.py#L20</span>
+<span class="sd">    </span>
+<span class="sd">    Based on: </span>
+<span class="sd">    </span>
+<span class="sd">    https://github.com/delijati/pytorch-siamese/blob/master/contrastive.py#L20</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ContrastiveLoss</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">margin</span> <span class="o">=</span> <span class="n">margin</span>
@@ -58,8 +95,10 @@
         <span class="k">assert</span> <span class="n">x1_type</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span>
         <span class="k">assert</span> <span class="n">y_type</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span></div>
 
-<div class="viewcode-block" id="ContrastiveLoss.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.ContrastiveLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="ContrastiveLoss.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.ContrastiveLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_type_forward</span><span class="p">((</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">x0</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="c1"># euclidian distance</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -67,10 +106,10 @@
 
         <span class="n">mdist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin</span> <span class="o">-</span> <span class="n">dist</span>
         <span class="n">cl_dist</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">mdist</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="c1"># print(dist)</span>
         <span class="n">loss</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">dist_sq</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">cl_dist</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">loss</span></div>
-
 
 <div class="viewcode-block" id="ContrastiveLoss.dist"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.ContrastiveLoss.dist">[docs]</a>    <span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_0</span><span class="p">,</span> <span class="n">x_1</span><span class="p">,</span> <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span> <span class="n">squared</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="n">interaction</span> <span class="o">=</span> <span class="n">x_0</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="n">x_1</span><span class="p">))</span>
@@ -80,53 +119,63 @@
         <span class="k">if</span> <span class="n">squared</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">dist_squared</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dist_squared</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span></div></div>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">dist_squared</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="TripletSoftMarginLoss"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.TripletSoftMarginLoss">[docs]</a><span class="k">class</span> <span class="nc">TripletSoftMarginLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TripletSoftMarginLoss</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_p</span> <span class="o">=</span> <span class="n">p</span>
 
-<div class="viewcode-block" id="TripletSoftMarginLoss.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.TripletSoftMarginLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anchor</span><span class="p">,</span> <span class="n">positive</span><span class="p">,</span> <span class="n">negative</span><span class="p">):</span>
+<div class="viewcode-block" id="TripletSoftMarginLoss.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.TripletSoftMarginLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">anchor</span><span class="p">,</span> <span class="n">positive</span><span class="p">,</span> <span class="n">negative</span> <span class="o">=</span> <span class="n">data</span>
         <span class="n">ap</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">anchor</span> <span class="o">-</span> <span class="n">positive</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_p</span><span class="p">)</span>
         <span class="n">an</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">anchor</span> <span class="o">-</span> <span class="n">negative</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_p</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ap</span> <span class="o">-</span> <span class="n">an</span><span class="p">)))</span></div></div>
 
 
+<div class="viewcode-block" id="TripletMarginLossV2"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.TripletMarginLossV2">[docs]</a><span class="k">class</span> <span class="nc">TripletMarginLossV2</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">TripletMarginLoss</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A quick wrapper for margin loss&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-06</span><span class="p">,</span> <span class="n">swap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">size_average</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduce</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TripletMarginLossV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">margin</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">swap</span><span class="p">,</span> <span class="n">size_average</span><span class="p">,</span> <span class="n">reduce</span><span class="p">,</span> <span class="n">reduction</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TripletMarginLossV2.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.TripletMarginLossV2.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">anchor</span><span class="p">,</span> <span class="n">positive</span><span class="p">,</span> <span class="n">negative</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">anchor</span><span class="p">,</span> <span class="n">positive</span><span class="p">,</span> <span class="n">negative</span><span class="p">)</span></div></div>
+
+
 <div class="viewcode-block" id="NPairLoss"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.NPairLoss">[docs]</a><span class="k">class</span> <span class="nc">NPairLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reg_lambda</span> <span class="o">=</span> <span class="mf">0.002</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reg_lambda</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.002</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NPairLoss</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reg_lambda</span> <span class="o">=</span> <span class="n">reg_lambda</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ce_loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
 
     <span class="c1"># anchors, positives: (N, D)</span>
-<div class="viewcode-block" id="NPairLoss.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.NPairLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anchors</span><span class="p">,</span> <span class="n">positives</span><span class="p">):</span>
+<div class="viewcode-block" id="NPairLoss.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.NPairLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">anchors</span><span class="p">,</span> <span class="n">positives</span> <span class="o">=</span> <span class="n">data</span>
         <span class="n">interaction</span> <span class="o">=</span> <span class="n">anchors</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="n">positives</span><span class="p">))</span> <span class="c1">#(N, N) (i, j) = anchor_i positive j</span>
         <span class="n">labels</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">anchors</span><span class="p">)))</span>
 
         <span class="k">if</span> <span class="n">anchors</span><span class="o">.</span><span class="n">is_cuda</span><span class="p">:</span>
             <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 
-
         <span class="n">reg_an</span> <span class="o">=</span>  <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">anchors</span> <span class="o">*</span> <span class="n">anchors</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
         <span class="n">reg_pos</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">positives</span> <span class="o">*</span> <span class="n">positives</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
         <span class="n">l2_reg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reg_lambda</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">reg_an</span> <span class="o">+</span> <span class="n">reg_pos</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()(</span><span class="n">interaction</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span> <span class="o">+</span> <span class="n">l2_reg</span></div></div>
-
-
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ce_loss</span><span class="p">(</span><span class="n">interaction</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span> <span class="o">+</span> <span class="n">l2_reg</span></div></div>
 
 
 <div class="viewcode-block" id="AngularLoss"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.AngularLoss">[docs]</a><span class="k">class</span> <span class="nc">AngularLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Based on https://github.com/leeesangwon/PyTorch-Image-Retrieval/blob/public/losses.py</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">45</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">AngularLoss</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">([</span><span class="n">alpha</span><span class="p">]))</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
 
-
-<div class="viewcode-block" id="AngularLoss.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.AngularLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anchors</span><span class="p">,</span> <span class="n">positives</span><span class="p">):</span>
+<div class="viewcode-block" id="AngularLoss.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.AngularLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">anchors</span><span class="p">,</span> <span class="n">positives</span> <span class="o">=</span> <span class="n">data</span>
         <span class="k">if</span> <span class="n">anchors</span><span class="o">.</span><span class="n">is_cuda</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 
@@ -159,14 +208,22 @@
 
 
 <div class="viewcode-block" id="NPairAngular"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.NPairAngular">[docs]</a><span class="k">class</span> <span class="nc">NPairAngular</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Combining N-Pair loss and Angular loss</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">45</span><span class="p">,</span> <span class="n">reg_lambda</span> <span class="o">=</span> <span class="mf">0.002</span><span class="p">,</span> <span class="n">angular_lambda</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NPairAngular</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_angular_loss</span> <span class="o">=</span> <span class="n">AngularLoss</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_npair_loss</span> <span class="o">=</span> <span class="n">NPairLoss</span><span class="p">(</span><span class="n">reg_lambda</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_angular_lambda</span> <span class="o">=</span> <span class="n">angular_lambda</span>
 
-<div class="viewcode-block" id="NPairAngular.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.NPairAngular.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anchors</span><span class="p">,</span> <span class="n">positives</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_npair_loss</span><span class="p">(</span><span class="n">anchors</span><span class="p">,</span> <span class="n">positives</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_angular_lambda</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_angular_loss</span><span class="p">(</span><span class="n">anchors</span><span class="p">,</span> <span class="n">positives</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_angular_lambda</span><span class="p">)</span></div></div>
+<div class="viewcode-block" id="NPairAngular.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.metrics.NPairAngular.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">anchors</span><span class="p">,</span> <span class="n">positives</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="p">(</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_npair_loss</span><span class="p">(</span><span class="n">anchors</span><span class="p">,</span> <span class="n">positives</span><span class="p">)</span>
+                   <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_angular_lambda</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_angular_loss</span><span class="p">(</span><span class="n">anchors</span><span class="p">,</span> <span class="n">positives</span><span class="p">)</span>
+               <span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_angular_lambda</span><span class="p">)</span></div></div>
+
 </pre></div>
 
           </div>
@@ -197,7 +254,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>

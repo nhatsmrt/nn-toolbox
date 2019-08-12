@@ -20,6 +20,14 @@ nntoolbox.components.components module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.components.kernel module
+----------------------------------
+
+.. automodule:: nntoolbox.components.kernel
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.components.maxout module
 ----------------------------------
 
@@ -28,10 +36,34 @@ nntoolbox.components.maxout module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.components.moe module
+-------------------------------
+
+.. automodule:: nntoolbox.components.moe
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.components.pool module
 --------------------------------
 
 .. automodule:: nntoolbox.components.pool
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.components.rbf module
+-------------------------------
+
+.. automodule:: nntoolbox.components.rbf
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.components.regularization module
+------------------------------------------
+
+.. automodule:: nntoolbox.components.regularization
    :members:
    :undoc-members:
    :show-inheritance:

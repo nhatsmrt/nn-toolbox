@@ -12,6 +12,22 @@ nntoolbox.vision.utils.data module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.vision.utils.dataset module
+-------------------------------------
+
+.. automodule:: nntoolbox.vision.utils.dataset
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.vision.utils.selector module
+--------------------------------------
+
+.. automodule:: nntoolbox.vision.utils.selector
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.vision.utils.utils module
 -----------------------------------
 

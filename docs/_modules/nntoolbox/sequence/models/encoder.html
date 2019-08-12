@@ -32,8 +32,12 @@
             
   <h1>Source code for nntoolbox.sequence.models.encoder</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">..components</span> <span class="k">import</span> <span class="n">ResidualRNN</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Encoder&#39;</span><span class="p">,</span> <span class="s1">&#39;RNNEncoder&#39;</span><span class="p">,</span> <span class="s1">&#39;GRUEncoder&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="Encoder"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.Encoder">[docs]</a><span class="k">class</span> <span class="nc">Encoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -49,37 +53,157 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_embedding</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embedding_dim</span><span class="p">,</span> <span class="n">padding_idx</span><span class="o">=</span><span class="n">pad_token</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">drop_rate</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Encoder.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.Encoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">):</span>
+<div class="viewcode-block" id="Encoder.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.Encoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">states</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param input: (seq_len, batch_size, input_dim)</span>
+<span class="sd">        :param states: internal states of the RNN, each having dimension</span>
+<span class="sd">        (num_layers * num_directions, batch_size, hidden_size)</span>
+<span class="sd">        :return:</span>
+
+<span class="sd">            output: (seq_len, batch, num_directions * hidden_size)</span>
+
+<span class="sd">            states: states at final time step, each having dimension</span>
+<span class="sd">                (num_layers * num_directions, batch_size, hidden_size)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="Encoder.init_hidden"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.Encoder.init_hidden">[docs]</a>    <span class="k">def</span> <span class="nf">init_hidden</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+<div class="viewcode-block" id="Encoder.init_hidden"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.Encoder.init_hidden">[docs]</a>    <span class="k">def</span> <span class="nf">init_hidden</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the first zero hidden state</span>
+
+<span class="sd">        :param batch_size:</span>
+<span class="sd">        :return: Initial internal states, each of dim (num_layers * num_directions, batch_size, hidden_size)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+
+
+<div class="viewcode-block" id="RNNEncoder"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.RNNEncoder">[docs]</a><span class="k">class</span> <span class="nc">RNNEncoder</span><span class="p">(</span><span class="n">Encoder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">rnn</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span>
+            <span class="n">num_layers</span><span class="p">,</span> <span class="n">bidirectional</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">pad_token</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">drop_rate</span><span class="o">=</span><span class="mf">0.1</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RNNEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">bidirectional</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">pad_token</span><span class="p">,</span> <span class="n">drop_rate</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rnn</span> <span class="o">=</span> <span class="n">rnn</span>
+
+<div class="viewcode-block" id="RNNEncoder.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.RNNEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">states</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="n">embedded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dropout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_embedding</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span>
+        <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rnn</span><span class="p">(</span><span class="n">embedded</span><span class="p">,</span> <span class="n">states</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span></div></div>
+
+
+<div class="viewcode-block" id="GRUEncoder"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.GRUEncoder">[docs]</a><span class="k">class</span> <span class="nc">GRUEncoder</span><span class="p">(</span><span class="n">RNNEncoder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_token</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">drop_rate</span><span class="o">=</span><span class="mf">0.1</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GRUEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span>
+                <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span>
+                <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span>
+                <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
+                <span class="n">bidirectional</span><span class="o">=</span><span class="n">bidirectional</span>
+            <span class="p">),</span>
+            <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">bidirectional</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">pad_token</span><span class="p">,</span> <span class="n">drop_rate</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="GRUEncoder.init_hidden"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.GRUEncoder.init_hidden">[docs]</a>    <span class="k">def</span> <span class="nf">init_hidden</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the first zero hidden state</span>
+
+<span class="sd">        :param batch_size:</span>
+<span class="sd">        :return: Initial hidden state, of dimensision (num_layers * num_directions, batch_size, hidden_size)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">first_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_layers</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bidirectional</span><span class="p">:</span>
             <span class="n">first_dim</span> <span class="o">*=</span> <span class="mi">2</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">first_dim</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hidden_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">first_dim</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hidden_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">),)</span></div></div>
 
 
-<div class="viewcode-block" id="GRUEncoder"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.GRUEncoder">[docs]</a><span class="k">class</span> <span class="nc">GRUEncoder</span><span class="p">(</span><span class="n">Encoder</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_token</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">drop_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GRUEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">bidirectional</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">pad_token</span><span class="p">,</span> <span class="n">drop_rate</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gru</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">GRU</span><span class="p">(</span>
-            <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span>
-            <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span>
-            <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
-            <span class="n">bidirectional</span><span class="o">=</span><span class="n">bidirectional</span>
+<span class="k">class</span> <span class="nc">LSTMEncoder</span><span class="p">(</span><span class="n">RNNEncoder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_token</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">drop_rate</span><span class="o">=</span><span class="mf">0.1</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LSTMEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span>
+                <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span>
+                <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span>
+                <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
+                <span class="n">bidirectional</span><span class="o">=</span><span class="n">bidirectional</span>
+            <span class="p">),</span>
+            <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">bidirectional</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">pad_token</span><span class="p">,</span> <span class="n">drop_rate</span>
         <span class="p">)</span>
-        <span class="c1"># self._gru = ResidualRNN(</span>
-        <span class="c1">#     nn.GRU, input_size=hidden_size,</span>
-        <span class="c1">#     bias=bias, num_layers=num_layers,</span>
-        <span class="c1">#     dropout=dropout,</span>
-        <span class="c1"># )</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GRUEncoder.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.encoder.GRUEncoder.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">):</span>
-        <span class="n">embedded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dropout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_embedding</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span>
-        <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gru</span><span class="p">(</span><span class="n">embedded</span><span class="p">,</span> <span class="n">hidden</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span></div></div>
+    <span class="k">def</span> <span class="nf">init_hidden</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the first zero hidden state</span>
 
+<span class="sd">        :param batch_size:</span>
+<span class="sd">        :return: Initial hidden state and cell state, each of dim (num_layers * num_directions, batch_size, hidden_size)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">first_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_layers</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bidirectional</span><span class="p">:</span>
+            <span class="n">first_dim</span> <span class="o">*=</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">first_dim</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hidden_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">first_dim</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hidden_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
+        <span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ResidualRNNEncoder</span><span class="p">(</span><span class="n">RNNEncoder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">base_rnn</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pad_token</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">drop_rate</span><span class="o">=</span><span class="mf">0.1</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ResidualRNNEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+                <span class="n">ResidualRNN</span><span class="p">(</span>
+                    <span class="n">base_rnn</span><span class="o">=</span><span class="n">base_rnn</span><span class="p">,</span> <span class="n">input_size</span><span class="o">=</span><span class="n">embedding_dim</span><span class="p">,</span>
+                    <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="n">num_layers</span><span class="p">,</span>
+                    <span class="n">dropout</span><span class="o">=</span><span class="n">dropout</span><span class="p">,</span>
+                    <span class="n">bidirectional</span><span class="o">=</span><span class="n">bidirectional</span>
+                <span class="p">),</span>
+                <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">bidirectional</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">pad_token</span><span class="p">,</span> <span class="n">drop_rate</span>
+        <span class="p">)</span>
+
+
+<span class="c1"># class ResidualGRUEncoder(RNNEncoder, GRUEncoder):</span>
+<span class="c1">#     def __init__(</span>
+<span class="c1">#             self, input_size, hidden_size, embedding_dim, device, bias=False,</span>
+<span class="c1">#             num_layers=1, dropout=0, bidirectional=False, pad_token=0, drop_rate=0.1</span>
+<span class="c1">#     ):</span>
+<span class="c1">#         super(ResidualGRUEncoder, self).__init__(</span>
+<span class="c1">#             nn.GRU, input_size, hidden_size, embedding_dim, num_layers, bidirectional,</span>
+<span class="c1">#             device, bias, num_layers, dropout, bidirectional, pad_token, drop_rate</span>
+<span class="c1">#         )</span>
+
+<span class="c1">#</span>
+<span class="c1"># class GRUEncoder(Encoder):</span>
+<span class="c1">#     def __init__(</span>
+<span class="c1">#             self, input_size, hidden_size, embedding_dim, device, bias=False,</span>
+<span class="c1">#             num_layers=1, dropout=0, bidirectional=False, pad_token=0, drop_rate=0.1):</span>
+<span class="c1">#         super(GRUEncoder, self).__init__(</span>
+<span class="c1">#             input_size, hidden_size, embedding_dim,</span>
+<span class="c1">#             num_layers, bidirectional, device, pad_token, drop_rate)</span>
+<span class="c1">#         self._gru = nn.GRU(</span>
+<span class="c1">#             embedding_dim, hidden_size,</span>
+<span class="c1">#             bias=bias, num_layers=num_layers,</span>
+<span class="c1">#             dropout=dropout,</span>
+<span class="c1">#             bidirectional=bidirectional</span>
+<span class="c1">#         )</span>
+<span class="c1">#         # self._gru = ResidualRNN(</span>
+<span class="c1">#         #     nn.GRU, input_size=hidden_size,</span>
+<span class="c1">#         #     bias=bias, num_layers=num_layers,</span>
+<span class="c1">#         #     dropout=dropout,</span>
+<span class="c1">#         # )</span>
+<span class="c1">#         self.to(device)</span>
+<span class="c1">#</span>
+<span class="c1">#     def forward(self, input: Tensor, hidden: Tensor) -&gt; Tuple[Tensor, Tensor]:</span>
+<span class="c1">#         embedded = self._dropout(self._embedding(input))</span>
+<span class="c1">#         output, hidden = self._gru(embedded, hidden)</span>
+<span class="c1">#         return output, hidden</span>
+<span class="c1">#</span>
 </pre></div>
 
           </div>
@@ -110,7 +234,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>

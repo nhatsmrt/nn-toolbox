@@ -31,18 +31,19 @@
           <div class="body" role="main">
             
   <h1>Source code for nntoolbox.callbacks.transfer</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.callbacks</span> <span class="k">import</span> <span class="n">Callback</span>
-<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">BatchNorm1d</span><span class="p">,</span> <span class="n">BatchNorm2d</span><span class="p">,</span> <span class="n">BatchNorm3d</span><span class="p">,</span> <span class="n">Module</span>
+<span></span><span class="kn">from</span> <span class="nn">.callbacks</span> <span class="k">import</span> <span class="n">Callback</span><span class="p">,</span> <span class="n">GroupCallback</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">BatchNorm1d</span><span class="p">,</span> <span class="n">BatchNorm2d</span><span class="p">,</span> <span class="n">BatchNorm3d</span><span class="p">,</span> <span class="n">Module</span><span class="p">,</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">torch.optim</span> <span class="k">import</span> <span class="n">Optimizer</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FreezeBN&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FreezeBN&#39;</span><span class="p">,</span> <span class="s1">&#39;GradualUnfreezing&#39;</span><span class="p">,</span> <span class="s1">&#39;FineTuning&#39;</span><span class="p">]</span>
 <span class="n">BN_TYPE</span> <span class="o">=</span> <span class="p">[</span><span class="n">BatchNorm1d</span><span class="p">,</span> <span class="n">BatchNorm2d</span><span class="p">,</span> <span class="n">BatchNorm3d</span><span class="p">]</span>
 
 
-<span class="c1"># UNTESTED</span>
 <div class="viewcode-block" id="FreezeBN"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.transfer.FreezeBN">[docs]</a><span class="k">class</span> <span class="nc">FreezeBN</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Freeze statistics of non trainable batch norms so that it won&#39;t accumulate statistics</span>
+<span class="sd">    Freeze statistics of non trainable batch norms so that it won&#39;t accumulate statistics (UNTESTED)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="FreezeBN.on_epoch_begin"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.transfer.FreezeBN.on_epoch_begin">[docs]</a>    <span class="k">def</span> <span class="nf">on_epoch_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">freeze_bn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span></div></div>
@@ -54,10 +55,90 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">submodule</span><span class="p">,</span> <span class="n">bn_type</span><span class="p">):</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">next</span><span class="p">(</span><span class="n">submodule</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">:</span>
                     <span class="n">submodule</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-        <span class="n">freeze_bn</span><span class="p">(</span><span class="n">submodule</span><span class="p">)</span>
+        <span class="c1"># freeze_bn(submodule)</span>
 
 
-<span class="c1"># class GradualUnfreezing</span>
+<span class="k">def</span> <span class="nf">unfreeze</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">Sequential</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">unfreeze_from</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">unfreeze_to</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unfreeze a model from ind</span>
+
+<span class="sd">    :param module:</span>
+<span class="sd">    :param optimizer</span>
+<span class="sd">    :param unfreeze_from:</span>
+<span class="sd">    :param unfreeze_to:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">module</span><span class="p">)):</span>
+        <span class="n">submodule</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">_modules</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">ind</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">ind</span> <span class="o">&lt;</span> <span class="n">unfreeze_from</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">submodule</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">ind</span> <span class="o">&lt;</span> <span class="n">unfreeze_to</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">submodule</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+                <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">add_param_group</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">submodule</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">})</span>
+
+
+<div class="viewcode-block" id="GradualUnfreezing"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.transfer.GradualUnfreezing">[docs]</a><span class="k">class</span> <span class="nc">GradualUnfreezing</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gradually unfreezing pretrained layers, with discriminative learning rates (UNTESTED)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">unfreeze_every</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">freeze_inds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">lr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_freeze_inds</span> <span class="o">=</span> <span class="n">freeze_inds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unfreeze_every</span> <span class="o">=</span> <span class="n">unfreeze_every</span>
+        <span class="k">if</span> <span class="n">lr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">lr</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">freeze_inds</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="p">[</span><span class="n">lr</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freeze_inds</span><span class="p">))]</span>
+
+<div class="viewcode-block" id="GradualUnfreezing.on_train_begin"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.transfer.GradualUnfreezing.on_train_begin">[docs]</a>    <span class="k">def</span> <span class="nf">on_train_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">n_layer</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_modules</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_freeze_inds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_freeze_inds</span> <span class="o">=</span> <span class="p">[</span><span class="n">n_layer</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layer</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_freeze_inds</span> <span class="o">=</span> <span class="p">[</span><span class="n">n_layer</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_freeze_inds</span></div>
+
+<div class="viewcode-block" id="GradualUnfreezing.on_epoch_end"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.transfer.GradualUnfreezing.on_epoch_end">[docs]</a>    <span class="k">def</span> <span class="nf">on_epoch_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">logs</span><span class="p">[</span><span class="s1">&#39;epoch&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unfreeze_every</span> <span class="o">==</span> <span class="mi">0</span> \
+                <span class="ow">and</span> <span class="n">logs</span><span class="p">[</span><span class="s1">&#39;epoch&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> \
+                <span class="ow">and</span> <span class="n">logs</span><span class="p">[</span><span class="s1">&#39;epoch&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unfreeze_every</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_freeze_inds</span><span class="p">):</span>
+            <span class="n">unfreeze_from</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_freeze_inds</span><span class="p">[</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;epoch&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unfreeze_every</span><span class="p">]</span>
+            <span class="n">unfreeze_to</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_freeze_inds</span><span class="p">[</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;epoch&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unfreeze_every</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">unfreeze</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_modules</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_optimizer</span><span class="p">,</span>
+                    <span class="n">unfreeze_from</span><span class="p">,</span> <span class="n">unfreeze_to</span><span class="p">,</span>
+                    <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">[</span><span class="n">logs</span><span class="p">[</span><span class="s1">&#39;epoch&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unfreeze_every</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">unfreeze</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_modules</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_optimizer</span><span class="p">,</span>
+                    <span class="n">unfreeze_from</span><span class="p">,</span> <span class="n">unfreeze_to</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unfreeze feature after &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">unfreeze_from</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
+
+<div class="viewcode-block" id="FineTuning"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.transfer.FineTuning">[docs]</a><span class="k">class</span> <span class="nc">FineTuning</span><span class="p">(</span><span class="n">GroupCallback</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Combining freezing batch norm and gradual unfreezing of layer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unfreeze_every</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">freeze_inds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FineTuning</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">GradualUnfreezing</span><span class="p">(</span><span class="n">unfreeze_every</span><span class="p">,</span> <span class="n">freeze_inds</span><span class="p">,</span> <span class="n">lr</span><span class="p">),</span>
+                <span class="n">FreezeBN</span><span class="p">()</span>
+            <span class="p">]</span>
+        <span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -88,7 +169,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>

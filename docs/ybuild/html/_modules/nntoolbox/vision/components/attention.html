@@ -44,7 +44,8 @@
 <span class="c1"># UNTESTED</span>
 <div class="viewcode-block" id="GlobalSelfAttention"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.attention.GlobalSelfAttention">[docs]</a><span class="k">class</span> <span class="nc">GlobalSelfAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Implement attention module as described by</span>
+<span class="sd">    Implement attention module as described by:</span>
+
 <span class="sd">    https://arxiv.org/pdf/1805.08318.pdf</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">reduction_ratio</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
@@ -82,11 +83,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">*</span> <span class="n">output</span> <span class="o">+</span> <span class="nb">input</span></div></div>
 
 
-
 <span class="c1"># UNTESTED</span>
 <div class="viewcode-block" id="StandAloneSelfAttention"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.attention.StandAloneSelfAttention">[docs]</a><span class="k">class</span> <span class="nc">StandAloneSelfAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Implement a single head of self attention</span>
+<span class="sd">    Implement a single head of self attention:</span>
+
 <span class="sd">    https://arxiv.org/pdf/1906.05909v1.pdf</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
@@ -210,15 +211,6 @@
 <div class="viewcode-block" id="StandAloneMultiheadAttention.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.attention.StandAloneMultiheadAttention.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="n">heads</span> <span class="o">=</span> <span class="p">[</span><span class="n">head</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="k">for</span> <span class="n">head</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">heads</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">heads</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div></div>
-
-
-<span class="c1"># input = torch.rand(2, 3, 16, 16)</span>
-<span class="c1"># layer = StandAloneMultiheadAttention(4, 3, 8, 7, stride=2)</span>
-<span class="c1"># layer_2 = nn.Conv2d(3, 8, 7, stride=2)</span>
-<span class="c1"># layer(input)</span>
-<span class="c1"># print(layer(input).shape)</span>
-<span class="c1"># print(layer_2(input).shape)</span>
-
 
 
 <span class="c1">#INCOMPLETE</span>
@@ -367,7 +359,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>

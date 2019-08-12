@@ -37,6 +37,40 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-nntoolbox.vision.learner.metrics">
+<span id="nntoolbox-vision-learner-metrics-module"></span><h2>nntoolbox.vision.learner.metrics module<a class="headerlink" href="#module-nntoolbox.vision.learner.metrics" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.vision.learner.metrics.MetricLearner">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.learner.metrics.</code><code class="sig-name descname">MetricLearner</code><span class="sig-paren">(</span><em class="sig-param">train_data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">val_data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">criterion: torch.nn.modules.module.Module</em>, <em class="sig-param">optimizer: torch.optim.optimizer.Optimizer</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/learner/metrics.html#MetricLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.metrics.MetricLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="nntoolbox.html#nntoolbox.learner.Learner" title="nntoolbox.learner.Learner"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.learner.Learner</span></code></a></p>
+<dl class="method">
+<dt id="nntoolbox.vision.learner.metrics.MetricLearner.compute_embeddings">
+<code class="sig-name descname">compute_embeddings</code><span class="sig-paren">(</span><em class="sig-param">images: torch.Tensor</em>, <em class="sig-param">train: bool</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/learner/metrics.html#MetricLearner.compute_embeddings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.metrics.MetricLearner.compute_embeddings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.vision.learner.metrics.MetricLearner.compute_loss">
+<code class="sig-name descname">compute_loss</code><span class="sig-paren">(</span><em class="sig-param">selected: Tuple[torch.Tensor, ...], train: bool</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/learner/metrics.html#MetricLearner.compute_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.metrics.MetricLearner.compute_loss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.vision.learner.metrics.MetricLearner.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/vision/learner/metrics.html#MetricLearner.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.metrics.MetricLearner.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.vision.learner.metrics.MetricLearner.learn">
+<code class="sig-name descname">learn</code><span class="sig-paren">(</span><em class="sig-param">n_epoch, selector: nntoolbox.vision.utils.selector.Selector, callbacks: List[nntoolbox.callbacks.callbacks.Callback], metrics: Dict[str, nntoolbox.metrics.metrics.Metric], final_metric: str</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/nntoolbox/vision/learner/metrics.html#MetricLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.metrics.MetricLearner.learn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.vision.learner.metrics.MetricLearner.learn_one_iter">
+<code class="sig-name descname">learn_one_iter</code><span class="sig-paren">(</span><em class="sig-param">data: Tuple[torch.Tensor, torch.Tensor]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/learner/metrics.html#MetricLearner.learn_one_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.metrics.MetricLearner.learn_one_iter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-nntoolbox.vision.learner.style">
 <span id="nntoolbox-vision-learner-style-module"></span><h2>nntoolbox.vision.learner.style module<a class="headerlink" href="#module-nntoolbox.vision.learner.style" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -168,7 +202,7 @@
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a><ul class="current">
@@ -176,6 +210,7 @@
 <li class="toctree-l3"><a class="reference internal" href="nntoolbox.vision.components.html">nntoolbox.vision.components package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">nntoolbox.vision.learner package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.learner.metrics">nntoolbox.vision.learner.metrics module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.learner.style">nntoolbox.vision.learner.style module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.learner.supervised">nntoolbox.vision.learner.supervised module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.vision.learner">Module contents</a></li>

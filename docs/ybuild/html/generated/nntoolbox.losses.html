@@ -60,6 +60,35 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-nntoolbox.losses.moe">
+<span id="nntoolbox-losses-moe-module"></span><h2>nntoolbox.losses.moe module<a class="headerlink" href="#module-nntoolbox.losses.moe" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.losses.moe.CompetitiveMOELoss">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.losses.moe.</code><code class="sig-name descname">CompetitiveMOELoss</code><span class="sig-paren">(</span><em class="sig-param">base_loss: torch.nn.modules.module.Module = MSELoss()</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/losses/moe.html#CompetitiveMOELoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.moe.CompetitiveMOELoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Encourage expert specialization:</p>
+<p>loss(expert_op, expert_weight, target) = sum_e weight_e * base_loss(op_e, target)</p>
+<p>Reference:</p>
+<p><a class="reference external" href="https://www.cs.toronto.edu/~hinton/absps/jjnh91.pdf">https://www.cs.toronto.edu/~hinton/absps/jjnh91.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.losses.moe.CompetitiveMOELoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">experts: Tuple[torch.Tensor, torch.Tensor], targets: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/losses/moe.html#CompetitiveMOELoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.moe.CompetitiveMOELoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experts</strong> – expert_output: (batch_size, <a href="#id1"><span class="problematic" id="id2">*</span></a>, n_expert), expert_score: (batch_size, <a href="#id3"><span class="problematic" id="id4">*</span></a>, n_expert)</p></li>
+<li><p><strong>targets</strong> – (batch_size, <a href="#id5"><span class="problematic" id="id6">*</span></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-nntoolbox.losses.smooth">
 <span id="nntoolbox-losses-smooth-module"></span><h2>nntoolbox.losses.smooth module<a class="headerlink" href="#module-nntoolbox.losses.smooth" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -78,8 +107,8 @@ registered hooks while the latter silently ignores them.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>output</strong> – Predicted class scores. (batch_size, C, <a href="#id1"><span class="problematic" id="id2">*</span></a>)</p></li>
-<li><p><strong>label</strong> – The true label. (batch_size, <a href="#id3"><span class="problematic" id="id4">*</span></a>)</p></li>
+<li><p><strong>output</strong> – Predicted class scores. (batch_size, C, <a href="#id7"><span class="problematic" id="id8">*</span></a>)</p></li>
+<li><p><strong>label</strong> – The true label. (batch_size, <a href="#id9"><span class="problematic" id="id10">*</span></a>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -95,12 +124,12 @@ registered hooks while the latter silently ignores them.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>label</strong> – (batch_size, <a href="#id5"><span class="problematic" id="id6">*</span></a>)</p></li>
+<li><p><strong>label</strong> – (batch_size, <a href="#id11"><span class="problematic" id="id12">*</span></a>)</p></li>
 <li><p><strong>n_class</strong> – number of class of the output</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(batch_size, C, <a href="#id7"><span class="problematic" id="id8">*</span></a>)</p>
+<dd class="field-even"><p>(batch_size, C, <a href="#id13"><span class="problematic" id="id14">*</span></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -139,6 +168,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">nntoolbox.losses package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.losses.losses">nntoolbox.losses.losses module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.losses.moe">nntoolbox.losses.moe module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.losses.smooth">nntoolbox.losses.smooth module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.losses">Module contents</a></li>
 </ul>
@@ -148,7 +178,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>

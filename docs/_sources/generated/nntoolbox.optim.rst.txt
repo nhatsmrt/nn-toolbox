@@ -12,6 +12,14 @@ nntoolbox.optim.adamW module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.optim.layerwise module
+--------------------------------
+
+.. automodule:: nntoolbox.optim.layerwise
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.optim.lr\_scheduler module
 ------------------------------------
 
