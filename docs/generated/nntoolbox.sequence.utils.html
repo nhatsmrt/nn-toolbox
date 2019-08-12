@@ -14,7 +14,7 @@
     <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="nntoolbox.tabular" href="nntoolbox.tabular.html" />
+    <link rel="next" title="nntoolbox.tabular package" href="nntoolbox.tabular.html" />
     <link rel="prev" title="nntoolbox.sequence.searcher package" href="nntoolbox.sequence.searcher.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -54,6 +54,31 @@
 <dd class="field-even"><p>text (array form)</p>
 </dd>
 </dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.sequence.utils.datasets">
+<span id="nntoolbox-sequence-utils-datasets-module"></span><h2>nntoolbox.sequence.utils.datasets module<a class="headerlink" href="#module-nntoolbox.sequence.utils.datasets" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.sequence.utils.datasets.Europarl">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.utils.datasets.</code><code class="sig-name descname">Europarl</code><span class="sig-paren">(</span><em class="sig-param">root: str, exts: Tuple[str, str], fields: Tuple[torchtext.data.field.Field, torchtext.data.field.Field], download: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/utils/datasets.html#Europarl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.datasets.Europarl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torchtext.datasets.translation.TranslationDataset</span></code></p>
+<p>European Parliament Proceedings Parallel Corpus 1996-2011 (UNTESTED)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> – directory containing the europarl-v7 file</p></li>
+<li><p><strong>exts</strong> – extension denoting languages</p></li>
+<li><p><strong>fields</strong> – 2 text fields, one for source and one for target</p></li>
+<li><p><strong>download</strong> – whether to download the data</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="nntoolbox.sequence.utils.datasets.Europarl.base_url">
+<code class="sig-name descname">base_url</code><em class="property"> = 'http://www.statmt.org/europarl/v7/'</em><a class="headerlink" href="#nntoolbox.sequence.utils.datasets.Europarl.base_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -110,7 +135,7 @@
 
 <dl class="function">
 <dt id="nntoolbox.sequence.utils.utils.get_lengths">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">get_lengths</code><span class="sig-paren">(</span><em class="sig-param">mask</em>, <em class="sig-param">return_tensor: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/utils/utils.html#get_lengths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.get_lengths" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">get_lengths</code><span class="sig-paren">(</span><em class="sig-param">mask: Union[numpy.ndarray, torch.Tensor], return_tensor: bool = False</em><span class="sig-paren">)</span> &#x2192; Union[numpy.ndarray, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/sequence/utils/utils.html#get_lengths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.get_lengths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a 1D array indicating the length of each sequence in batch</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -199,6 +224,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">nntoolbox.sequence.utils package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.utils.data">nntoolbox.sequence.utils.data module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.utils.datasets">nntoolbox.sequence.utils.datasets module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.utils.utils">nntoolbox.sequence.utils.utils module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.utils">Module contents</a></li>
 </ul>
@@ -208,7 +234,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.html#module-nntoolbox.sequence">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>
@@ -220,7 +246,7 @@
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="nntoolbox.sequence.html">nntoolbox.sequence package</a><ul>
       <li>Previous: <a href="nntoolbox.sequence.searcher.html" title="previous chapter">nntoolbox.sequence.searcher package</a></li>
-      <li>Next: <a href="nntoolbox.tabular.html" title="next chapter">nntoolbox.tabular</a></li>
+      <li>Next: <a href="nntoolbox.tabular.html" title="next chapter">nntoolbox.tabular package</a></li>
   </ul></li>
   </ul></li>
 </ul>

@@ -32,10 +32,10 @@
             
   <h1>Source code for nntoolbox.callbacks.device</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">.callbacks</span> <span class="k">import</span> <span class="n">Callback</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">device</span>
-<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">DataParallel</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">get_device</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">DataParallel</span><span class="p">,</span> <span class="n">Module</span><span class="p">,</span> <span class="n">AdaptiveAvgPool2d</span><span class="p">,</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">get_device</span><span class="p">,</span> <span class="n">cut_model</span>
 <span class="kn">from</span> <span class="nn">torchgpipe</span> <span class="k">import</span> <span class="n">GPipe</span>
 <span class="kn">from</span> <span class="nn">torchgpipe_balancing</span> <span class="k">import</span> <span class="n">balance_by_time</span>
 
@@ -49,7 +49,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">learner</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="ToDeviceCallback.on_train_begin"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.device.ToDeviceCallback.on_train_begin">[docs]</a>    <span class="k">def</span> <span class="nf">on_train_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="p">,</span> <span class="s1">&#39;_model&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="p">,</span> <span class="s1">&#39;_models&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_models</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ToDeviceCallback.on_batch_begin"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.device.ToDeviceCallback.on_batch_begin">[docs]</a>    <span class="k">def</span> <span class="nf">on_batch_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
@@ -98,13 +102,40 @@
             <span class="bp">self</span><span class="p">,</span> <span class="n">device_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">device</span><span class="p">]]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">output_device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">device</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span> <span class="o">=</span> <span class="n">device_ids</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ouput_device</span> <span class="o">=</span> <span class="n">output_device</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
 
     <span class="k">def</span> <span class="nf">on_train_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_learner</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">DataParallel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_learner</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ouput_device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">DataParallel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ouput_device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">MixedParallelismCB</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Callback for mixed parallelism: data parallelism for convolution/feature layers, and model parallelism for head</span>
+<span class="sd">    (UNTESTED)</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">    https://discuss.pytorch.org/t/why-not-giving-the-whole-model-to-dataparallel-in-the-imagenet-example/4092</span>
+
+<span class="sd">    https://arxiv.org/pdf/1404.5997.pdf</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">device_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">device</span><span class="p">]]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">output_device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">device</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">sep</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Module</span><span class="p">]</span><span class="o">=</span><span class="n">AdaptiveAvgPool2d</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span> <span class="o">=</span> <span class="n">device_ids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ouput_device</span> <span class="o">=</span> <span class="n">output_device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sep</span> <span class="o">=</span> <span class="n">sep</span>
+
+    <span class="k">def</span> <span class="nf">on_train_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">features</span><span class="p">,</span> <span class="n">head</span> <span class="o">=</span> <span class="n">cut_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="n">DataParallel</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ouput_device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">head</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ouput_device</span><span class="p">)</span>
+
 </pre></div>
 
           </div>
@@ -135,7 +166,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>

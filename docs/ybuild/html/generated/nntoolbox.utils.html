@@ -85,8 +85,29 @@
 
 <dl class="function">
 <dt id="nntoolbox.utils.data.grab_next_batch">
-<code class="sig-prename descclassname">nntoolbox.utils.data.</code><code class="sig-name descname">grab_next_batch</code><span class="sig-paren">(</span><em class="sig-param">data: torch.utils.data.dataloader.DataLoader</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#grab_next_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.grab_next_batch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">nntoolbox.utils.data.</code><code class="sig-name descname">grab_next_batch</code><span class="sig-paren">(</span><em class="sig-param">data: Union[torch.utils.data.dataloader.DataLoader, torchtext.data.iterator.Iterator]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/data.html#grab_next_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.data.grab_next_batch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grab the next batch from dataloader</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.utils.download">
+<span id="nntoolbox-utils-download-module"></span><h2>nntoolbox.utils.download module<a class="headerlink" href="#module-nntoolbox.utils.download" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="nntoolbox.utils.download.download_from_url">
+<code class="sig-prename descclassname">nntoolbox.utils.download.</code><code class="sig-name descname">download_from_url</code><span class="sig-paren">(</span><em class="sig-param">url: str</em>, <em class="sig-param">filename: str</em>, <em class="sig-param">max_size: Optional[int] = 50</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/download.html#download_from_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.download.download_from_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download from a url, and save to filename</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> – </p></li>
+<li><p><strong>filename</strong> – </p></li>
+<li><p><strong>max_size</strong> – (in kbs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -167,18 +188,66 @@
 <p><a class="reference external" href="https://arxiv.org/pdf/1506.01186.pdf">https://arxiv.org/pdf/1506.01186.pdf</a></p>
 <dl class="method">
 <dt id="nntoolbox.utils.lr_finder.LRFinder.find_lr">
-<code class="sig-name descname">find_lr</code><span class="sig-paren">(</span><em class="sig-param">lr0: float = 1e-07</em>, <em class="sig-param">lr_final: float = 10.0</em>, <em class="sig-param">warmup: int = 15</em>, <em class="sig-param">beta: float = 0.98</em>, <em class="sig-param">verbose: bool = True</em>, <em class="sig-param">display: bool = True</em>, <em class="sig-param">callbacks: Optional[List[Callback]] = None</em><span class="sig-paren">)</span> &#x2192; Tuple[float, float]<a class="reference internal" href="../_modules/nntoolbox/utils/lr_finder.html#LRFinder.find_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.lr_finder.LRFinder.find_lr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start from a very low initial learning rate, then gradually increases it up to a big lr until loss blows up
-:param lr0: intitial learning rate
-:param lr_final: final (max) learning rate
-:param warmup: how many iterations to warmup
-:param beta: smoothing coefficient for loss
-:param verbose: whether to print out the progress
-:param display: whether to graph
-:param callbacks: an optional list of callbacks to process input
-:return: a base_lr and the best lr (base_lr = best_lr / 4)</p>
+<code class="sig-name descname">find_lr</code><span class="sig-paren">(</span><em class="sig-param">lr0: float = 1e-07</em>, <em class="sig-param">lr_final: float = 10.0</em>, <em class="sig-param">warmup: int = 15</em>, <em class="sig-param">beta: float = 0.67</em>, <em class="sig-param">verbose: bool = True</em>, <em class="sig-param">display: bool = True</em>, <em class="sig-param">callbacks: Optional[List[Callback]] = None</em><span class="sig-paren">)</span> &#x2192; Tuple[float, float]<a class="reference internal" href="../_modules/nntoolbox/utils/lr_finder.html#LRFinder.find_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.lr_finder.LRFinder.find_lr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start from a very low initial learning rate, then gradually increases it up to a big lr until loss blows up</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lr0</strong> – intitial learning rate</p></li>
+<li><p><strong>lr_final</strong> – final (max) learning rate</p></li>
+<li><p><strong>warmup</strong> – how many iterations to warmup</p></li>
+<li><p><strong>beta</strong> – smoothing coefficient for loss</p></li>
+<li><p><strong>verbose</strong> – whether to print out the progress</p></li>
+<li><p><strong>display</strong> – whether to graph</p></li>
+<li><p><strong>callbacks</strong> – an optional list of callbacks to process input</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a base_lr and the best lr (base_lr = best_lr / 4)</p>
+</dd>
+</dl>
 </dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.utils.norm_dist">
+<span id="nntoolbox-utils-norm-dist-module"></span><h2>nntoolbox.utils.norm_dist module<a class="headerlink" href="#module-nntoolbox.utils.norm_dist" title="Permalink to this headline">¶</a></h2>
+<p>Utility functions involving computing norms and distances</p>
+<dl class="function">
+<dt id="nntoolbox.utils.norm_dist.emb_pairwise_dist">
+<code class="sig-prename descclassname">nntoolbox.utils.norm_dist.</code><code class="sig-name descname">emb_pairwise_dist</code><span class="sig-paren">(</span><em class="sig-param">embeddings: torch.Tensor</em>, <em class="sig-param">squared: bool = True</em>, <em class="sig-param">eps: float = 1e-16</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/norm_dist.html#emb_pairwise_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.norm_dist.emb_pairwise_dist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.norm_dist.compute_squared_norm">
+<code class="sig-prename descclassname">nntoolbox.utils.norm_dist.</code><code class="sig-name descname">compute_squared_norm</code><span class="sig-paren">(</span><em class="sig-param">A: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/norm_dist.html#compute_squared_norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.norm_dist.compute_squared_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the squared norm of each row of A</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>A</strong> – (M, D)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>squared norm (M, 1)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.norm_dist.pairwise_dist">
+<code class="sig-prename descclassname">nntoolbox.utils.norm_dist.</code><code class="sig-name descname">pairwise_dist</code><span class="sig-paren">(</span><em class="sig-param">A: torch.Tensor</em>, <em class="sig-param">B: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/norm_dist.html#pairwise_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.norm_dist.pairwise_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute pairwise distance from each row vector of A to row vector of B</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – (N, D)</p></li>
+<li><p><strong>B</strong> – (M, D)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(M, N)</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -201,17 +270,83 @@ is supposed to be specified only when <cite>replacement</cite> is <code class="d
 </dl>
 </dd></dl>
 
+<dl class="class">
+<dt id="nntoolbox.utils.sampler.BatchSampler">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.sampler.</code><code class="sig-name descname">BatchSampler</code><span class="sig-paren">(</span><em class="sig-param">sampler</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">drop_last</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch/utils/data/sampler.html#BatchSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.sampler.BatchSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.sampler.Sampler</span></code></p>
+<p>Wraps another sampler to yield a mini-batch of indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sampler</strong> (<em>Sampler</em>) – Base sampler.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Size of mini-batch.</p></li>
+<li><p><strong>drop_last</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the sampler will drop the last batch if
+its size would be less than <code class="docutils literal notranslate"><span class="pre">batch_size</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">BatchSampler</span><span class="p">(</span><span class="n">SequentialSampler</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="go">[[0, 1, 2], [3, 4, 5], [6, 7, 8], [9]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">BatchSampler</span><span class="p">(</span><span class="n">SequentialSampler</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">drop_last</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">[[0, 1, 2], [3, 4, 5], [6, 7, 8]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.utils.sampler.BatchStratifiedSampler">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.sampler.</code><code class="sig-name descname">BatchStratifiedSampler</code><span class="sig-paren">(</span><em class="sig-param">data_source: torch.utils.data.dataset.Dataset</em>, <em class="sig-param">n_sample_per_class: int</em>, <em class="sig-param">n_class_per_batch: int</em>, <em class="sig-param">drop_last: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/utils/sampler.html#BatchStratifiedSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.sampler.BatchStratifiedSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.sampler.BatchSampler</span></code></p>
+<p>Ensure that each class in the batch has the same number of examples</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_source</strong> – dataset</p></li>
+<li><p><strong>batch_size</strong> – size of each batch</p></li>
+<li><p><strong>n_class_per_batch</strong> – number of class to sample each batch</p></li>
+<li><p><strong>drop_last</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, drop the last batch.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-nntoolbox.utils.transfer">
 <span id="nntoolbox-utils-transfer-module"></span><h2>nntoolbox.utils.transfer module<a class="headerlink" href="#module-nntoolbox.utils.transfer" title="Permalink to this headline">¶</a></h2>
 <p>Some utility functions for transfer learning</p>
 <dl class="function">
+<dt id="nntoolbox.utils.transfer.cut_sequential_model">
+<code class="sig-prename descclassname">nntoolbox.utils.transfer.</code><code class="sig-name descname">cut_sequential_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.container.Sequential</em>, <em class="sig-param">sep: Callable[...</em>, <em class="sig-param">torch.nn.modules.module.Module] = &lt;class 'torch.nn.modules.pooling.AdaptiveAvgPool2d'&gt;</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.nn.modules.container.Sequential, torch.nn.modules.container.Sequential]<a class="reference internal" href="../_modules/nntoolbox/utils/transfer.html#cut_sequential_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.transfer.cut_sequential_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cut a sequential model at the first instance of layer type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – </p></li>
+<li><p><strong>sep</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="nntoolbox.utils.transfer.cut_model">
-<code class="sig-prename descclassname">nntoolbox.utils.transfer.</code><code class="sig-name descname">cut_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.container.Sequential</em>, <em class="sig-param">layer_type: Callable[...</em>, <em class="sig-param">torch.nn.modules.module.Module] = &lt;class 'torch.nn.modules.pooling.AdaptiveAvgPool2d'&gt;</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.nn.modules.container.Sequential, torch.nn.modules.container.Sequential]<a class="reference internal" href="../_modules/nntoolbox/utils/transfer.html#cut_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.transfer.cut_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cut a sequential model at the first instance of layer type
-:param model:
-:param layer_type:
-:return:</p>
+<code class="sig-prename descclassname">nntoolbox.utils.transfer.</code><code class="sig-name descname">cut_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.container.Sequential</em>, <em class="sig-param">sep: Callable[...</em>, <em class="sig-param">torch.nn.modules.module.Module] = &lt;class 'torch.nn.modules.pooling.AdaptiveAvgPool2d'&gt;</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.nn.modules.container.Sequential, torch.nn.modules.container.Sequential]<a class="reference internal" href="../_modules/nntoolbox/utils/transfer.html#cut_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.transfer.cut_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cut a non-sequential model at the first instance of layer type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – </p></li>
+<li><p><strong>sep</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -412,14 +547,16 @@ is supposed to be specified only when <cite>replacement</cite> is <code class="d
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">nntoolbox.utils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.utils.colab">nntoolbox.utils.colab module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.utils.data">nntoolbox.utils.data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.utils.download">nntoolbox.utils.download module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.utils.gradient">nntoolbox.utils.gradient module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.utils.lr_finder">nntoolbox.utils.lr_finder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.utils.norm_dist">nntoolbox.utils.norm_dist module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.utils.sampler">nntoolbox.utils.sampler module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.utils.transfer">nntoolbox.utils.transfer module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.utils.utils">nntoolbox.utils.utils module</a></li>

@@ -60,6 +60,14 @@ nntoolbox.vision.components.layers module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.vision.components.local module
+----------------------------------------
+
+.. automodule:: nntoolbox.vision.components.local
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.vision.components.normalization module
 ------------------------------------------------
 
@@ -116,10 +124,26 @@ nntoolbox.vision.components.stn module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.vision.components.structured module
+---------------------------------------------
+
+.. automodule:: nntoolbox.vision.components.structured
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.vision.components.unet module
 ---------------------------------------
 
 .. automodule:: nntoolbox.vision.components.unet
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.vision.components.upsample module
+-------------------------------------------
+
+.. automodule:: nntoolbox.vision.components.upsample
    :members:
    :undoc-members:
    :show-inheritance:

@@ -64,12 +64,26 @@ Adopt from FastAI:</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-nntoolbox.hooks.inputs">
-<span id="nntoolbox-hooks-inputs-module"></span><h2>nntoolbox.hooks.inputs module<a class="headerlink" href="#module-nntoolbox.hooks.inputs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-nntoolbox.hooks.io">
+<span id="nntoolbox-hooks-io-module"></span><h2>nntoolbox.hooks.io module<a class="headerlink" href="#module-nntoolbox.hooks.io" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="nntoolbox.hooks.inputs.InputHook">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.hooks.inputs.</code><code class="sig-name descname">InputHook</code><span class="sig-paren">(</span><em class="sig-param">module: torch.nn.modules.module.Module</em>, <em class="sig-param">forward: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/hooks/inputs.html#InputHook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.hooks.inputs.InputHook" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.hooks.io.InputHook">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.hooks.io.</code><code class="sig-name descname">InputHook</code><span class="sig-paren">(</span><em class="sig-param">module: torch.nn.modules.module.Module</em>, <em class="sig-param">forward: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/hooks/io.html#InputHook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.hooks.io.InputHook" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nntoolbox.hooks.hooks.Hook" title="nntoolbox.hooks.hooks.Hook"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.hooks.hooks.Hook</span></code></a></p>
+<p>Keep this for backward compatibility</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.hooks.io.OutputHook">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.hooks.io.</code><code class="sig-name descname">OutputHook</code><span class="sig-paren">(</span><em class="sig-param">module: torch.nn.modules.module.Module</em>, <em class="sig-param">forward: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/hooks/io.html#OutputHook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.hooks.io.OutputHook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.hooks.hooks.Hook" title="nntoolbox.hooks.hooks.Hook"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.hooks.hooks.Hook</span></code></a></p>
+<p>A generic hook for storing output hook</p>
+<p>A subclass would implement the store_output function (i.e decide which part of the output to store) (UNTESTED)</p>
+<dl class="method">
+<dt id="nntoolbox.hooks.io.OutputHook.store_output">
+<em class="property">static </em><code class="sig-name descname">store_output</code><span class="sig-paren">(</span><em class="sig-param">hook: nntoolbox.hooks.hooks.Hook</em>, <em class="sig-param">m: torch.nn.modules.module.Module</em>, <em class="sig-param">inp: torch.Tensor</em>, <em class="sig-param">op: torch.Tensor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/hooks/io.html#OutputHook.store_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.hooks.io.OutputHook.store_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -120,7 +134,7 @@ Adopt from FastAI:</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">nntoolbox.hooks package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.hooks.hooks">nntoolbox.hooks.hooks module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.hooks.inputs">nntoolbox.hooks.inputs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.hooks.io">nntoolbox.hooks.io module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.hooks.stats">nntoolbox.hooks.stats module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.hooks.utils">nntoolbox.hooks.utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.hooks">Module contents</a></li>
@@ -133,7 +147,7 @@ Adopt from FastAI:</p>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>

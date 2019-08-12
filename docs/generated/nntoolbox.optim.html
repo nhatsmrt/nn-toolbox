@@ -43,10 +43,60 @@
 <dt id="nntoolbox.optim.adamW.AdamW">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.optim.adamW.</code><code class="sig-name descname">AdamW</code><span class="sig-paren">(</span><em class="sig-param">params</em>, <em class="sig-param">lr: float = 0.001</em>, <em class="sig-param">betas: Tuple[float</em>, <em class="sig-param">float] = (0.9</em>, <em class="sig-param">0.999)</em>, <em class="sig-param">eps: float = 1e-08</em>, <em class="sig-param">weight_decay: float = 0.0001</em>, <em class="sig-param">amsgrad: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/optim/adamW.html#AdamW"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.adamW.AdamW" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.adam.Adam</span></code></p>
-<p>Implement decoupled weight decay for Adam</p>
+<p>Implement decoupled weight decay for Adam. This is no longer maintained, as pytorch already provides its own
+implementation, which is most likely more efficient.</p>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://arxiv.org/abs/1711.05101">https://arxiv.org/abs/1711.05101</a></p>
 <dl class="method">
 <dt id="nntoolbox.optim.adamW.AdamW.step">
 <code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">closure=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/optim/adamW.html#AdamW.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.adamW.AdamW.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single optimization step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>closure</strong> (<em>callable</em><em>, </em><em>optional</em>) – A closure that reevaluates the model
+and returns the loss.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.optim.layerwise">
+<span id="nntoolbox-optim-layerwise-module"></span><h2>nntoolbox.optim.layerwise module<a class="headerlink" href="#module-nntoolbox.optim.layerwise" title="Permalink to this headline">¶</a></h2>
+<p>Scaling the learning rate layerwise (HIGHLY EXPERIMENTAL)</p>
+<dl class="class">
+<dt id="nntoolbox.optim.layerwise.LARS">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.optim.layerwise.</code><code class="sig-name descname">LARS</code><span class="sig-paren">(</span><em class="sig-param">params</em>, <em class="sig-param">lr: float</em>, <em class="sig-param">momentum: float = 0.0</em>, <em class="sig-param">weight_decay: float = 0.0</em>, <em class="sig-param">trust_coefficient: float = 0.001</em>, <em class="sig-param">eps: float = 1e-08</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/optim/layerwise.html#LARS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.layerwise.LARS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.sgd.SGD</span></code></p>
+<p>Implement Layer-wise Adaptive Rate Scaling (LARS) algorithm for training with large batch and learning rate</p>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://arxiv.org/pdf/1708.03888.pdf">https://arxiv.org/pdf/1708.03888.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.optim.layerwise.LARS.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">closure=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/optim/layerwise.html#LARS.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.layerwise.LARS.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single optimization step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>closure</strong> (<em>callable</em><em>, </em><em>optional</em>) – A closure that reevaluates the model
+and returns the loss.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.optim.layerwise.LAMB">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.optim.layerwise.</code><code class="sig-name descname">LAMB</code><span class="sig-paren">(</span><em class="sig-param">params</em>, <em class="sig-param">lr: float = 0.001</em>, <em class="sig-param">betas: Tuple[float</em>, <em class="sig-param">float] = (0.9</em>, <em class="sig-param">0.999)</em>, <em class="sig-param">eps: float = 1e-08</em>, <em class="sig-param">weight_decay: float = 0</em>, <em class="sig-param">scaling_fn: Callable[torch.Tensor</em>, <em class="sig-param">torch.Tensor] = &lt;function LAMB.&lt;lambda&gt;&gt;</em>, <em class="sig-param">amsgrad: bool = False</em>, <em class="sig-param">correct_bias: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/optim/layerwise.html#LAMB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.layerwise.LAMB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.adam.Adam</span></code></p>
+<p>Implement LAMB algorithm for training with large batch and learning rate</p>
+<p>Note that in second version of the paper, bias correction for betas is missing.</p>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://arxiv.org/pdf/1904.00962.pdf">https://arxiv.org/pdf/1904.00962.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.optim.layerwise.LAMB.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">closure=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/optim/layerwise.html#LAMB.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.layerwise.LAMB.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a single optimization step.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -208,6 +258,7 @@ and returns the loss.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">nntoolbox.optim package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.optim.adamW">nntoolbox.optim.adamW module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.optim.layerwise">nntoolbox.optim.layerwise module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.optim.lr_scheduler">nntoolbox.optim.lr_scheduler module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.optim.utils">nntoolbox.optim.utils module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.optim">Module contents</a></li>
@@ -215,7 +266,7 @@ and returns the loss.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>

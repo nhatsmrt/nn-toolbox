@@ -32,14 +32,178 @@
             
   <h1>Source code for nntoolbox.sequence.learner.seq2seq</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span>
-<span class="kn">from</span> <span class="nn">torch.optim</span> <span class="k">import</span> <span class="n">Adam</span><span class="p">,</span> <span class="n">SGD</span>
-<span class="kn">from</span> <span class="nn">nntoolbox.utils</span> <span class="k">import</span> <span class="n">compute_num_batch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
+<span class="kn">from</span> <span class="nn">torch.optim</span> <span class="k">import</span> <span class="n">Adam</span><span class="p">,</span> <span class="n">Optimizer</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.utils</span> <span class="k">import</span> <span class="n">compute_num_batch</span><span class="p">,</span> <span class="n">grab_next_batch</span>
 <span class="kn">from</span> <span class="nn">nntoolbox.sequence.utils</span> <span class="k">import</span> <span class="n">create_mask</span><span class="p">,</span> <span class="n">get_lengths</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.callbacks</span> <span class="k">import</span> <span class="n">CallbackHandler</span><span class="p">,</span> <span class="n">Callback</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.metrics</span> <span class="k">import</span> <span class="n">Metric</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">trange</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">..models</span> <span class="k">import</span> <span class="n">Encoder</span><span class="p">,</span> <span class="n">Decoder</span>
+
+
+<div class="viewcode-block" id="Seq2SeqLearnerV2"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearnerV2">[docs]</a><span class="k">class</span> <span class="nc">Seq2SeqLearnerV2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">train_iterator</span><span class="p">,</span> <span class="n">val_iterator</span><span class="p">,</span> <span class="n">encoder</span><span class="p">:</span> <span class="n">Encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">:</span> <span class="n">Decoder</span><span class="p">,</span>
+            <span class="n">criterion</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">],</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">teacher_forcing_ratio</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">pad_token</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">SOS_token</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">EOS_token</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">2</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_models</span> <span class="o">=</span> <span class="p">[</span><span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_train_iterator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val_iterator</span> <span class="o">=</span> <span class="n">train_iterator</span><span class="p">,</span> <span class="n">val_iterator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_criterion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_teacher_forcing_ratio</span> <span class="o">=</span> <span class="n">teacher_forcing_ratio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pad_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SOS_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EOS_token</span> <span class="o">=</span> <span class="n">pad_token</span><span class="p">,</span> <span class="n">SOS_token</span><span class="p">,</span> <span class="n">EOS_token</span>
+
+<div class="viewcode-block" id="Seq2SeqLearnerV2.learn"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearnerV2.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">n_epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">callbacks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Callback</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">metrics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Metric</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">final_metric</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span> <span class="o">=</span> <span class="n">CallbackHandler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_epoch</span><span class="p">,</span> <span class="n">callbacks</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">final_metric</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_train_begin</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epoch</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_epoch_begin</span><span class="p">()</span>
+
+            <span class="c1"># train step</span>
+            <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_iterator</span><span class="p">:</span>
+                <span class="n">src</span><span class="p">,</span> <span class="n">trg</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">batch</span><span class="o">.</span><span class="n">trg</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">learn_one_iter</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">trg</span><span class="p">)</span>
+
+            <span class="n">stop_training</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">stop_training</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_train_end</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Seq2SeqLearnerV2.learn_one_iter"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearnerV2.learn_one_iter">[docs]</a>    <span class="k">def</span> <span class="nf">learn_one_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">trg</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">):</span>
+        <span class="n">use_teacher_forcing</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_teacher_forcing_ratio</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="n">src_mask</span><span class="p">,</span> <span class="n">src_lengths</span><span class="p">,</span> <span class="n">src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_input</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+        <span class="n">trg_mask</span><span class="p">,</span> <span class="n">trg_lengths</span><span class="p">,</span> <span class="n">trg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_input</span><span class="p">(</span><span class="n">trg</span><span class="p">)</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">sos</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">_SOS_token</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)]]))</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_begin</span><span class="p">({</span>
+            <span class="s2">&quot;src_mask&quot;</span><span class="p">:</span> <span class="n">src_mask</span><span class="p">,</span>
+            <span class="s2">&quot;src_lengths&quot;</span><span class="p">:</span> <span class="n">src_lengths</span><span class="p">,</span>
+            <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">src</span><span class="p">,</span>
+            <span class="s2">&quot;trg_mask&quot;</span><span class="p">:</span> <span class="n">trg_mask</span><span class="p">,</span>
+            <span class="s2">&quot;trg_lengths&quot;</span><span class="p">:</span> <span class="n">trg_lengths</span><span class="p">,</span>
+            <span class="s2">&quot;trg&quot;</span><span class="p">:</span> <span class="n">trg</span><span class="p">,</span>
+            <span class="s2">&quot;sos&quot;</span><span class="p">:</span> <span class="n">sos</span>
+        <span class="p">},</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">src_mask</span><span class="p">,</span> <span class="n">src_lengths</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">trg_mask</span><span class="p">,</span> <span class="n">trg_lengths</span><span class="p">,</span> <span class="n">trg</span><span class="p">,</span> <span class="n">sos</span> <span class="o">=</span> \
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;src_mask&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;src_lengths&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">],</span> \
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;trg_mask&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;trg_lengths&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;trg&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;sos&quot;</span><span class="p">]</span>
+
+        <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_output</span><span class="p">(</span>
+            <span class="n">src_mask</span><span class="p">,</span> <span class="n">src_lengths</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">trg_mask</span><span class="p">,</span> <span class="n">trg_lengths</span><span class="p">,</span> <span class="n">trg</span><span class="p">,</span> <span class="n">sos</span><span class="p">,</span> <span class="n">use_teacher_forcing</span><span class="p">,</span> <span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">trg</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">after_backward</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">after_step</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_end</span><span class="p">({</span><span class="s1">&#39;loss&#39;</span><span class="p">:</span> <span class="n">loss</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()})</span></div>
+
+<div class="viewcode-block" id="Seq2SeqLearnerV2.compute_output"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearnerV2.compute_output">[docs]</a>    <span class="k">def</span> <span class="nf">compute_output</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">src_mask</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">src_lengths</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+            <span class="n">trg_mask</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">trg_lengths</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">trg</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
+            <span class="n">sos</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">use_teacher_forcing</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">encoder</span><span class="p">,</span> <span class="n">decoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">hidden</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">init_hidden</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">enc_outputs</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">hidden</span><span class="p">)</span>
+
+        <span class="n">hidden</span> <span class="o">=</span> <span class="n">enc_outputs</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+            <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="p">(</span><span class="n">src_lengths</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">enc_outputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">train</span> <span class="ow">and</span> <span class="n">use_teacher_forcing</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_decoder_input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">sos</span><span class="p">,</span>
+                    <span class="n">trg</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">trg</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="p">),</span>
+                <span class="n">dim</span><span class="o">=</span><span class="mi">0</span>
+            <span class="p">)</span>
+            <span class="n">outputs</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">decoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_decoder_input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">,</span> <span class="n">enc_outputs</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">src_mask</span><span class="p">)</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_decoder_input</span> <span class="o">=</span> <span class="n">sos</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">src</span><span class="p">)):</span>
+                <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">decoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_decoder_input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">,</span> <span class="n">enc_outputs</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">src_mask</span><span class="p">)</span>
+                <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+                <span class="c1"># self._decoder_input = torch.argmax(output, dim=-1)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_decoder_input</span> <span class="o">=</span> <span class="n">trg</span><span class="p">[</span><span class="n">t</span><span class="p">:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">after_outputs</span><span class="p">({</span><span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="n">outputs</span><span class="p">},</span> <span class="n">train</span><span class="p">)[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Seq2SeqLearnerV2.compute_loss"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearnerV2.compute_loss">[docs]</a>    <span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">trg</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">after_losses</span><span class="p">({</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">trg</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))},</span> <span class="n">train</span><span class="p">)[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Seq2SeqLearnerV2.evaluate"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearnerV2.evaluate">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_models</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="c1"># for batch in self._val_iterator:</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">grab_next_batch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_val_iterator</span><span class="p">)</span>
+        <span class="n">src</span><span class="p">,</span> <span class="n">trg</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">batch</span><span class="o">.</span><span class="n">trg</span>
+        <span class="n">src_mask</span><span class="p">,</span> <span class="n">src_lengths</span><span class="p">,</span> <span class="n">src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_input</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+        <span class="n">trg_mask</span><span class="p">,</span> <span class="n">trg_lengths</span><span class="p">,</span> <span class="n">trg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_input</span><span class="p">(</span><span class="n">trg</span><span class="p">)</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">sos</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">_SOS_token</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)]]))</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_begin</span><span class="p">({</span>
+            <span class="s2">&quot;src_mask&quot;</span><span class="p">:</span> <span class="n">src_mask</span><span class="p">,</span>
+            <span class="s2">&quot;src_lengths&quot;</span><span class="p">:</span> <span class="n">src_lengths</span><span class="p">,</span>
+            <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">src</span><span class="p">,</span>
+            <span class="s2">&quot;trg_mask&quot;</span><span class="p">:</span> <span class="n">trg_mask</span><span class="p">,</span>
+            <span class="s2">&quot;trg_lengths&quot;</span><span class="p">:</span> <span class="n">trg_lengths</span><span class="p">,</span>
+            <span class="s2">&quot;trg&quot;</span><span class="p">:</span> <span class="n">trg</span><span class="p">,</span>
+            <span class="s2">&quot;sos&quot;</span><span class="p">:</span> <span class="n">sos</span>
+        <span class="p">},</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">src_mask</span><span class="p">,</span> <span class="n">src_lengths</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">trg_mask</span><span class="p">,</span> <span class="n">trg_lengths</span><span class="p">,</span> <span class="n">trg</span><span class="p">,</span> <span class="n">sos</span> <span class="o">=</span> \
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;src_mask&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;src_lengths&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">],</span> \
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;trg_mask&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;trg_lengths&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;trg&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;sos&quot;</span><span class="p">]</span>
+
+        <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_output</span><span class="p">(</span>
+            <span class="n">src_mask</span><span class="p">,</span> <span class="n">src_lengths</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">trg_mask</span><span class="p">,</span> <span class="n">trg_lengths</span><span class="p">,</span> <span class="n">trg</span><span class="p">,</span> <span class="n">sos</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">trg</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_epoch_end</span><span class="p">({</span>
+            <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">loss</span><span class="p">,</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="n">outputs</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
+            <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">trg</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="Seq2SeqLearnerV2.prepare_input"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearnerV2.prepare_input">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param X: sequence length of shape (seq_length, batch_size)</span>
+<span class="sd">        :return: mask and lengths</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pad_token</span><span class="p">)</span>
+
+        <span class="n">lengths</span> <span class="o">=</span> <span class="n">get_lengths</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">(),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">outputs</span></div></div>
 
 
 <div class="viewcode-block" id="Seq2SeqLearner"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.seq2seq.Seq2SeqLearner">[docs]</a><span class="k">class</span> <span class="nc">Seq2SeqLearner</span><span class="p">:</span>
@@ -47,7 +211,7 @@
 <span class="sd">    INCOMPLETE</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">encoder</span><span class="p">:</span><span class="n">Encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">:</span><span class="n">Decoder</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">encoder</span><span class="p">:</span> <span class="n">Encoder</span><span class="p">,</span> <span class="n">decoder</span><span class="p">:</span> <span class="n">Decoder</span><span class="p">,</span>
             <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">Y_val</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span>
             <span class="n">teacher_forcing_ratio</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
             <span class="n">pad_token</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">SOS_token</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">EOS_token</span><span class="o">=</span><span class="mi">2</span>
@@ -259,7 +423,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>

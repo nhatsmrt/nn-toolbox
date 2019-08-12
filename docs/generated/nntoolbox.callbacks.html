@@ -117,6 +117,11 @@
 <code class="sig-name descname">on_train_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#Callback.on_train_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.Callback.on_train_end" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="nntoolbox.callbacks.callbacks.Callback.order">
+<code class="sig-name descname">order</code><em class="property"> = 0</em><a class="headerlink" href="#nntoolbox.callbacks.callbacks.Callback.order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -187,6 +192,68 @@
 <dl class="method">
 <dt id="nntoolbox.callbacks.callbacks.EarlyStoppingCB.on_epoch_end">
 <code class="sig-name descname">on_epoch_end</code><span class="sig-paren">(</span><em class="sig-param">logs: Dict[str, Any]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#EarlyStoppingCB.on_epoch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.EarlyStoppingCB.on_epoch_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.callbacks.</code><code class="sig-name descname">GroupCallback</code><span class="sig-paren">(</span><em class="sig-param">callbacks: List[nntoolbox.callbacks.callbacks.Callback]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<p>Group several callbacks together (UNTESTED)</p>
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.after_backward">
+<code class="sig-name descname">after_backward</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.after_backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.after_backward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.after_losses">
+<code class="sig-name descname">after_losses</code><span class="sig-paren">(</span><em class="sig-param">losses: Dict[str, torch.Tensor], train: bool</em><span class="sig-paren">)</span> &#x2192; Dict[str, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.after_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.after_losses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.after_outputs">
+<code class="sig-name descname">after_outputs</code><span class="sig-paren">(</span><em class="sig-param">outputs: Dict[str, torch.Tensor], train: bool</em><span class="sig-paren">)</span> &#x2192; Dict[str, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.after_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.after_outputs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.after_step">
+<code class="sig-name descname">after_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.after_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.after_step" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.on_backward_begin">
+<code class="sig-name descname">on_backward_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.on_backward_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.on_backward_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.on_batch_begin">
+<code class="sig-name descname">on_batch_begin</code><span class="sig-paren">(</span><em class="sig-param">data: Dict[str, torch.Tensor], train</em><span class="sig-paren">)</span> &#x2192; Dict[str, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.on_batch_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.on_batch_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.on_batch_end">
+<code class="sig-name descname">on_batch_end</code><span class="sig-paren">(</span><em class="sig-param">logs: Dict[str, Any]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.on_batch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.on_batch_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.on_epoch_begin">
+<code class="sig-name descname">on_epoch_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.on_epoch_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.on_epoch_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.on_epoch_end">
+<code class="sig-name descname">on_epoch_end</code><span class="sig-paren">(</span><em class="sig-param">logs: Dict[str, Any]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.on_epoch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.on_epoch_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.on_train_begin">
+<code class="sig-name descname">on_train_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.on_train_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.on_train_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.callbacks.GroupCallback.on_train_end">
+<code class="sig-name descname">on_train_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/callbacks.html#GroupCallback.on_train_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.callbacks.GroupCallback.on_train_end" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -579,6 +646,23 @@ registered hooks while the latter silently ignores them.</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="nntoolbox.callbacks.nan.SkipNaN">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.nan.</code><code class="sig-name descname">SkipNaN</code><a class="reference internal" href="../_modules/nntoolbox/callbacks/nan.html#SkipNaN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.nan.SkipNaN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<p>Skip when loss or output is nan (UNTESTED)</p>
+<dl class="method">
+<dt id="nntoolbox.callbacks.nan.SkipNaN.after_losses">
+<code class="sig-name descname">after_losses</code><span class="sig-paren">(</span><em class="sig-param">losses: Dict[str, torch.Tensor], train: bool</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/callbacks/nan.html#SkipNaN.after_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.nan.SkipNaN.after_losses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.nan.SkipNaN.after_outputs">
+<code class="sig-name descname">after_outputs</code><span class="sig-paren">(</span><em class="sig-param">outputs: Dict[str, torch.Tensor], train: bool</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/callbacks/nan.html#SkipNaN.after_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.nan.SkipNaN.after_outputs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-nntoolbox.callbacks.progress_bar">
 <span id="nntoolbox-callbacks-progress-bar-module"></span><h2>nntoolbox.callbacks.progress_bar module<a class="headerlink" href="#module-nntoolbox.callbacks.progress_bar" title="Permalink to this headline">¶</a></h2>
@@ -613,6 +697,69 @@ Adapt from fastai course 2 v3 notebook</p>
 <code class="sig-name descname">set_progress</code><span class="sig-paren">(</span><em class="sig-param">data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">epoch: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/progress_bar.html#ProgressBarCB.set_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.progress_bar.ProgressBarCB.set_progress" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.callbacks.regularization">
+<span id="nntoolbox-callbacks-regularization-module"></span><h2>nntoolbox.callbacks.regularization module<a class="headerlink" href="#module-nntoolbox.callbacks.regularization" title="Permalink to this headline">¶</a></h2>
+<p>A few regularizers, implemented as callbacks (UNTESTED)</p>
+<dl class="class">
+<dt id="nntoolbox.callbacks.regularization.ActivationRegularization">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.regularization.</code><code class="sig-name descname">ActivationRegularization</code><span class="sig-paren">(</span><em class="sig-param">output_hook: nntoolbox.hooks.io.OutputHook, regularizer: Callable[torch.Tensor, torch.Tensor], loss_name: str = 'loss'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#ActivationRegularization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.ActivationRegularization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_hook</strong> – output hook of the module we want to regularize</p></li>
+<li><p><strong>regularizer</strong> – regularization function (e.g L2)</p></li>
+<li><p><strong>loss_name</strong> – name of the loss stored in loss logs. Default to ‘loss’</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="nntoolbox.callbacks.regularization.ActivationRegularization.after_losses">
+<code class="sig-name descname">after_losses</code><span class="sig-paren">(</span><em class="sig-param">losses: Dict[str, torch.Tensor], train: bool</em><span class="sig-paren">)</span> &#x2192; Dict[str, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#ActivationRegularization.after_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.ActivationRegularization.after_losses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.callbacks.regularization.DoubleBackpropagationCB">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.regularization.</code><code class="sig-name descname">DoubleBackpropagationCB</code><span class="sig-paren">(</span><em class="sig-param">input_name: str = 'inputs'</em>, <em class="sig-param">loss_name: str = 'loss'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#DoubleBackpropagationCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.DoubleBackpropagationCB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<p>Double backpropagation regularizer to penalize slight perturbation in input (as a CB) (UNTESTED)</p>
+<p><a class="reference external" href="https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf">https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf</a></p>
+<p><a class="reference external" href="http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf">http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.callbacks.regularization.DoubleBackpropagationCB.after_losses">
+<code class="sig-name descname">after_losses</code><span class="sig-paren">(</span><em class="sig-param">losses: Dict[str, torch.Tensor], train: bool</em><span class="sig-paren">)</span> &#x2192; Dict[str, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#DoubleBackpropagationCB.after_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.DoubleBackpropagationCB.after_losses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.regularization.DoubleBackpropagationCB.on_batch_begin">
+<code class="sig-name descname">on_batch_begin</code><span class="sig-paren">(</span><em class="sig-param">data: Dict[str, torch.Tensor], train</em><span class="sig-paren">)</span> &#x2192; Dict[str, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#DoubleBackpropagationCB.on_batch_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.DoubleBackpropagationCB.on_batch_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.callbacks.regularization.L1AR">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.regularization.</code><code class="sig-name descname">L1AR</code><span class="sig-paren">(</span><em class="sig-param">output_hook: nntoolbox.hooks.io.OutputHook</em>, <em class="sig-param">loss_name: str = 'loss'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#L1AR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.L1AR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.regularization.ActivationRegularization" title="nntoolbox.callbacks.regularization.ActivationRegularization"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.regularization.ActivationRegularization</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.callbacks.regularization.L2AR">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.regularization.</code><code class="sig-name descname">L2AR</code><span class="sig-paren">(</span><em class="sig-param">output_hook: nntoolbox.hooks.io.OutputHook</em>, <em class="sig-param">loss_name: str = 'loss'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#L2AR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.L2AR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.regularization.ActivationRegularization" title="nntoolbox.callbacks.regularization.ActivationRegularization"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.regularization.ActivationRegularization</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.callbacks.regularization.StudentTPenaltyAR">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.regularization.</code><code class="sig-name descname">StudentTPenaltyAR</code><span class="sig-paren">(</span><em class="sig-param">output_hook: nntoolbox.hooks.io.OutputHook</em>, <em class="sig-param">loss_name: str = 'loss'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#StudentTPenaltyAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.StudentTPenaltyAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.regularization.ActivationRegularization" title="nntoolbox.callbacks.regularization.ActivationRegularization"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.regularization.ActivationRegularization</span></code></a></p>
+<p>Student’s T Activation Regularization:</p>
+<p>omega(t) = sum_i log(1 + t_i^2)</p>
 </dd></dl>
 
 </div>
@@ -677,7 +824,7 @@ Adapt from fastai course 2 v3 notebook</p>
 <dt id="nntoolbox.callbacks.transfer.FreezeBN">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.transfer.</code><code class="sig-name descname">FreezeBN</code><a class="reference internal" href="../_modules/nntoolbox/callbacks/transfer.html#FreezeBN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.transfer.FreezeBN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
-<p>Freeze statistics of non trainable batch norms so that it won’t accumulate statistics</p>
+<p>Freeze statistics of non trainable batch norms so that it won’t accumulate statistics (UNTESTED)</p>
 <dl class="method">
 <dt id="nntoolbox.callbacks.transfer.FreezeBN.on_epoch_begin">
 <code class="sig-name descname">on_epoch_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/transfer.html#FreezeBN.on_epoch_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.transfer.FreezeBN.on_epoch_begin" title="Permalink to this definition">¶</a></dt>
@@ -685,9 +832,34 @@ Adapt from fastai course 2 v3 notebook</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="nntoolbox.callbacks.transfer.GradualUnfreezing">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.transfer.</code><code class="sig-name descname">GradualUnfreezing</code><span class="sig-paren">(</span><em class="sig-param">unfreeze_every: int, freeze_inds: Optional[List[int]] = None, lr: Union[List[float], float, None] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/transfer.html#GradualUnfreezing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.transfer.GradualUnfreezing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<p>Gradually unfreezing pretrained layers, with discriminative learning rates (UNTESTED)</p>
+<dl class="method">
+<dt id="nntoolbox.callbacks.transfer.GradualUnfreezing.on_epoch_end">
+<code class="sig-name descname">on_epoch_end</code><span class="sig-paren">(</span><em class="sig-param">logs: Dict[str, Any]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/callbacks/transfer.html#GradualUnfreezing.on_epoch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.transfer.GradualUnfreezing.on_epoch_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.transfer.GradualUnfreezing.on_train_begin">
+<code class="sig-name descname">on_train_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/transfer.html#GradualUnfreezing.on_train_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.transfer.GradualUnfreezing.on_train_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.callbacks.transfer.FineTuning">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.transfer.</code><code class="sig-name descname">FineTuning</code><span class="sig-paren">(</span><em class="sig-param">unfreeze_every: int, freeze_inds: Optional[List[int]] = None, lr: Union[List[float], float, None] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/transfer.html#FineTuning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.transfer.FineTuning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.GroupCallback" title="nntoolbox.callbacks.callbacks.GroupCallback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.GroupCallback</span></code></a></p>
+<p>Combining freezing batch norm and gradual unfreezing of layer</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-nntoolbox.callbacks">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.callbacks" title="Permalink to this headline">¶</a></h2>
+<p>Implementations of training procedures</p>
 </div>
 </div>
 
@@ -725,6 +897,7 @@ Adapt from fastai course 2 v3 notebook</p>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.mixup">nntoolbox.callbacks.mixup module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.nan">nntoolbox.callbacks.nan module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.progress_bar">nntoolbox.callbacks.progress_bar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.regularization">nntoolbox.callbacks.regularization module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.resizing">nntoolbox.callbacks.resizing module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.swa">nntoolbox.callbacks.swa module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.transfer">nntoolbox.callbacks.transfer module</a></li>
@@ -741,7 +914,7 @@ Adapt from fastai course 2 v3 notebook</p>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>

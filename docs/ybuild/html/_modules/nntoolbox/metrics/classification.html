@@ -51,10 +51,12 @@
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
             <span class="n">predictions</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-            <span class="n">labels</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">predictions</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]</span>
-            <span class="n">labels</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
         <span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span>
             <span class="n">y_true</span><span class="o">=</span><span class="n">labels</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
@@ -105,7 +107,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">labels</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_at_k</span><span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;best&quot;</span><span class="p">],</span> <span class="n">labels</span><span class="p">)</span>
+        <span class="nb">map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_at_k</span><span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;best&quot;</span><span class="p">],</span> <span class="n">labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_best</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">map</span>
 
 <div class="viewcode-block" id="MAPAtK.map_at_k"><a class="viewcode-back" href="../../../generated/nntoolbox.metrics.html#nntoolbox.metrics.classification.MAPAtK.map_at_k">[docs]</a>    <span class="k">def</span> <span class="nf">map_at_k</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">best</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
@@ -165,7 +169,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>

@@ -12,6 +12,14 @@ nntoolbox.losses.losses module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.losses.moe module
+---------------------------
+
+.. automodule:: nntoolbox.losses.moe
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.losses.smooth module
 ------------------------------
 

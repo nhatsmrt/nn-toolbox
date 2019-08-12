@@ -4,10 +4,26 @@ nntoolbox.vision.losses package
 Submodules
 ----------
 
+nntoolbox.vision.losses.discriminative module
+---------------------------------------------
+
+.. automodule:: nntoolbox.vision.losses.discriminative
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.vision.losses.metrics module
 --------------------------------------
 
 .. automodule:: nntoolbox.vision.losses.metrics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.vision.losses.robust module
+-------------------------------------
+
+.. automodule:: nntoolbox.vision.losses.robust
    :members:
    :undoc-members:
    :show-inheritance:

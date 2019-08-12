@@ -37,8 +37,9 @@
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ndarray</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">float32</span><span class="p">,</span> <span class="n">long</span><span class="p">,</span> <span class="n">Tensor</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="k">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span> <span class="nn">torchtext.data</span> <span class="k">import</span> <span class="n">Iterator</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SupervisedDataset&#39;</span><span class="p">,</span> <span class="s1">&#39;get_first_batch&#39;</span><span class="p">,</span> <span class="s1">&#39;grab_next_batch&#39;</span><span class="p">]</span>
@@ -97,7 +98,7 @@
         <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;inputs&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">callbacks</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;inputs&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="grab_next_batch"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.data.grab_next_batch">[docs]</a><span class="k">def</span> <span class="nf">grab_next_batch</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">):</span>
+<div class="viewcode-block" id="grab_next_batch"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.data.grab_next_batch">[docs]</a><span class="k">def</span> <span class="nf">grab_next_batch</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataLoader</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Grab the next batch from dataloader&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">data</span><span class="p">))</span></div>
 </pre></div>
@@ -130,7 +131,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>

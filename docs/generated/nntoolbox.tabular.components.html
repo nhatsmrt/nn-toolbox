@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.tabular.components package &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="nntoolbox.tabular.utils package" href="nntoolbox.tabular.utils.html" />
+    <link rel="prev" title="nntoolbox.tabular package" href="nntoolbox.tabular.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nntoolbox-tabular-components-package">
+<h1>nntoolbox.tabular.components package<a class="headerlink" href="#nntoolbox-tabular-components-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nntoolbox.tabular.components.components">
+<span id="nntoolbox-tabular-components-components-module"></span><h2>nntoolbox.tabular.components.components module<a class="headerlink" href="#module-nntoolbox.tabular.components.components" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.tabular.components.components.CrossLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.tabular.components.components.</code><code class="sig-name descname">CrossLayer</code><span class="sig-paren">(</span><em class="sig-param">n_hidden</em>, <em class="sig-param">bias=True</em>, <em class="sig-param">return_first=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/tabular/components/components.html#CrossLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.tabular.components.components.CrossLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Implement a (residual) crossing layer for Deep and Cross Net (DCN):</p>
+<p>x_{l+1} = x_0 x^T_l w + b + x_l</p>
+<p>Based on: <a class="reference external" href="https://arxiv.org/pdf/1708.05123.pdf">https://arxiv.org/pdf/1708.05123.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.tabular.components.components.CrossLayer.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">inputs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/tabular/components/components.html#CrossLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.tabular.components.components.CrossLayer.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inputs</strong> – a tuple: first element is the orinal features, second element is the output of last layer</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.tabular.components.components.CrossLayer.reset_parameters">
+<code class="sig-name descname">reset_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/tabular/components/components.html#CrossLayer.reset_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.tabular.components.components.CrossLayer.reset_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the parameters of the model</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.tabular.components">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.tabular.components" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nntoolbox.tabular.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">nntoolbox.tabular.components package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.tabular.components.components">nntoolbox.tabular.components.components module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.tabular.components">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nntoolbox.tabular.utils.html">nntoolbox.tabular.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.tabular.html#module-nntoolbox.tabular">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="nntoolbox.tabular.html">nntoolbox.tabular package</a><ul>
+      <li>Previous: <a href="nntoolbox.tabular.html" title="previous chapter">nntoolbox.tabular package</a></li>
+      <li>Next: <a href="nntoolbox.tabular.utils.html" title="next chapter">nntoolbox.tabular.utils package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/generated/nntoolbox.tabular.components.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

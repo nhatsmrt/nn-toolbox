@@ -64,12 +64,87 @@ registered hooks while the latter silently ignores them.</p>
 <div class="section" id="module-nntoolbox.components.components">
 <span id="nntoolbox-components-components-module"></span><h2>nntoolbox.components.components module<a class="headerlink" href="#module-nntoolbox.components.components" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="nntoolbox.components.components.HighwayLayer">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">HighwayLayer</code><span class="sig-paren">(</span><em class="sig-param">in_features</em>, <em class="sig-param">main</em>, <em class="sig-param">gate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#HighwayLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.HighwayLayer" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.components.components.LambdaLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">LambdaLayer</code><span class="sig-paren">(</span><em class="sig-param">fn: Callable[torch.Tensor, torch.Tensor]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#LambdaLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.LambdaLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Highway layer:
-y = T(x) * H(x) + (1 - T(x)) * x
-<a class="reference external" href="https://arxiv.org/pdf/1505.00387.pdf">https://arxiv.org/pdf/1505.00387.pdf</a></p>
+<p>Implement a quick layer wrapper for a function</p>
+<p>Useful for stateless layer (e.g without parameters)</p>
+<dl class="method">
+<dt id="nntoolbox.components.components.LambdaLayer.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/components.html#LambdaLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.LambdaLayer.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.components.components.ScalingLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">ScalingLayer</code><span class="sig-paren">(</span><em class="sig-param">scale: float = 0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#ScalingLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.ScalingLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.components.components.LambdaLayer" title="nntoolbox.components.components.LambdaLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.components.components.LambdaLayer</span></code></a></p>
+<p class="rubric">References</p>
+<p>Christian Szegedy et al. “Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning.”
+<a class="reference external" href="https://arxiv.org/pdf/1602.07261.pdf">https://arxiv.org/pdf/1602.07261.pdf</a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.components.components.ResidualLinearBlock">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">ResidualLinearBlock</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">activation: Callable[...</em>, <em class="sig-param">torch.nn.modules.module.Module] = &lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">bias: bool = True</em>, <em class="sig-param">use_dropout: bool = False</em>, <em class="sig-param">drop_rate: float = 0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#ResidualLinearBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.ResidualLinearBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>A two-layer linear block with residual connection:</p>
+<p>y = f(w_2f(w_1 x + b_1) + b_2) + x</p>
+<dl class="method">
+<dt id="nntoolbox.components.components.ResidualLinearBlock.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#ResidualLinearBlock.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.ResidualLinearBlock.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.components.components.LinearlyAugmentedFF">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">LinearlyAugmentedFF</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">activation: Callable[...</em>, <em class="sig-param">torch.nn.modules.module.Module] = &lt;class 'torch.nn.modules.linear.Identity'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#LinearlyAugmentedFF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.LinearlyAugmentedFF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Based on <a class="reference external" href="https://link.springer.com/chapter/10.1007/978-3-642-35289-8_13">https://link.springer.com/chapter/10.1007/978-3-642-35289-8_13</a></p>
+<dl class="method">
+<dt id="nntoolbox.components.components.LinearlyAugmentedFF.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#LinearlyAugmentedFF.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.LinearlyAugmentedFF.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.components.components.HighwayLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">HighwayLayer</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">main: torch.nn.modules.module.Module</em>, <em class="sig-param">gate: Optional[torch.nn.modules.module.Module] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#HighwayLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.HighwayLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Highway layer:</p>
+<p>y = T(x) * H(x) + (1 - T(x)) * x</p>
+<p>Reference:</p>
+<p><a class="reference external" href="https://arxiv.org/pdf/1505.00387.pdf">https://arxiv.org/pdf/1505.00387.pdf</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -95,13 +170,39 @@ y = T(x) * H(x) + (1 - T(x)) * x
 </dd></dl>
 
 <dl class="class">
-<dt id="nntoolbox.components.components.LinearlyAugmentedFF">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">LinearlyAugmentedFF</code><span class="sig-paren">(</span><em class="sig-param">in_features</em>, <em class="sig-param">out_features</em>, <em class="sig-param">activation=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#LinearlyAugmentedFF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.LinearlyAugmentedFF" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Based on <a class="reference external" href="https://link.springer.com/chapter/10.1007/978-3-642-35289-8_13">https://link.springer.com/chapter/10.1007/978-3-642-35289-8_13</a></p>
+<dt id="nntoolbox.components.components.SquareUnitLinear">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">SquareUnitLinear</code><span class="sig-paren">(</span><em class="sig-param">in_features</em>, <em class="sig-param">out_features</em>, <em class="sig-param">bias: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#SquareUnitLinear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.SquareUnitLinear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.linear.Linear</span></code></p>
+<p>Augment input with square units:</p>
+<p>g(x) = W concat([x, x^2]) + b</p>
+<p>Reference:</p>
+<p>Flake, Gary. “Square Unit Augmented, Radially Extended, Multilayer Perceptrons.” Neural Network: Tricks of the Trade</p>
 <dl class="method">
-<dt id="nntoolbox.components.components.LinearlyAugmentedFF.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#LinearlyAugmentedFF.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.LinearlyAugmentedFF.forward" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.components.components.SquareUnitLinear.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#SquareUnitLinear.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.SquareUnitLinear.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.components.components.QuadraticPolynomialLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">QuadraticPolynomialLayer</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">threshold: float = 0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#QuadraticPolynomialLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.QuadraticPolynomialLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.linear.Linear</span></code></p>
+<p>h(x) = sigma( sum_k(A_k x)^2 + bx + c)</p>
+<p class="rubric">References</p>
+<p>Bergstra et al. “Quadratic Polynomials Learn Better Image Features”</p>
+<dl class="method">
+<dt id="nntoolbox.components.components.QuadraticPolynomialLayer.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#QuadraticPolynomialLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.QuadraticPolynomialLayer.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -119,28 +220,30 @@ registered hooks while the latter silently ignores them.</p>
 <dt id="nntoolbox.components.components.MLP">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">MLP</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">hidden_layer_sizes: Sequence[int] = (512</em>, <em class="sig-param">)</em>, <em class="sig-param">activation: Callable[...</em>, <em class="sig-param">torch.Tensor] = &lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">bn_final: bool = False</em>, <em class="sig-param">drop_ps=(0.5</em>, <em class="sig-param">0.5)</em>, <em class="sig-param">use_batch_norm: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#MLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.MLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
+<p>Implement a generic multilayer perceptron</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.components.kernel">
+<span id="nntoolbox-components-kernel-module"></span><h2>nntoolbox.components.kernel module<a class="headerlink" href="#module-nntoolbox.components.kernel" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.components.kernel.DistKernel">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.kernel.</code><code class="sig-name descname">DistKernel</code><a class="reference internal" href="../_modules/nntoolbox/components/kernel.html#DistKernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.kernel.DistKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 </dd></dl>
 
 <dl class="class">
-<dt id="nntoolbox.components.components.ResidualLinearBlock">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">ResidualLinearBlock</code><span class="sig-paren">(</span><em class="sig-param">in_features</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">bias=True</em>, <em class="sig-param">use_dropout=False</em>, <em class="sig-param">drop_rate=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#ResidualLinearBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.ResidualLinearBlock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>A two-layer linear block with residual connection:
-y = f(w_2f(w_1 x + b_1) + b_2) + x</p>
-<dl class="method">
-<dt id="nntoolbox.components.components.ResidualLinearBlock.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#ResidualLinearBlock.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.ResidualLinearBlock.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
+<dt id="nntoolbox.components.kernel.GaussianDistKernel">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.kernel.</code><code class="sig-name descname">GaussianDistKernel</code><span class="sig-paren">(</span><em class="sig-param">log_beta: float = 0.0</em>, <em class="sig-param">trainable_beta: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/kernel.html#GaussianDistKernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.kernel.GaussianDistKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.components.kernel.DistKernel" title="nntoolbox.components.kernel.DistKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.components.kernel.DistKernel</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>log_beta</strong> – log of beta (which is inverse of bandwidth)</p></li>
+<li><p><strong>trainable_beta</strong> – whether beta should be trainable</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -164,6 +267,39 @@ output_i = max_{j = 1,…,k} (w_1 input + b_1, w_2 input + b_2,…, w_k input + 
 <dd class="field-even"><p>(batch_size, out_features)</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.components.moe">
+<span id="nntoolbox-components-moe-module"></span><h2>nntoolbox.components.moe module<a class="headerlink" href="#module-nntoolbox.components.moe" title="Permalink to this headline">¶</a></h2>
+<p>Implement mixture-of-experts (moe) layers</p>
+<dl class="class">
+<dt id="nntoolbox.components.moe.MixtureOfExpert">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.moe.</code><code class="sig-name descname">MixtureOfExpert</code><span class="sig-paren">(</span><em class="sig-param">experts: List[torch.nn.modules.module.Module], gate: torch.nn.modules.module.Module, return_mixture: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/moe.html#MixtureOfExpert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.moe.MixtureOfExpert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experts</strong> – list of separate expert networks. Each must take the same input and return
+output of same dimensionality</p></li>
+<li><p><strong>gate</strong> – take the input and output (un-normalized) score for each expert</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="nntoolbox.components.moe.MixtureOfExpert.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; Union[Tuple[torch.Tensor, torch.Tensor], torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/components/moe.html#MixtureOfExpert.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.moe.MixtureOfExpert.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if return_mixture, return the mixture of expert output; else return both expert score and expert output</p>
+</dd>
+</dl>
+<p>(with the n_expert channel coming last)</p>
 </dd></dl>
 
 </dd></dl>
@@ -232,6 +368,96 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-nntoolbox.components.rbf">
+<span id="nntoolbox-components-rbf-module"></span><h2>nntoolbox.components.rbf module<a class="headerlink" href="#module-nntoolbox.components.rbf" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.components.rbf.RBFLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.rbf.</code><code class="sig-name descname">RBFLayer</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">trainable_centers: bool = True</em>, <em class="sig-param">normalized: bool = False</em>, <em class="sig-param">kernel: Optional[nntoolbox.components.kernel.DistKernel] = None</em>, <em class="sig-param">initial_centers: Optional[torch.Tensor] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/rbf.html#RBFLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.linear.Linear</span></code></p>
+<p>RBF Layer (used for output or as the hidden layer for RBF network)</p>
+<p>References:</p>
+<p>Lecun et al. “Gradient-Based Learning Applied to Document Recognition.”
+<a class="reference external" href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf">http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_features</strong> – dimension of input</p></li>
+<li><p><strong>out_features</strong> – number of centers</p></li>
+<li><p><strong>trainable_centers</strong> – whether the center can be moved</p></li>
+<li><p><strong>normalized</strong> – whether the output should be normalized (i.e sum to 1)</p></li>
+<li><p><strong>kernel</strong> – (optional) a distance-based kernel function</p></li>
+<li><p><strong>initial_centers</strong> – (optional) initial centers placement</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="nntoolbox.components.rbf.RBFLayer.centroids_initialize">
+<code class="sig-name descname">centroids_initialize</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em>, <em class="sig-param">labels: torch.Tensor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/rbf.html#RBFLayer.centroids_initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer.centroids_initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Re-)initialize the centers based on nearest centroids algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – </p></li>
+<li><p><strong>labels</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.components.rbf.RBFLayer.cluster_initialize">
+<code class="sig-name descname">cluster_initialize</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/rbf.html#RBFLayer.cluster_initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer.cluster_initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Re-)initialize the centers based on k-mean clustering on the input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.components.rbf.RBFLayer.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/rbf.html#RBFLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.components.regularization">
+<span id="nntoolbox-components-regularization-module"></span><h2>nntoolbox.components.regularization module<a class="headerlink" href="#module-nntoolbox.components.regularization" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.components.regularization.DropConnect">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.regularization.</code><code class="sig-name descname">DropConnect</code><span class="sig-paren">(</span><em class="sig-param">module: torch.nn.modules.module.Module, ps: Union[List[float], float] = 0.0, weight_names: List[str] = ['weight']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/regularization.html#DropConnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.regularization.DropConnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Implementation based on fastai’s WeightDropout (from course 2 v3 notebook)</p>
+<p>Reference:</p>
+<p><a class="reference external" href="http://yann.lecun.com/exdb/publis/pdf/wan-icml-13.pdf">http://yann.lecun.com/exdb/publis/pdf/wan-icml-13.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.components.regularization.DropConnect.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">*inputs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/regularization.html#DropConnect.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.regularization.DropConnect.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-nntoolbox.components.self_normalizing">
 <span id="nntoolbox-components-self-normalizing-module"></span><h2>nntoolbox.components.self_normalizing module<a class="headerlink" href="#module-nntoolbox.components.self_normalizing" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -245,6 +471,7 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 <div class="section" id="module-nntoolbox.components">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.components" title="Permalink to this headline">¶</a></h2>
+<p>General components for neural networks</p>
 </div>
 </div>
 
@@ -271,8 +498,12 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.activation">nntoolbox.components.activation module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.components">nntoolbox.components.components module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.kernel">nntoolbox.components.kernel module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.maxout">nntoolbox.components.maxout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.moe">nntoolbox.components.moe module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.pool">nntoolbox.components.pool module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.rbf">nntoolbox.components.rbf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.regularization">nntoolbox.components.regularization module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.self_normalizing">nntoolbox.components.self_normalizing module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components">Module contents</a></li>
 </ul>
@@ -286,7 +517,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>
