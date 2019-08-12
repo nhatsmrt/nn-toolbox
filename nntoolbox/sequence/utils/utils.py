@@ -1,8 +1,10 @@
 from __future__ import unicode_literals, print_function, division
 import unicodedata
 import numpy as np
+from numpy import ndarray
 import torch
 from torch import Tensor, nn
+from typing import Union
 
 
 __all__ = [
@@ -51,7 +53,7 @@ def create_mask_from_lengths(inputs: Tensor, lengths: Tensor) -> Tensor:
     return mask == 1
 
 
-def get_lengths(mask, return_tensor: bool=False):
+def get_lengths(mask: Union[ndarray, Tensor], return_tensor: bool=False) -> Union[ndarray, Tensor]:
     """
     Return a 1D array indicating the length of each sequence in batch
 

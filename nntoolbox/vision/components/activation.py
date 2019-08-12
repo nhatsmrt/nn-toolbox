@@ -5,6 +5,7 @@ import torch
 class Swish(nn.Module):
     """
     Swish activation function:
+
     f(x) = x * sigmoid(\beta x)
     """
     def __init__(self, beta_init: float=1.0, trainable: bool=True):

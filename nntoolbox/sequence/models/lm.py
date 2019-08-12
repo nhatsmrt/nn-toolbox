@@ -1,4 +1,5 @@
 from torch import nn, Tensor
+import torch.nn.functional as F
 
 
 __all__ = ['LanguageModel']
@@ -42,3 +43,12 @@ class LanguageModel(nn.Module):
         :param head:
         """
         self.head = head
+
+    def compute_prob(self, input: Tensor) -> Tensor:
+        """
+        :param input: a single sentence. (seq_len, input_dim)
+        :return: probability of the sentence
+        """
+        representation = self.encoder(input.unsqueeze(1))[0]
+        score = self.head(representation) # (seq_length, batch_size, vocab_size)
+        return F.softmax(score, dim=-1).prod()

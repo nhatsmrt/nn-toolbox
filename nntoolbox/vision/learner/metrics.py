@@ -1,21 +1,25 @@
+import torch
 from torch import Tensor
 from nntoolbox.learner import Learner
 from ...callbacks import Callback, CallbackHandler
 from ...metrics import Metric
-from typing import Tuple, List, Dict
+from ..utils import Selector
+from typing import List, Dict, Tuple
+from ..models import KNNClassifier
+import numpy as np
 
 
-__all__ = ['SiameseLearner']
+__all__ = ['MetricLearner']
 
 
-class SiameseLearner(Learner):
-    """
-    Abstraction for training of neural network in siamese style
-    """
-
-    def learn(self, n_epoch, callbacks: List[Callback], metrics: Dict[str, Metric], final_metric: str) -> float:
+class MetricLearner(Learner):
+    def learn(
+            self, n_epoch, selector: Selector, callbacks: List[Callback],
+            metrics: Dict[str, Metric], final_metric: str
+    ) -> float:
         self._cb_handler = CallbackHandler(self, n_epoch, callbacks, metrics, final_metric)
         self._cb_handler.on_train_begin()
+        self._selector = selector
 
         for e in range(n_epoch):
             self._model.train()
@@ -30,19 +34,19 @@ class SiameseLearner(Learner):
 
         print("Finish training")
         return 0.0
-        # return self._cb_handler.on_train_end()
 
-    def learn_one_iter(self, data):
-        images_1, labels_1, images_2, labels_2 = data[0][0], data[0][1], data[1][0], data[1][1]
-        first = self._cb_handler.on_batch_begin({"inputs": images_1, "labels": labels_1}, True)
-        images_1, labels_1 = first["inputs"], first["labels"]
-        second = self._cb_handler.on_batch_begin({"inputs": images_2, "labels": labels_2}, True)
-        images_2, labels_2 = second["inputs"], second["labels"]
+    def learn_one_iter(self, data: Tuple[Tensor, Tensor]):
+        images, labels = data
+        data = self._cb_handler.on_batch_begin({"inputs": images, "labels": labels}, True)
+        images, labels = data["inputs"], data["labels"]
+        embeddings = self.compute_embeddings(images, True)
+        try:
+            selected = self._selector.select(embeddings, labels)
+        except:
+            return
 
-        embeddings_1, embeddings_2 = self.compute_embeddings(images_1, images_2, True)
-        labels = labels_1 == labels_2
-        loss = self.compute_loss(embeddings_1, embeddings_2, labels, True)
-        print(loss)
+        loss = self.compute_loss(selected, True)
+        # print(loss)
         loss.backward()
         if self._cb_handler.after_backward():
             self._optimizer.step()
@@ -51,14 +55,54 @@ class SiameseLearner(Learner):
 
             self._cb_handler.on_batch_end({"loss": loss})
 
-    def compute_embeddings(self, images_1, images_2, train: bool) -> Tuple[Tensor, Tensor]:
-        embedding_1, embedding_2 = self._model(images_1), self._model(images_2)
-        return embedding_1, embedding_2
+    def compute_embeddings(self, images: Tensor, train: bool) -> Tensor:
+        return self._cb_handler.after_outputs({"embeddings": self._model(images)}, train)["embeddings"]
 
-    def compute_loss(self, embeddings_1, embeddings_2, labels, train: bool) -> Tensor:
+    def compute_loss(self, selected: Tuple[Tensor, ...], train: bool) -> Tensor:
         return self._cb_handler.after_losses(
-            {"loss": self._criterion(embeddings_1, embeddings_2, labels)}, train
+            {"loss": self._criterion(selected)}, train
         )["loss"]
 
     def evaluate(self) -> bool:
-        return False
+        self._model.eval()
+        classifier = KNNClassifier(model=self._model, database=self._train_data)
+
+        all_outputs = []
+        all_labels = []
+        all_bests = []
+
+        total_data = 0
+        loss = 0
+
+        for data in self._val_data:
+            images, labels = data
+            data = self._cb_handler.on_batch_begin({"inputs": images, "labels": labels}, True)
+            predictions, best, prediction_probs = classifier.predict(images)
+
+            images, labels = data["inputs"], data["labels"]
+            embeddings = self.compute_embeddings(images, True)
+            try:
+                selected = self._selector.select(embeddings, labels)
+            except:
+                continue
+
+            loss = self.compute_loss(selected, True)
+
+            all_outputs.append(predictions)
+            all_bests.append(best)
+            all_labels.append(labels.cpu())
+
+            loss += self.compute_loss(selected, False).cpu().item() * len(images)
+            total_data += len(images)
+            break
+
+        loss /= total_data
+
+        logs = dict()
+
+        logs["loss"] = loss
+        logs["best"] = np.concatenate(all_bests, axis=0)
+        logs["outputs"] = np.concatenate(all_outputs, axis=0)
+        logs["labels"] = torch.cat(all_labels, dim=0)
+
+        return self._cb_handler.on_epoch_end(logs)

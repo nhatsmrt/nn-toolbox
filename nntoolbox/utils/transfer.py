@@ -4,7 +4,6 @@ from typing import Callable, Tuple
 from torch import nn
 
 
-
 __all__ = ['cut_sequential_model', 'cut_model']
 
 

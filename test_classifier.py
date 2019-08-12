@@ -17,6 +17,7 @@ from nntoolbox.vision.transforms import Cutout
 from nntoolbox.vision.models import ImageClassifier, EnsembleImageClassifier
 from nntoolbox.losses import SmoothedCrossEntropy
 from nntoolbox.init import lsuv_init
+from nntoolbox.optim import LARS, LAMB
 
 from functools import partial
 import math
@@ -72,9 +73,11 @@ train_dataset.dataset.transform = Compose(
         ToTensor()
     ]
 )
-train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True)
-val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=128, shuffle=False)
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True)
+val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=128, shuffle=False)
+
+print("Number of batches per epoch " + str(len(train_loader)))
 
 
 class SEResNeXtShakeShake(ResNeXtBlock):
@@ -204,11 +207,22 @@ model = Sequential(
     )
 ).to(get_device())
 
+# lr_finder = LRFinder(
+#     model=model,
+#     train_data=train_loader,
+#     criterion=SmoothedCrossEntropy(),
+#     optimizer=partial(LAMB, lr=0.074, weight_decay=0.01),
+#     device=get_device()
+# )
+# lr_finder.find_lr(warmup=100, callbacks=[ToDeviceCallback()])
+
+
 # lsuv_init(module=model, input=get_first_batch(train_loader, callbacks = [ToDeviceCallback()])[0])
 
 # print(count_trainable_parameters(model)) # 14437816 3075928
 
-optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.30, momentum=0.9)
+# optimizer = LARS(model.parameters(), weight_decay=0.0001, lr=0.10, momentum=0.9)
+optimizer = LAMB(model.parameters(), weight_decay=0.01, lr=0.06)
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
@@ -218,24 +232,16 @@ learner = SupervisedImageLearner(
     mixup=True
 )
 
-# lr_finder = LRFinder(
-#     model=model,
-#     train_data=train_loader,
-#     criterion=SmoothedCrossEntropy(),
-#     optimizer=partial(SGD, lr=0.074, weight_decay=0.0001, momentum=0.9),
-#     device=get_device()
-# )
-# lr_finder.find_lr(warmup=100, callbacks=[ToDeviceCallback()])
 
-swa = StochasticWeightAveraging(learner, average_after=5025, update_every=670)
+swa = StochasticWeightAveraging(learner, average_after=2255, update_every=410)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     ToDeviceCallback(),
     # MixedPrecisionV2(),
-    InputProgressiveResizing(initial_size=80, max_size=160, upscale_every=10, upscale_factor=math.sqrt(2)),
+    # InputProgressiveResizing(initial_size=80, max_size=160, upscale_every=10, upscale_factor=math.sqrt(2)),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.10, T_max=335)),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.015, T_max=205)),
     swa,
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),

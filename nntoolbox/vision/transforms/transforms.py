@@ -19,7 +19,7 @@ class ElasticDeformation(object):
         self.alpha = alpha
         self.sigma = sigma
 
-    def __call__(self, image:Image)->Image:
+    def __call__(self, image: Image)->Image:
         if isinstance(self.alpha, collections.Sequence):
             alpha = random_num_generator(self.alpha)
         else:

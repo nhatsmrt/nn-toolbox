@@ -1,10 +1,11 @@
 from torchvision.transforms import functional as F
+from torch import Tensor
 import cv2
 from cv2 import imread, cvtColor
 from numpy import ndarray
 
 
-__all__ = ['gram_matrix', 'is_image', 'pil_to_tensor', 'tensor_to_pil', 'cv2_read_image']
+__all__ = ['gram_matrix', 'is_image', 'pil_to_tensor', 'tensor_to_pil', 'tensor_to_np', 'cv2_read_image']
 
 
 def gram_matrix(x):
@@ -14,13 +15,18 @@ def gram_matrix(x):
 
 
 def is_image(filename):
-    '''
+    """
     Check if filename has valid extension
+
     :param filename:
     :return: boolean indicating whether filename is a valid image filename
-    '''
+    """
     filename = filename.lower()
-    return filename.endswith(".jpg") or filename.endswith(".png") or filename.endswith(".jpeg")
+    return filename.endswith(".jpg") \
+           or filename.endswith(".png") \
+           or filename.endswith(".jpeg") \
+           or filename.endswith(".gif") \
+           or filename.endswith(".bmp")
 
 
 def pil_to_tensor(pil, device=None):
@@ -36,6 +42,14 @@ def tensor_to_pil(tensor):
         return F.to_pil_image(tensor[0])
     else:
         return F.to_pil_image(tensor)
+
+
+def tensor_to_np(tensor: Tensor) -> ndarray:
+    """Convert the tensor image to numpy format"""
+    if len(tensor.shape) == 4:
+        return tensor.permute(0, 2, 3, 1).cpu().detach().numpy()
+    else:
+        return tensor.permute(1, 2, 0).cpu().detach().numpy()
 
 
 def cv2_read_image(image_path, to_float: bool=False, flag: int=cv2.IMREAD_COLOR) -> ndarray:

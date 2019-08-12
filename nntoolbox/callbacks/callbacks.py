@@ -1,9 +1,11 @@
-from typing import Iterable, Dict, Any, Tuple
+from typing import Iterable, Dict, Any, List
 from ..metrics import Metric
 from torch import Tensor
 
 
 class Callback:
+    order: int=0
+
     def on_train_begin(self): pass
 
     def on_epoch_begin(self): pass
@@ -31,6 +33,66 @@ class Callback:
     def on_train_end(self): pass
 
 
+class GroupCallback(Callback):
+    """
+    Group several callbacks together (UNTESTED)
+    """
+
+    def __init__(self, callbacks: List[Callback]):
+        self._callbacks = callbacks
+
+    def on_train_begin(self):
+        for cb in self._callbacks: cb.on_train_begin()
+
+    def on_epoch_begin(self):
+        for cb in self._callbacks: cb.on_epoch_begin()
+
+    def on_batch_begin(self, data: Dict[str, Tensor], train) -> Dict[str, Tensor]:
+        for cb in self._callbacks:
+            data = cb.on_batch_begin(data, train)
+        return data
+
+    def after_outputs(self, outputs: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
+        for cb in self._callbacks:
+            outputs = cb.after_outputs(outputs, train)
+        return outputs
+
+    def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
+        for cb in self._callbacks:
+            losses = cb.after_losses(losses, train)
+        return losses
+
+    def on_backward_begin(self) -> bool:
+        ret = True
+        for cb in self._callbacks: ret = ret and cb.on_backward_begin()
+        return ret # if false, skip backward
+
+    def after_backward(self) -> bool:
+        ret = True
+        for cb in self._callbacks: ret = ret and cb.after_backward()
+        return ret # whether to continue with iteration
+
+    def after_step(self) -> bool:
+        ret = True
+        for cb in self._callbacks: ret = ret and cb.after_step()
+        return ret # whether to stop training
+
+    # def on_phase_begin(self): pass
+
+    def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
+        ret = False
+        for cb in self._callbacks: ret = ret or cb.on_epoch_end(logs)
+        return ret # whether to stop training
+
+    # def on_phase_end(self): pass
+
+    def on_batch_end(self, logs: Dict[str, Any]):
+        for cb in self._callbacks: cb.on_batch_end(logs)
+
+    def on_train_end(self):
+        for cb in self._callbacks: cb.on_train_end()
+
+
 class CallbackHandler:
     def __init__(
             self, learner, n_epoch: int, callbacks: Iterable[Callback]=None,
@@ -41,8 +103,13 @@ class CallbackHandler:
 
         if callbacks is not None:
             for callback in callbacks:
-                callback.learner = learner
-                callback.n_epoch = n_epoch
+                if isinstance(callback, GroupCallback):
+                    for subcb in callback._callbacks:
+                        subcb.learner = learner
+                        subcb.n_epoch = n_epoch
+                else:
+                    callback.learner = learner
+                    callback.n_epoch = n_epoch
 
         self._callbacks = callbacks
         self._metrics = metrics

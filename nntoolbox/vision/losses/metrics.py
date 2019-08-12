@@ -2,9 +2,41 @@ import torch
 from torch import nn, Tensor
 from torch.nn import functional as F
 import numpy as np
+from typing import Tuple
+from ...components import MLP
 
 
-__all__ = ['ContrastiveLoss', 'TripletSoftMarginLoss', 'AngularLoss', 'NPairLoss', 'NPairAngular']
+__all__ = [
+    'VerificationLoss', 'ContrastiveLoss', 'TripletSoftMarginLoss',
+    'TripletMarginLossV2', 'AngularLoss', 'NPairLoss', 'NPairAngular'
+]
+
+
+class VerificationLoss(nn.Module):
+    """
+    Verify if two embeddings belong to the same class
+    """
+
+    def __init__(self, embedding_dim: int):
+        super(VerificationLoss, self).__init__()
+        self.embedding_dim = embedding_dim
+        self.verifier = MLP(in_features=embedding_dim, out_features=1, hidden_layer_sizes=[embedding_dim // 2])
+        self.loss = nn.BCEWithLogitsLoss()
+
+    def forward(self, data: Tuple[Tensor, ...]) -> Tensor:
+        (x0, x1), y = data
+        assert x0.shape[-1] == x1.shape[-1] == self.embedding_dim
+        assert len(x0) == len(x1) == len(y)
+
+        y = y.float()
+        if len(x0.shape) == len(y.shape) + 1:
+            y = y.unsqueeze(-1)
+
+        score = self.verifier(torch.abs(x0 - x1))
+        return self.loss(score, y)
+
+    def get_verifier(self):
+        return self.verifier
 
 
 class ContrastiveLoss(nn.Module):
@@ -30,7 +62,8 @@ class ContrastiveLoss(nn.Module):
         assert x1_type.dim() == 2
         assert y_type.dim() == 1
 
-    def forward(self, x0: Tensor, x1: Tensor, y: Tensor) -> Tensor:
+    def forward(self, data: Tuple[Tensor, ...]) -> Tensor:
+        (x0, x1), y = data
         self.check_type_forward((x0, x1, y))
         y = y.to(x0.dtype)
 
@@ -40,6 +73,7 @@ class ContrastiveLoss(nn.Module):
 
         mdist = self.margin - dist
         cl_dist = torch.clamp(mdist, min=0.0)
+        # print(dist)
         loss = y * dist_sq + (1 - y) * cl_dist.pow(2)
         loss = torch.sum(loss) / 2.0 / x0.shape[0]
         return loss
@@ -52,39 +86,51 @@ class ContrastiveLoss(nn.Module):
         if squared:
             return dist_squared
         else:
-            return torch.sqrt(dist_squared + eps)
+            return torch.sqrt(torch.clamp(dist_squared, 0.0) + eps)
 
 
 class TripletSoftMarginLoss(nn.Module):
-    def __init__(self, p = 2):
+    def __init__(self, p: float=2.0):
         super(TripletSoftMarginLoss, self).__init__()
         self._p = p
 
-    def forward(self, anchor, positive, negative):
+    def forward(self, data: Tuple[Tensor, Tensor, Tensor]) -> Tensor:
+        anchor, positive, negative = data
         ap = torch.norm(anchor - positive, dim = -1, p = self._p)
         an = torch.norm(anchor - negative, dim = -1,  p = self._p)
         return torch.mean(torch.log1p(torch.exp(ap - an)))
 
 
+class TripletMarginLossV2(nn.TripletMarginLoss):
+    """A quick wrapper for margin loss"""
+    def __init__(self, margin=1.0, p=2.0, eps=1e-06, swap=False, size_average=None, reduce=None, reduction='mean'):
+        super(TripletMarginLossV2, self).__init__(margin, p, eps, swap, size_average, reduce, reduction)
+
+    def forward(self, data: Tuple[Tensor, Tensor, Tensor]) -> Tensor:
+        anchor, positive, negative = data
+        return super().forward(anchor, positive, negative)
+
+
 class NPairLoss(nn.Module):
-    def __init__(self, reg_lambda = 0.002):
+    def __init__(self, reg_lambda: float=0.002):
         super(NPairLoss, self).__init__()
         self._reg_lambda = reg_lambda
+        self.ce_loss = nn.CrossEntropyLoss()
 
     # anchors, positives: (N, D)
-    def forward(self, anchors, positives):
+    def forward(self, data: Tuple[Tensor, Tensor]) -> Tensor:
+        anchors, positives = data
         interaction = anchors.mm(torch.t(positives)) #(N, N) (i, j) = anchor_i positive j
         labels = torch.from_numpy(np.arange(len(anchors)))
 
         if anchors.is_cuda:
             labels = labels.cuda()
 
-
         reg_an =  torch.mean(torch.sum(anchors * anchors, dim = -1))
         reg_pos = torch.mean(torch.sum(positives * positives, dim = -1))
         l2_reg = self._reg_lambda * 0.25 * (reg_an + reg_pos)
 
-        return nn.CrossEntropyLoss()(interaction, labels) + l2_reg
+        return self.ce_loss(interaction, labels) + l2_reg
 
 
 class AngularLoss(nn.Module):
@@ -95,8 +141,8 @@ class AngularLoss(nn.Module):
         super(AngularLoss, self).__init__()
         self._alpha = torch.from_numpy(np.deg2rad([alpha])).float()
 
-
-    def forward(self, anchors, positives):
+    def forward(self, data: Tuple[Tensor, Tensor]) -> Tensor:
+        anchors, positives = data
         if anchors.is_cuda:
             self._alpha = self._alpha.cuda()
 
@@ -129,11 +175,19 @@ class AngularLoss(nn.Module):
 
 
 class NPairAngular(nn.Module):
+    """
+    Combining N-Pair loss and Angular loss
+    """
     def __init__(self, alpha = 45, reg_lambda = 0.002, angular_lambda = 2):
         super(NPairAngular, self).__init__()
         self._angular_loss = AngularLoss(alpha)
         self._npair_loss = NPairLoss(reg_lambda)
         self._angular_lambda = angular_lambda
 
-    def forward(self, anchors, positives):
-        return (self._npair_loss(anchors, positives) + self._angular_lambda * self._angular_loss(anchors, positives)) / (1 + self._angular_lambda)
+    def forward(self, data: Tuple[Tensor, Tensor]) -> Tensor:
+        anchors, positives = data
+        return (
+                   self._npair_loss(anchors, positives)
+                   + self._angular_lambda * self._angular_loss(anchors, positives)
+               ) / (1 + self._angular_lambda)
+

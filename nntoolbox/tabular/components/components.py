@@ -4,11 +4,13 @@ import math
 
 
 class CrossLayer(nn.Module):
-    '''
+    """
     Implement a (residual) crossing layer for Deep and Cross Net (DCN):
+
     x_{l+1} = x_0 x^T_l w + b + x_l
+
     Based on: https://arxiv.org/pdf/1708.05123.pdf
-    '''
+    """
     def __init__(self, n_hidden, bias=True, return_first=False):
         super(CrossLayer, self).__init__()
 
@@ -21,18 +23,18 @@ class CrossLayer(nn.Module):
         self._return_first = return_first
 
     def reset_parameters(self):
-        '''
+        """
         Reset the parameters of the model
-        '''
+        """
         nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
         if self.bias is not None:
             nn.init.uniform_(self.bias, 0, 0)
 
     def forward(self, inputs):
-        '''
+        """
         :param inputs: a tuple: first element is the orinal features, second element is the output of last layer
         :return:
-        '''
+        """
         input, first = inputs
 
         interaction = torch.bmm(

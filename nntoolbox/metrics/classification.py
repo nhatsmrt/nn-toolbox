@@ -18,10 +18,12 @@ class Accuracy(Metric):
     def __call__(self, logs: Dict[str, Any]) -> float:
         if isinstance(logs["outputs"], torch.Tensor):
             predictions = torch.argmax(logs["outputs"], dim=1).cpu().detach().numpy()
-            labels = logs["labels"].cpu().numpy()
         else:
             predictions = logs["outputs"]
-            labels = logs["labels"]
+
+        labels = logs["labels"]
+        if isinstance(labels, torch.Tensor):
+            labels = labels.cpu().numpy()
 
         acc = accuracy_score(
             y_true=labels.ravel(),
