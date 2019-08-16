@@ -8,8 +8,8 @@ __all__ = ['RMSELoss', 'CombinedLoss']
 
 
 class RMSELoss(MSELoss):
-    def __init__(self, size_average=None, reduce=None, reduction='mean', eps: float=1e-8):
-        super(RMSELoss, self).__init__(size_average, reduce, reduction)
+    def __init__(self, reduction='mean', eps: float=1e-8):
+        super(RMSELoss, self).__init__(reduction=reduction)
         self._eps = eps
 
     def forward(self, input: Tensor, target: Tensor) -> Tensor:
