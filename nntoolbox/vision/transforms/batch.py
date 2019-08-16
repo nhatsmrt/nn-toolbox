@@ -5,9 +5,9 @@ from typing import List, Callable
 
 
 __all__ = [
-    'BatchCompose', 'Identity', 'LambdaTransform',
-    'HorizontalFlip', 'VerticalFlip', 'Rotation90',
-    'Rotation180', 'Rotation270'
+    'BatchCompose', 'Identity', 'BatchLambdaTransform',
+    'BatchHorizontalFlip', 'BatchVerticalFlip', 'BatchRotation90',
+    'BatchRotation180', 'BatchRotation270'
 ]
 
 
@@ -34,28 +34,28 @@ class Identity:
     def __call__(self, input: Tensor) -> Tensor: return input
 
 
-class LambdaTransform:
+class BatchLambdaTransform:
     def __init__(self, fn: Callable[[Tensor], Tensor]):
         self.fn = fn
 
     def __call__(self, input: Tensor) -> Tensor: return self.fn(input)
 
 
-class HorizontalFlip(LambdaTransform):
-    def __init__(self): super(HorizontalFlip, self).__init__(hflip)
+class BatchHorizontalFlip(BatchLambdaTransform):
+    def __init__(self): super(BatchHorizontalFlip, self).__init__(hflip)
 
 
-class VerticalFlip(LambdaTransform):
-    def __init__(self): super(VerticalFlip, self).__init__(vflip)
+class BatchVerticalFlip(BatchLambdaTransform):
+    def __init__(self): super(BatchVerticalFlip, self).__init__(vflip)
 
 
-class Rotation90(LambdaTransform):
-    def __init__(self): super(Rotation90, self).__init__(rot90deg)
+class BatchRotation90(BatchLambdaTransform):
+    def __init__(self): super(BatchRotation90, self).__init__(rot90deg)
 
 
-class Rotation180(LambdaTransform):
-    def __init__(self): super(Rotation180, self).__init__(rot180deg)
+class BatchRotation180(BatchLambdaTransform):
+    def __init__(self): super(BatchRotation180, self).__init__(rot180deg)
 
 
-class Rotation270(LambdaTransform):
-    def __init__(self): super(Rotation270, self).__init__(rot270deg)
+class BatchRotation270(BatchLambdaTransform):
+    def __init__(self): super(BatchRotation270, self).__init__(rot270deg)
