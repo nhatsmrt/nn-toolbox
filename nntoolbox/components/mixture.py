@@ -1,12 +1,41 @@
-"""Implement mixture-of-experts (moe) layers"""
+"""Implement mixture of probability distribution layers"""
 import torch
 from torch import Tensor, nn
 from torch.nn import Module
+import torch.nn.functional as F
 from typing import List, Union, Tuple
-import math
 
 
-__all__ = ['MixtureOfExpert']
+__all__ = ['MixtureOfGaussian', 'MixtureOfExpert']
+
+
+class MixtureOfGaussian(nn.Linear):
+    """
+    A layer that generates means, stds and mixing coefficients of a mixture of gaussian distributions.
+
+    Used as the final layer of a mixture of (Gaussian) density network.
+
+    Only support isotropic covariances for the components.
+
+    References:
+
+        Christopher Bishop. "Pattern Recognition and Machine Learning"
+    """
+    def __init__(self, in_features: int, out_features: int, n_dist: int, bias: bool=True):
+        assert n_dist > 0 and in_features > 0 and out_features > 0
+        self.n_dist = n_dist
+        super(MixtureOfGaussian, self).__init__(in_features, n_dist * (2 + out_features), bias)
+
+    def forward(self, input: Tensor) -> Tuple[Tensor, Tensor, Tensor]:
+        """
+        :param input:
+        :return: means, stds and mixing coefficients
+        """
+        features = super().forward(input)
+        mixing_coeffs = F.softmax(features[:, :self.n_dist], dim=-1)
+        stds = torch.exp(features[:, self.n_dist:self.n_dist * 2])
+        means = features[:, self.n_dist * 2:]
+        return means, stds, mixing_coeffs
 
 
 class MixtureOfExpert(Module):
@@ -39,19 +68,4 @@ class MixtureOfExpert(Module):
             return torch.sum(expert_outputs * expert_scores, dim=-1)
         else:
             return expert_outputs, expert_scores
-
-
-# class DiscreteGaussianMOE(MixtureOfExpert):
-#     def __init__(self, experts: List[Module], gate: Module):
-#         super(DiscreteGaussianMOE, self).__init__(experts, gate, False)
-#
-#     def forward(self, input: Tensor) -> Tensor:
-#         # (batch_size, n_expert, output_dim), (batch_size, n_expert)
-#         expert_output, expert_score = super().forward(input)
-#         targets = torch.eye(expert_output.shape[2])[None, None, :] # (1, 1, output_dim, output_dim)
-#         expert_output = expert_output.unsqueeze(2) # (batch_size, n_expert, 1, output_dim)
-#         # (batch_size, n_expert, output_dim):
-#         output = torch.exp(-(expert_output - targets).pow(2).sum(-1)) / math.sqrt(2 * math.pi)
-#         output = (output * expert_score.unsqueeze(-1)).sum(1) # (batch_size, output_dim):
-#         return output
 
