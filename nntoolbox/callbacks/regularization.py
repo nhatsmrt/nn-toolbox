@@ -4,6 +4,7 @@ from torch import Tensor
 from .callbacks import Callback
 from ..hooks import OutputHook
 from ..utils import compute_jacobian
+from torch.autograd import grad
 from typing import Dict, Callable
 
 
@@ -64,22 +65,21 @@ class DoubleBackpropagationCB(Callback):
     https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf
 
     http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf
-    """
-    def __init__(self, input_name: str='inputs', loss_name: str='loss'):
-        self.loss_name = loss_name
-        self.input_name = input_name
 
-    def on_batch_begin(self, data: Dict[str, Tensor], train) -> Dict[str, Tensor]:
-        assert self.input_name in data
+    http://luizgh.github.io/libraries/2018/06/22/pytorch-doublebackprop/
+    """
+    def __init__(self, input_name: str="inputs", loss_name: str="loss"):
+        self.input_name = input_name
+        self.loss_name = loss_name
+
+    def on_batch_begin(self, data: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
+        data[self.input_name].requires_grad = True
         self.input = data[self.input_name]
         return data
 
     def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
-        assert self.loss_name in losses
-        self.input.requires_grad = True
-        jacobian = compute_jacobian(self.input, lambda input: losses[self.loss_name], True)
+        inp_grad = grad(losses[self.loss_name], self.input, create_graph=True)[0]
         self.input.requires_grad = False
         self.input = None
-        losses[self.loss_name] = losses[self.loss_name] + 0.5 * torch.sum(jacobian * jacobian)
+        losses[self.loss_name] = losses[self.loss_name] + 0.5 * inp_grad.pow(2).sum()
         return losses
-

@@ -27,6 +27,3 @@ class CombinedLoss(nn.Module):
     def forward(self, input: Tensor, target: Tensor) -> Tensor:
         losses = torch.stack([self.losses[i](input, target) * self.weights[i] for i in range(len(self.losses))], -1)
         return torch.sum(losses)
-
-
-
