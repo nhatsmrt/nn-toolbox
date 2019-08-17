@@ -105,8 +105,8 @@ def learn_fn(train_data, val_data, model, save_path):
         final_metric='accuracy'
     )
     print(final)
-    load_model(model=model, path="weights/model.pt")
-    return model
+    # load_model(model=model, path=save_path)
+    # return model
 
 ensembler = CVEnsembler(data, path="weights/", n_model=2, learn_fn=learn_fn, model_fn=model_fn)
 ensembler.learn()
