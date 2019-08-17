@@ -99,7 +99,7 @@ def learn_fn(train_data, val_data, model, save_path):
         "loss": Loss()
     }
     final = learner.learn(
-        n_epoch=2,
+        n_epoch=1,
         callbacks=callbacks,
         metrics=metrics,
         final_metric='accuracy'
@@ -108,7 +108,7 @@ def learn_fn(train_data, val_data, model, save_path):
     load_model(model=model, path="weights/model.pt")
     return model
 
-ensembler = CVEnsembler(data, path="weights/", n_model=3, learn_fn=learn_fn, model_fn=model_fn)
+ensembler = CVEnsembler(data, path="weights/", n_model=2, learn_fn=learn_fn, model_fn=model_fn)
 ensembler.learn()
 
 ensemble_model = EnsembleImageClassifier([ImageClassifier(model) for model in ensembler.get_models()])
