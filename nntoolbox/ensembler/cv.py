@@ -13,6 +13,11 @@ class CVEnsembler:
     """
     Create an ensemble of identical models, each trained on a separate (k - 1) folds of the data
     and validated on the remaining fold.
+
+    References:
+
+        Anders Krogh and Jesper Vedelsby. "Neural Network Ensembles, Cross Validation, and Active Learning."
+        https://papers.nips.cc/paper/1001-neural-network-ensembles-cross-validation-and-active-learning.pdf
     """
     def __init__(
             self, data: Dataset, path: str, n_model: int, model_fn: Callable[..., nn.Module],

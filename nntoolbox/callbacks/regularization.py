@@ -3,13 +3,72 @@ import torch
 from torch import Tensor
 from .callbacks import Callback
 from ..hooks import OutputHook
-from ..utils import compute_jacobian
 from torch.autograd import grad
 from typing import Dict, Callable
 
 
+__all__ = [
+    'WeightRegularization', 'WeightElimination', 'L1WR', 'L2WR',
+    'ActivationRegularization', 'L1AR', 'L2AR',
+    'StudentTPenaltyAR', 'DoubleBackpropagationCB'
+]
+
+
+class WeightRegularization(Callback):
+    """Regularization by penalizing weights"""
+    def __init__(self, regularizer: Callable[[Tensor], Tensor], lambd: float, loss_name: str='loss'):
+        self.loss_name = loss_name
+        self.regularizer = regularizer
+        self.lambd = lambd
+
+    def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
+        assert self.loss_name in losses
+        reg = 0.0
+        for p in self._learner._model.parameters():
+            reg = reg + self.regularizer(p.data)
+        losses[self.loss_name] += self.lambd * reg
+        return losses
+
+
+class WeightElimination(WeightRegularization):
+    def __init__(self, scale: float, lambd: float, loss_name: str='loss'):
+        assert scale > 0.0
+
+        def weight_elimination(t: Tensor) -> Tensor:
+            t_sq = t.pow(2)
+            return t_sq / (t_sq + scale ** 2).sum()
+
+        super().__init__(
+            regularizer=weight_elimination,
+            lambd=lambd, loss_name=loss_name
+        )
+
+
+class L1WR(WeightRegularization):
+    def __init__(self, lambd: float, loss_name: str='loss'):
+        super(L1WR, self).__init__(
+            regularizer=lambda t: t.float().abs().sum(),
+            lambd=lambd,
+            loss_name=loss_name
+        )
+
+
+class L2WR(WeightRegularization):
+    def __init__(self, lambd: float, loss_name: str='loss'):
+        super(L2WR, self).__init__(
+            regularizer=lambda t: t.float().pow(2).sum(),
+            lambd=lambd,
+            loss_name=loss_name
+        )
+
+
 class ActivationRegularization(Callback):
-    def __init__(self, output_hook: OutputHook, regularizer: Callable[[Tensor], Tensor], loss_name: str='loss'):
+    """Regularization by penalizing activations"""
+    def __init__(
+            self, output_hook: OutputHook,
+            regularizer: Callable[[Tensor], Tensor],
+            lambd: float, loss_name: str='loss'
+    ):
         """
         :param output_hook: output hook of the module we want to regularize
         :param regularizer: regularization function (e.g L2)
@@ -18,28 +77,31 @@ class ActivationRegularization(Callback):
         self.hook = output_hook
         self.loss_name = loss_name
         self.regularizer = regularizer
+        self.lambd = lambd
 
     def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         assert self.loss_name in losses
-        losses[self.loss_name] += self.regularizer(self.hook.store)
+        losses[self.loss_name] += self.regularizer(self.hook.store) * self.lambd
         self.hook.store = None
         return losses
 
 
 class L2AR(ActivationRegularization):
-    def __init__(self, output_hook: OutputHook, loss_name: str='loss'):
+    def __init__(self, output_hook: OutputHook, lambd: float, loss_name: str='loss'):
         super(L2AR, self).__init__(
             output_hook=output_hook,
-            regularizer=lambda t: t.float().pow(2).mean(),
+            regularizer=lambda t: t.float().pow(2).sum(),
+            lambd=lambd,
             loss_name=loss_name
         )
 
 
 class L1AR(ActivationRegularization):
-    def __init__(self, output_hook: OutputHook, loss_name: str='loss'):
+    def __init__(self, output_hook: OutputHook, lambd: float, loss_name: str='loss'):
         super(L1AR, self).__init__(
             output_hook=output_hook,
-            regularizer=lambda t: t.float().abs().mean(),
+            regularizer=lambda t: t.float().abs().sum(),
+            lambd=lambd,
             loss_name=loss_name
         )
 
@@ -50,10 +112,11 @@ class StudentTPenaltyAR(ActivationRegularization):
 
     omega(t) = sum_i log(1 + t_i^2)
     """
-    def __init__(self, output_hook: OutputHook, loss_name: str='loss'):
+    def __init__(self, output_hook: OutputHook, lambd: float, loss_name: str='loss'):
         super(StudentTPenaltyAR, self).__init__(
             output_hook=output_hook,
             regularizer=lambda t: torch.log1p(t.pow(2)).mean(),
+            lambd=lambd,
             loss_name=loss_name
         )
 

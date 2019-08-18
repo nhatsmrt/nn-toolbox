@@ -14,3 +14,5 @@ from .gradient import *
 from .transfer import *
 from .colab import *
 from .checkpoint import *
+from .regularization import *
+from .warmup import *

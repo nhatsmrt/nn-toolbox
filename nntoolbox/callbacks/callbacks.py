@@ -40,6 +40,7 @@ class GroupCallback(Callback):
 
     def __init__(self, callbacks: List[Callback]):
         self._callbacks = callbacks
+        self.order = callbacks[0].order
 
     def on_train_begin(self):
         for cb in self._callbacks: cb.on_train_begin()
@@ -95,7 +96,7 @@ class GroupCallback(Callback):
 
 class CallbackHandler:
     def __init__(
-            self, learner, n_epoch: int, callbacks: Iterable[Callback]=None,
+            self, learner, n_epoch: int, callbacks: List[Callback]=None,
             metrics: Dict[str, Metric]=None, final_metric: str='accuracy'
     ):
         if metrics is not None:
@@ -111,6 +112,7 @@ class CallbackHandler:
                     callback.learner = learner
                     callback.n_epoch = n_epoch
 
+        callbacks.sort(key=lambda cb: cb.order)
         self._callbacks = callbacks
         self._metrics = metrics
         self._final_metric = final_metric
