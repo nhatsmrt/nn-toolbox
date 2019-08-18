@@ -3,9 +3,14 @@ from torch import Tensor
 import cv2
 from cv2 import imread, cvtColor
 from numpy import ndarray
+import numpy as np
 
 
-__all__ = ['gram_matrix', 'is_image', 'pil_to_tensor', 'tensor_to_pil', 'tensor_to_np', 'cv2_read_image']
+__all__ = [
+    'gram_matrix', 'is_image', 'pil_to_tensor',
+    'tensor_to_pil', 'tensor_to_np', 'cv2_read_image',
+    'compute_output_shape'
+]
 
 
 def gram_matrix(x):
@@ -67,6 +72,12 @@ def cv2_read_image(image_path, to_float: bool=False, flag: int=cv2.IMREAD_COLOR)
     if to_float:
         img = img / 255
     return img
+
+
+def compute_output_shape(inp_dim: int, padding: int, kernel_size: int, dilation: int, stride: int) -> int:
+    return np.floor(
+        (inp_dim + 2 * padding - dilation * (kernel_size - 1) - 1) / stride + 1
+    ).astype(np.uint32)
 
 
 # def is_color(image, batch: bool=True) -> bool:
