@@ -241,8 +241,8 @@ callbacks = [
     # InputProgressiveResizing(initial_size=80, max_size=160, upscale_every=10, upscale_factor=math.sqrt(2)),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.024, T_max=1600)),
-    GradualLRWarmup(min_lr=0.024, max_lr=0.094, duration=3200),
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.024, T_max=405)),
+    GradualLRWarmup(min_lr=0.024, max_lr=0.094, duration=810),
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
 ]
