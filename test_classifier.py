@@ -73,8 +73,8 @@ train_dataset.dataset.transform = Compose(
         ToTensor()
     ]
 )
-train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=256, shuffle=True)
-val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=256, shuffle=False)
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True)
+val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=128, shuffle=False)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=128, shuffle=False)
 
 print("Number of batches per epoch " + str(len(train_loader)))
@@ -222,7 +222,8 @@ model = Sequential(
 # print(count_trainable_parameters(model)) # 14437816 3075928
 
 # optimizer = LARS(model.parameters(), weight_decay=0.0001, lr=0.10, momentum=0.9)
-optimizer = LAMB(model.parameters(), weight_decay=0.01, lr=0.06)
+# optimizer = LAMB(model.parameters(), weight_decay=0.01, lr=0.06)
+optimizer = SGD(model.parameters(), weight_decay=0.0001, lr=0.094, momentum=0.9)
 learner = SupervisedImageLearner(
     train_data=train_loader,
     val_data=val_loader,
@@ -233,7 +234,6 @@ learner = SupervisedImageLearner(
 )
 
 
-swa = StochasticWeightAveraging(learner, average_after=2255, update_every=410)
 callbacks = [
     # ManifoldMixupCallback(learner=learner, modules=[layer_1, block_1]),
     ToDeviceCallback(),
@@ -241,8 +241,8 @@ callbacks = [
     # InputProgressiveResizing(initial_size=80, max_size=160, upscale_every=10, upscale_factor=math.sqrt(2)),
     Tensorboard(),
     # ReduceLROnPlateauCB(optimizer, monitor='accuracy', mode='max', patience=10),
-    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.015, T_max=205)),
-    swa,
+    LRSchedulerCB(CosineAnnealingLR(optimizer, eta_min=0.024, T_max=1600)),
+    GradualLRWarmup(min_lr=0.024, max_lr=0.094, duration=3200),
     LossLogger(),
     ModelCheckpoint(learner=learner, filepath="weights/model.pt", monitor='accuracy', mode='max'),
 ]
