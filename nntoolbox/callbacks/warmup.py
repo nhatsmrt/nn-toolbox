@@ -9,7 +9,7 @@ __all__ = ['LRWarmup', 'ConstantLRWarmup', 'GradualLRWarmup']
 
 class LRWarmup(Callback):
     """
-    Gradually increasing the LR at the beginning of training
+    Start training with a small learning rate
 
     References:
 
@@ -42,6 +42,7 @@ class LRWarmup(Callback):
 
 
 class ConstantLRWarmup(LRWarmup):
+    """Keeping the learning rate at a small value for several iterations/epochs"""
     def __init__(self, min_lr, duration: int, timescale: str="iter"):
         super().__init__(duration, timescale)
         self.min_lr = min_lr
@@ -50,6 +51,7 @@ class ConstantLRWarmup(LRWarmup):
 
 
 class GradualLRWarmup(LRWarmup):
+    """Gradually increase the learning rate from a small value for several iterations/epochs"""
     def __init__(self, min_lr: float, max_lr: float, duration: int, timescale: str="iter"):
         assert min_lr < max_lr
         super().__init__(duration, timescale)
