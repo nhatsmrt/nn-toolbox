@@ -33,7 +33,7 @@ class LRWarmup(Callback):
         return False
 
     def update_lr(self):
-        for param_group in self._learner._optimizer.param_groups:
+        for param_group in self.learner._optimizer.param_groups:
             param_group['lr'] = self.get_lr()
         self.cur += 1
 

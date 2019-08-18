@@ -24,7 +24,7 @@ class WeightRegularization(Callback):
     def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         assert self.loss_name in losses
         reg = 0.0
-        for p in self._learner._model.parameters():
+        for p in self.learner._model.parameters():
             reg = reg + self.regularizer(p.data)
         losses[self.loss_name] += self.lambd * reg
         return losses
