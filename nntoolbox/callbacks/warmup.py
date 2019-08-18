@@ -1,6 +1,7 @@
 """Learning rate warmup (UNTESTED)"""
 from .callbacks import Callback
 from typing import Dict, Any
+from torch import Tensor
 
 
 __all__ = ['LRWarmup', 'ConstantLRWarmup', 'GradualLRWarmup']
@@ -21,16 +22,16 @@ class LRWarmup(Callback):
         self.timescale = timescale
         self.cur = 0
 
-    def on_batch_end(self, logs: Dict[str, Any]):
+    def on_batch_begin(self, data: Dict[str, Tensor], train) -> Dict[str, Tensor]:
         if self.timescale == "iter":
             if self.cur < self.duration:
                 self.update_lr()
+        return data
 
-    def on_epoch_end(self, logs: Dict[str, Any]) -> bool:
+    def on_epoch_begin(self):
         if self.timescale == "epoch":
             if self.cur < self.duration:
                 self.update_lr()
-        return False
 
     def update_lr(self):
         for param_group in self.learner._optimizer.param_groups:
