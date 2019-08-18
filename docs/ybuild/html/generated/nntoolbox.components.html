@@ -253,9 +253,12 @@ registered hooks while the latter silently ignores them.</p>
 <dt id="nntoolbox.components.maxout.MaxoutLinear">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.maxout.</code><code class="sig-name descname">MaxoutLinear</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">nb_features: int</em>, <em class="sig-param">bias: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/maxout.html#MaxoutLinear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.maxout.MaxoutLinear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>A linear maxout layer
-<a class="reference external" href="https://arxiv.org/pdf/1302.4389.pdf">https://arxiv.org/pdf/1302.4389.pdf</a>
-output_i = max_{j = 1,…,k} (w_1 input + b_1, w_2 input + b_2,…, w_k input + b_k)</p>
+<p>A linear maxout layer:</p>
+<blockquote>
+<div><p>output_i = max_{j = 1,…,k} (w_1 input + b_1, w_2 input + b_2,…, w_k input + b_k)</p>
+</div></blockquote>
+<p class="rubric">References</p>
+<p>Ian J. Goodfellow et al. “Maxout Networks.” <a class="reference external" href="https://arxiv.org/pdf/1302.4389.pdf">https://arxiv.org/pdf/1302.4389.pdf</a></p>
 <dl class="method">
 <dt id="nntoolbox.components.maxout.MaxoutLinear.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/maxout.html#MaxoutLinear.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.maxout.MaxoutLinear.forward" title="Permalink to this definition">¶</a></dt>
@@ -272,12 +275,36 @@ output_i = max_{j = 1,…,k} (w_1 input + b_1, w_2 input + b_2,…, w_k input + 
 </dd></dl>
 
 </div>
-<div class="section" id="module-nntoolbox.components.moe">
-<span id="nntoolbox-components-moe-module"></span><h2>nntoolbox.components.moe module<a class="headerlink" href="#module-nntoolbox.components.moe" title="Permalink to this headline">¶</a></h2>
-<p>Implement mixture-of-experts (moe) layers</p>
+<div class="section" id="module-nntoolbox.components.mixture">
+<span id="nntoolbox-components-mixture-module"></span><h2>nntoolbox.components.mixture module<a class="headerlink" href="#module-nntoolbox.components.mixture" title="Permalink to this headline">¶</a></h2>
+<p>Implement mixture of probability distribution layers</p>
 <dl class="class">
-<dt id="nntoolbox.components.moe.MixtureOfExpert">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.moe.</code><code class="sig-name descname">MixtureOfExpert</code><span class="sig-paren">(</span><em class="sig-param">experts: List[torch.nn.modules.module.Module], gate: torch.nn.modules.module.Module, return_mixture: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/moe.html#MixtureOfExpert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.moe.MixtureOfExpert" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.components.mixture.MixtureOfGaussian">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.mixture.</code><code class="sig-name descname">MixtureOfGaussian</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">n_dist: int</em>, <em class="sig-param">bias: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/mixture.html#MixtureOfGaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfGaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.linear.Linear</span></code></p>
+<p>A layer that generates means, stds and mixing coefficients of a mixture of gaussian distributions.</p>
+<p>Used as the final layer of a mixture of (Gaussian) density network.</p>
+<p>Only support isotropic covariances for the components.</p>
+<p class="rubric">References</p>
+<p>Christopher Bishop. “Pattern Recognition and Machine Learning”</p>
+<dl class="method">
+<dt id="nntoolbox.components.mixture.MixtureOfGaussian.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.Tensor, torch.Tensor, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/components/mixture.html#MixtureOfGaussian.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfGaussian.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>means, stds and mixing coefficients</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.components.mixture.MixtureOfExpert">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.mixture.</code><code class="sig-name descname">MixtureOfExpert</code><span class="sig-paren">(</span><em class="sig-param">experts: List[torch.nn.modules.module.Module], gate: torch.nn.modules.module.Module, return_mixture: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/mixture.html#MixtureOfExpert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfExpert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -289,8 +316,8 @@ output of same dimensionality</p></li>
 </dd>
 </dl>
 <dl class="method">
-<dt id="nntoolbox.components.moe.MixtureOfExpert.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; Union[Tuple[torch.Tensor, torch.Tensor], torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/components/moe.html#MixtureOfExpert.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.moe.MixtureOfExpert.forward" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.components.mixture.MixtureOfExpert.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; Union[Tuple[torch.Tensor, torch.Tensor], torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/components/mixture.html#MixtureOfExpert.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfExpert.forward" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>input</strong> – </p>
@@ -500,7 +527,7 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.components">nntoolbox.components.components module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.kernel">nntoolbox.components.kernel module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.maxout">nntoolbox.components.maxout module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.moe">nntoolbox.components.moe module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.mixture">nntoolbox.components.mixture module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.pool">nntoolbox.components.pool module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.rbf">nntoolbox.components.rbf module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.regularization">nntoolbox.components.regularization module</a></li>

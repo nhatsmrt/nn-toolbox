@@ -4,6 +4,14 @@ nntoolbox.vision.transforms package
 Submodules
 ----------
 
+nntoolbox.vision.transforms.batch module
+----------------------------------------
+
+.. automodule:: nntoolbox.vision.transforms.batch
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.vision.transforms.imgaug module
 -----------------------------------------
 

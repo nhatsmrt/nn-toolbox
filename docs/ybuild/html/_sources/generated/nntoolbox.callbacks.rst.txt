@@ -148,6 +148,14 @@ nntoolbox.callbacks.transfer module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.callbacks.warmup module
+---------------------------------
+
+.. automodule:: nntoolbox.callbacks.warmup
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

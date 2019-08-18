@@ -8,6 +8,7 @@ Subpackages
 
    nntoolbox.callbacks
    nntoolbox.components
+   nntoolbox.ensembler
    nntoolbox.graph
    nntoolbox.hooks
    nntoolbox.init

@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>nntoolbox.components.mixture &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nntoolbox.components.mixture</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Implement mixture of probability distribution layers&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">Module</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MixtureOfGaussian&#39;</span><span class="p">,</span> <span class="s1">&#39;MixtureOfExpert&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="MixtureOfGaussian"><a class="viewcode-back" href="../../../generated/nntoolbox.components.html#nntoolbox.components.mixture.MixtureOfGaussian">[docs]</a><span class="k">class</span> <span class="nc">MixtureOfGaussian</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A layer that generates means, stds and mixing coefficients of a mixture of gaussian distributions.</span>
+
+<span class="sd">    Used as the final layer of a mixture of (Gaussian) density network.</span>
+
+<span class="sd">    Only support isotropic covariances for the components.</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">        Christopher Bishop. &quot;Pattern Recognition and Machine Learning&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_dist</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bias</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">n_dist</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">in_features</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">out_features</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_dist</span> <span class="o">=</span> <span class="n">n_dist</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MixtureOfGaussian</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="n">n_dist</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="n">out_features</span><span class="p">),</span> <span class="n">bias</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MixtureOfGaussian.forward"><a class="viewcode-back" href="../../../generated/nntoolbox.components.html#nntoolbox.components.mixture.MixtureOfGaussian.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param input:</span>
+<span class="sd">        :return: means, stds and mixing coefficients</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+        <span class="n">mixing_coeffs</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">features</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dist</span><span class="p">],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">stds</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">features</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dist</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dist</span> <span class="o">*</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">means</span> <span class="o">=</span> <span class="n">features</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_dist</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="n">means</span><span class="p">,</span> <span class="n">stds</span><span class="p">,</span> <span class="n">mixing_coeffs</span></div></div>
+
+
+<div class="viewcode-block" id="MixtureOfExpert"><a class="viewcode-back" href="../../../generated/nntoolbox.components.html#nntoolbox.components.mixture.MixtureOfExpert">[docs]</a><span class="k">class</span> <span class="nc">MixtureOfExpert</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Module</span><span class="p">],</span> <span class="n">gate</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span> <span class="n">return_mixture</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param experts: list of separate expert networks. Each must take the same input and return</span>
+<span class="sd">         output of same dimensionality</span>
+<span class="sd">        :param gate: take the input and output (un-normalized) score for each expert</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MixtureOfExpert</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experts</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="n">experts</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gate</span> <span class="o">=</span> <span class="n">gate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">return_mixture</span> <span class="o">=</span> <span class="n">return_mixture</span>
+
+<div class="viewcode-block" id="MixtureOfExpert.forward"><a class="viewcode-back" href="../../../generated/nntoolbox.components.html#nntoolbox.components.mixture.MixtureOfExpert.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param input:</span>
+<span class="sd">        :return: if return_mixture, return the mixture of expert output; else return both expert score and expert output</span>
+<span class="sd">        (with the n_expert channel coming last)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">expert_scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gate</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span>
+        <span class="n">expert_outputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">expert</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="k">for</span> <span class="n">expert</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">experts</span><span class="p">],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">expert_scores</span> <span class="o">=</span> <span class="n">expert_scores</span><span class="o">.</span><span class="n">view</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">expert_scores</span><span class="o">.</span><span class="n">shape</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">expert_outputs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">expert_scores</span><span class="o">.</span><span class="n">shape</span><span class="p">))]</span>
+            <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">expert_scores</span><span class="o">.</span><span class="n">shape</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_mixture</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">expert_outputs</span> <span class="o">*</span> <span class="n">expert_scores</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">expert_outputs</span><span class="p">,</span> <span class="n">expert_scores</span></div></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.graph.html">nntoolbox.graph package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.init.html">nntoolbox.init package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.losses.html">nntoolbox.losses package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.models.html">nntoolbox.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -36,10 +36,10 @@ nntoolbox.components.maxout module
    :undoc-members:
    :show-inheritance:
 
-nntoolbox.components.moe module
--------------------------------
+nntoolbox.components.mixture module
+-----------------------------------
 
-.. automodule:: nntoolbox.components.moe
+.. automodule:: nntoolbox.components.mixture
    :members:
    :undoc-members:
    :show-inheritance:
