@@ -95,7 +95,7 @@ class LocallyConnected2D(nn.Module):
 class Subsampling2D(nn.Module):
     """
     For each feature map of input, subsample one patch at the time, sum the values
-    and then perform a linear transformation. Use in LeNet.
+    and then perform a linear transformation. Use in LeNet. (UNTESTED)
 
     References:
 

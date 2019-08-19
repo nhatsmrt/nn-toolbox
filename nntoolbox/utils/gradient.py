@@ -2,10 +2,14 @@ import torch
 import numpy as np
 from torch.nn import Module
 from torch import Tensor
-from typing import List, Callable
+from torch.autograd import grad
+from typing import List, Callable, Union, Iterable
 
 
-__all__ = ['compute_gradient', 'compute_jacobian', 'update_gradient', 'accumulate_gradient', 'compute_gradient_norm']
+__all__ = [
+    'compute_gradient', 'compute_jacobian', 'update_gradient',
+    'accumulate_gradient', 'compute_gradient_norm', 'hessian_diagonal'
+]
 
 
 def compute_gradient(output: Tensor, model: Module) -> List[Tensor]:
@@ -71,3 +75,33 @@ def compute_gradient_norm(output: Tensor, model: Module):
         parameter.grad = None # Reset gradient accumulation
 
     return ret
+
+
+def hessian_diagonal(
+        output: Tensor, input: Union[Tensor, Iterable], requires_grad: bool=True
+) -> Union[Tensor, List[Tensor]]:
+    """
+    Compute the diagonal of the hessian
+
+    :param output: a scalar tensor
+    :param input: either a tensor (parameter), or a list/generator of parameters
+    :param requires_grad: whether output should be differentiable
+    :return: a tensor (parameter), or a list/generator of parameters, denoting the diagonal of hessian of output
+    with respect to input
+    """
+    if isinstance(input, Tensor):
+        original_grad = input.grad
+        assert output.numel() == 1
+        grads = grad(output, input, create_graph=True)[0]
+        if not grads.requires_grad:
+            input.grad = original_grad
+            return torch.zeros(input.shape)
+        grads.view(-1).backward(torch.eye(grads.numel()), create_graph=requires_grad)
+        hess_diag = input.grad if input.grad is not None else torch.zeros(input.shape)
+        input.grad = original_grad
+        return hess_diag
+    else:
+        hess_diags = []
+        for param in input:
+            hess_diags.append(hessian_diagonal(output, param))
+        return hess_diags
