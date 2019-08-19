@@ -182,7 +182,6 @@ class FlatMinimaSearch(Callback):
 
         for ind in range(len(self.output)):
             output = self.output[ind].view(-1)
-            self.output = None
             jacobian = compute_jacobian_v2(output, self.learner._model.parameters(), True)
 
             sq = [g.pow(2).sum(0) for g in jacobian]
@@ -196,5 +195,6 @@ class FlatMinimaSearch(Callback):
 
         total_loss = torch.stack(total_loss, dim=0).mean()
         losses[self.loss_name] += total_loss * self.lambd
+        self.output = None
 
         return losses
