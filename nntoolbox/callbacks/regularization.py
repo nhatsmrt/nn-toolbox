@@ -3,6 +3,7 @@ import torch
 from torch import Tensor
 from .callbacks import Callback
 from ..hooks import OutputHook
+from ..utils import compute_jacobian_v2, count_trainable_parameters
 from torch.autograd import grad
 from typing import Dict, Callable
 
@@ -10,7 +11,7 @@ from typing import Dict, Callable
 __all__ = [
     'WeightRegularization', 'WeightElimination', 'L1WR', 'L2WR',
     'ActivationRegularization', 'L1AR', 'L2AR',
-    'StudentTPenaltyAR', 'DoubleBackpropagationCB'
+    'StudentTPenaltyAR', 'DoubleBackpropagationCB', 'FlatMinimaSearch'
 ]
 
 
@@ -145,4 +146,55 @@ class DoubleBackpropagationCB(Callback):
         self.input.requires_grad = False
         self.input = None
         losses[self.loss_name] = losses[self.loss_name] + 0.5 * inp_grad.pow(2).sum()
+        return losses
+
+
+class FlatMinimaSearch(Callback):
+    """
+    Encourage model to find flat minima, which helps generalization (UNTESTED)
+
+    References:
+        Sepp Hochreiter and Jurgen Schmidhuber. "Flat Minima."
+        https://www.mitpressjournals.org/doi/abs/10.1162/neco.1997.9.1.1
+
+        Sepp Hochreiter and Jurgen Schmidhuber. "Feature Extraction through LOCOCODE."
+        http://www.bioinf.jku.at/publications/older/2104.pdf
+    """
+    def __init__(self, lambd: float, output_name: str, loss_name: str, eps: float=1e-6):
+        assert lambd >= 0.0
+        self.lambd = lambd
+        self.output_name = output_name
+        self.loss_name = loss_name
+        self.eps = eps
+
+    def on_train_begin(self):
+        self.n_params = count_trainable_parameters(self.learner._model)
+
+    def after_outputs(self, outputs: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
+        assert self.output_name in outputs
+        self.output = outputs[self.output_name]
+        return outputs
+
+    def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
+        assert self.loss_name in losses
+        # batch_size = self.output.shape[0]
+        total_loss = []
+
+        for ind in range(len(self.output)):
+            output = self.output[ind].view(-1)
+            self.output = None
+            jacobian = compute_jacobian_v2(output, self.learner._model.parameters(), True)
+
+            sq = [g.pow(2).sum(0) for g in jacobian]
+            abs_jacob = [g.abs() for g in jacobian]
+            sq_sqrt = [(g + self.eps).sqrt().unsqueeze(0) for g in sq]
+
+            first_term = torch.stack([torch.log(g).sum() for g in sq], dim=0).sum()
+            second_term = [abs_g / sq_sqrt_g for abs_g, sq_sqrt_g in zip(abs_jacob, sq_sqrt)]
+            second_term = sum([torch.log(g.sum(0).pow(2)) for g in second_term]) * self.n_params
+            total_loss.append(first_term + second_term)
+
+        total_loss = torch.stack(total_loss, dim=0).mean()
+        losses[self.loss_name] += total_loss * self.lambd
+
         return losses

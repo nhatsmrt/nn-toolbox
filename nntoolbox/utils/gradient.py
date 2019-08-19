@@ -7,8 +7,9 @@ from typing import List, Callable, Union, Iterable
 
 
 __all__ = [
-    'compute_gradient', 'compute_jacobian', 'update_gradient',
-    'accumulate_gradient', 'compute_gradient_norm', 'hessian_diagonal'
+    'compute_gradient', 'compute_jacobian', 'compute_jacobian_v2',
+    'update_gradient', 'accumulate_gradient', 'compute_gradient_norm',
+    'hessian_diagonal'
 ]
 
 
@@ -28,9 +29,11 @@ def compute_gradient(output: Tensor, model: Module) -> List[Tensor]:
     return ret
 
 
-def compute_jacobian(input: Tensor, fn: Callable[[Tensor], Tensor], is_batch: bool=True) -> Tensor:
+def compute_jacobian(
+        input: Tensor, fn: Callable[[Tensor], Tensor], is_batch: bool=True, requires_grad: bool=True
+) -> Tensor:
     """
-    Compute the jacobian of function(input) with respect to input
+    Compute the jacobian of function(input) with respect to input. For most purpose, should use v2
 
     :param output:
     :param input: assume that input require_grad = True
@@ -45,8 +48,30 @@ def compute_jacobian(input: Tensor, fn: Callable[[Tensor], Tensor], is_batch: bo
         output_shape = output.shape
         input_shape = input.shape
         output = output.view(-1)
-        grad = [torch.autograd.grad(output[ind], [input], allow_unused=True)[0] for ind in range(len(output))]
+        grad = [
+            torch.autograd.grad(output[ind], [input], allow_unused=True, create_graph=requires_grad)[0]
+            for ind in range(len(output))
+        ]
         return torch.stack(grad, dim=0).reshape(output_shape + input_shape)
+
+
+def compute_jacobian_v2(
+        output: Tensor, input: Union[Tensor, Iterable[Tensor]], requires_grad: bool=True
+) -> Union[Tensor, Iterable[Tensor]]:
+    """
+    Compute the jacobian of a vector with respect to an input tensor
+
+    :param output: a 1D vector of length L
+    :param input: either a tensor (parameter) or an iterable of paramters
+    :param requires_grad: whether output should be differentiable
+    :return: jacobian
+    """
+    if isinstance(input, Tensor):
+        assert len(output.shape) == 1
+        grads = [grad(output[ind], input, create_graph=requires_grad)[0] for ind in range(len(output))]
+        return torch.stack(grads, dim=0)
+    else:
+        return [compute_jacobian_v2(output, param, requires_grad) for param in input]
 
 
 def update_gradient(gradients: Tensor, model: Module, fn: Callable[[Tensor], Tensor]=lambda x:x):
@@ -103,5 +128,6 @@ def hessian_diagonal(
     else:
         hess_diags = []
         for param in input:
-            hess_diags.append(hessian_diagonal(output, param))
+            hess_diags.append(hessian_diagonal(output, param, requires_grad))
         return hess_diags
+
