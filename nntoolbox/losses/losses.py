@@ -1,10 +1,11 @@
 from torch.nn import MSELoss
+import torch.nn.functional as F
 from torch import Tensor, nn
 import torch
 from typing import List, Optional
 
 
-__all__ = ['RMSELoss', 'CombinedLoss']
+__all__ = ['RMSELoss', 'LogSigmoidLoss', 'CombinedLoss']
 
 
 class RMSELoss(MSELoss):
@@ -14,6 +15,10 @@ class RMSELoss(MSELoss):
 
     def forward(self, input: Tensor, target: Tensor) -> Tensor:
         return torch.sqrt(super().forward(input, target) + self._eps)
+
+
+class LogSigmoidLoss(nn.Module):
+    def forward(self, input: Tensor) -> Tensor: return -F.logsigmoid(input).mean(0)
 
 
 class CombinedLoss(nn.Module):
