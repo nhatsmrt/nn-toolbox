@@ -9,7 +9,7 @@ class NeuralAbstractionPyramid(nn.Module):
     """
     Neural Abstraction Pyramid Module. Sharing weights both spatially and temporally:
 
-    a^t_l = norm(activation(f_l(a^{t - 1}_l) + g_l(a^t_{l - 1}) + h_l(a^{t - l}_{l + 1})))
+    a^t_l = norm(activation(f_l(a^{t - 1}_l) + g_l(a^{t - 1}_{l - 1}) + h_l(a^{t - l}_{l + 1})))
 
     If f_l, g_l and h_l are repeated for all layers, then we can also share weights across depth dimension.
 
@@ -36,7 +36,7 @@ class NeuralAbstractionPyramid(nn.Module):
         :param lateral_connections: consist of depth + 1 conv layers, each with output of same dimension as input.
         Aggregate information from a local neighborhood of the same resolution from previous timestep.
         :param forward_connections: consist of depth downsampling conv layers.
-        Transform information from a region of larger resolution (i.e previous layer) from the same timestep.
+        Transform information from a region of larger resolution (i.e previous layer) from the previous timestep.
         :param backward_connections: consist of depth upsampling layers
         Retrieve feedback from a region of smaller resolution (i.e next layer) from the previous timestep.
         :param duration: number of timesteps to process data
@@ -56,7 +56,7 @@ class NeuralAbstractionPyramid(nn.Module):
             new_states = []
             for l in range(self.depth + 1):
                 new_state = self.lateral_connections[l](states[l])
-                if l > 0: new_state = new_state + self.forward_connections[l - 1](new_states[l - 1])
+                if l > 0: new_state = new_state + self.forward_connections[l - 1](states[l - 1])
                 if l < self.depth: new_state = new_state + self.backward_connections[l](states[l + 1])
                 new_state = self.activ_norm(new_state)
                 new_states.append(new_state)
