@@ -3,7 +3,7 @@ import torch
 from torch import Tensor
 from .callbacks import Callback
 from ..hooks import OutputHook
-from ..utils import compute_jacobian_v2, count_trainable_parameters
+from ..utils import compute_jacobian_v2, count_trainable_parameters, hessian_diagonal
 from torch.autograd import grad
 from typing import Dict, Callable
 
@@ -198,3 +198,52 @@ class FlatMinimaSearch(Callback):
         self.output = None
 
         return losses
+
+
+class CurvatureDrivenSmoothing(Callback):
+    """
+    Encourage the model to be smooth (i.e has small curvature) (UNTESTED)
+
+    References:
+
+        Chris M. Bishop. "Curvature-Driven Smoothing: A Learning Algorithm for Feedforward Networks."
+        https://pdfs.semanticscholar.org/3c39/ddfbd9822230b5375d581bf505ecf6255283.pdf
+    """
+    def __init__(self, lambd: float, input_name: str, output_name: str, loss_name: str, eps: float=1e-6):
+        assert lambd >= 0.0
+        self.lambd = lambd
+        self.output_name = output_name
+        self.input_name = input_name
+        self.loss_name = loss_name
+        self.eps = eps
+
+    def on_batch_begin(self, data: Dict[str, Tensor], train) -> Dict[str, Tensor]:
+        if train:
+            assert self.input_name in data
+            self.input = data[self.input_name]
+        return data
+
+    def after_outputs(self, outputs: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
+        if train:
+            assert self.output_name in outputs
+            self.output = outputs[self.output_name]
+        return outputs
+
+    def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
+        if train:
+            assert self.loss_name in losses
+            total_loss = []
+
+            for ind in range(len(self.output)):
+                output = self.output[ind].view(-1)
+                hessian_diag = hessian_diagonal(output, self.input, True)
+                sos = torch.stack([h.pow(2).sum() for h in hessian_diag], dim=0).sum(0)
+                total_loss.append(sos)
+
+            self.output = None
+            self.input = None
+            total_loss = torch.stack(total_loss, dim=0).mean() * 0.5
+            losses[self.loss_name] += total_loss * self.lambd
+
+        return losses
+
