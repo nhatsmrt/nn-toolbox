@@ -9,7 +9,7 @@ __all__ = ['LookaheadOptimizer']
 
 class LookaheadOptimizer(Callback):
     """
-    Implement Lookahead Optimizer. Keep track of a set of "slow weights", which only update periodically. (UNTESTED)
+    Lookahead Optimizer: Keep track of a set of "slow weights", which only update periodically. (UNTESTED)
 
     References:
 
