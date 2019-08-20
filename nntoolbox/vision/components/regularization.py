@@ -1,10 +1,9 @@
 from torch import nn, Tensor
 import torch
-from ...utils import compute_jacobian
 from typing import Tuple, Optional
 
 
-__all__ = ['ShakeShake', 'DoubleBackpropagation']
+__all__ = ['ShakeShake']
 
 
 class ShakeShake(nn.Module):
@@ -79,23 +78,3 @@ class ShakeShakeFunction(torch.autograd.Function):
         branch_weights = torch.rand(size=(cardinality, batch_size))
         branch_weights /= torch.sum(branch_weights, dim=0, keepdim=True)
         return branch_weights
-
-
-class DoubleBackpropagation(nn.Module):
-    """
-    Double backpropagation regularizer to penalize slight perturbation in input
-
-    https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf
-
-    http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf
-    """
-    def __init__(self, model: nn.Module, criterion: nn.Module):
-        super(DoubleBackpropagation, self).__init__()
-        self.main = model
-        self.criterion = criterion
-
-    def forward(self, input: Tensor, label: Tensor) -> Tensor:
-        input.requires_grad = True
-        jacobian = compute_jacobian(input, lambda input: self.criterion(self.model(input), label), True)
-        input.requires_grad = False
-        return 0.5 * torch.sum(jacobian * jacobian)
