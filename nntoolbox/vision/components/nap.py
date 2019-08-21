@@ -42,7 +42,7 @@ class NeuralAbstractionPyramid(nn.Module):
         Transform information from a region of larger resolution (i.e previous layer) from the previous timestep.
         :param backward_connections: consist of depth upsampling layers
         Retrieve feedback from a region of smaller resolution (i.e next layer) from the previous timestep.
-        :param duration: number of timesteps to process data
+        :param duration: default number of timesteps to process data
         """
         assert len(lateral_connections) - 1 == len(forward_connections) == len(backward_connections)
         super().__init__()
@@ -59,9 +59,12 @@ class NeuralAbstractionPyramid(nn.Module):
         """
         :param input:
         :param return_all_states: whether to return output of all timesteps
+        :param duration: number of timesteps to process data
         :return: the output of last time steps and outputs of all time steps
         """
         if duration is None: duration=self.duration
+        assert duration > 0
+
         states = self.get_initial_states(input)
         all_states = [states]
         for t in range(duration):
@@ -77,8 +80,7 @@ class NeuralAbstractionPyramid(nn.Module):
         return states, all_states if return_all_states else states
 
     def get_initial_states(self, input: Tensor) -> List[Tensor]:
-        ret = []
-        ret.append(input)
+        ret = [input]
         for layer in self.forward_connections:
             input = layer(input)
             ret.append(input)
