@@ -1,5 +1,5 @@
 from torch import nn, Tensor
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Optional
 
 
 __all__ = ['NeuralAbstractionPyramid']
@@ -54,16 +54,17 @@ class NeuralAbstractionPyramid(nn.Module):
         self.activ_norm = nn.Sequential(activation_function, normalization)
 
     def forward(
-            self, input: Tensor, return_all_states: bool=False
+            self, input: Tensor, return_all_states: bool=False, duration: Optional[int]=None
     ) -> Union[List[Tensor], Tuple[List[Tensor], List[List[Tensor]]]]:
         """
         :param input:
         :param return_all_states: whether to return output of all timesteps
         :return: the output of last time steps and outputs of all time steps
         """
+        if duration is None: duration=self.duration
         states = self.get_initial_states(input)
         all_states = [states]
-        for t in range(self.duration):
+        for t in range(duration):
             new_states = []
             for l in range(self.depth + 1):
                 new_state = self.lateral_connections[l](states[l])
