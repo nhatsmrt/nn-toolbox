@@ -77,7 +77,9 @@ class NeuralAbstractionPyramid(nn.Module):
                 new_states.append(new_state)
             states = new_states
             all_states.append(states)
-        return states, all_states if return_all_states else states
+        print(states)
+        return states
+        # return states, all_states if return_all_states else states
 
     def get_initial_states(self, input: Tensor) -> List[Tensor]:
         ret = [input]
