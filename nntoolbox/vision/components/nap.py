@@ -1,5 +1,5 @@
 from torch import nn, Tensor
-from typing import List
+from typing import List, Tuple, Union
 
 
 __all__ = ['NeuralAbstractionPyramid']
@@ -33,6 +33,9 @@ class NeuralAbstractionPyramid(nn.Module):
             normalization: nn.Module, duration: int
     ):
         """
+        Note that here we assume the forward direction increase the resolution and the backward direction
+        reverse the resolution. This can always be reversed.
+
         :param lateral_connections: consist of depth + 1 conv layers, each with output of same dimension as input.
         Aggregate information from a local neighborhood of the same resolution from previous timestep.
         :param forward_connections: consist of depth downsampling conv layers.
@@ -50,8 +53,16 @@ class NeuralAbstractionPyramid(nn.Module):
         self.backward_connections = nn.ModuleList(backward_connections)
         self.activ_norm = nn.Sequential(activation_function, normalization)
 
-    def forward(self, input: Tensor) -> List[Tensor]:
-        states = self.get_initial_state(input)
+    def forward(
+            self, input: Tensor, return_all_states: bool=False
+    ) -> Union[List[Tensor], Tuple[List[Tensor], List[List[Tensor]]]]:
+        """
+        :param input:
+        :param return_all_states: whether to return output of all timesteps
+        :return: the output of last time steps and outputs of all time steps
+        """
+        states = self.get_initial_states(input)
+        all_states = [states]
         for t in range(self.duration):
             new_states = []
             for l in range(self.depth + 1):
@@ -61,7 +72,8 @@ class NeuralAbstractionPyramid(nn.Module):
                 new_state = self.activ_norm(new_state)
                 new_states.append(new_state)
             states = new_states
-        return states
+            all_states.append(states)
+        return states, all_states if return_all_states else states
 
     def get_initial_states(self, input: Tensor) -> List[Tensor]:
         ret = []
