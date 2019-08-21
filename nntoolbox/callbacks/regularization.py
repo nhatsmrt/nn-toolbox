@@ -122,6 +122,26 @@ class StudentTPenaltyAR(ActivationRegularization):
         )
 
 
+class LowActivityPrior(ActivationRegularization):
+    """
+    Constraint the activation to be small. Coupling with a variance force, this will drive the activation to sparsity.
+
+    (UNTESTED)
+
+    References:
+
+        Sven Behnke. "Hierarchical Neural Networks for Image Interpretation," page 124.
+        https://www.ais.uni-bonn.de/books/LNCS2766.pdf
+    """
+    def __init__(self, output_hook: OutputHook, lambd: float, alpha: float=0.1, loss_name: str='loss'):
+        super(LowActivityPrior, self).__init__(
+            output_hook=output_hook,
+            regularizer=lambda t: (t.mean(0) - alpha).pow(2).mean(),
+            lambd=lambd,
+            loss_name=loss_name
+        )
+
+
 class DoubleBackpropagationCB(Callback):
     """
     Double backpropagation regularizer to penalize slight perturbation in input (as a CB) (UNTESTED)
