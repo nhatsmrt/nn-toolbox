@@ -25,5 +25,5 @@ def test_component(
         l.backward()
         optimizer.step()
         if verbose: print(l)
-    print(l)
+    print("Final loss: " + str(l.detach().item()))
     assert all_close(l, torch.zeros(1), eps)
