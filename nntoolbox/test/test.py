@@ -15,6 +15,7 @@ def test_component(
         criterion: nn.Module=nn.MSELoss(), n_iter: int=1000, verbose: bool=True, eps: float=1e-6
 ):
     """Test if component returns expected output shape and can fit randomized input-target pair"""
+    assert n_iter > 0
     inp = rand(inp_shape)
     targ = rand(op_shape)
     assert component(inp).shape == targ.shape
