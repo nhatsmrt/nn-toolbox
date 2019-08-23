@@ -8,3 +8,4 @@ from .regularization import *
 from .mixture import *
 from .kernel import *
 from .rbf import *
+from .shunting import *

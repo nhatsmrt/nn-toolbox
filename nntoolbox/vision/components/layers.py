@@ -1,12 +1,13 @@
 import torch
 from torch import nn, Tensor
 from ...components import HighwayLayer
-from typing import Callable
+from typing import Tuple
 
 
 __all__ = [
     'ConvolutionalLayer', 'CoordConv2D', 'CoordConvolutionalLayer',
-    'HighwayConvolutionalLayer', 'Flatten', 'Reshape', 'InputNormalization'
+    'HighwayConvolutionalLayer', 'Flatten', 'Reshape', 'InputNormalization',
+    'BiasLayer2D'
 ]
 
 
@@ -151,3 +152,17 @@ class InputNormalization(nn.Module):
     def forward(self, img):
         # normalize img
         return (img - self._mean) / self._std
+
+
+class BiasLayer2D(nn.Module):
+    """
+    Add a trainable bias vector to input:
+
+    y = x + bias
+    """
+    def __init__(self, out_channels: int, init: float=0.0):
+        super().__init__()
+        self.bias = nn.Parameter(torch.zeros((out_channels, )) + init, requires_grad=True)
+
+    def forward(self, input: Tensor) -> Tensor: return input + self.bias[None, :, None, None]
+

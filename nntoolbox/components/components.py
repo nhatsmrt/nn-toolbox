@@ -1,10 +1,10 @@
 import torch
 from torch import nn, Tensor
-from typing import Sequence, Callable, Optional
+from typing import Sequence, Callable, Optional, Tuple
 
 
 __all__ = [
-    'LambdaLayer', 'ScalingLayer', 'ResidualLinearBlock',
+    'LambdaLayer', 'ScalingLayer', 'BiasLayer', 'ResidualLinearBlock',
     'LinearlyAugmentedFF', 'HighwayLayer', 'SquareUnitLinear',
     'QuadraticPolynomialLayer', 'MLP'
 ]
@@ -33,6 +33,19 @@ class ScalingLayer(LambdaLayer):
     """
     def __init__(self, scale: float=0.1):
         super(ScalingLayer, self).__init__(lambda inp: inp * scale)
+
+
+class BiasLayer(nn.Module):
+    """
+    Add a trainable bias vector to input:
+
+    y = x + bias
+    """
+    def __init__(self, shape: Tuple[int, ...], init: float=0.0):
+        super().__init__()
+        self.bias = nn.Parameter(torch.zeros(shape) + init, requires_grad=True)
+
+    def forward(self, input: Tensor) -> Tensor: return input + self.bias[None, :]
 
 
 class ResidualLinearBlock(nn.Module):
