@@ -16,7 +16,7 @@ class GeneralizedShuntingModule(nn.Module):
 
         Ganesh Arulampalam, Abdesselam Bouzerdoum.
         "A generalized feedforward neural network architecture for classification and regression."
-        https://sci-hub.tw/https://www.sciencedirect.com/science/article/pii/S0893608003001163
+        https://www.sciencedirect.com/science/article/pii/S0893608003001163
     """
     def __init__(self, num: nn.Module, denom: nn.Module, bound_denom: bool=True, bound: float=0.1):
         super().__init__()
