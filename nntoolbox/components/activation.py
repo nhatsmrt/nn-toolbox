@@ -1,6 +1,6 @@
 import torch
 from torch import nn, Tensor
-from nntoolbox.utils import to_onehotv2
+from ..utils import to_onehotv2
 
 
 __all__ = ['ZeroCenterRelu', 'LWTA']
