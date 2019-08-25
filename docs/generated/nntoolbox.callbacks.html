@@ -521,6 +521,56 @@ Reference:
 </dd></dl>
 
 </div>
+<div class="section" id="module-nntoolbox.callbacks.lookahead">
+<span id="nntoolbox-callbacks-lookahead-module"></span><h2>nntoolbox.callbacks.lookahead module<a class="headerlink" href="#module-nntoolbox.callbacks.lookahead" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.callbacks.lookahead.LookaheadOptimizer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.lookahead.</code><code class="sig-name descname">LookaheadOptimizer</code><span class="sig-paren">(</span><em class="sig-param">step_size: float = 0.5</em>, <em class="sig-param">update_every: int = 1</em>, <em class="sig-param">timescale: str = 'iter'</em>, <em class="sig-param">device=device(type='cpu')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/lookahead.html#LookaheadOptimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.lookahead.LookaheadOptimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<p>Lookahead Optimizer: Keep track of a set of “slow weights”, which only update periodically. (UNTESTED)</p>
+<p class="rubric">References</p>
+<p>Michael R. Zhang, James Lucas, Geoffrey Hinton, Jimmy Ba. “Lookahead Optimizer: k steps forward, 1 step back.”
+<a class="reference external" href="https://arxiv.org/abs/1907.08610">https://arxiv.org/abs/1907.08610</a></p>
+<p><a class="reference external" href="https://arxiv.org/pdf/1803.05407.pdf">https://arxiv.org/pdf/1803.05407.pdf</a>
+:param model: the model currently being trained
+:param step_size: the stepsize for slow weight update
+:param average_after: the first epoch to start averaging
+:param update_every: how many epochs/iters between each average update</p>
+<dl class="method">
+<dt id="nntoolbox.callbacks.lookahead.LookaheadOptimizer.get_final_model">
+<code class="sig-name descname">get_final_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; torch.nn.modules.module.Module<a class="reference internal" href="../_modules/nntoolbox/callbacks/lookahead.html#LookaheadOptimizer.get_final_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.lookahead.LookaheadOptimizer.get_final_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the post-training average model
+:return: the averaged model</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.lookahead.LookaheadOptimizer.on_batch_end">
+<code class="sig-name descname">on_batch_end</code><span class="sig-paren">(</span><em class="sig-param">logs: Dict[str, Any]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/lookahead.html#LookaheadOptimizer.on_batch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.lookahead.LookaheadOptimizer.on_batch_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.lookahead.LookaheadOptimizer.on_epoch_end">
+<code class="sig-name descname">on_epoch_end</code><span class="sig-paren">(</span><em class="sig-param">logs: Dict[str, Any]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/callbacks/lookahead.html#LookaheadOptimizer.on_epoch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.lookahead.LookaheadOptimizer.on_epoch_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.lookahead.LookaheadOptimizer.on_train_begin">
+<code class="sig-name descname">on_train_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/lookahead.html#LookaheadOptimizer.on_train_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.lookahead.LookaheadOptimizer.on_train_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.lookahead.LookaheadOptimizer.on_train_end">
+<code class="sig-name descname">on_train_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/lookahead.html#LookaheadOptimizer.on_train_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.lookahead.LookaheadOptimizer.on_train_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.lookahead.LookaheadOptimizer.update_slow_weights">
+<code class="sig-name descname">update_slow_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/lookahead.html#LookaheadOptimizer.update_slow_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.lookahead.LookaheadOptimizer.update_slow_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-nntoolbox.callbacks.lr_scheduler">
 <span id="nntoolbox-callbacks-lr-scheduler-module"></span><h2>nntoolbox.callbacks.lr_scheduler module<a class="headerlink" href="#module-nntoolbox.callbacks.lr_scheduler" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -794,6 +844,33 @@ Adapt from fastai course 2 v3 notebook</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="nntoolbox.callbacks.regularization.FlatMinimaSearch">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.regularization.</code><code class="sig-name descname">FlatMinimaSearch</code><span class="sig-paren">(</span><em class="sig-param">lambd: float</em>, <em class="sig-param">output_name: str</em>, <em class="sig-param">loss_name: str</em>, <em class="sig-param">eps: float = 1e-06</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#FlatMinimaSearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.FlatMinimaSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<p>Encourage model to find flat minima, which helps generalization (UNTESTED)</p>
+<p class="rubric">References</p>
+<p>Sepp Hochreiter and Jurgen Schmidhuber. “Flat Minima.”
+<a class="reference external" href="https://www.mitpressjournals.org/doi/abs/10.1162/neco.1997.9.1.1">https://www.mitpressjournals.org/doi/abs/10.1162/neco.1997.9.1.1</a></p>
+<p>Sepp Hochreiter and Jurgen Schmidhuber. “Feature Extraction through LOCOCODE.”
+<a class="reference external" href="http://www.bioinf.jku.at/publications/older/2104.pdf">http://www.bioinf.jku.at/publications/older/2104.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.callbacks.regularization.FlatMinimaSearch.after_losses">
+<code class="sig-name descname">after_losses</code><span class="sig-paren">(</span><em class="sig-param">losses: Dict[str, torch.Tensor], train: bool</em><span class="sig-paren">)</span> &#x2192; Dict[str, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#FlatMinimaSearch.after_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.FlatMinimaSearch.after_losses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.regularization.FlatMinimaSearch.after_outputs">
+<code class="sig-name descname">after_outputs</code><span class="sig-paren">(</span><em class="sig-param">outputs: Dict[str, torch.Tensor], train: bool</em><span class="sig-paren">)</span> &#x2192; Dict[str, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#FlatMinimaSearch.after_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.FlatMinimaSearch.after_outputs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.regularization.FlatMinimaSearch.on_train_begin">
+<code class="sig-name descname">on_train_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#FlatMinimaSearch.on_train_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.FlatMinimaSearch.on_train_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-nntoolbox.callbacks.resizing">
 <span id="nntoolbox-callbacks-resizing-module"></span><h2>nntoolbox.callbacks.resizing module<a class="headerlink" href="#module-nntoolbox.callbacks.resizing" title="Permalink to this headline">¶</a></h2>
@@ -982,6 +1059,7 @@ Adapt from fastai course 2 v3 notebook</p>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.fge">nntoolbox.callbacks.fge module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.gradient">nntoolbox.callbacks.gradient module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.logger">nntoolbox.callbacks.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.lookahead">nntoolbox.callbacks.lookahead module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.lr_scheduler">nntoolbox.callbacks.lr_scheduler module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.mixed_precision">nntoolbox.callbacks.mixed_precision module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.mixup">nntoolbox.callbacks.mixup module</a></li>
@@ -996,6 +1074,7 @@ Adapt from fastai course 2 v3 notebook</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.ensembler.html">nntoolbox.ensembler package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a></li>
@@ -1009,6 +1088,8 @@ Adapt from fastai course 2 v3 notebook</p>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.visualization.html">nntoolbox.visualization package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.test.html">nntoolbox.test package</a></li>
 </ul>
 
 <div class="relations">

@@ -1,6 +1,13 @@
 nntoolbox.sequence.components package
 =====================================
 
+Subpackages
+-----------
+
+.. toctree::
+
+   nntoolbox.sequence.components.cells
+
 Submodules
 ----------
 
@@ -8,14 +15,6 @@ nntoolbox.sequence.components.attention module
 ----------------------------------------------
 
 .. automodule:: nntoolbox.sequence.components.attention
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.sequence.components.cells module
-------------------------------------------
-
-.. automodule:: nntoolbox.sequence.components.cells
    :members:
    :undoc-members:
    :show-inheritance:

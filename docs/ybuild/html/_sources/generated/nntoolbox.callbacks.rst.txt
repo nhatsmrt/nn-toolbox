@@ -76,6 +76,14 @@ nntoolbox.callbacks.logger module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.callbacks.lookahead module
+------------------------------------
+
+.. automodule:: nntoolbox.callbacks.lookahead
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.callbacks.lr\_scheduler module
 ----------------------------------------
 

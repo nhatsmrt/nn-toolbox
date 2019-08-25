@@ -32,12 +32,13 @@
             
   <h1>Source code for nntoolbox.losses.losses</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">MSELoss</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">nn</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RMSELoss&#39;</span><span class="p">,</span> <span class="s1">&#39;CombinedLoss&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RMSELoss&#39;</span><span class="p">,</span> <span class="s1">&#39;LogSigmoidLoss&#39;</span><span class="p">,</span> <span class="s1">&#39;CombinedLoss&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="RMSELoss"><a class="viewcode-back" href="../../../generated/nntoolbox.losses.html#nntoolbox.losses.losses.RMSELoss">[docs]</a><span class="k">class</span> <span class="nc">RMSELoss</span><span class="p">(</span><span class="n">MSELoss</span><span class="p">):</span>
@@ -47,6 +48,10 @@
 
 <div class="viewcode-block" id="RMSELoss.forward"><a class="viewcode-back" href="../../../generated/nntoolbox.losses.html#nntoolbox.losses.losses.RMSELoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="LogSigmoidLoss"><a class="viewcode-back" href="../../../generated/nntoolbox.losses.html#nntoolbox.losses.losses.LogSigmoidLoss">[docs]</a><span class="k">class</span> <span class="nc">LogSigmoidLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LogSigmoidLoss.forward"><a class="viewcode-back" href="../../../generated/nntoolbox.losses.html#nntoolbox.losses.losses.LogSigmoidLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span> <span class="k">return</span> <span class="o">-</span><span class="n">F</span><span class="o">.</span><span class="n">logsigmoid</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="CombinedLoss"><a class="viewcode-back" href="../../../generated/nntoolbox.losses.html#nntoolbox.losses.losses.CombinedLoss">[docs]</a><span class="k">class</span> <span class="nc">CombinedLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -81,6 +86,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.ensembler.html">nntoolbox.ensembler package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.graph.html">nntoolbox.graph package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.init.html">nntoolbox.init package</a></li>
@@ -94,6 +100,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.visualization.html">nntoolbox.visualization package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.test.html">nntoolbox.test package</a></li>
 </ul>
 
 <div class="relations">
