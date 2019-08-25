@@ -9,7 +9,7 @@ from typing import List, Callable, Union, Iterable
 __all__ = [
     'compute_gradient', 'compute_jacobian', 'compute_jacobian_v2',
     'update_gradient', 'accumulate_gradient', 'compute_gradient_norm',
-    'hessian_diagonal'
+    'hessian_diagonal', 'gather_flat_grad'
 ]
 
 
@@ -131,3 +131,21 @@ def hessian_diagonal(
             hess_diags.append(hessian_diagonal(output, param, requires_grad))
         return hess_diags
 
+
+def gather_flat_grad(params: Iterable[Tensor]) -> Tensor:
+    """
+    Gather gradient of all the parameters and flatten into a vector. Adapted from pytorch's L-BFGS implementation.
+
+    :param params: List of parameters
+    :return: gradient vector of the parameters
+    """
+    views = []
+    for p in params:
+        if p.grad is None:
+            view = p.new(p.numel()).zero_()
+        elif p.grad.is_sparse:
+            view = p.grad.to_dense().view(-1)
+        else:
+            view = p.grad.view(-1)
+        views.append(view)
+    return torch.cat(views, 0)

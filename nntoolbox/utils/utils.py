@@ -9,7 +9,8 @@ from typing import Optional, List
 __all__ = [
     'compute_num_batch', 'copy_model', 'save_model',
     'load_model', 'get_device', 'get_trainable_parameters',
-    'count_trainable_parameters', 'to_onehot', 'is_nan', 'is_valid',
+    'count_trainable_parameters', 'to_onehot',
+    'to_onehotv2', 'is_nan', 'is_valid',
     'get_children', 'get_all_submodules', 'find_index'
 ]
 
@@ -82,7 +83,7 @@ def count_trainable_parameters(model: Module) -> int:
 
 def to_onehot(label: Tensor, n_class: Optional[int]=None) -> Tensor:
     """
-    Return one hot encoding of label
+    Return one hot encoding of label (assuming the label index is 1)
     
     :param label:
     :param n_class:
@@ -93,6 +94,23 @@ def to_onehot(label: Tensor, n_class: Optional[int]=None) -> Tensor:
     label_oh = torch.zeros([label.shape[0], n_class] + list(label.shape)[1:]).long().to(label.device)
     label = label.unsqueeze(1)
     label_oh.scatter_(dim=1, index=label, value=1)
+    return label_oh
+
+
+def to_onehotv2(label: Tensor, n_class: Optional[int] = None) -> Tensor:
+    """
+    Return one hot encoding of label (assuming the label index is -1)
+
+    :param label:
+    :param n_class:
+    :return:
+    """
+    if n_class is None:
+        n_class = torch.max(label) + 1
+    # label_oh = torch.zeros([label.shape[0], n_class] + list(label.shape)[1:]).long().to(label.device)
+    label_oh = torch.zeros(list(label.shape) + [n_class]).long().to(label.device)
+    label = label.unsqueeze(-1)
+    label_oh.scatter_(dim=-1, index=label, value=1)
     return label_oh
 
 
