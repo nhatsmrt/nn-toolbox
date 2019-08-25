@@ -47,7 +47,7 @@ def test_rosenbrock(
             print()
 
         if iter > max_iter:
-            print("Maximum number of iteration reached without converging to minima")
+            print("Maximum number of iteration reached without converging to the minimum.")
             return -1
     print("Optimizer takes " + str(iter) + " iterations to complete Rosenbrock test.")
     return iter
