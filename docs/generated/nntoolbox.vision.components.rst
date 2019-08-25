@@ -68,6 +68,14 @@ nntoolbox.vision.components.local module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.vision.components.nap module
+--------------------------------------
+
+.. automodule:: nntoolbox.vision.components.nap
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.vision.components.normalization module
 ------------------------------------------------
 
@@ -112,6 +120,14 @@ nntoolbox.vision.components.se module
 -------------------------------------
 
 .. automodule:: nntoolbox.vision.components.se
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.vision.components.shunting module
+-------------------------------------------
+
+.. automodule:: nntoolbox.vision.components.shunting
    :members:
    :undoc-members:
    :show-inheritance:

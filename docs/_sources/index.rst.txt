@@ -11,6 +11,7 @@ Welcome to nn-toolbox's documentation!
 
   nntoolbox.callbacks
   nntoolbox.components
+  nntoolbox.ensembler
   nntoolbox.graph
   nntoolbox.hooks
   nntoolbox.init
@@ -24,6 +25,8 @@ Welcome to nn-toolbox's documentation!
   nntoolbox.transforms
   nntoolbox.utils
   nntoolbox.vision
+  nntoolbox.visualization
+  nntoolbox.test
 
 
 Indices and tables

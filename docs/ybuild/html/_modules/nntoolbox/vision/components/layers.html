@@ -34,12 +34,13 @@
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
 <span class="kn">from</span> <span class="nn">...components</span> <span class="k">import</span> <span class="n">HighwayLayer</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;ConvolutionalLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;CoordConv2D&#39;</span><span class="p">,</span> <span class="s1">&#39;CoordConvolutionalLayer&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;HighwayConvolutionalLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;Flatten&#39;</span><span class="p">,</span> <span class="s1">&#39;Reshape&#39;</span><span class="p">,</span> <span class="s1">&#39;InputNormalization&#39;</span>
+    <span class="s1">&#39;HighwayConvolutionalLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;Flatten&#39;</span><span class="p">,</span> <span class="s1">&#39;Reshape&#39;</span><span class="p">,</span> <span class="s1">&#39;InputNormalization&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;BiasLayer2D&#39;</span>
 <span class="p">]</span>
 
 
@@ -184,6 +185,20 @@
 <div class="viewcode-block" id="InputNormalization.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.InputNormalization.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
         <span class="c1"># normalize img</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">img</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mean</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_std</span></div></div>
+
+
+<div class="viewcode-block" id="BiasLayer2D"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.BiasLayer2D">[docs]</a><span class="k">class</span> <span class="nc">BiasLayer2D</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add a trainable bias vector to input:</span>
+
+<span class="sd">    y = x + bias</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">init</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">out_channels</span><span class="p">,</span> <span class="p">))</span> <span class="o">+</span> <span class="n">init</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BiasLayer2D.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.layers.BiasLayer2D.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span> <span class="k">return</span> <span class="nb">input</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span></div></div>
+
 </pre></div>
 
           </div>
@@ -205,6 +220,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.ensembler.html">nntoolbox.ensembler package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.graph.html">nntoolbox.graph package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.init.html">nntoolbox.init package</a></li>
@@ -218,6 +234,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.visualization.html">nntoolbox.visualization package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.test.html">nntoolbox.test package</a></li>
 </ul>
 
 <div class="relations">

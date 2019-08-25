@@ -33,11 +33,10 @@
   <h1>Source code for nntoolbox.vision.components.regularization</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">...utils</span> <span class="k">import</span> <span class="n">compute_jacobian</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ShakeShake&#39;</span><span class="p">,</span> <span class="s1">&#39;DoubleBackpropagation&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ShakeShake&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="ShakeShake"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.regularization.ShakeShake">[docs]</a><span class="k">class</span> <span class="nc">ShakeShake</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -112,26 +111,6 @@
         <span class="n">branch_weights</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">cardinality</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">))</span>
         <span class="n">branch_weights</span> <span class="o">/=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">branch_weights</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">branch_weights</span>
-
-
-<div class="viewcode-block" id="DoubleBackpropagation"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.regularization.DoubleBackpropagation">[docs]</a><span class="k">class</span> <span class="nc">DoubleBackpropagation</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Double backpropagation regularizer to penalize slight perturbation in input</span>
-
-<span class="sd">    https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf</span>
-
-<span class="sd">    http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">criterion</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DoubleBackpropagation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">main</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span> <span class="o">=</span> <span class="n">criterion</span>
-
-<div class="viewcode-block" id="DoubleBackpropagation.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.regularization.DoubleBackpropagation.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
-        <span class="nb">input</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">jacobian</span> <span class="o">=</span> <span class="n">compute_jacobian</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="nb">input</span><span class="p">),</span> <span class="n">label</span><span class="p">),</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="nb">input</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jacobian</span> <span class="o">*</span> <span class="n">jacobian</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -153,6 +132,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.ensembler.html">nntoolbox.ensembler package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.graph.html">nntoolbox.graph package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.init.html">nntoolbox.init package</a></li>
@@ -166,6 +146,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.visualization.html">nntoolbox.visualization package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.test.html">nntoolbox.test package</a></li>
 </ul>
 
 <div class="relations">

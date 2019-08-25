@@ -132,8 +132,8 @@
 
 <dl class="function">
 <dt id="nntoolbox.utils.gradient.compute_jacobian">
-<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">compute_jacobian</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor, fn: Callable[torch.Tensor, torch.Tensor], is_batch: bool = True</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#compute_jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.compute_jacobian" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the jacobian of function(input) with respect to input</p>
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">compute_jacobian</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor, fn: Callable[torch.Tensor, torch.Tensor], is_batch: bool = True, requires_grad: bool = True</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#compute_jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.compute_jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the jacobian of function(input) with respect to input. For most purpose, should use v2</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -145,6 +145,24 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.compute_jacobian_v2">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">compute_jacobian_v2</code><span class="sig-paren">(</span><em class="sig-param">output: torch.Tensor, input: Union[torch.Tensor, Iterable[torch.Tensor]], requires_grad: bool = True</em><span class="sig-paren">)</span> &#x2192; Union[torch.Tensor, Iterable[torch.Tensor]]<a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#compute_jacobian_v2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.compute_jacobian_v2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the jacobian of a vector with respect to an input tensor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – a 1D vector of length L</p></li>
+<li><p><strong>input</strong> – either a tensor (parameter) or an iterable of paramters</p></li>
+<li><p><strong>requires_grad</strong> – whether output should be differentiable</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>jacobian</p>
 </dd>
 </dl>
 </dd></dl>
@@ -174,6 +192,25 @@
 <dd class="field-even"><p></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.hessian_diagonal">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">hessian_diagonal</code><span class="sig-paren">(</span><em class="sig-param">output: torch.Tensor</em>, <em class="sig-param">input: Iterable</em>, <em class="sig-param">requires_grad: bool = True</em><span class="sig-paren">)</span> &#x2192; Union[torch.Tensor, List[torch.Tensor]]<a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#hessian_diagonal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.hessian_diagonal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the diagonal of the hessian</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – a scalar tensor</p></li>
+<li><p><strong>input</strong> – either a tensor (parameter), or a list/generator of parameters</p></li>
+<li><p><strong>requires_grad</strong> – whether output should be differentiable</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tensor (parameter), or a list/generator of parameters, denoting the diagonal of hessian of output</p>
+</dd>
+</dl>
+<p>with respect to input</p>
 </dd></dl>
 
 </div>
@@ -539,6 +576,7 @@ its size would be less than <code class="docutils literal notranslate"><span cla
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.ensembler.html">nntoolbox.ensembler package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a></li>
@@ -565,6 +603,8 @@ its size would be less than <code class="docutils literal notranslate"><span cla
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.visualization.html">nntoolbox.visualization package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.test.html">nntoolbox.test package</a></li>
 </ul>
 
 <div class="relations">

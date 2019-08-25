@@ -76,6 +76,14 @@ nntoolbox.components.self\_normalizing module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.components.shunting module
+------------------------------------
+
+.. automodule:: nntoolbox.components.shunting
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------
