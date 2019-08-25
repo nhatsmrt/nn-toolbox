@@ -14,7 +14,7 @@ class SiConv2D(GeneralizedShuntingModule):
 
         Fok Hing Chi Tivive and Abdesselam Bouzerdoum.
         "Efficient Training Algorithms for a Class of Shunting Inhibitory Convolutional Neural Networks."
-        https://sci-hub.tw/https://ieeexplore.ieee.org/document/1427760
+        https://ieeexplore.ieee.org/document/1427760
     """
     def __init__(
             self, in_channels, out_channels, kernel_size,
