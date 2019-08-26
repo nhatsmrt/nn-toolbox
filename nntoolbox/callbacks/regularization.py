@@ -10,8 +10,9 @@ from typing import Dict, Callable
 
 __all__ = [
     'WeightRegularization', 'WeightElimination', 'L1WR', 'L2WR',
-    'ActivationRegularization', 'L1AR', 'L2AR',
-    'StudentTPenaltyAR', 'DoubleBackpropagationCB', 'FlatMinimaSearch'
+    'ActivationRegularization', 'L1AR', 'L2AR', 'StudentTPenaltyAR',
+    'TemporalActivationRegularization', 'L1TAR', 'L2TAR',
+    'DoubleBackpropagationCB', 'FlatMinimaSearch'
 ]
 
 
@@ -48,7 +49,7 @@ class WeightElimination(WeightRegularization):
 class L1WR(WeightRegularization):
     def __init__(self, lambd: float, loss_name: str='loss'):
         super(L1WR, self).__init__(
-            regularizer=lambda t: t.float().abs().sum(),
+            regularizer=lambda t: t.norm(1).mean(),
             lambd=lambd,
             loss_name=loss_name
         )
@@ -57,7 +58,7 @@ class L1WR(WeightRegularization):
 class L2WR(WeightRegularization):
     def __init__(self, lambd: float, loss_name: str='loss'):
         super(L2WR, self).__init__(
-            regularizer=lambda t: t.float().pow(2).sum(),
+            regularizer=lambda t: t.norm(2).mean(),
             lambd=lambd,
             loss_name=loss_name
         )
@@ -81,17 +82,23 @@ class ActivationRegularization(Callback):
         self.lambd = lambd
 
     def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
-        assert self.loss_name in losses
-        losses[self.loss_name] += self.regularizer(self.hook.store) * self.lambd
-        self.hook.store = None
+        if train:
+            assert self.loss_name in losses
+            outputs = self.hook.store
+            if isinstance(outputs, tuple): outputs = outputs[0]
+            losses[self.loss_name] += self.regularizer(outputs) * self.lambd
+            self.hook.store = None
         return losses
+
+    def on_train_end(self):
+        self.hook.remove()
 
 
 class L2AR(ActivationRegularization):
     def __init__(self, output_hook: OutputHook, lambd: float, loss_name: str='loss'):
         super(L2AR, self).__init__(
             output_hook=output_hook,
-            regularizer=lambda t: t.float().pow(2).sum(),
+            regularizer=lambda t: t.norm(2).mean(),
             lambd=lambd,
             loss_name=loss_name
         )
@@ -101,7 +108,7 @@ class L1AR(ActivationRegularization):
     def __init__(self, output_hook: OutputHook, lambd: float, loss_name: str='loss'):
         super(L1AR, self).__init__(
             output_hook=output_hook,
-            regularizer=lambda t: t.float().abs().sum(),
+            regularizer=lambda t: t.norm(1).mean(),
             lambd=lambd,
             loss_name=loss_name
         )
@@ -137,6 +144,63 @@ class LowActivityPrior(ActivationRegularization):
         super(LowActivityPrior, self).__init__(
             output_hook=output_hook,
             regularizer=lambda t: (t.mean(0) - alpha).pow(2).mean(),
+            lambd=lambd,
+            loss_name=loss_name
+        )
+
+
+class TemporalActivationRegularization(Callback):
+    """
+    Regularizing by penalizing activation change.
+
+    References:
+
+        Stephen Merity, Bryan McCann, Richard Socher. "Revisiting Activation Regularization for Language RNNs."
+        https://arxiv.org/pdf/1708.01009.pdf
+    """
+    def __init__(
+            self, output_hook: OutputHook,
+            regularizer: Callable[[Tensor], Tensor],
+            lambd: float, loss_name: str = 'loss'
+    ):
+        self.lambd, self.loss_name, self.regularizer, self.hook = lambd, loss_name, regularizer, output_hook
+
+    def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
+        if train:
+            assert self.loss_name in losses
+            outputs = self.hook.store
+            if isinstance(outputs, tuple): outputs = outputs[0]
+            states_change = outputs[:len(outputs) - 1] - outputs[1:]
+            losses[self.loss_name] = self.regularizer(states_change) * self.lambd + losses[self.loss_name]
+            self.hook.store = None
+
+        return losses
+
+    def on_train_end(self):
+        self.hook.remove()
+
+
+class L2TAR(TemporalActivationRegularization):
+    def __init__(
+            self, output_hook: OutputHook,
+            lambd: float, loss_name: str = 'loss'
+    ):
+        super(L2TAR, self).__init__(
+            output_hook=output_hook,
+            regularizer=lambda t: t.norm(2).mean(),
+            lambd=lambd,
+            loss_name=loss_name
+        )
+
+
+class L1TAR(TemporalActivationRegularization):
+    def __init__(
+            self, output_hook: OutputHook,
+            lambd: float, loss_name: str = 'loss'
+    ):
+        super(L1TAR, self).__init__(
+            output_hook=output_hook,
+            regularizer=lambda t: t.norm(1).mean(),
             lambd=lambd,
             loss_name=loss_name
         )

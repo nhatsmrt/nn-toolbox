@@ -21,6 +21,8 @@ class LWTA(nn.Module):
     """
     Local Winner-Take-All Layer
 
+    For every k consecutive units, keep only the one with highest activations and zero-out the rest.
+
     References:
         Rupesh Kumar Srivastava, Jonathan Masci, Sohrob Kazerounian, Faustino Gomez, Jürgen Schmidhuber.
         "Compete to Compute." https://papers.nips.cc/paper/5059-compete-to-compute.pdf
