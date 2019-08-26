@@ -10,8 +10,9 @@ from typing import Dict, Callable
 
 __all__ = [
     'WeightRegularization', 'WeightElimination', 'L1WR', 'L2WR',
-    'ActivationRegularization', 'L1AR', 'L2AR',
-    'StudentTPenaltyAR', 'DoubleBackpropagationCB', 'FlatMinimaSearch'
+    'ActivationRegularization', 'L1AR', 'L2AR', 'StudentTPenaltyAR',
+    'TemporalActivationRegularization', 'L1TAR', 'L2TAR',
+    'DoubleBackpropagationCB', 'FlatMinimaSearch'
 ]
 
 
