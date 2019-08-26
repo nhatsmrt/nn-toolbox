@@ -50,10 +50,10 @@ load_embedding(embedding, TEXT.vocab.vectors)
 # print(id_to_text(next(iter(train_iterator)).text[:, 1], TEXT.vocab))
 
 model = LanguageModel(
-    encoder=nn.Sequential(
-        embedding,
+    embedding=embedding,
+    encoder=
         nn.GRU(input_size=100, hidden_size=256)
-    ),
+    ,
     head=nn.Sequential(
         nn.Linear(256, 1024),
         nn.ReLU(),
