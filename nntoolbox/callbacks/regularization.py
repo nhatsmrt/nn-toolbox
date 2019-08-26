@@ -82,9 +82,12 @@ class ActivationRegularization(Callback):
         self.lambd = lambd
 
     def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
-        assert self.loss_name in losses
-        losses[self.loss_name] += self.regularizer(self.hook.store) * self.lambd
-        self.hook.store = None
+        if train:
+            assert self.loss_name in losses
+            outputs = self.hook.store
+            if isinstance(outputs, tuple): outputs = outputs[0]
+            losses[self.loss_name] += self.regularizer(outputs) * self.lambd
+            self.hook.store = None
         return losses
 
     def on_train_end(self):
@@ -165,9 +168,9 @@ class TemporalActivationRegularization(Callback):
     def after_losses(self, losses: Dict[str, Tensor], train: bool) -> Dict[str, Tensor]:
         if train:
             assert self.loss_name in losses
-            output, states = self.hook.store
-            if isinstance(states, tuple): states = states[0]
-            states_change = states[:len(states) - 1] - states[1:]
+            outputs = self.hook.store
+            if isinstance(outputs, tuple): outputs = outputs[0]
+            states_change = outputs[:len(outputs) - 1] - outputs[1:]
             losses[self.loss_name] = self.regularizer(states_change) * self.lambd + losses[self.loss_name]
             self.hook.store = None
 
