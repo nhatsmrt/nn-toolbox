@@ -76,7 +76,7 @@ class MaskedConv1D(nn.Conv1d):
 
 class QRNNLayer(nn.Module):
     """
-    Quasi RNN layer. Decouple the gate computation (which can now be performed parallizably with convolution)
+    Quasi RNN layer. Decouple the gate computation (which can now be performed parallelwise with convolution)
     and the hidden state sequential computation.
 
     References:
