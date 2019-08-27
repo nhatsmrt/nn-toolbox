@@ -1,7 +1,7 @@
-"""Convolution modules for text classification"""
+"""Convolution and Quasi-RNN modules"""
 import torch
 from torch import nn, Tensor
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Optional
 
 
 __all__ = ['ConvolutionalLayer1D', 'MaskedConv1D', 'QRNNLayer']
@@ -91,10 +91,13 @@ class QRNNLayer(nn.Module):
         assert pooling_mode == 'f' or pooling_mode == 'fo' or pooling_mode == 'ifo'
         self.n_gates = len(pooling_mode) + 1
         self.pooling_mode = pooling_mode
+        self.hidden_size = hidden_size
         out_channels = hidden_size * (len(pooling_mode) + 1)
         self.conv = MaskedConv1D(in_channels=input_size, out_channels=out_channels, kernel_size=kernel_size)
 
-    def forward(self, input: Tensor, h: Tensor) -> Tuple[Tensor, Tuple[Tensor, Tensor]]:
+    def forward(self, input: Tensor, h: Optional[Tensor]=None) -> Tuple[Tensor, Tuple[Tensor, Tensor]]:
+        if h is None: h = torch.zeros((1, input.shape[1], self.hidden_size)).to(input.device).to(input.dtype)
+        h = h[0]
         gates = self.conv(input).chunk(self.n_gates, -1)
 
         if self.pooling_mode == 'f':
@@ -104,9 +107,8 @@ class QRNNLayer(nn.Module):
         else:
             z, f, o, i = torch.tanh(gates[0]), torch.sigmoid(gates[1]), torch.sigmoid(gates[2]), torch.sigmoid(gates[3])
 
-        hs = [h]
+        hs = []
         c = torch.zeros(h.shape).to(input.device).to(input.dtype)
-        cs = [c]
 
         for t in range(len(input)):
             if self.pooling_mode == 'f':
@@ -119,6 +121,5 @@ class QRNNLayer(nn.Module):
                 h = c * o[t]
 
             hs.append(h)
-            cs.append(c)
 
-        return torch.stack(hs, dim=0), (h, c)
+        return torch.stack(hs, dim=0), (h[None, :], c[None, :])
