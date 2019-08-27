@@ -1,10 +1,10 @@
 """Convolution modules for text classification"""
 import torch
 from torch import nn, Tensor
-from typing import Union, List
+from typing import Union, List, Tuple
 
 
-__all__ = ['ConvolutionalLayer1D']
+__all__ = ['ConvolutionalLayer1D', 'MaskedConv1D', 'QRNNLayer']
 
 
 class ConvolutionalLayer1D(nn.Module):
@@ -57,6 +57,14 @@ class ConvolutionalLayer1D(nn.Module):
 
 
 class MaskedConv1D(nn.Conv1d):
+    """
+    Output at t should only depend on input from t - k + 1 to t
+
+    References:
+
+        James Bradbury, Stephen Merity, Caiming Xiong, Richard Socher. "Quasi-Recurrent Neural Networks."
+        https://arxiv.org/abs/1611.01576
+    """
     def forward(self, input: Tensor) -> Tensor:
         """
         :param input: (seq_len, batch_size, in_channels)
@@ -64,3 +72,53 @@ class MaskedConv1D(nn.Conv1d):
         """
         mask = torch.zeros((self.kernel_size[0] - 1, input.shape[1], input.shape[2])).to(input.device).to(input.dtype)
         return super().forward(torch.cat([mask, input], dim=0).permute(1, 2, 0)).permute(2, 0, 1)
+
+
+class QRNNLayer(nn.Module):
+    """
+    Quasi RNN layer. Decouple the gate computation (which can now be performed parallizably with convolution)
+    and the hidden state sequential computation.
+
+    References:
+
+        James Bradbury, Stephen Merity, Caiming Xiong, Richard Socher. "Quasi-Recurrent Neural Networks."
+        https://arxiv.org/abs/1611.01576
+    """
+    def __init__(
+            self, input_size: int, hidden_size: int, kernel_size: int, pooling_mode: str='fo'
+    ):
+        super().__init__()
+        assert pooling_mode == 'f' or pooling_mode == 'fo' or pooling_mode == 'ifo'
+        self.n_gates = len(pooling_mode) + 1
+        self.pooling_mode = pooling_mode
+        out_channels = hidden_size * (len(pooling_mode) + 1)
+        self.conv = MaskedConv1D(in_channels=input_size, out_channels=out_channels, kernel_size=kernel_size)
+
+    def forward(self, input: Tensor, h: Tensor) -> Tuple[Tensor, Tuple[Tensor, Tensor]]:
+        gates = self.conv(input).chunk(self.n_gates, -1)
+
+        if self.pooling_mode == 'f':
+            z, f = torch.tanh(gates[0]), torch.sigmoid(gates[1])
+        elif self.pooling_mode == 'fo':
+            z, f, o = torch.tanh(gates[0]), torch.sigmoid(gates[1]), torch.sigmoid(gates[2])
+        else:
+            z, f, o, i = torch.tanh(gates[0]), torch.sigmoid(gates[1]), torch.sigmoid(gates[2]), torch.sigmoid(gates[3])
+
+        hs = [h]
+        c = torch.zeros(h.shape).to(input.device).to(input.dtype)
+        cs = [c]
+
+        for t in range(len(input)):
+            if self.pooling_mode == 'f':
+                h = f[t] * h + (1 - f[t]) * z[t]
+            elif self.pooling_mode == 'fo':
+                c = f[t] * c + (1 - f[t]) * z[t]
+                h = c * o[t]
+            else:
+                c = f[t] * c + i[t] * z[t]
+                h = c * o[t]
+
+            hs.append(h)
+            cs.append(c)
+
+        return torch.stack(hs, dim=0), (h, c)
