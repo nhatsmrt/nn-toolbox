@@ -54,3 +54,13 @@ class ConvolutionalLayer1D(nn.Module):
     def forward(self, input: Tensor) -> Tensor:
         input = input.permute(0, 2, 1) if self.batch_first else input.permute(1, 2, 0)
         return torch.cat([conv(input).max(-1)[0] for conv in self.convs], -1)
+
+
+class MaskedConv1D(nn.Conv1d):
+    def forward(self, input: Tensor) -> Tensor:
+        """
+        :param input: (seq_len, batch_size, in_channels)
+        :return: (seq_len, batch_size, out_channels)
+        """
+        mask = torch.zeros((self.kernel_size[0] - 1, input.shape[1], input.shape[2])).to(input.device).to(input.dtype)
+        return super().forward(torch.cat([mask, input], dim=0).permute(1, 2, 0)).permute(2, 0, 1)

@@ -12,6 +12,8 @@ class GeneralizedShuntingModule(nn.Module):
 
     y = f(x) / (a + g(x))
 
+    Difference from original implementation: clamping denominator.
+
     References:
 
         Ganesh Arulampalam, Abdesselam Bouzerdoum.

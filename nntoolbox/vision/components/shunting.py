@@ -10,6 +10,8 @@ class SiConv2D(GeneralizedShuntingModule):
     """
     Implement a shunting inhibition convolution layer. Right now only support channelwise fully connected variant.
 
+        Difference from original implementation: clamping denominator.
+
     References:
 
         Fok Hing Chi Tivive and Abdesselam Bouzerdoum.
