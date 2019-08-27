@@ -95,7 +95,7 @@ class QRNNLayer(nn.Module):
         out_channels = hidden_size * (len(pooling_mode) + 1)
         self.conv = MaskedConv1D(in_channels=input_size, out_channels=out_channels, kernel_size=kernel_size)
 
-    def forward(self, input: Tensor, h: Optional[Tensor]=None) -> Tuple[Tensor, Tuple[Tensor, Tensor]]:
+    def forward(self, input: Tensor, h: Optional[Tensor]=None) -> Tuple[Tensor, Tuple[Tensor, ...]]:
         if h is None: h = torch.zeros((1, input.shape[1], self.hidden_size)).to(input.device).to(input.dtype)
         h = h[0]
         gates = self.conv(input).chunk(self.n_gates, -1)
@@ -108,7 +108,7 @@ class QRNNLayer(nn.Module):
             z, f, o, i = torch.tanh(gates[0]), torch.sigmoid(gates[1]), torch.sigmoid(gates[2]), torch.sigmoid(gates[3])
 
         hs = []
-        c = torch.zeros(h.shape).to(input.device).to(input.dtype)
+        if self.pooling_mode != 'f': c = torch.zeros(h.shape).to(input.device).to(input.dtype)
 
         for t in range(len(input)):
             if self.pooling_mode == 'f':
@@ -122,4 +122,7 @@ class QRNNLayer(nn.Module):
 
             hs.append(h)
 
-        return torch.stack(hs, dim=0), (h[None, :], c[None, :])
+        if self.pooling_mode == 'f':
+            return torch.stack(hs, dim=0), h[None: ]
+        else:
+            return torch.stack(hs, dim=0), (h[None, :], c[None, :])
