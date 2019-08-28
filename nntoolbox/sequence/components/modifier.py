@@ -3,9 +3,9 @@ from torch import nn, Tensor
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence, PackedSequence
 import torch.jit as jit
 from typing import Tuple
-from .rnn import FastRNNSequential, FastRNNDropout
+from .rnn import JitRNNSequential, JitRNNDropout
 
-__all__ = ['ModifiedStackedRNN', 'ResidualRNN', 'FastModifiedStackedRNN', 'FastResidualRNN']
+__all__ = ['ModifiedStackedRNN', 'ResidualRNN', 'JitModifiedStackedRNN', 'JitResidualRNN']
 
 
 class ModifiedStackedRNN(nn.Module):
@@ -89,9 +89,9 @@ class ResidualRNN(ModifiedStackedRNN):
             return output_unpacked, torch.cat(hiddens, dim=0)
 
 
-class FastModifiedStackedRNN(jit.ScriptModule):
+class JitModifiedStackedRNN(jit.ScriptModule):
     """
-    Faster implementation using ScriptModule. Currently only works with GRU
+    Jiter implementation using ScriptModule. Currently only works with GRU
     """
 
     __constants__ = ['_layers', '_num_directions']
@@ -100,7 +100,7 @@ class FastModifiedStackedRNN(jit.ScriptModule):
             self, base_rnn, num_layers: int, input_size: int, hidden_size: int,
             bidirectional: bool, dropout: float = 0.0, **kwargs
     ):
-        super(FastModifiedStackedRNN, self).__init__()
+        super(JitModifiedStackedRNN, self).__init__()
         layers = [
             base_rnn(
                 num_layers=1, input_size=input_size, hidden_size=hidden_size,
@@ -109,8 +109,8 @@ class FastModifiedStackedRNN(jit.ScriptModule):
             )
         ]
         layers += [
-            FastRNNSequential(
-                FastRNNDropout(dropout),
+            JitRNNSequential(
+                JitRNNDropout(dropout),
                 base_rnn(
                     num_layers=1, input_size=hidden_size, hidden_size=hidden_size,
                     bidirectional=bidirectional, **kwargs
@@ -124,7 +124,7 @@ class FastModifiedStackedRNN(jit.ScriptModule):
         self._num_directions = 2 if bidirectional else 1
 
 
-class FastResidualRNN(FastModifiedStackedRNN):
+class JitResidualRNN(JitModifiedStackedRNN):
     """
     StackedRNN with residual connections:
 
@@ -132,13 +132,13 @@ class FastResidualRNN(FastModifiedStackedRNN):
 
     o_{l + 1} = f(i_{l + 1}, h_l)
 
-    Faster implementation using ScriptModule. Currently only works with GRU
+    Jiter implementation using ScriptModule. Currently only works with GRU
     """
 
     def __init__(self, base_rnn, num_layers: int, input_size: int, bidirectional: bool, dropout: float = 0.0, **kwargs):
         assert 'hidden_size' not in kwargs
         assert num_layers > 0
-        super(FastResidualRNN, self).__init__(
+        super(JitResidualRNN, self).__init__(
             base_rnn, num_layers, input_size, input_size,
             bidirectional, dropout, **kwargs
         )
