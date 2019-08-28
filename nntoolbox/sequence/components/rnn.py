@@ -162,7 +162,7 @@ class JitLSTMSequential(jit.ScriptModule):
 
 class JitResidualLSTMV2(JitLSTMSequential):
     """
-    Implement a simple residual stacked RNN
+    Implement a simple residual stacked LSTM
     """
     __constants__ = ['_modules_list', 'skip_length']
 
