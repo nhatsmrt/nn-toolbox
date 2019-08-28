@@ -1,6 +1,7 @@
 import torch
 from torch import nn, Tensor
-from typing import Tuple
+from typing import Tuple, Optional
+from ....init import sqrt_uniform_init
 from torch import jit
 
 
@@ -20,6 +21,9 @@ class MILSTMCell(jit.ScriptModule):
         The PyTorch Team. "Optimizing CUDA Recurrent Neural Networks with TorchScript."
         https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/
     """
+
+    __constants__ = ['hidden_size']
+
     def __init__(self, input_size: int, hidden_size: int):
         super().__init__()
         self.input_size = input_size
@@ -30,8 +34,17 @@ class MILSTMCell(jit.ScriptModule):
         self.bias_hh = nn.Parameter(torch.randn(4 * hidden_size))
         self.bias_mult = nn.Parameter(torch.randn(4 * hidden_size))
         self.bias_ind = nn.Parameter(torch.randn(4 * hidden_size))
+        sqrt_uniform_init(self)
 
-    def forward(self, input: Tensor, state: Tuple[Tensor, Tensor]) -> Tuple[Tensor, Tuple[Tensor, Tensor]]:
+    @jit.script_method
+    def forward(
+            self, input: Tensor, state: Optional[Tuple[Tensor, Tensor]]=None
+    ) -> Tuple[Tensor, Tuple[Tensor, Tensor]]:
+        if state is None: state = (
+            torch.zeros((input.shape[0], self.hidden_size)).to(input.device).to(input.dtype),
+            torch.zeros((input.shape[0], self.hidden_size)).to(input.device).to(input.dtype)
+        )
+
         hx, cx = state
         input_transform = torch.mm(input, self.weight_ih.t())
         hidden_transform = torch.mm(hx, self.weight_hh.t())
@@ -65,6 +78,9 @@ class MIGRUCell(jit.ScriptModule):
         The PyTorch Team. "Optimizing CUDA Recurrent Neural Networks with TorchScript."
         https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/
     """
+
+    __constants__ = ['hidden_size']
+
     def __init__(self, input_size: int, hidden_size: int):
         super().__init__()
         self.input_size = input_size
@@ -82,8 +98,12 @@ class MIGRUCell(jit.ScriptModule):
         self.bias_hc = nn.Parameter(torch.randn(hidden_size))
         self.bias_mult_c = nn.Parameter(torch.randn(hidden_size))
         self.bias_ind_c = nn.Parameter(torch.randn(hidden_size))
+        sqrt_uniform_init(self)
 
-    def forward(self, input: Tensor, hx: Tensor) -> Tensor:
+    @jit.script_method
+    def forward(self, input: Tensor, hx: Optional[Tensor]=None) -> Tensor:
+        if hx is None: hx = torch.zeros((input.shape[0], self.hidden_size)).to(input.device).to(input.dtype)
+
         input_transform = torch.mm(input, self.weight_ig.t())
         hidden_transform = torch.mm(hx, self.weight_hg.t())
         gates = (

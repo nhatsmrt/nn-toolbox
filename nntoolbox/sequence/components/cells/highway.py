@@ -1,6 +1,8 @@
 from torch import nn, Tensor
+from ....init import sqrt_uniform_init
 from torch import jit
 import torch
+from typing import Optional
 
 
 __all__ = ['RecurrentHighwayCell']
@@ -25,17 +27,22 @@ class RecurrentHighwayCell(jit.ScriptModule):
         Julian Georg Zilly, Rupesh Kumar Srivastava, Jan Koutník, Jürgen Schmidhuber. "Recurrent Highway Networks."
         http://proceedings.mlr.press/v70/zilly17a/zilly17a.pdf
     """
-    __constants__ = ['recurrence_depth']
+
+    __constants__ = ['recurrence_depth', 'state_size']
 
     def __init__(self, input_size: int, state_size: int, recurrence_depth: int):
         super().__init__()
+        self.state_size = state_size
         self.weight_i = nn.Parameter(torch.rand(3 * state_size, input_size))
         self.weight_s = nn.Parameter(torch.rand(recurrence_depth, 3 * state_size, state_size))
         self.bias = nn.Parameter(torch.rand(recurrence_depth, 3 * state_size))
         self.recurrence_depth = recurrence_depth
+        sqrt_uniform_init(self)
 
     @jit.script_method
-    def forward(self, input: Tensor, state: Tensor) -> Tensor:
+    def forward(self, input: Tensor, state: Optional[Tensor]=None) -> Tensor:
+        if state is None: state = torch.zeros((input.shape[0], self.state_size)).to(input.device).to(input.dtype)
+
         for l in range(self.recurrence_depth):
             if l == 0:
                 input_state = torch.cat([input, state], dim=-1)
