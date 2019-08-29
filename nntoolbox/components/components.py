@@ -143,23 +143,35 @@ class SquareUnitLinear(nn.Linear):
         return super(SquareUnitLinear, self).forward(input)
 
 
-class QuadraticPolynomialLayer(nn.Linear):
+class QuadraticPolynomialLayer(nn.Module):
     """
     h(x) = sigma( sum_k(A_k x)^2 + bx + c)
 
     References:
 
-        Bergstra et al. "Quadratic Polynomials Learn Better Image Features"
-    """
-    def __init__(self, in_features: int, out_features: int, threshold: float=0.0):
-        super(QuadraticPolynomialLayer, self).__init__(in_features, out_features, False)
-        self.linear_feature = nn.Linear(in_features=in_features, out_features=out_features, bias=False)
-        self.threshold = nn.Parameter(torch.tensor(threshold), requires_grad=False)
+        Bergstra et al. "Quadratic Polynomials Learn Better Image Features."
+        http://www.iro.umontreal.ca/~lisa/publications2/index.php/attachments/single/205 (dead link, use web archive)
 
-    def forward(self, input):
-        weight = self.weight.t()
-        quadratic_features = (weight.unsqueeze(0) * input.unsqueeze(-1)).pow(2).sum(1)
-        return quadratic_features + self.linear_feature(input) + self.threshold
+        Joseph Turian, James Bergstra and Yoshua Bengio. "Quadratic Features and Deep Architectures for Chunking."
+        https://www.aclweb.org/anthology/N09-2062
+    """
+    def __init__(
+            self, in_features: int, out_features: int, rank: int, sqrt: bool=False, bias: bool=False
+    ):
+        super(QuadraticPolynomialLayer, self).__init__()
+        self.linear = nn.Linear(in_features=in_features, out_features=out_features, bias=bias)
+        self.quadratic = nn.Linear(in_features=in_features, out_features=out_features * rank, bias=False)
+        self.out_features = out_features
+        self.rank = rank
+        self.sqrt = sqrt
+
+    def forward(self, input: Tensor) -> Tensor:
+        linear_features = self.linear(input)
+        quadratic_features = self.quadratic(input).pow(2)
+        quadratic_features = quadratic_features.view(-1, self.rank, self.out_features).sum(-2)
+        if self.sqrt:
+            quadratic_features = torch.sqrt(quadratic_features)
+        return quadratic_features + linear_features
 
 
 class MLP(nn.Sequential):
