@@ -14,8 +14,8 @@ class QuadraticPolynomialConv2D(nn.Module):
 
     References:
 
-        Joseph Turian, James Bergstra and Yoshua Bengio. "Quadratic Features and Deep Architectures for Chunking."
-        https://www.aclweb.org/anthology/N09-2062
+        Bergstra et al. "Quadratic Polynomials Learn Better Image Features."
+        http://www.iro.umontreal.ca/~lisa/publications2/index.php/attachments/single/205 (dead link, use web archive)
     """
     def __init__(
             self, in_channels, out_channels, kernel_size, rank: int, stride=1, padding=0,
