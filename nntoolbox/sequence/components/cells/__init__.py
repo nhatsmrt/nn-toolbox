@@ -1,3 +1,3 @@
 from .zoneout import *
-from .mi import *
+from .multiplicative import *
 from .highway import *
