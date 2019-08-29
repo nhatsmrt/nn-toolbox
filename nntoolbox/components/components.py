@@ -156,7 +156,7 @@ class QuadraticPolynomialLayer(nn.Module):
         https://www.aclweb.org/anthology/N09-2062
     """
     def __init__(
-            self, in_features: int, out_features: int, rank: int, sqrt: bool=False, bias: bool=False
+            self, in_features: int, out_features: int, rank: int, sqrt: bool=False, bias: bool=False, eps: float=1e-6
     ):
         super(QuadraticPolynomialLayer, self).__init__()
         self.linear = nn.Linear(in_features=in_features, out_features=out_features, bias=bias)
@@ -164,13 +164,14 @@ class QuadraticPolynomialLayer(nn.Module):
         self.out_features = out_features
         self.rank = rank
         self.sqrt = sqrt
+        self.eps = eps
 
     def forward(self, input: Tensor) -> Tensor:
         linear_features = self.linear(input)
         quadratic_features = self.quadratic(input).pow(2)
         quadratic_features = quadratic_features.view(-1, self.rank, self.out_features).sum(-2)
         if self.sqrt:
-            quadratic_features = torch.sqrt(quadratic_features)
+            quadratic_features = torch.sqrt(quadratic_features + self.eps)
         return quadratic_features + linear_features
 
 
