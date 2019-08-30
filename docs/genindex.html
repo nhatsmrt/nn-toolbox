@@ -44,6 +44,7 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -107,6 +108,8 @@
         <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.DoubleBackpropagationCB.after_losses">(nntoolbox.callbacks.regularization.DoubleBackpropagationCB method)</a>
 </li>
         <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.FlatMinimaSearch.after_losses">(nntoolbox.callbacks.regularization.FlatMinimaSearch method)</a>
+</li>
+        <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.TemporalActivationRegularization.after_losses">(nntoolbox.callbacks.regularization.TemporalActivationRegularization method)</a>
 </li>
         <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.WeightRegularization.after_losses">(nntoolbox.callbacks.regularization.WeightRegularization method)</a>
 </li>
@@ -223,6 +226,8 @@
 </li>
       <li><a href="generated/nntoolbox.losses.html#nntoolbox.losses.moe.CompetitiveMOELoss">CompetitiveMOELoss (class in nntoolbox.losses.moe)</a>
 </li>
+      <li><a href="generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.lm.LanguageModel.complete">complete() (nntoolbox.sequence.models.lm.LanguageModel method)</a>
+</li>
       <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.attention.Attention.compute_attn_weights">compute_attn_weights() (nntoolbox.sequence.components.attention.Attention method)</a>
 </li>
       <li><a href="generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.metrics.MetricLearner.compute_embeddings">compute_embeddings() (nntoolbox.vision.learner.metrics.MetricLearner method)</a>
@@ -265,10 +270,10 @@
 </li>
       <li><a href="generated/nntoolbox.graph.html#nntoolbox.graph.utils.compute_normed_laplacian">compute_normed_laplacian() (in module nntoolbox.graph.utils)</a>
 </li>
-      <li><a href="generated/nntoolbox.utils.html#nntoolbox.utils.utils.compute_num_batch">compute_num_batch() (in module nntoolbox.utils.utils)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/nntoolbox.utils.html#nntoolbox.utils.utils.compute_num_batch">compute_num_batch() (in module nntoolbox.utils.utils)</a>
+</li>
       <li><a href="generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.lm.LanguageModelLearner.compute_output">compute_output() (nntoolbox.sequence.learner.lm.LanguageModelLearner method)</a>
 
       <ul>
@@ -433,14 +438,6 @@
 </li>
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.fge.FastGeometricEnsembling">FastGeometricEnsembling (class in nntoolbox.callbacks.fge)</a>
 </li>
-      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.FastModifiedStackedRNN">FastModifiedStackedRNN (class in nntoolbox.sequence.components.modifier)</a>
-</li>
-      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.FastResidualRNN">FastResidualRNN (class in nntoolbox.sequence.components.modifier)</a>
-</li>
-      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.rnn.FastRNNDropout">FastRNNDropout (class in nntoolbox.sequence.components.rnn)</a>
-</li>
-      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.rnn.FastRNNSequential">FastRNNSequential (class in nntoolbox.sequence.components.rnn)</a>
-</li>
       <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.pretrain.FeatureExtractor">FeatureExtractor (class in nntoolbox.vision.components.pretrain)</a>
 </li>
       <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.pretrain.FeatureExtractorSequential">FeatureExtractorSequential (class in nntoolbox.vision.components.pretrain)</a>
@@ -464,6 +461,8 @@
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.mixup.ManifoldMixupModule.forward">forward() (nntoolbox.callbacks.mixup.ManifoldMixupModule method)</a>
 
       <ul>
+        <li><a href="generated/nntoolbox.components.html#nntoolbox.components.activation.LWTA.forward">(nntoolbox.components.activation.LWTA method)</a>
+</li>
         <li><a href="generated/nntoolbox.components.html#nntoolbox.components.activation.ZeroCenterRelu.forward">(nntoolbox.components.activation.ZeroCenterRelu method)</a>
 </li>
         <li><a href="generated/nntoolbox.components.html#nntoolbox.components.components.BiasLayer.forward">(nntoolbox.components.components.BiasLayer method)</a>
@@ -514,19 +513,21 @@
 </li>
         <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.attention.SelfAttention.forward">(nntoolbox.sequence.components.attention.SelfAttention method)</a>
 </li>
-        <li><a href="generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.mi.MIGRUCell.forward">(nntoolbox.sequence.components.cells.mi.MIGRUCell method)</a>
-</li>
-        <li><a href="generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.mi.MILSTMCell.forward">(nntoolbox.sequence.components.cells.mi.MILSTMCell method)</a>
-</li>
         <li><a href="generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.zoneout.ZoneoutCell.forward">(nntoolbox.sequence.components.cells.zoneout.ZoneoutCell method)</a>
 </li>
         <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.conv.ConvolutionalLayer1D.forward">(nntoolbox.sequence.components.conv.ConvolutionalLayer1D method)</a>
 </li>
+        <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.conv.MaskedConv1D.forward">(nntoolbox.sequence.components.conv.MaskedConv1D method)</a>
+</li>
+        <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.conv.QRNNLayer.forward">(nntoolbox.sequence.components.conv.QRNNLayer method)</a>
+</li>
         <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.AdditiveContextEmbedding.forward">(nntoolbox.sequence.components.embedding.AdditiveContextEmbedding method)</a>
+</li>
+        <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.TiedOutputEmbedding.forward">(nntoolbox.sequence.components.embedding.TiedOutputEmbedding method)</a>
 </li>
         <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.hierarchical.TimeDistributed.forward">(nntoolbox.sequence.components.hierarchical.TimeDistributed method)</a>
 </li>
-        <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.FastResidualRNN.forward">(nntoolbox.sequence.components.modifier.FastResidualRNN method)</a>
+        <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.JitResidualRNN.forward">(nntoolbox.sequence.components.modifier.JitResidualRNN method)</a>
 </li>
         <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.ModifiedStackedRNN.forward">(nntoolbox.sequence.components.modifier.ModifiedStackedRNN method)</a>
 </li>
@@ -559,6 +560,8 @@
         <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.attention.StandAloneSelfAttention.forward">(nntoolbox.vision.components.attention.StandAloneSelfAttention method)</a>
 </li>
         <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.dense.DenseLayer.forward">(nntoolbox.vision.components.dense.DenseLayer method)</a>
+</li>
+        <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.ho.QuadraticPolynomialConv2D.forward">(nntoolbox.vision.components.ho.QuadraticPolynomialConv2D method)</a>
 </li>
         <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.kervolution.GaussianKernel.forward">(nntoolbox.vision.components.kervolution.GaussianKernel method)</a>
 </li>
@@ -653,6 +656,8 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/nntoolbox.utils.html#nntoolbox.utils.gradient.gather_flat_grad">gather_flat_grad() (in module nntoolbox.utils.gradient)</a>
+</li>
       <li><a href="generated/nntoolbox.components.html#nntoolbox.components.kernel.GaussianDistKernel">GaussianDistKernel (class in nntoolbox.components.kernel)</a>
 </li>
       <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.kervolution.GaussianKernel">GaussianKernel (class in nntoolbox.vision.components.kervolution)</a>
@@ -674,6 +679,8 @@
       <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.unet.DynamicUnetV2.get_decoder">get_decoder() (nntoolbox.vision.components.unet.DynamicUnetV2 method)</a>
 </li>
       <li><a href="generated/nntoolbox.utils.html#nntoolbox.utils.utils.get_device">get_device() (in module nntoolbox.utils.utils)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.lm.LanguageModel.get_embedding">get_embedding() (nntoolbox.sequence.models.lm.LanguageModel method)</a>
 </li>
       <li><a href="generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.lm.LanguageModel.get_encoder">get_encoder() (nntoolbox.sequence.models.lm.LanguageModel method)</a>
 </li>
@@ -699,14 +706,14 @@
       </ul></li>
       <li><a href="generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.zoneout.ZoneoutCell.get_mask">get_mask() (nntoolbox.sequence.components.cells.zoneout.ZoneoutCell method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.fge.FastGeometricEnsembling.get_models">get_models() (nntoolbox.callbacks.fge.FastGeometricEnsembling method)</a>
 
       <ul>
         <li><a href="generated/nntoolbox.ensembler.html#nntoolbox.ensembler.cv.CVEnsembler.get_models">(nntoolbox.ensembler.cv.CVEnsembler method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/nntoolbox.vision.utils.html#nntoolbox.vision.utils.selector.AllPairSelector.get_pairs">get_pairs() (nntoolbox.vision.utils.selector.AllPairSelector method)</a>
 
       <ul>
@@ -818,6 +825,32 @@
   </ul></td>
 </tr></table>
 
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.rnn.JitLSTMLayer">JitLSTMLayer (class in nntoolbox.sequence.components.rnn)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.rnn.JitLSTMSequential">JitLSTMSequential (class in nntoolbox.sequence.components.rnn)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.JitModifiedStackedRNN">JitModifiedStackedRNN (class in nntoolbox.sequence.components.modifier)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.rnn.JitResidualLSTMV2">JitResidualLSTMV2 (class in nntoolbox.sequence.components.rnn)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.JitResidualRNN">JitResidualRNN (class in nntoolbox.sequence.components.modifier)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.rnn.JitResidualRNNV2">JitResidualRNNV2 (class in nntoolbox.sequence.components.rnn)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.rnn.JitRNNDropout">JitRNNDropout (class in nntoolbox.sequence.components.rnn)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.rnn.JitRNNLayer">JitRNNLayer (class in nntoolbox.sequence.components.rnn)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.rnn.JitRNNSequential">JitRNNSequential (class in nntoolbox.sequence.components.rnn)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -837,11 +870,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L1AR">L1AR (class in nntoolbox.callbacks.regularization)</a>
 </li>
+      <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L1TAR">L1TAR (class in nntoolbox.callbacks.regularization)</a>
+</li>
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L1WR">L1WR (class in nntoolbox.callbacks.regularization)</a>
 </li>
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L2AR">L2AR (class in nntoolbox.callbacks.regularization)</a>
 </li>
       <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.normalization.L2NormalizationLayer">L2NormalizationLayer (class in nntoolbox.vision.components.normalization)</a>
+</li>
+      <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L2TAR">L2TAR (class in nntoolbox.callbacks.regularization)</a>
 </li>
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L2WR">L2WR (class in nntoolbox.callbacks.regularization)</a>
 </li>
@@ -927,6 +964,8 @@
 </li>
       <li><a href="generated/nntoolbox.init.html#nntoolbox.init.lsuv.lsuv_init">lsuv_init() (in module nntoolbox.init.lsuv)</a>
 </li>
+      <li><a href="generated/nntoolbox.components.html#nntoolbox.components.activation.LWTA">LWTA (class in nntoolbox.components.activation)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -941,6 +980,8 @@
 </li>
       <li><a href="generated/nntoolbox.metrics.html#nntoolbox.metrics.classification.MAPAtK">MAPAtK (class in nntoolbox.metrics.classification)</a>
 </li>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.conv.MaskedConv1D">MaskedConv1D (class in nntoolbox.sequence.components.conv)</a>
+</li>
       <li><a href="generated/nntoolbox.components.html#nntoolbox.components.maxout.MaxoutLinear">MaxoutLinear (class in nntoolbox.components.maxout)</a>
 </li>
       <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.pool.MaxOverTime">MaxOverTime (class in nntoolbox.sequence.components.pool)</a>
@@ -951,11 +992,11 @@
 </li>
       <li><a href="generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.metrics.MetricLearner">MetricLearner (class in nntoolbox.vision.learner.metrics)</a>
 </li>
-      <li><a href="generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.mi.MIGRUCell">MIGRUCell (class in nntoolbox.sequence.components.cells.mi)</a>
+      <li><a href="generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.multiplicative.MIGRUCell">MIGRUCell (class in nntoolbox.sequence.components.cells.multiplicative)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.mi.MILSTMCell">MILSTMCell (class in nntoolbox.sequence.components.cells.mi)</a>
+      <li><a href="generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.multiplicative.MILSTMCell">MILSTMCell (class in nntoolbox.sequence.components.cells.multiplicative)</a>
 </li>
       <li><a href="generated/nntoolbox.components.html#nntoolbox.components.mixture.MixtureOfExpert">MixtureOfExpert (class in nntoolbox.components.mixture)</a>
 </li>
@@ -974,6 +1015,8 @@
       <li><a href="generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.style.MultipleStylesTransferLearner">MultipleStylesTransferLearner (class in nntoolbox.vision.learner.style)</a>
 </li>
       <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.attention.MultiplicativeAttention">MultiplicativeAttention (class in nntoolbox.sequence.components.attention)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.multiplicative.MultiplicativeRNNCell">MultiplicativeRNNCell (class in nntoolbox.sequence.components.cells.multiplicative)</a>
 </li>
       <li><a href="generated/nntoolbox.utils.html#nntoolbox.utils.sampler.MultiRandomSampler">MultiRandomSampler (class in nntoolbox.utils.sampler)</a>
 </li>
@@ -1089,6 +1132,8 @@
 </li>
       <li><a href="generated/nntoolbox.init.html#module-nntoolbox.init.normal">nntoolbox.init.normal (module)</a>
 </li>
+      <li><a href="generated/nntoolbox.init.html#module-nntoolbox.init.uniform">nntoolbox.init.uniform (module)</a>
+</li>
       <li><a href="generated/nntoolbox.html#module-nntoolbox.learner">nntoolbox.learner (module)</a>
 </li>
       <li><a href="generated/nntoolbox.losses.html#module-nntoolbox.losses">nntoolbox.losses (module)</a>
@@ -1131,7 +1176,9 @@
 </li>
       <li><a href="generated/nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells">nntoolbox.sequence.components.cells (module)</a>
 </li>
-      <li><a href="generated/nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.mi">nntoolbox.sequence.components.cells.mi (module)</a>
+      <li><a href="generated/nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.highway">nntoolbox.sequence.components.cells.highway (module)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.multiplicative">nntoolbox.sequence.components.cells.multiplicative (module)</a>
 </li>
       <li><a href="generated/nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.zoneout">nntoolbox.sequence.components.cells.zoneout (module)</a>
 </li>
@@ -1149,10 +1196,10 @@
 </li>
       <li><a href="generated/nntoolbox.sequence.learner.html#module-nntoolbox.sequence.learner">nntoolbox.sequence.learner (module)</a>
 </li>
-      <li><a href="generated/nntoolbox.sequence.learner.html#module-nntoolbox.sequence.learner.classification">nntoolbox.sequence.learner.classification (module)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/nntoolbox.sequence.learner.html#module-nntoolbox.sequence.learner.classification">nntoolbox.sequence.learner.classification (module)</a>
+</li>
       <li><a href="generated/nntoolbox.sequence.learner.html#module-nntoolbox.sequence.learner.lm">nntoolbox.sequence.learner.lm (module)</a>
 </li>
       <li><a href="generated/nntoolbox.sequence.learner.html#module-nntoolbox.sequence.learner.seq2seq">nntoolbox.sequence.learner.seq2seq (module)</a>
@@ -1232,6 +1279,8 @@
       <li><a href="generated/nntoolbox.vision.components.html#module-nntoolbox.vision.components.dense">nntoolbox.vision.components.dense (module)</a>
 </li>
       <li><a href="generated/nntoolbox.vision.components.html#module-nntoolbox.vision.components.ff">nntoolbox.vision.components.ff (module)</a>
+</li>
+      <li><a href="generated/nntoolbox.vision.components.html#module-nntoolbox.vision.components.ho">nntoolbox.vision.components.ho (module)</a>
 </li>
       <li><a href="generated/nntoolbox.vision.components.html#module-nntoolbox.vision.components.inception">nntoolbox.vision.components.inception (module)</a>
 </li>
@@ -1490,6 +1539,10 @@
 </li>
         <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.progress_bar.ProgressBarCB.on_train_end">(nntoolbox.callbacks.progress_bar.ProgressBarCB method)</a>
 </li>
+        <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.ActivationRegularization.on_train_end">(nntoolbox.callbacks.regularization.ActivationRegularization method)</a>
+</li>
+        <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.TemporalActivationRegularization.on_train_end">(nntoolbox.callbacks.regularization.TemporalActivationRegularization method)</a>
+</li>
         <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.swa.StochasticWeightAveraging.on_train_end">(nntoolbox.callbacks.swa.StochasticWeightAveraging method)</a>
 </li>
       </ul></li>
@@ -1561,6 +1614,12 @@
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.conv.QRNNLayer">QRNNLayer (class in nntoolbox.sequence.components.conv)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.ho.QuadraticPolynomialConv2D">QuadraticPolynomialConv2D (class in nntoolbox.vision.components.ho)</a>
+</li>
       <li><a href="generated/nntoolbox.components.html#nntoolbox.components.components.QuadraticPolynomialLayer">QuadraticPolynomialLayer (class in nntoolbox.components.components)</a>
 </li>
   </ul></td>
@@ -1572,6 +1631,8 @@
       <li><a href="generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.scale.RandomRescale">RandomRescale (class in nntoolbox.vision.transforms.scale)</a>
 </li>
       <li><a href="generated/nntoolbox.components.html#nntoolbox.components.rbf.RBFLayer">RBFLayer (class in nntoolbox.components.rbf)</a>
+</li>
+      <li><a href="generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.highway.RecurrentHighwayCell">RecurrentHighwayCell (class in nntoolbox.sequence.components.cells.highway)</a>
 </li>
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.lr_scheduler.ReduceLROnPlateauCB">ReduceLROnPlateauCB (class in nntoolbox.callbacks.lr_scheduler)</a>
 </li>
@@ -1673,10 +1734,10 @@
 </li>
       <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.shunting.SiConv2D">SiConv2D (class in nntoolbox.vision.components.shunting)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.nan.SkipNaN">SkipNaN (class in nntoolbox.callbacks.nan)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/nntoolbox.losses.html#nntoolbox.losses.smooth.SmoothedCrossEntropy.smooth_label">smooth_label() (nntoolbox.losses.smooth.SmoothedCrossEntropy method)</a>
 </li>
       <li><a href="generated/nntoolbox.losses.html#nntoolbox.losses.smooth.SmoothedCrossEntropy">SmoothedCrossEntropy (class in nntoolbox.losses.smooth)</a>
@@ -1686,6 +1747,8 @@
       <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.pool.SpatialPyramidPool">SpatialPyramidPool (class in nntoolbox.vision.components.pool)</a>
 </li>
       <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.stn.SpatialTransformerModule">SpatialTransformerModule (class in nntoolbox.vision.components.stn)</a>
+</li>
+      <li><a href="generated/nntoolbox.init.html#nntoolbox.init.uniform.sqrt_uniform_init">sqrt_uniform_init() (in module nntoolbox.init.uniform)</a>
 </li>
       <li><a href="generated/nntoolbox.components.html#nntoolbox.components.components.SquareUnitLinear">SquareUnitLinear (class in nntoolbox.components.components)</a>
 </li>
@@ -1729,6 +1792,8 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.TemporalActivationRegularization">TemporalActivationRegularization (class in nntoolbox.callbacks.regularization)</a>
+</li>
       <li><a href="generated/nntoolbox.vision.utils.html#nntoolbox.vision.utils.utils.tensor_to_np">tensor_to_np() (in module nntoolbox.vision.utils.utils)</a>
 </li>
       <li><a href="generated/nntoolbox.vision.utils.html#nntoolbox.vision.utils.utils.tensor_to_pil">tensor_to_pil() (in module nntoolbox.vision.utils.utils)</a>
@@ -1739,20 +1804,24 @@
 </li>
       <li><a href="generated/nntoolbox.test.html#nntoolbox.test.test_optim.test_rosenbrock">test_rosenbrock() (in module nntoolbox.test.test_optim)</a>
 </li>
+      <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.TiedOutputEmbedding">TiedOutputEmbedding (class in nntoolbox.sequence.components.embedding)</a>
+</li>
       <li><a href="generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.hierarchical.TimeDistributed">TimeDistributed (class in nntoolbox.sequence.components.hierarchical)</a>
 </li>
       <li><a href="generated/nntoolbox.vision.components.html#nntoolbox.vision.components.attention.StandAloneSelfAttention.to">to() (nntoolbox.vision.components.attention.StandAloneSelfAttention method)</a>
 </li>
       <li><a href="generated/nntoolbox.utils.html#nntoolbox.utils.utils.to_onehot">to_onehot() (in module nntoolbox.utils.utils)</a>
 </li>
+      <li><a href="generated/nntoolbox.utils.html#nntoolbox.utils.utils.to_onehotv2">to_onehotv2() (in module nntoolbox.utils.utils)</a>
+</li>
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.device.ToDeviceCallback">ToDeviceCallback (class in nntoolbox.callbacks.device)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.imgaug.ToFloat">ToFloat (class in nntoolbox.vision.transforms.imgaug)</a>
 </li>
       <li><a href="generated/nntoolbox.callbacks.html#nntoolbox.callbacks.device.ToGPipeDeviceCallback">ToGPipeDeviceCallback (class in nntoolbox.callbacks.device)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/nntoolbox.transforms.html#nntoolbox.transforms.transforms.ToNumpyArray">ToNumpyArray (class in nntoolbox.transforms.transforms)</a>
 </li>
       <li><a href="generated/nntoolbox.vision.losses.html#nntoolbox.vision.losses.style.TotalVariationLoss">TotalVariationLoss (class in nntoolbox.vision.losses.style)</a>

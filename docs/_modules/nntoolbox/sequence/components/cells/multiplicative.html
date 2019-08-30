@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>nntoolbox.sequence.components.cells.mi &#8212; nn-toolbox 0.0.1 documentation</title>
+    <title>nntoolbox.sequence.components.cells.multiplicative &#8212; nn-toolbox 0.0.1 documentation</title>
     <link rel="stylesheet" href="../../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
@@ -30,17 +30,66 @@
 
           <div class="body" role="main">
             
-  <h1>Source code for nntoolbox.sequence.components.cells.mi</h1><div class="highlight"><pre>
+  <h1>Source code for nntoolbox.sequence.components.cells.multiplicative</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">....init</span> <span class="k">import</span> <span class="n">sqrt_uniform_init</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">jit</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MILSTMCell&#39;</span><span class="p">,</span> <span class="s1">&#39;MIGRUCell&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MultiplicativeRNNCell&#39;</span><span class="p">,</span> <span class="s1">&#39;MILSTMCell&#39;</span><span class="p">,</span> <span class="s1">&#39;MIGRUCell&#39;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="MILSTMCell"><a class="viewcode-back" href="../../../../../generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.mi.MILSTMCell">[docs]</a><span class="k">class</span> <span class="nc">MILSTMCell</span><span class="p">(</span><span class="n">jit</span><span class="o">.</span><span class="n">ScriptModule</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiplicativeRNNCell"><a class="viewcode-back" href="../../../../../generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.multiplicative.MultiplicativeRNNCell">[docs]</a><span class="k">class</span> <span class="nc">MultiplicativeRNNCell</span><span class="p">(</span><span class="n">jit</span><span class="o">.</span><span class="n">ScriptModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Multiplicative RNN. Allowing input to change the hidden state easier by introducing multiplicative interaction:</span>
+
+<span class="sd">    m_t = (W_mx x_t) * (W_mh h_{t-1})</span>
+
+<span class="sd">    h_t = tanh(W_hm m_t + W_hx x_t)</span>
+
+<span class="sd">    Note that the implementation is based on the re-formulation from the second reference.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Ilya Sutskever, James Martens, and Geoffrey Hinton. &quot;Generating Text with Recurrent Neural Networks.&quot;</span>
+<span class="sd">        https://www.cs.utoronto.ca/~ilya/pubs/2011/LANG-RNN.pdf</span>
+
+<span class="sd">        Ben Krause, Iain Murray, Steve Renals, and Liang Lu. &quot;MULTIPLICATIVE LSTM FOR SEQUENCE MODELLING.&quot;</span>
+<span class="sd">        https://arxiv.org/pdf/1609.07959.pdf</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;intermediate_size&#39;</span><span class="p">,</span> <span class="s1">&#39;hidden_size&#39;</span><span class="p">,</span> <span class="s1">&#39;bias&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">intermediate_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bias</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">intermediate_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">intermediate_size</span><span class="p">,</span> <span class="n">bias</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_i</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">intermediate_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">input_size</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">intermediate_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_m</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">intermediate_size</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">bias</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias_i</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">intermediate_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias_h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">intermediate_size</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias_op</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">))</span>
+
+        <span class="n">sqrt_uniform_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="nd">@jit</span><span class="o">.</span><span class="n">script_method</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">input_trans</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_i</span><span class="o">.</span><span class="n">t</span><span class="p">())</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">:</span> <span class="n">input_trans</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_i</span>
+
+        <span class="n">intermediate</span> <span class="o">=</span> <span class="n">input_trans</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">intermediate_size</span><span class="p">]</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_h</span><span class="o">.</span><span class="n">t</span><span class="p">())</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">:</span> <span class="n">intermediate</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_h</span>
+
+        <span class="n">op</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">intermediate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_m</span><span class="o">.</span><span class="n">t</span><span class="p">())</span> <span class="o">+</span> <span class="n">input_trans</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">intermediate_size</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">:</span> <span class="n">op</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_op</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">op</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MILSTMCell"><a class="viewcode-back" href="../../../../../generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.multiplicative.MILSTMCell">[docs]</a><span class="k">class</span> <span class="nc">MILSTMCell</span><span class="p">(</span><span class="n">jit</span><span class="o">.</span><span class="n">ScriptModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Multiplicative Integration LSTM Cell</span>
 
@@ -53,6 +102,9 @@
 <span class="sd">        The PyTorch Team. &quot;Optimizing CUDA Recurrent Neural Networks with TorchScript.&quot;</span>
 <span class="sd">        https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;hidden_size&#39;</span><span class="p">]</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">input_size</span>
@@ -63,8 +115,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">bias_hh</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">hidden_size</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bias_mult</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">hidden_size</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bias_ind</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">hidden_size</span><span class="p">))</span>
+        <span class="n">sqrt_uniform_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MILSTMCell.forward"><a class="viewcode-back" href="../../../../../generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.mi.MILSTMCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]]:</span>
+    <span class="nd">@jit</span><span class="o">.</span><span class="n">script_method</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]]:</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">state</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="p">)</span>
+
         <span class="n">hx</span><span class="p">,</span> <span class="n">cx</span> <span class="o">=</span> <span class="n">state</span>
         <span class="n">input_transform</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_ih</span><span class="o">.</span><span class="n">t</span><span class="p">())</span>
         <span class="n">hidden_transform</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">hx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_hh</span><span class="o">.</span><span class="n">t</span><span class="p">())</span>
@@ -82,10 +143,10 @@
         <span class="n">cy</span> <span class="o">=</span> <span class="n">forgetgate</span> <span class="o">*</span> <span class="n">cx</span> <span class="o">+</span> <span class="n">ingate</span> <span class="o">*</span> <span class="n">cellgate</span>
         <span class="n">hy</span> <span class="o">=</span> <span class="n">outgate</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">cy</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">hy</span><span class="p">,</span> <span class="p">(</span><span class="n">hy</span><span class="p">,</span> <span class="n">cy</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">hy</span><span class="p">,</span> <span class="p">(</span><span class="n">hy</span><span class="p">,</span> <span class="n">cy</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="MIGRUCell"><a class="viewcode-back" href="../../../../../generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.mi.MIGRUCell">[docs]</a><span class="k">class</span> <span class="nc">MIGRUCell</span><span class="p">(</span><span class="n">jit</span><span class="o">.</span><span class="n">ScriptModule</span><span class="p">):</span>
+<div class="viewcode-block" id="MIGRUCell"><a class="viewcode-back" href="../../../../../generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.multiplicative.MIGRUCell">[docs]</a><span class="k">class</span> <span class="nc">MIGRUCell</span><span class="p">(</span><span class="n">jit</span><span class="o">.</span><span class="n">ScriptModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Multiplicative Integration GRU Cell</span>
 
@@ -98,6 +159,9 @@
 <span class="sd">        The PyTorch Team. &quot;Optimizing CUDA Recurrent Neural Networks with TorchScript.&quot;</span>
 <span class="sd">        https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;hidden_size&#39;</span><span class="p">]</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">input_size</span>
@@ -115,8 +179,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">bias_hc</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bias_mult_c</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bias_ind_c</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">))</span>
+        <span class="n">sqrt_uniform_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MIGRUCell.forward"><a class="viewcode-back" href="../../../../../generated/nntoolbox.sequence.components.cells.html#nntoolbox.sequence.components.cells.mi.MIGRUCell.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">hx</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+    <span class="nd">@jit</span><span class="o">.</span><span class="n">script_method</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">hx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">hx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">hx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
         <span class="n">input_transform</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_ig</span><span class="o">.</span><span class="n">t</span><span class="p">())</span>
         <span class="n">hidden_transform</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">hx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_hg</span><span class="o">.</span><span class="n">t</span><span class="p">())</span>
         <span class="n">gates</span> <span class="o">=</span> <span class="p">(</span>
@@ -136,7 +204,7 @@
             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_ind_c</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">update_gate</span><span class="p">)</span> <span class="o">*</span> <span class="n">hx</span> <span class="o">+</span> <span class="n">update_gate</span> <span class="o">*</span> <span class="n">candidate</span></div></div>
+        <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">update_gate</span><span class="p">)</span> <span class="o">*</span> <span class="n">hx</span> <span class="o">+</span> <span class="n">update_gate</span> <span class="o">*</span> <span class="n">candidate</span></div>
 </pre></div>
 
           </div>

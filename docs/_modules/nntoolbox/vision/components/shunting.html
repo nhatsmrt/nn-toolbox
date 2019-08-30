@@ -43,11 +43,13 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Implement a shunting inhibition convolution layer. Right now only support channelwise fully connected variant.</span>
 
+<span class="sd">        Difference from original implementation: clamping denominator.</span>
+
 <span class="sd">    References:</span>
 
 <span class="sd">        Fok Hing Chi Tivive and Abdesselam Bouzerdoum.</span>
 <span class="sd">        &quot;Efficient Training Algorithms for a Class of Shunting Inhibitory Convolutional Neural Networks.&quot;</span>
-<span class="sd">        https://sci-hub.tw/https://ieeexplore.ieee.org/document/1427760</span>
+<span class="sd">        https://ieeexplore.ieee.org/document/1427760</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">,</span>

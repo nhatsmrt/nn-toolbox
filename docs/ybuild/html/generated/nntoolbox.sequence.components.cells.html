@@ -37,11 +37,44 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-nntoolbox.sequence.components.cells.mi">
-<span id="nntoolbox-sequence-components-cells-mi-module"></span><h2>nntoolbox.sequence.components.cells.mi module<a class="headerlink" href="#module-nntoolbox.sequence.components.cells.mi" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-nntoolbox.sequence.components.cells.highway">
+<span id="nntoolbox-sequence-components-cells-highway-module"></span><h2>nntoolbox.sequence.components.cells.highway module<a class="headerlink" href="#module-nntoolbox.sequence.components.cells.highway" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="nntoolbox.sequence.components.cells.mi.MILSTMCell">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.cells.mi.</code><code class="sig-name descname">MILSTMCell</code><span class="sig-paren">(</span><em class="sig-param">input_size: int</em>, <em class="sig-param">hidden_size: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/cells/mi.html#MILSTMCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.cells.mi.MILSTMCell" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.sequence.components.cells.highway.RecurrentHighwayCell">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.cells.highway.</code><code class="sig-name descname">RecurrentHighwayCell</code><span class="sig-paren">(</span><em class="sig-param">input_size: int</em>, <em class="sig-param">state_size: int</em>, <em class="sig-param">recurrence_depth: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/cells/highway.html#RecurrentHighwayCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.cells.highway.RecurrentHighwayCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+<p>Implement a recurrence highway cell for deep recurrence:</p>
+<p>h^l(t) = tanh( W_h x(t) I_{l = 0} + R_hl s^{l-1}(t) + b_hl) (transformed)</p>
+<p>t^l(t) = tanh( W_t x(t) I_{l = 0} + R_tl s^{l-1}(t) + b_tl) (transform gate)</p>
+<p>c^l(t) = tanh( W_c x(t) I_{l = 0} + R_cl s^{l-1}(t) + b_cl) (carry gate)</p>
+<p>s^l(t) = h^l(t) * t^l(t) + c^l(t) s^{l-1}(t) (state)</p>
+<p>s^{-1}(t) = y(t - 1) = s^L(t - 1)</p>
+<p class="rubric">References</p>
+<p>Julian Georg Zilly, Rupesh Kumar Srivastava, Jan Koutník, Jürgen Schmidhuber. “Recurrent Highway Networks.”
+<a class="reference external" href="http://proceedings.mlr.press/v70/zilly17a/zilly17a.pdf">http://proceedings.mlr.press/v70/zilly17a/zilly17a.pdf</a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.sequence.components.cells.multiplicative">
+<span id="nntoolbox-sequence-components-cells-multiplicative-module"></span><h2>nntoolbox.sequence.components.cells.multiplicative module<a class="headerlink" href="#module-nntoolbox.sequence.components.cells.multiplicative" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.sequence.components.cells.multiplicative.MultiplicativeRNNCell">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.cells.multiplicative.</code><code class="sig-name descname">MultiplicativeRNNCell</code><span class="sig-paren">(</span><em class="sig-param">input_size: int</em>, <em class="sig-param">hidden_size: int</em>, <em class="sig-param">intermediate_size: int</em>, <em class="sig-param">bias: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/cells/multiplicative.html#MultiplicativeRNNCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.cells.multiplicative.MultiplicativeRNNCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+<p>Multiplicative RNN. Allowing input to change the hidden state easier by introducing multiplicative interaction:</p>
+<p>m_t = (W_mx x_t) * (W_mh h_{t-1})</p>
+<p>h_t = tanh(W_hm m_t + W_hx x_t)</p>
+<p>Note that the implementation is based on the re-formulation from the second reference.</p>
+<p class="rubric">References</p>
+<p>Ilya Sutskever, James Martens, and Geoffrey Hinton. “Generating Text with Recurrent Neural Networks.”
+<a class="reference external" href="https://www.cs.utoronto.ca/~ilya/pubs/2011/LANG-RNN.pdf">https://www.cs.utoronto.ca/~ilya/pubs/2011/LANG-RNN.pdf</a></p>
+<p>Ben Krause, Iain Murray, Steve Renals, and Liang Lu. “MULTIPLICATIVE LSTM FOR SEQUENCE MODELLING.”
+<a class="reference external" href="https://arxiv.org/pdf/1609.07959.pdf">https://arxiv.org/pdf/1609.07959.pdf</a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.cells.multiplicative.MILSTMCell">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.cells.multiplicative.</code><code class="sig-name descname">MILSTMCell</code><span class="sig-paren">(</span><em class="sig-param">input_size: int</em>, <em class="sig-param">hidden_size: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/cells/multiplicative.html#MILSTMCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.cells.multiplicative.MILSTMCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
 <p>Multiplicative Integration LSTM Cell</p>
 <p class="rubric">References</p>
@@ -50,25 +83,11 @@
 <a class="reference external" href="https://arxiv.org/abs/1606.06630">https://arxiv.org/abs/1606.06630</a></p>
 <p>The PyTorch Team. “Optimizing CUDA Recurrent Neural Networks with TorchScript.”
 <a class="reference external" href="https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/">https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/</a></p>
-<dl class="method">
-<dt id="nntoolbox.sequence.components.cells.mi.MILSTMCell.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor, state: Tuple[torch.Tensor, torch.Tensor]</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]<a class="reference internal" href="../_modules/nntoolbox/sequence/components/cells/mi.html#MILSTMCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.cells.mi.MILSTMCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
-<dt id="nntoolbox.sequence.components.cells.mi.MIGRUCell">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.cells.mi.</code><code class="sig-name descname">MIGRUCell</code><span class="sig-paren">(</span><em class="sig-param">input_size: int</em>, <em class="sig-param">hidden_size: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/cells/mi.html#MIGRUCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.cells.mi.MIGRUCell" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.sequence.components.cells.multiplicative.MIGRUCell">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.cells.multiplicative.</code><code class="sig-name descname">MIGRUCell</code><span class="sig-paren">(</span><em class="sig-param">input_size: int</em>, <em class="sig-param">hidden_size: int</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/cells/multiplicative.html#MIGRUCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.cells.multiplicative.MIGRUCell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
 <p>Multiplicative Integration GRU Cell</p>
 <p class="rubric">References</p>
@@ -77,20 +96,6 @@ registered hooks while the latter silently ignores them.</p>
 <a class="reference external" href="https://arxiv.org/abs/1606.06630">https://arxiv.org/abs/1606.06630</a></p>
 <p>The PyTorch Team. “Optimizing CUDA Recurrent Neural Networks with TorchScript.”
 <a class="reference external" href="https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/">https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/</a></p>
-<dl class="method">
-<dt id="nntoolbox.sequence.components.cells.mi.MIGRUCell.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em>, <em class="sig-param">hx: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/components/cells/mi.html#MIGRUCell.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.cells.mi.MIGRUCell.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -165,7 +170,8 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l4 current"><a class="reference internal" href="nntoolbox.sequence.components.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l5 current"><a class="current reference internal" href="#">nntoolbox.sequence.components.cells package</a><ul>
 <li class="toctree-l6"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l6"><a class="reference internal" href="#module-nntoolbox.sequence.components.cells.mi">nntoolbox.sequence.components.cells.mi module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#module-nntoolbox.sequence.components.cells.highway">nntoolbox.sequence.components.cells.highway module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#module-nntoolbox.sequence.components.cells.multiplicative">nntoolbox.sequence.components.cells.multiplicative module</a></li>
 <li class="toctree-l6"><a class="reference internal" href="#module-nntoolbox.sequence.components.cells.zoneout">nntoolbox.sequence.components.cells.zoneout module</a></li>
 <li class="toctree-l6"><a class="reference internal" href="#module-nntoolbox.sequence.components.cells">Module contents</a></li>
 </ul>

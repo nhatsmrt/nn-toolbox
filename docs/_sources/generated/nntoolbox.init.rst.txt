@@ -20,6 +20,14 @@ nntoolbox.init.normal module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.init.uniform module
+-----------------------------
+
+.. automodule:: nntoolbox.init.uniform
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

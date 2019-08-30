@@ -43,8 +43,9 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;WeightRegularization&#39;</span><span class="p">,</span> <span class="s1">&#39;WeightElimination&#39;</span><span class="p">,</span> <span class="s1">&#39;L1WR&#39;</span><span class="p">,</span> <span class="s1">&#39;L2WR&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;ActivationRegularization&#39;</span><span class="p">,</span> <span class="s1">&#39;L1AR&#39;</span><span class="p">,</span> <span class="s1">&#39;L2AR&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;StudentTPenaltyAR&#39;</span><span class="p">,</span> <span class="s1">&#39;DoubleBackpropagationCB&#39;</span><span class="p">,</span> <span class="s1">&#39;FlatMinimaSearch&#39;</span>
+    <span class="s1">&#39;ActivationRegularization&#39;</span><span class="p">,</span> <span class="s1">&#39;L1AR&#39;</span><span class="p">,</span> <span class="s1">&#39;L2AR&#39;</span><span class="p">,</span> <span class="s1">&#39;StudentTPenaltyAR&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;TemporalActivationRegularization&#39;</span><span class="p">,</span> <span class="s1">&#39;L1TAR&#39;</span><span class="p">,</span> <span class="s1">&#39;L2TAR&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;DoubleBackpropagationCB&#39;</span><span class="p">,</span> <span class="s1">&#39;FlatMinimaSearch&#39;</span>
 <span class="p">]</span>
 
 
@@ -81,7 +82,7 @@
 <div class="viewcode-block" id="L1WR"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L1WR">[docs]</a><span class="k">class</span> <span class="nc">L1WR</span><span class="p">(</span><span class="n">WeightRegularization</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lambd</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;loss&#39;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">L1WR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">regularizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="n">regularizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
             <span class="n">lambd</span><span class="o">=</span><span class="n">lambd</span><span class="p">,</span>
             <span class="n">loss_name</span><span class="o">=</span><span class="n">loss_name</span>
         <span class="p">)</span></div>
@@ -90,7 +91,7 @@
 <div class="viewcode-block" id="L2WR"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L2WR">[docs]</a><span class="k">class</span> <span class="nc">L2WR</span><span class="p">(</span><span class="n">WeightRegularization</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lambd</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;loss&#39;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">L2WR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">regularizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="n">regularizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
             <span class="n">lambd</span><span class="o">=</span><span class="n">lambd</span><span class="p">,</span>
             <span class="n">loss_name</span><span class="o">=</span><span class="n">loss_name</span>
         <span class="p">)</span></div>
@@ -114,17 +115,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">lambd</span> <span class="o">=</span> <span class="n">lambd</span>
 
 <div class="viewcode-block" id="ActivationRegularization.after_losses"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.ActivationRegularization.after_losses">[docs]</a>    <span class="k">def</span> <span class="nf">after_losses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">losses</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span> <span class="ow">in</span> <span class="n">losses</span>
-        <span class="n">losses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">store</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambd</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">losses</span></div></div>
+        <span class="k">if</span> <span class="n">train</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span> <span class="ow">in</span> <span class="n">losses</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">store</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">losses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularizer</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambd</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">losses</span></div>
+
+<div class="viewcode-block" id="ActivationRegularization.on_train_end"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.ActivationRegularization.on_train_end">[docs]</a>    <span class="k">def</span> <span class="nf">on_train_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="L2AR"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L2AR">[docs]</a><span class="k">class</span> <span class="nc">L2AR</span><span class="p">(</span><span class="n">ActivationRegularization</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_hook</span><span class="p">:</span> <span class="n">OutputHook</span><span class="p">,</span> <span class="n">lambd</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;loss&#39;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">L2AR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">output_hook</span><span class="o">=</span><span class="n">output_hook</span><span class="p">,</span>
-            <span class="n">regularizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="n">regularizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
             <span class="n">lambd</span><span class="o">=</span><span class="n">lambd</span><span class="p">,</span>
             <span class="n">loss_name</span><span class="o">=</span><span class="n">loss_name</span>
         <span class="p">)</span></div>
@@ -134,7 +141,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_hook</span><span class="p">:</span> <span class="n">OutputHook</span><span class="p">,</span> <span class="n">lambd</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;loss&#39;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">L1AR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">output_hook</span><span class="o">=</span><span class="n">output_hook</span><span class="p">,</span>
-            <span class="n">regularizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+            <span class="n">regularizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
             <span class="n">lambd</span><span class="o">=</span><span class="n">lambd</span><span class="p">,</span>
             <span class="n">loss_name</span><span class="o">=</span><span class="n">loss_name</span>
         <span class="p">)</span></div>
@@ -173,6 +180,63 @@
             <span class="n">lambd</span><span class="o">=</span><span class="n">lambd</span><span class="p">,</span>
             <span class="n">loss_name</span><span class="o">=</span><span class="n">loss_name</span>
         <span class="p">)</span>
+
+
+<div class="viewcode-block" id="TemporalActivationRegularization"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.TemporalActivationRegularization">[docs]</a><span class="k">class</span> <span class="nc">TemporalActivationRegularization</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Regularizing by penalizing activation change.</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">        Stephen Merity, Bryan McCann, Richard Socher. &quot;Revisiting Activation Regularization for Language RNNs.&quot;</span>
+<span class="sd">        https://arxiv.org/pdf/1708.01009.pdf</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">output_hook</span><span class="p">:</span> <span class="n">OutputHook</span><span class="p">,</span>
+            <span class="n">regularizer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">],</span>
+            <span class="n">lambd</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;loss&#39;</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lambd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularizer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="n">lambd</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">,</span> <span class="n">regularizer</span><span class="p">,</span> <span class="n">output_hook</span>
+
+<div class="viewcode-block" id="TemporalActivationRegularization.after_losses"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.TemporalActivationRegularization.after_losses">[docs]</a>    <span class="k">def</span> <span class="nf">after_losses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">losses</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">train</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span> <span class="ow">in</span> <span class="n">losses</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">store</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">states_change</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="n">losses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularizer</span><span class="p">(</span><span class="n">states_change</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambd</span> <span class="o">+</span> <span class="n">losses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">losses</span></div>
+
+<div class="viewcode-block" id="TemporalActivationRegularization.on_train_end"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.TemporalActivationRegularization.on_train_end">[docs]</a>    <span class="k">def</span> <span class="nf">on_train_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="L2TAR"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L2TAR">[docs]</a><span class="k">class</span> <span class="nc">L2TAR</span><span class="p">(</span><span class="n">TemporalActivationRegularization</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">output_hook</span><span class="p">:</span> <span class="n">OutputHook</span><span class="p">,</span>
+            <span class="n">lambd</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;loss&#39;</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">L2TAR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">output_hook</span><span class="o">=</span><span class="n">output_hook</span><span class="p">,</span>
+            <span class="n">regularizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+            <span class="n">lambd</span><span class="o">=</span><span class="n">lambd</span><span class="p">,</span>
+            <span class="n">loss_name</span><span class="o">=</span><span class="n">loss_name</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="L1TAR"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.L1TAR">[docs]</a><span class="k">class</span> <span class="nc">L1TAR</span><span class="p">(</span><span class="n">TemporalActivationRegularization</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">output_hook</span><span class="p">:</span> <span class="n">OutputHook</span><span class="p">,</span>
+            <span class="n">lambd</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;loss&#39;</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">L1TAR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">output_hook</span><span class="o">=</span><span class="n">output_hook</span><span class="p">,</span>
+            <span class="n">regularizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+            <span class="n">lambd</span><span class="o">=</span><span class="n">lambd</span><span class="p">,</span>
+            <span class="n">loss_name</span><span class="o">=</span><span class="n">loss_name</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="DoubleBackpropagationCB"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.DoubleBackpropagationCB">[docs]</a><span class="k">class</span> <span class="nc">DoubleBackpropagationCB</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>

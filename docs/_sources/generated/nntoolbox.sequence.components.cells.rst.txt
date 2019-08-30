@@ -4,10 +4,18 @@ nntoolbox.sequence.components.cells package
 Submodules
 ----------
 
-nntoolbox.sequence.components.cells.mi module
----------------------------------------------
+nntoolbox.sequence.components.cells.highway module
+--------------------------------------------------
 
-.. automodule:: nntoolbox.sequence.components.cells.mi
+.. automodule:: nntoolbox.sequence.components.cells.highway
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.sequence.components.cells.multiplicative module
+---------------------------------------------------------
+
+.. automodule:: nntoolbox.sequence.components.cells.multiplicative
    :members:
    :undoc-members:
    :show-inheritance:

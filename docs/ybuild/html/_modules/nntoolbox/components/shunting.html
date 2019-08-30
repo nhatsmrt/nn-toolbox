@@ -45,11 +45,13 @@
 
 <span class="sd">    y = f(x) / (a + g(x))</span>
 
+<span class="sd">    Difference from original implementation: clamping denominator.</span>
+
 <span class="sd">    References:</span>
 
 <span class="sd">        Ganesh Arulampalam, Abdesselam Bouzerdoum.</span>
 <span class="sd">        &quot;A generalized feedforward neural network architecture for classification and regression.&quot;</span>
-<span class="sd">        https://sci-hub.tw/https://www.sciencedirect.com/science/article/pii/S0893608003001163</span>
+<span class="sd">        https://www.sciencedirect.com/science/article/pii/S0893608003001163</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">denom</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">bound_denom</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bound</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>

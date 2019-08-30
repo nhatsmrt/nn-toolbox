@@ -40,7 +40,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.components.cells.html">nntoolbox.sequence.components.cells package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.mi">nntoolbox.sequence.components.cells.mi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.highway">nntoolbox.sequence.components.cells.highway module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.multiplicative">nntoolbox.sequence.components.cells.multiplicative module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.zoneout">nntoolbox.sequence.components.cells.zoneout module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells">Module contents</a></li>
 </ul>
@@ -191,7 +192,7 @@ score(K, Q) = KQ^T / sqrt(d_k)
 </div>
 <div class="section" id="module-nntoolbox.sequence.components.conv">
 <span id="nntoolbox-sequence-components-conv-module"></span><h2>nntoolbox.sequence.components.conv module<a class="headerlink" href="#module-nntoolbox.sequence.components.conv" title="Permalink to this headline">¶</a></h2>
-<p>Convolution modules for text classification</p>
+<p>Convolution and Quasi-RNN modules</p>
 <dl class="class">
 <dt id="nntoolbox.sequence.components.conv.ConvolutionalLayer1D">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.conv.</code><code class="sig-name descname">ConvolutionalLayer1D</code><span class="sig-paren">(</span><em class="sig-param">in_channels: int, out_channels: Union[int, List[int]], kernel_sizes: List[int], strides: Union[int, List[int]] = 1, paddings: Union[int, List[int]] = 0, dilations: Union[int, List[int]] = 1, groups: Union[int, List[int]] = 1, biases: Union[bool, List[bool]] = True, padding_modes: Union[str, List[str]] = 'zeros', batch_first: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/conv.html#ConvolutionalLayer1D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.conv.ConvolutionalLayer1D" title="Permalink to this definition">¶</a></dt>
@@ -203,6 +204,54 @@ score(K, Q) = KQ^T / sqrt(d_k)
 <dl class="method">
 <dt id="nntoolbox.sequence.components.conv.ConvolutionalLayer1D.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/components/conv.html#ConvolutionalLayer1D.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.conv.ConvolutionalLayer1D.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.conv.MaskedConv1D">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.conv.</code><code class="sig-name descname">MaskedConv1D</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">kernel_size</em>, <em class="sig-param">stride=1</em>, <em class="sig-param">padding=0</em>, <em class="sig-param">dilation=1</em>, <em class="sig-param">groups=1</em>, <em class="sig-param">bias=True</em>, <em class="sig-param">padding_mode='zeros'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/conv.html#MaskedConv1D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.conv.MaskedConv1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.conv.Conv1d</span></code></p>
+<p>Output at t should only depend on input from t - k + 1 to t</p>
+<p class="rubric">References</p>
+<p>James Bradbury, Stephen Merity, Caiming Xiong, Richard Socher. “Quasi-Recurrent Neural Networks.”
+<a class="reference external" href="https://arxiv.org/abs/1611.01576">https://arxiv.org/abs/1611.01576</a></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.conv.MaskedConv1D.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/components/conv.html#MaskedConv1D.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.conv.MaskedConv1D.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – (seq_len, batch_size, in_channels)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(seq_len, batch_size, out_channels)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.conv.QRNNLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.conv.</code><code class="sig-name descname">QRNNLayer</code><span class="sig-paren">(</span><em class="sig-param">input_size: int</em>, <em class="sig-param">hidden_size: int</em>, <em class="sig-param">kernel_size: int</em>, <em class="sig-param">pooling_mode: str = 'fo'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/conv.html#QRNNLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.conv.QRNNLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Quasi RNN layer. Decouple the gate computation (which can now be performed parallelwise with convolution)
+and the hidden state sequential computation.</p>
+<p class="rubric">References</p>
+<p>James Bradbury, Stephen Merity, Caiming Xiong, Richard Socher. “Quasi-Recurrent Neural Networks.”
+<a class="reference external" href="https://arxiv.org/abs/1611.01576">https://arxiv.org/abs/1611.01576</a></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.conv.QRNNLayer.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em>, <em class="sig-param">h: Optional[torch.Tensor] = None</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.Tensor, Tuple[torch.Tensor, ...]]<a class="reference internal" href="../_modules/nntoolbox/sequence/components/conv.html#QRNNLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.conv.QRNNLayer.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -228,6 +277,30 @@ registered hooks while the latter silently ignores them.</p>
 <dl class="method">
 <dt id="nntoolbox.sequence.components.embedding.AdditiveContextEmbedding.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/embedding.html#AdditiveContextEmbedding.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.embedding.AdditiveContextEmbedding.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.embedding.TiedOutputEmbedding">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.embedding.</code><code class="sig-name descname">TiedOutputEmbedding</code><span class="sig-paren">(</span><em class="sig-param">emb: torch.nn.modules.sparse.Embedding</em>, <em class="sig-param">bias: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/embedding.html#TiedOutputEmbedding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.embedding.TiedOutputEmbedding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Tie the weight of input embedding to the output layer</p>
+<p class="rubric">References</p>
+<p>Ofir Press and Lior Wolf. “Using the Output Embedding to Improve Language Models.”
+<a class="reference external" href="https://arxiv.org/pdf/1608.05859.pdf">https://arxiv.org/pdf/1608.05859.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.embedding.TiedOutputEmbedding.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/components/embedding.html#TiedOutputEmbedding.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.embedding.TiedOutputEmbedding.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -321,23 +394,23 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="nntoolbox.sequence.components.modifier.FastModifiedStackedRNN">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.modifier.</code><code class="sig-name descname">FastModifiedStackedRNN</code><span class="sig-paren">(</span><em class="sig-param">base_rnn</em>, <em class="sig-param">num_layers: int</em>, <em class="sig-param">input_size: int</em>, <em class="sig-param">hidden_size: int</em>, <em class="sig-param">bidirectional: bool</em>, <em class="sig-param">dropout: float = 0.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/modifier.html#FastModifiedStackedRNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.modifier.FastModifiedStackedRNN" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.sequence.components.modifier.JitModifiedStackedRNN">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.modifier.</code><code class="sig-name descname">JitModifiedStackedRNN</code><span class="sig-paren">(</span><em class="sig-param">base_rnn</em>, <em class="sig-param">num_layers: int</em>, <em class="sig-param">input_size: int</em>, <em class="sig-param">hidden_size: int</em>, <em class="sig-param">bidirectional: bool</em>, <em class="sig-param">dropout: float = 0.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/modifier.html#JitModifiedStackedRNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.modifier.JitModifiedStackedRNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
-<p>Faster implementation using ScriptModule. Currently only works with GRU</p>
+<p>Jiter implementation using ScriptModule. Currently only works with GRU</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="nntoolbox.sequence.components.modifier.FastResidualRNN">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.modifier.</code><code class="sig-name descname">FastResidualRNN</code><span class="sig-paren">(</span><em class="sig-param">base_rnn</em>, <em class="sig-param">num_layers: int</em>, <em class="sig-param">input_size: int</em>, <em class="sig-param">bidirectional: bool</em>, <em class="sig-param">dropout: float = 0.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/modifier.html#FastResidualRNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.modifier.FastResidualRNN" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.sequence.components.modifier.FastModifiedStackedRNN" title="nntoolbox.sequence.components.modifier.FastModifiedStackedRNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.sequence.components.modifier.FastModifiedStackedRNN</span></code></a></p>
+<dt id="nntoolbox.sequence.components.modifier.JitResidualRNN">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.modifier.</code><code class="sig-name descname">JitResidualRNN</code><span class="sig-paren">(</span><em class="sig-param">base_rnn</em>, <em class="sig-param">num_layers: int</em>, <em class="sig-param">input_size: int</em>, <em class="sig-param">bidirectional: bool</em>, <em class="sig-param">dropout: float = 0.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/modifier.html#JitResidualRNN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.modifier.JitResidualRNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.sequence.components.modifier.JitModifiedStackedRNN" title="nntoolbox.sequence.components.modifier.JitModifiedStackedRNN"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.sequence.components.modifier.JitModifiedStackedRNN</span></code></a></p>
 <p>StackedRNN with residual connections:</p>
 <p>i_{l + 1} = o_l + i_l = i_l + f(i_l, h_{l - 1})</p>
 <p>o_{l + 1} = f(i_{l + 1}, h_l)</p>
-<p>Faster implementation using ScriptModule. Currently only works with GRU</p>
+<p>Jiter implementation using ScriptModule. Currently only works with GRU</p>
 <dl class="method">
-<dt id="nntoolbox.sequence.components.modifier.FastResidualRNN.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em>, <em class="sig-param">h_0=None</em>, <em class="sig-param">lengths=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/modifier.html#FastResidualRNN.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.modifier.FastResidualRNN.forward" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.sequence.components.modifier.JitResidualRNN.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em>, <em class="sig-param">h_0=None</em>, <em class="sig-param">lengths=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/modifier.html#JitResidualRNN.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.modifier.JitResidualRNN.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -383,6 +456,26 @@ registered hooks while the latter silently ignores them.</p>
 <div class="section" id="module-nntoolbox.sequence.components.rnn">
 <span id="nntoolbox-sequence-components-rnn-module"></span><h2>nntoolbox.sequence.components.rnn module<a class="headerlink" href="#module-nntoolbox.sequence.components.rnn" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
+<dt id="nntoolbox.sequence.components.rnn.JitRNNLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitRNNLayer</code><span class="sig-paren">(</span><em class="sig-param">base_cell: Callable[..., torch.nn.modules.module.Module], *cell_args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitRNNLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitRNNLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+<p>Implement an RNN layer with jit script module</p>
+<p class="rubric">References</p>
+<p>The PyTorch Team. “Optimizing CUDA Recurrent Neural Networks with TorchScript.”
+<a class="reference external" href="https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/">https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/</a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.rnn.JitLSTMLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitLSTMLayer</code><span class="sig-paren">(</span><em class="sig-param">base_cell: Callable[..., torch.nn.modules.module.Module], *cell_args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitLSTMLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitLSTMLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+<p>Implement an LSTM layer with jit script module</p>
+<p class="rubric">References</p>
+<p>The PyTorch Team. “Optimizing CUDA Recurrent Neural Networks with TorchScript.”
+<a class="reference external" href="https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/">https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/</a></p>
+</dd></dl>
+
+<dl class="class">
 <dt id="nntoolbox.sequence.components.rnn.RNNDropout">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">RNNDropout</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#RNNDropout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.RNNDropout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
@@ -423,20 +516,72 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="nntoolbox.sequence.components.rnn.FastRNNDropout">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">FastRNNDropout</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#FastRNNDropout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.FastRNNDropout" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.sequence.components.rnn.JitRNNDropout">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitRNNDropout</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitRNNDropout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitRNNDropout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
 </dd></dl>
 
 <dl class="class">
-<dt id="nntoolbox.sequence.components.rnn.FastRNNSequential">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">FastRNNSequential</code><span class="sig-paren">(</span><em class="sig-param">*layers</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#FastRNNSequential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.FastRNNSequential" title="Permalink to this definition">¶</a></dt>
+<dt id="nntoolbox.sequence.components.rnn.JitRNNSequential">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitRNNSequential</code><span class="sig-paren">(</span><em class="sig-param">layers: List[torch.nn.modules.module.Module]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitRNNSequential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitRNNSequential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+<p>Implement a simple stacked RNN</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.rnn.JitResidualRNNV2">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitResidualRNNV2</code><span class="sig-paren">(</span><em class="sig-param">layers: List[torch.nn.modules.module.Module], skip_length: int = 1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitResidualRNNV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitResidualRNNV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+<p>Implement a simple residual stacked RNN</p>
+<p class="rubric">References</p>
+<p>Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc V. Le, Mohammad Norouzi.
+“Google’s Neural Machine Translation System: Bridging the Gap between Human and Machine Translation.”
+<a class="reference external" href="https://arxiv.org/pdf/1609.08144.pdf">https://arxiv.org/pdf/1609.08144.pdf</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layers</strong> – rnn layers. Must have output dimension the same as input dimension</p></li>
+<li><p><strong>skip_length</strong> – length of the skip</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.rnn.JitLSTMSequential">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitLSTMSequential</code><span class="sig-paren">(</span><em class="sig-param">layers: List[torch.nn.modules.module.Module]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitLSTMSequential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitLSTMSequential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+<p>Implement a simple stacked LSTM</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.rnn.JitResidualLSTMV2">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitResidualLSTMV2</code><span class="sig-paren">(</span><em class="sig-param">layers: List[torch.nn.modules.module.Module], skip_length: int = 1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitResidualLSTMV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitResidualLSTMV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+<p>Implement a simple residual stacked LSTM</p>
+<p class="rubric">References</p>
+<p>Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc V. Le, Mohammad Norouzi.
+“Google’s Neural Machine Translation System: Bridging the Gap between Human and Machine Translation.”
+<a class="reference external" href="https://arxiv.org/pdf/1609.08144.pdf">https://arxiv.org/pdf/1609.08144.pdf</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layers</strong> – rnn layers. Must have output dimension the same as input dimension</p></li>
+<li><p><strong>skip_length</strong> – length of the skip</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
 <div class="section" id="module-nntoolbox.sequence.components">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.sequence.components" title="Permalink to this headline">¶</a></h2>
+<p>For RNN, the hierarchy of components should be:</p>
+<blockquote>
+<div><p>Cell =&gt; Layer =&gt; StackedLayer</p>
+</div></blockquote>
+<p>Cell is the basic computing unit, processing every timestep. Layer takes a cell and apply it across the temporal
+dimensions. StackedLayer stacks layers on top of each other and sequentially apply them in a depthwise manner.</p>
 </div>
 </div>
 

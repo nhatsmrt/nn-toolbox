@@ -802,6 +802,11 @@ Adapt from fastai course 2 v3 notebook</p>
 <code class="sig-name descname">after_losses</code><span class="sig-paren">(</span><em class="sig-param">losses: Dict[str, torch.Tensor], train: bool</em><span class="sig-paren">)</span> &#x2192; Dict[str, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#ActivationRegularization.after_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.ActivationRegularization.after_losses" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="nntoolbox.callbacks.regularization.ActivationRegularization.on_train_end">
+<code class="sig-name descname">on_train_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#ActivationRegularization.on_train_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.ActivationRegularization.on_train_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -822,6 +827,38 @@ Adapt from fastai course 2 v3 notebook</p>
 <dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.regularization.ActivationRegularization" title="nntoolbox.callbacks.regularization.ActivationRegularization"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.regularization.ActivationRegularization</span></code></a></p>
 <p>Student’s T Activation Regularization:</p>
 <p>omega(t) = sum_i log(1 + t_i^2)</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.callbacks.regularization.TemporalActivationRegularization">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.regularization.</code><code class="sig-name descname">TemporalActivationRegularization</code><span class="sig-paren">(</span><em class="sig-param">output_hook: nntoolbox.hooks.io.OutputHook, regularizer: Callable[torch.Tensor, torch.Tensor], lambd: float, loss_name: str = 'loss'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#TemporalActivationRegularization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.TemporalActivationRegularization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<p>Regularizing by penalizing activation change.</p>
+<p class="rubric">References</p>
+<p>Stephen Merity, Bryan McCann, Richard Socher. “Revisiting Activation Regularization for Language RNNs.”
+<a class="reference external" href="https://arxiv.org/pdf/1708.01009.pdf">https://arxiv.org/pdf/1708.01009.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.callbacks.regularization.TemporalActivationRegularization.after_losses">
+<code class="sig-name descname">after_losses</code><span class="sig-paren">(</span><em class="sig-param">losses: Dict[str, torch.Tensor], train: bool</em><span class="sig-paren">)</span> &#x2192; Dict[str, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#TemporalActivationRegularization.after_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.TemporalActivationRegularization.after_losses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.regularization.TemporalActivationRegularization.on_train_end">
+<code class="sig-name descname">on_train_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#TemporalActivationRegularization.on_train_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.TemporalActivationRegularization.on_train_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.callbacks.regularization.L1TAR">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.regularization.</code><code class="sig-name descname">L1TAR</code><span class="sig-paren">(</span><em class="sig-param">output_hook: nntoolbox.hooks.io.OutputHook</em>, <em class="sig-param">lambd: float</em>, <em class="sig-param">loss_name: str = 'loss'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#L1TAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.L1TAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.regularization.TemporalActivationRegularization" title="nntoolbox.callbacks.regularization.TemporalActivationRegularization"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.regularization.TemporalActivationRegularization</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.callbacks.regularization.L2TAR">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.regularization.</code><code class="sig-name descname">L2TAR</code><span class="sig-paren">(</span><em class="sig-param">output_hook: nntoolbox.hooks.io.OutputHook</em>, <em class="sig-param">lambd: float</em>, <em class="sig-param">loss_name: str = 'loss'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/regularization.html#L2TAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.regularization.L2TAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.regularization.TemporalActivationRegularization" title="nntoolbox.callbacks.regularization.TemporalActivationRegularization"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.regularization.TemporalActivationRegularization</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
