@@ -36,9 +36,9 @@
 <span class="kn">from</span> <span class="nn">torch.nn.utils.rnn</span> <span class="k">import</span> <span class="n">pack_padded_sequence</span><span class="p">,</span> <span class="n">pad_packed_sequence</span><span class="p">,</span> <span class="n">PackedSequence</span>
 <span class="kn">import</span> <span class="nn">torch.jit</span> <span class="k">as</span> <span class="nn">jit</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
-<span class="kn">from</span> <span class="nn">.rnn</span> <span class="k">import</span> <span class="n">FastRNNSequential</span><span class="p">,</span> <span class="n">FastRNNDropout</span>
+<span class="kn">from</span> <span class="nn">.rnn</span> <span class="k">import</span> <span class="n">JitRNNSequential</span><span class="p">,</span> <span class="n">JitRNNDropout</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ModifiedStackedRNN&#39;</span><span class="p">,</span> <span class="s1">&#39;ResidualRNN&#39;</span><span class="p">,</span> <span class="s1">&#39;FastModifiedStackedRNN&#39;</span><span class="p">,</span> <span class="s1">&#39;FastResidualRNN&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ModifiedStackedRNN&#39;</span><span class="p">,</span> <span class="s1">&#39;ResidualRNN&#39;</span><span class="p">,</span> <span class="s1">&#39;JitModifiedStackedRNN&#39;</span><span class="p">,</span> <span class="s1">&#39;JitResidualRNN&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="ModifiedStackedRNN"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.ModifiedStackedRNN">[docs]</a><span class="k">class</span> <span class="nc">ModifiedStackedRNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -122,9 +122,9 @@
             <span class="k">return</span> <span class="n">output_unpacked</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">hiddens</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="FastModifiedStackedRNN"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.FastModifiedStackedRNN">[docs]</a><span class="k">class</span> <span class="nc">FastModifiedStackedRNN</span><span class="p">(</span><span class="n">jit</span><span class="o">.</span><span class="n">ScriptModule</span><span class="p">):</span>
+<div class="viewcode-block" id="JitModifiedStackedRNN"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.JitModifiedStackedRNN">[docs]</a><span class="k">class</span> <span class="nc">JitModifiedStackedRNN</span><span class="p">(</span><span class="n">jit</span><span class="o">.</span><span class="n">ScriptModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Faster implementation using ScriptModule. Currently only works with GRU</span>
+<span class="sd">    Jiter implementation using ScriptModule. Currently only works with GRU</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_layers&#39;</span><span class="p">,</span> <span class="s1">&#39;_num_directions&#39;</span><span class="p">]</span>
@@ -133,7 +133,7 @@
             <span class="bp">self</span><span class="p">,</span> <span class="n">base_rnn</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
             <span class="n">bidirectional</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">FastModifiedStackedRNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">JitModifiedStackedRNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">base_rnn</span><span class="p">(</span>
                 <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
@@ -142,8 +142,8 @@
             <span class="p">)</span>
         <span class="p">]</span>
         <span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span>
-            <span class="n">FastRNNSequential</span><span class="p">(</span>
-                <span class="n">FastRNNDropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">),</span>
+            <span class="n">JitRNNSequential</span><span class="p">(</span>
+                <span class="n">JitRNNDropout</span><span class="p">(</span><span class="n">dropout</span><span class="p">),</span>
                 <span class="n">base_rnn</span><span class="p">(</span>
                     <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">input_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
                     <span class="n">bidirectional</span><span class="o">=</span><span class="n">bidirectional</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -157,7 +157,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_directions</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">bidirectional</span> <span class="k">else</span> <span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="FastResidualRNN"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.FastResidualRNN">[docs]</a><span class="k">class</span> <span class="nc">FastResidualRNN</span><span class="p">(</span><span class="n">FastModifiedStackedRNN</span><span class="p">):</span>
+<div class="viewcode-block" id="JitResidualRNN"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.JitResidualRNN">[docs]</a><span class="k">class</span> <span class="nc">JitResidualRNN</span><span class="p">(</span><span class="n">JitModifiedStackedRNN</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    StackedRNN with residual connections:</span>
 
@@ -165,18 +165,18 @@
 
 <span class="sd">    o_{l + 1} = f(i_{l + 1}, h_l)</span>
 
-<span class="sd">    Faster implementation using ScriptModule. Currently only works with GRU</span>
+<span class="sd">    Jiter implementation using ScriptModule. Currently only works with GRU</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_rnn</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bidirectional</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">assert</span> <span class="s1">&#39;hidden_size&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span>
         <span class="k">assert</span> <span class="n">num_layers</span> <span class="o">&gt;</span> <span class="mi">0</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">FastResidualRNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">JitResidualRNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">base_rnn</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span>
             <span class="n">bidirectional</span><span class="p">,</span> <span class="n">dropout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="FastResidualRNN.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.FastResidualRNN.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">h_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lengths</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="JitResidualRNN.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.modifier.JitResidualRNN.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">h_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lengths</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">PackedSequence</span><span class="p">):</span>
             <span class="n">input_unpacked</span><span class="p">,</span> <span class="n">lengths</span> <span class="o">=</span> <span class="n">pad_packed_sequence</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>

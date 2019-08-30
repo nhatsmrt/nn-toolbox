@@ -213,6 +213,20 @@
 <p>with respect to input</p>
 </dd></dl>
 
+<dl class="function">
+<dt id="nntoolbox.utils.gradient.gather_flat_grad">
+<code class="sig-prename descclassname">nntoolbox.utils.gradient.</code><code class="sig-name descname">gather_flat_grad</code><span class="sig-paren">(</span><em class="sig-param">params: Iterable[torch.Tensor]</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/gradient.html#gather_flat_grad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.gradient.gather_flat_grad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather gradient of all the parameters and flatten into a vector. Adapted from pytorch’s L-BFGS implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>params</strong> – List of parameters</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>gradient vector of the parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-nntoolbox.utils.lr_finder">
 <span id="nntoolbox-utils-lr-finder-module"></span><h2>nntoolbox.utils.lr_finder module<a class="headerlink" href="#module-nntoolbox.utils.lr_finder" title="Permalink to this headline">¶</a></h2>
@@ -475,7 +489,24 @@ its size would be less than <code class="docutils literal notranslate"><span cla
 <dl class="function">
 <dt id="nntoolbox.utils.utils.to_onehot">
 <code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">to_onehot</code><span class="sig-paren">(</span><em class="sig-param">label: torch.Tensor</em>, <em class="sig-param">n_class: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#to_onehot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.to_onehot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return one hot encoding of label</p>
+<dd><p>Return one hot encoding of label (assuming the label index is 1)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> – </p></li>
+<li><p><strong>n_class</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nntoolbox.utils.utils.to_onehotv2">
+<code class="sig-prename descclassname">nntoolbox.utils.utils.</code><code class="sig-name descname">to_onehotv2</code><span class="sig-paren">(</span><em class="sig-param">label: torch.Tensor</em>, <em class="sig-param">n_class: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/utils/utils.html#to_onehotv2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.utils.to_onehotv2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return one hot encoding of label (assuming the label index is -1)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

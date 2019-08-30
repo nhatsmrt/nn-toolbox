@@ -197,7 +197,7 @@ registered hooks while the latter silently ignores them.</p>
 <span id="nntoolbox-sequence-models-lm-module"></span><h2>nntoolbox.sequence.models.lm module<a class="headerlink" href="#module-nntoolbox.sequence.models.lm" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="nntoolbox.sequence.models.lm.LanguageModel">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.models.lm.</code><code class="sig-name descname">LanguageModel</code><span class="sig-paren">(</span><em class="sig-param">encoder: torch.nn.modules.module.Module</em>, <em class="sig-param">head: torch.nn.modules.module.Module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.models.lm.</code><code class="sig-name descname">LanguageModel</code><span class="sig-paren">(</span><em class="sig-param">embedding: torch.nn.modules.sparse.Embedding</em>, <em class="sig-param">encoder: torch.nn.modules.module.Module</em>, <em class="sig-param">head: torch.nn.modules.module.Module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>General Language Model (UNTESTED):</p>
 <p>p(x_t|x_{&lt;t}) = prod_{t’ &lt; t} p(x_{t’} | x_{&lt;t’})</p>
@@ -210,11 +210,28 @@ registered hooks while the latter silently ignores them.</p>
 </dd>
 </dl>
 <dl class="method">
+<dt id="nntoolbox.sequence.models.lm.LanguageModel.complete">
+<code class="sig-name descname">complete</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em>, <em class="sig-param">n_token_gen: int = 1</em><span class="sig-paren">)</span> &#x2192; List[int]<a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel.complete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel.complete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Complete the sentence</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – a single partial sentence. (seq_len, )</p></li>
+<li><p><strong>n_token_gen</strong> – number of tokens to generated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the complete sentence: (seq_len + n_token_gen, input_dim)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="nntoolbox.sequence.models.lm.LanguageModel.compute_prob">
 <code class="sig-name descname">compute_prob</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel.compute_prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel.compute_prob" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input</strong> – a single sentence. (seq_len, input_dim)</p>
+<dd class="field-odd"><p><strong>input</strong> – a single sentence. (seq_len, )</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>probability of the sentence</p>
@@ -231,6 +248,17 @@ registered hooks while the latter silently ignores them.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>(seq_length, batch_size, vocab_size)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.sequence.models.lm.LanguageModel.get_embedding">
+<code class="sig-name descname">get_embedding</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; torch.nn.modules.module.Module<a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel.get_embedding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel.get_embedding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the embedding for downstream task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>encoder</p>
 </dd>
 </dl>
 </dd></dl>

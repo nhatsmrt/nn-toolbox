@@ -46,7 +46,32 @@
 <p>As described by Jeremy of FastAI</p>
 <dl class="method">
 <dt id="nntoolbox.components.activation.ZeroCenterRelu.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/activation.html#ZeroCenterRelu.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.activation.ZeroCenterRelu.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/activation.html#ZeroCenterRelu.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.activation.ZeroCenterRelu.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.components.activation.LWTA">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.activation.</code><code class="sig-name descname">LWTA</code><span class="sig-paren">(</span><em class="sig-param">block_size</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/activation.html#LWTA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.activation.LWTA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Local Winner-Take-All Layer</p>
+<p>For every k consecutive units, keep only the one with highest activations and zero-out the rest.</p>
+<p class="rubric">References</p>
+<p>Rupesh Kumar Srivastava, Jonathan Masci, Sohrob Kazerounian, Faustino Gomez, Jürgen Schmidhuber.
+“Compete to Compute.” <a class="reference external" href="https://papers.nips.cc/paper/5059-compete-to-compute.pdf">https://papers.nips.cc/paper/5059-compete-to-compute.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.components.activation.LWTA.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/activation.html#LWTA.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.activation.LWTA.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -217,14 +242,17 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="class">
 <dt id="nntoolbox.components.components.QuadraticPolynomialLayer">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">QuadraticPolynomialLayer</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">threshold: float = 0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#QuadraticPolynomialLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.QuadraticPolynomialLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.linear.Linear</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">QuadraticPolynomialLayer</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">rank: int</em>, <em class="sig-param">sqrt: bool = False</em>, <em class="sig-param">bias: bool = False</em>, <em class="sig-param">eps: float = 1e-06</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#QuadraticPolynomialLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.QuadraticPolynomialLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>h(x) = sigma( sum_k(A_k x)^2 + bx + c)</p>
 <p class="rubric">References</p>
-<p>Bergstra et al. “Quadratic Polynomials Learn Better Image Features”</p>
+<p>Bergstra et al. “Quadratic Polynomials Learn Better Image Features.”
+<a class="reference external" href="http://www.iro.umontreal.ca/~lisa/publications2/index.php/attachments/single/205">http://www.iro.umontreal.ca/~lisa/publications2/index.php/attachments/single/205</a> (dead link, use web archive)</p>
+<p>Joseph Turian, James Bergstra and Yoshua Bengio. “Quadratic Features and Deep Architectures for Chunking.”
+<a class="reference external" href="https://www.aclweb.org/anthology/N09-2062">https://www.aclweb.org/anthology/N09-2062</a></p>
 <dl class="method">
 <dt id="nntoolbox.components.components.QuadraticPolynomialLayer.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#QuadraticPolynomialLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.QuadraticPolynomialLayer.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/components.html#QuadraticPolynomialLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.QuadraticPolynomialLayer.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -527,10 +555,11 @@ registered hooks while the latter silently ignores them.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Implement a module that exhibits the shunting inhibition mechanism:</p>
 <p>y = f(x) / (a + g(x))</p>
+<p>Difference from original implementation: clamping denominator.</p>
 <p class="rubric">References</p>
 <p>Ganesh Arulampalam, Abdesselam Bouzerdoum.
 “A generalized feedforward neural network architecture for classification and regression.”
-<a class="reference external" href="https://sci-hub.tw/https://www.sciencedirect.com/science/article/pii/S0893608003001163">https://sci-hub.tw/https://www.sciencedirect.com/science/article/pii/S0893608003001163</a></p>
+<a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0893608003001163">https://www.sciencedirect.com/science/article/pii/S0893608003001163</a></p>
 <dl class="method">
 <dt id="nntoolbox.components.shunting.GeneralizedShuntingModule.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/shunting.html#GeneralizedShuntingModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.shunting.GeneralizedShuntingModule.forward" title="Permalink to this definition">¶</a></dt>
