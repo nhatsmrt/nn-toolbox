@@ -119,6 +119,12 @@ class JitRNNSequential(jit.ScriptModule):
 class JitResidualRNNV2(jit.ScriptModule):
     """
     Implement a simple residual stacked RNN
+
+    References:
+
+        Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc V. Le, Mohammad Norouzi.
+        "Google’s Neural Machine Translation System: Bridging the Gap between Human and Machine Translation."
+        https://arxiv.org/pdf/1609.08144.pdf
     """
     __constants__ = ['_modules_list', 'skip_length']
 
@@ -168,6 +174,12 @@ class JitLSTMSequential(jit.ScriptModule):
 class JitResidualLSTMV2(jit.ScriptModule):
     """
     Implement a simple residual stacked LSTM
+
+    References:
+
+        Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc V. Le, Mohammad Norouzi.
+        "Google’s Neural Machine Translation System: Bridging the Gap between Human and Machine Translation."
+        https://arxiv.org/pdf/1609.08144.pdf
     """
     __constants__ = ['_modules_list', 'skip_length']
 

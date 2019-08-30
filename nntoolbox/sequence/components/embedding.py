@@ -1,5 +1,9 @@
-from torch import nn
+from torch import nn, Tensor
 import torch
+import torch.nn.functional as F
+
+
+__all__ = ['AdditiveContextEmbedding', 'TiedOutputEmbedding']
 
 
 class AdditiveContextEmbedding(nn.Embedding):
@@ -21,3 +25,22 @@ class AdditiveContextEmbedding(nn.Embedding):
 
     def forward(self, input):
         return super().forward(input) + self.context
+
+
+class TiedOutputEmbedding(nn.Module):
+    """
+    Tie the weight of input embedding to the output layer
+
+    References:
+
+        Ofir Press and Lior Wolf. "Using the Output Embedding to Improve Language Models."
+        https://arxiv.org/pdf/1608.05859.pdf
+    """
+    def __init__(self, emb: nn.Embedding, bias: bool=True):
+        super().__init__()
+        self.weight = nn.Parameter(emb.weight, requires_grad=True)
+        self.bias = nn.Parameter(torch.zeros(self.weight.shape[0]), requires_grad=True) if bias else None
+
+    def forward(self, input: Tensor) -> Tensor:
+        return F.linear(input, self.weight, self.bias)
+
