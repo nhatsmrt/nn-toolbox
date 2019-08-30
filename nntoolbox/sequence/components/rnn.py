@@ -37,7 +37,7 @@ class JitRNNLayer(jit.ScriptModule):
         return torch.stack(outputs, dim=0), state
 
 
-class JitLSTMLayer(JitRNNLayer):
+class JitLSTMLayer(jit.ScriptModule):
     """
     Implement an LSTM layer with jit script module
 
@@ -46,6 +46,10 @@ class JitLSTMLayer(JitRNNLayer):
         The PyTorch Team. "Optimizing CUDA Recurrent Neural Networks with TorchScript."
         https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/
     """
+    def __init__(self, base_cell: Callable[..., Union[jit.ScriptModule, nn.Module]], *cell_args):
+        super().__init__()
+        self.base_cell = base_cell(*cell_args)
+
     @jit.script_method
     def forward(
             self, input: Tensor, state: Optional[Tuple[Tensor, Tensor]]=None
@@ -112,9 +116,15 @@ class JitRNNSequential(jit.ScriptModule):
         return input, h_0
 
 
-class JitResidualRNNV2(JitRNNSequential):
+class JitResidualRNNV2(jit.ScriptModule):
     """
     Implement a simple residual stacked RNN
+
+    References:
+
+        Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc V. Le, Mohammad Norouzi.
+        "Google’s Neural Machine Translation System: Bridging the Gap between Human and Machine Translation."
+        https://arxiv.org/pdf/1609.08144.pdf
     """
     __constants__ = ['_modules_list', 'skip_length']
 
@@ -123,8 +133,9 @@ class JitResidualRNNV2(JitRNNSequential):
         :param layers: rnn layers. Must have output dimension the same as input dimension
         :param skip_length: length of the skip
         """
-        super(JitResidualRNNV2, self).__init__(layers)
+        super(JitResidualRNNV2, self).__init__()
         assert skip_length > 0
+        self._modules_list = nn.ModuleList(layers)
         self.skip_length = skip_length
 
     @jit.script_method
@@ -160,9 +171,15 @@ class JitLSTMSequential(jit.ScriptModule):
         return input, states
 
 
-class JitResidualLSTMV2(JitLSTMSequential):
+class JitResidualLSTMV2(jit.ScriptModule):
     """
     Implement a simple residual stacked LSTM
+
+    References:
+
+        Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc V. Le, Mohammad Norouzi.
+        "Google’s Neural Machine Translation System: Bridging the Gap between Human and Machine Translation."
+        https://arxiv.org/pdf/1609.08144.pdf
     """
     __constants__ = ['_modules_list', 'skip_length']
 
@@ -171,7 +188,8 @@ class JitResidualLSTMV2(JitLSTMSequential):
         :param layers: rnn layers. Must have output dimension the same as input dimension
         :param skip_length: length of the skip
         """
-        super().__init__(layers)
+        super().__init__()
+        self._modules_list = nn.ModuleList(layers)
         assert skip_length > 0
         self.skip_length = skip_length
 

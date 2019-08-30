@@ -5,7 +5,55 @@ from ....init import sqrt_uniform_init
 from torch import jit
 
 
-__all__ = ['MILSTMCell', 'MIGRUCell']
+__all__ = ['MultiplicativeRNNCell', 'MILSTMCell', 'MIGRUCell']
+
+
+class MultiplicativeRNNCell(jit.ScriptModule):
+    """
+    Multiplicative RNN. Allowing input to change the hidden state easier by introducing multiplicative interaction:
+
+    m_t = (W_mx x_t) * (W_mh h_{t-1})
+
+    h_t = tanh(W_hm m_t + W_hx x_t)
+
+    Note that the implementation is based on the re-formulation from the second reference.
+
+    References:
+        Ilya Sutskever, James Martens, and Geoffrey Hinton. "Generating Text with Recurrent Neural Networks."
+        https://www.cs.utoronto.ca/~ilya/pubs/2011/LANG-RNN.pdf
+
+        Ben Krause, Iain Murray, Steve Renals, and Liang Lu. "MULTIPLICATIVE LSTM FOR SEQUENCE MODELLING."
+        https://arxiv.org/pdf/1609.07959.pdf
+    """
+
+    __constants__ = ['intermediate_size', 'hidden_size', 'bias']
+
+    def __init__(self, input_size: int, hidden_size: int, intermediate_size: int, bias: bool=True):
+        super().__init__()
+        self.hidden_size, self.intermediate_size, self.bias = hidden_size, intermediate_size, bias
+        self.weight_i = nn.Parameter(torch.rand(intermediate_size + hidden_size, input_size))
+        self.weight_h = nn.Parameter(torch.rand(intermediate_size, hidden_size))
+        self.weight_m = nn.Parameter(torch.rand(hidden_size, intermediate_size))
+
+        if bias:
+            self.bias_i = nn.Parameter(torch.rand(intermediate_size + hidden_size))
+            self.bias_h = nn.Parameter(torch.rand(intermediate_size))
+            self.bias_op = nn.Parameter(torch.rand(hidden_size))
+
+        sqrt_uniform_init(self)
+
+    @jit.script_method
+    def forward(self, input: Tensor, state: Optional[Tensor]=None) -> Tensor:
+        if state is None: state = torch.zeros((input.shape[0], self.hidden_size)).to(input.device).to(input.dtype)
+        input_trans = torch.matmul(input, self.weight_i.t())
+        if self.bias: input_trans += self.bias_i
+
+        intermediate = input_trans[:, :self.intermediate_size] * torch.matmul(state, self.weight_h.t())
+        if self.bias: intermediate += self.bias_h
+
+        op = torch.matmul(intermediate, self.weight_m.t()) + input_trans[:, self.intermediate_size:]
+        if self.bias: op += self.bias_op
+        return torch.tanh(op)
 
 
 class MILSTMCell(jit.ScriptModule):
