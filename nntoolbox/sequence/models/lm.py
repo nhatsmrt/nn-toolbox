@@ -55,14 +55,26 @@ class LanguageModel(nn.Module):
         """
         self.head = head
 
-    def compute_prob(self, input: Tensor) -> Tensor:
+    @torch.no_grad()
+    def compute_prob(self, input: Tensor, from_ind: int=2) -> float:
         """
+        Evaluating the probability of a sequence from a certain index
+
         :param input: a single sentence. (seq_len, )
+        :param from_ind: the point to start evaluating probability
         :return: probability of the sentence
         """
+        if from_ind < 0:
+            return self.compute_prob(input, len(input) + from_ind)
+
         representation = self.encoder(self.embedding(input.unsqueeze(1)))[0]
-        score = self.head(representation) # (seq_len, batch_size, vocab_size)
-        return F.softmax(score, dim=-1).prod()
+        score = self.head(representation)[from_ind - 1:-1]  # (seq_len - from_ind + 1, batch_size, vocab_size)
+        all_probs = torch.softmax(score, dim=-1)  # (seq_len - from_ind + 1, batch_size, vocab_size)
+        final_prob = 1.0
+        for ind in range(len(all_probs)):
+            final_prob *= all_probs[ind, 0, input[ind + from_ind]]
+            print(final_prob)
+        return final_prob.item()
 
     @torch.no_grad()
     def complete(self, input: Tensor, n_token_gen: int=1) -> List[int]:
