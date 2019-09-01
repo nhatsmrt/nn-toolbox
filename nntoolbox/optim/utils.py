@@ -5,7 +5,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-__all__ = ['change_lr', 'plot_schedule', 'save_optimizer', 'load_optimizer']
+__all__ = ['get_lr', 'change_lr', 'plot_schedule', 'save_optimizer', 'load_optimizer']
+
+
+def get_lr(optim: Optimizer) -> List[float]:
+    return [param_group['lr'] for param_group in optim.param_groups]
 
 
 # UNTESTED
