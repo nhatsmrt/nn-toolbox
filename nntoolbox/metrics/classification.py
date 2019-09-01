@@ -93,13 +93,18 @@ class Perplexity(Metric):
 
     perplexity(language_model, sentence) = exp(-log language_model(sentence))
     """
-    def __init__(self):
+    def __init__(self, per_word: bool=True):
         self._best = float('inf')
+        self.per_word = per_word
 
     def __call__(self, logs: Dict[str, Any]) -> float:
         labels = logs["labels"].cpu()
         predictions_prob = log_softmax(logs["outputs"], dim=1)
         entropy = nll_loss(predictions_prob, labels)
+
+        if self.per_word:
+            entropy /= labels.shape[0]
+
         perplexity = torch.exp(entropy).cpu().numpy().item()
 
         if perplexity < self._best:

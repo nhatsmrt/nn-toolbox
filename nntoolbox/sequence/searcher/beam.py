@@ -25,7 +25,7 @@ class LMBeamSearcher:
         current = [input]
         current_scores = [self.model.compute_prob(input)]
 
-        for iter in range(n_iter):
+        for _ in range(n_iter):
             candidates = []
             candidates_scores = []
 
