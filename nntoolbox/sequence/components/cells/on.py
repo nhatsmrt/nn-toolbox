@@ -8,7 +8,7 @@ from nntoolbox.init import sqrt_uniform_init
 __all__ = ['Cumax', 'ONLSTMCell', 'ONLSTMCellV2']
 
 
-class Cumax(nn.Module):
+class Cumax(jit.ScriptModule):
     def forward(self, input: Tensor) -> Tensor:
         return torch.cumsum(torch.softmax(input, dim=-1), dim=-1)
 
@@ -16,7 +16,7 @@ class Cumax(nn.Module):
 class ONLSTMCell(jit.ScriptModule):
     """
     Ordered Neuron LSTM. Augmenting LSTM with the hierarchical inductive bias by ordering the neurons of each hidden
-    states.
+    states. This is the recommended version.
 
     References:
 
@@ -59,7 +59,7 @@ class ONLSTMCell(jit.ScriptModule):
 class ONLSTMCellV2(jit.ScriptModule):
     """
     Ordered Neuron LSTM. Augmenting LSTM with the hierarchical inductive bias by ordering the neurons of each hidden
-    states.
+    states. This is NOT the recommended version.
 
     References:
 
