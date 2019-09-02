@@ -59,12 +59,15 @@ class JitRNNLayer(jit.ScriptModule):
     def forward(self, input: Tensor, state: Optional[Tensor]=None) -> Tuple[Tensor, Optional[Tensor]]:
         inputs = input.unbind(0)
         outputs = jit.annotate(List[Tensor], [])
+        mask_r = jit.annotate(Tensor, torch.zeros(1))
+        mask_i = jit.annotate(Tensor, torch.zeros(1))
 
         for t in range(len(inputs)):
             if self.training and self.inp_drop_p > 0.0:
-                mask_i = torch.rand(inputs[t].shape). \
-                    bernoulli_(1 - self.recurrent_drop_p). \
-                    div(1 - self.recurrent_drop_p)
+                if t == 0:
+                    mask_i = torch.rand(inputs[t].shape). \
+                        bernoulli_(1 - self.recurrent_drop_p). \
+                        div(1 - self.recurrent_drop_p)
                 mask_i = mask_i.to(inputs[t].dtype).to(inputs[t].device)
                 inputs[t] = mask_i * inputs[t]
 
@@ -72,9 +75,10 @@ class JitRNNLayer(jit.ScriptModule):
             outputs.append(state)
 
             if self.training and self.recurrent_drop_p > 0.0 and t < len(inputs) - 1:
-                mask_r = torch.rand(state.shape). \
-                    bernoulli_(1 - self.recurrent_drop_p). \
-                    div(1 - self.recurrent_drop_p)
+                if t == 0:
+                    mask_r = torch.rand(state.shape). \
+                        bernoulli_(1 - self.recurrent_drop_p). \
+                        div(1 - self.recurrent_drop_p)
                 mask_r = mask_r.to(state.dtype).to(state.device)
                 state = mask_r * state
 
@@ -108,12 +112,15 @@ class JitLSTMLayer(jit.ScriptModule):
     ) -> Tuple[Tensor, Optional[Tuple[Tensor, Tensor]]]:
         inputs = input.unbind(0)
         outputs = jit.annotate(List[Tensor], [])
+        mask_r = jit.annotate(Tensor, torch.zeros(1))
+        mask_i = jit.annotate(Tensor, torch.zeros(1))
 
         for t in range(len(inputs)):
             if self.training and self.inp_drop_p > 0.0:
-                mask_i = torch.rand(inputs[t].shape). \
-                    bernoulli_(1 - self.recurrent_drop_p). \
-                    div(1 - self.recurrent_drop_p)
+                if t == 0:
+                    mask_i = torch.rand(inputs[t].shape). \
+                        bernoulli_(1 - self.recurrent_drop_p). \
+                        div(1 - self.recurrent_drop_p)
                 mask_i = mask_i.to(inputs[t].dtype).to(inputs[t].device)
                 inputs[t] = mask_i * inputs[t]
 
@@ -121,9 +128,10 @@ class JitLSTMLayer(jit.ScriptModule):
             outputs.append(output)
 
             if self.training and self.recurrent_drop_p > 0.0 and t < len(inputs) - t:
-                mask_r = torch.rand(state[0].shape) \
-                    .bernoulli_(1 - self.recurrent_drop_p) \
-                    .div(1 - self.recurrent_drop_p)
+                if t == 0:
+                    mask_r = torch.rand(state[0].shape) \
+                        .bernoulli_(1 - self.recurrent_drop_p) \
+                        .div(1 - self.recurrent_drop_p)
                 mask_r = mask_r.to(state[0].dtype).to(state[0].device)
                 state[0] = mask_r * state[0]
 
