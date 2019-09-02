@@ -41,6 +41,9 @@ class JitRNNLayer(jit.ScriptModule):
 
         The PyTorch Team. "Optimizing CUDA Recurrent Neural Networks with TorchScript."
         https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/
+
+        Yarin Gal, Zoubin Ghahramani. "A Theoretically Grounded Application of Dropout in Recurrent Neural Networks."
+        https://papers.nips.cc/paper/6241-a-theoretically-grounded-application-of-dropout-in-recurrent-neural-networks
     """
 
     __constants__ = ['recurrent_drop_p', 'inp_drop_p']
@@ -93,6 +96,9 @@ class JitLSTMLayer(jit.ScriptModule):
 
         The PyTorch Team. "Optimizing CUDA Recurrent Neural Networks with TorchScript."
         https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/
+
+        Yarin Gal, Zoubin Ghahramani. "A Theoretically Grounded Application of Dropout in Recurrent Neural Networks."
+        https://papers.nips.cc/paper/6241-a-theoretically-grounded-application-of-dropout-in-recurrent-neural-networks
     """
 
     __constants__ = ['recurrent_drop_p', 'inp_drop_p']
