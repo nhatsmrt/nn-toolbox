@@ -43,30 +43,40 @@ class JitRNNLayer(jit.ScriptModule):
         https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/
     """
 
-    __constants__ = ['recurrent_drop_p']
+    __constants__ = ['recurrent_drop_p', 'inp_drop_p']
 
     def __init__(
-            self, base_cell: Callable[..., Union[jit.ScriptModule, nn.Module]], recurrent_drop_p, *cell_args
+            self, base_cell: Callable[..., Union[jit.ScriptModule, nn.Module]], *cell_args,
+            inp_drop_p: float=0.0, recurrent_drop_p: float=0.0
     ):
         assert 0.0 <= recurrent_drop_p < 1.0
         super().__init__()
         self.base_cell = base_cell(*cell_args)
         self.recurrent_drop_p = recurrent_drop_p
+        self.inp_drop_p = inp_drop_p
 
     @jit.script_method
     def forward(self, input: Tensor, state: Optional[Tensor]=None) -> Tuple[Tensor, Optional[Tensor]]:
         inputs = input.unbind(0)
         outputs = jit.annotate(List[Tensor], [])
-        mask = jit.annotate(Tensor, torch.zeros(1))
 
         for t in range(len(inputs)):
+            if self.training and self.inp_drop_p > 0.0:
+                mask_i = torch.rand(inputs[t].shape). \
+                    bernoulli_(1 - self.recurrent_drop_p). \
+                    div(1 - self.recurrent_drop_p)
+                mask_i = mask_i.to(inputs[t].dtype).to(inputs[t].device)
+                inputs[t] = mask_i * inputs[t]
+
             state = self.base_cell(inputs[t], state)
             outputs.append(state)
-            if t < len(inputs) - 1 and self.recurrent_drop_p > 0.0 and self.training:
-                if t == 0:
-                    mask = torch.rand(state.shape).bernoulli_(1 - self.recurrent_drop_p).div(1 - self.recurrent_drop_p)
-                    mask = mask.to(state.dtype).to(state.device)
-                state = mask * state
+
+            if self.training and self.recurrent_drop_p > 0.0 and t < len(inputs) - 1:
+                mask_r = torch.rand(state.shape). \
+                    bernoulli_(1 - self.recurrent_drop_p). \
+                    div(1 - self.recurrent_drop_p)
+                mask_r = mask_r.to(state.dtype).to(state.device)
+                state = mask_r * state
 
         return torch.stack(outputs, dim=0), state
 
@@ -81,15 +91,16 @@ class JitLSTMLayer(jit.ScriptModule):
         https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/
     """
 
-    __constants__ = ['recurrent_drop_p']
+    __constants__ = ['recurrent_drop_p', 'inp_drop_p']
 
     def __init__(
-            self, base_cell: Callable[..., Union[jit.ScriptModule, nn.Module]],
-            recurrent_drop_p, *cell_args
+            self, base_cell: Callable[..., Union[jit.ScriptModule, nn.Module]], *cell_args,
+            inp_drop_p: float=0.0, recurrent_drop_p: float=0.0
     ):
         super().__init__()
         self.recurrent_drop_p = recurrent_drop_p
         self.base_cell = base_cell(*cell_args)
+        self.inp_drop_p = inp_drop_p
 
     @jit.script_method
     def forward(
@@ -99,17 +110,22 @@ class JitLSTMLayer(jit.ScriptModule):
         outputs = jit.annotate(List[Tensor], [])
 
         for t in range(len(inputs)):
+            if self.training and self.inp_drop_p > 0.0:
+                mask_i = torch.rand(inputs[t].shape). \
+                    bernoulli_(1 - self.recurrent_drop_p). \
+                    div(1 - self.recurrent_drop_p)
+                mask_i = mask_i.to(inputs[t].dtype).to(inputs[t].device)
+                inputs[t] = mask_i * inputs[t]
+
             output, state = self.base_cell(inputs[t], state)
             outputs.append(output)
-            mask = jit.annotate(Tensor, torch.zeros(1))
 
-            if t < len(inputs) - 1 and self.recurrent_drop_p > 0.0 and self.training:
-                if t == 0:
-                    mask = torch.rand(state[0].shape)\
-                        .bernoulli_(1 - self.recurrent_drop_p)\
-                        .div(1 - self.recurrent_drop_p)
-                    mask = mask.to(state[0].dtype).to(state[0].device)
-                state[0] = mask * state[0]
+            if self.training and self.recurrent_drop_p > 0.0 and t < len(inputs) - t:
+                mask_r = torch.rand(state[0].shape) \
+                    .bernoulli_(1 - self.recurrent_drop_p) \
+                    .div(1 - self.recurrent_drop_p)
+                mask_r = mask_r.to(state[0].dtype).to(state[0].device)
+                state[0] = mask_r * state[0]
 
         return torch.stack(outputs, dim=0), state
 
