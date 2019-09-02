@@ -3,13 +3,34 @@ from torch import nn, Tensor
 from typing import Tuple, Optional, Callable, Union, List
 import torch.jit as jit
 from collections import OrderedDict
+from ...utils import dropout_mask
 
 
 __all__ = [
-    'JitRNNLayer', 'JitLSTMLayer', 'RNNDropout',
-    'RNNSequential', 'JitRNNDropout', 'JitRNNSequential',
+    'RNNDropout', 'JitRNNDropout',
+    'JitRNNLayer', 'JitLSTMLayer',
+    'RNNSequential', 'JitRNNSequential',
     'JitResidualRNNV2', 'JitLSTMSequential', 'JitResidualLSTMV2'
 ]
+
+
+class RNNDropout(nn.Module):
+    def __init__(self, p):
+        super(RNNDropout, self).__init__()
+        self.dropout = nn.Dropout(p)
+
+    def forward(self, input_unpacked: Tensor, h_0: Tensor):
+        return self.dropout(input_unpacked), h_0
+
+
+class JitRNNDropout(jit.ScriptModule):
+    def __init__(self, p):
+        super(JitRNNDropout, self).__init__()
+        self.dropout = nn.Dropout(p)
+
+    @jit.script_method
+    def forward(self, input_unpacked: Tensor, h_0: Tensor) -> Tuple[Tensor, Tensor]:
+        return self.dropout(input_unpacked), h_0
 
 
 class JitRNNLayer(jit.ScriptModule):
@@ -21,18 +42,31 @@ class JitRNNLayer(jit.ScriptModule):
         The PyTorch Team. "Optimizing CUDA Recurrent Neural Networks with TorchScript."
         https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/
     """
-    def __init__(self, base_cell: Callable[..., Union[jit.ScriptModule, nn.Module]], *cell_args):
+
+    __constants__ = ['recurrent_drop_p']
+
+    def __init__(
+            self, base_cell: Callable[..., Union[jit.ScriptModule, nn.Module]], recurrent_drop_p, *cell_args
+    ):
+        assert 0.0 <= recurrent_drop_p < 1.0
         super().__init__()
         self.base_cell = base_cell(*cell_args)
+        self.recurrent_drop_p = recurrent_drop_p
 
     @jit.script_method
     def forward(self, input: Tensor, state: Optional[Tensor]=None) -> Tuple[Tensor, Optional[Tensor]]:
         inputs = input.unbind(0)
         outputs = jit.annotate(List[Tensor], [])
+        mask = jit.annotate(Tensor, torch.zeros(1))
 
         for t in range(len(inputs)):
             state = self.base_cell(inputs[t], state)
             outputs.append(state)
+            if t < len(inputs) - 1 and self.recurrent_drop_p > 0.0:
+                if t == 0:
+                    mask = torch.rand(state.shape).bernoulli_(1 - self.recurrent_drop_p).div(1 - self.recurrent_drop_p)
+                    mask = mask.to(state.dtype).to(state.device)
+                state = mask * state
 
         return torch.stack(outputs, dim=0), state
 
@@ -46,8 +80,15 @@ class JitLSTMLayer(jit.ScriptModule):
         The PyTorch Team. "Optimizing CUDA Recurrent Neural Networks with TorchScript."
         https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/
     """
-    def __init__(self, base_cell: Callable[..., Union[jit.ScriptModule, nn.Module]], *cell_args):
+
+    __constants__ = ['recurrent_drop_p']
+
+    def __init__(
+            self, base_cell: Callable[..., Union[jit.ScriptModule, nn.Module]],
+            recurrent_drop_p, *cell_args
+    ):
         super().__init__()
+        self.recurrent_drop_p = recurrent_drop_p
         self.base_cell = base_cell(*cell_args)
 
     @jit.script_method
@@ -60,17 +101,17 @@ class JitLSTMLayer(jit.ScriptModule):
         for t in range(len(inputs)):
             output, state = self.base_cell(inputs[t], state)
             outputs.append(output)
+            mask = jit.annotate(Tensor, torch.zeros(1))
+
+            if t < len(inputs) - 1 and self.recurrent_drop_p > 0.0:
+                if t == 0:
+                    mask = torch.rand(state[0].shape)\
+                        .bernoulli_(1 - self.recurrent_drop_p)\
+                        .div(1 - self.recurrent_drop_p)
+                    mask = mask.to(state[0].dtype).to(state[0].device)
+                state[0] = mask * state[0]
 
         return torch.stack(outputs, dim=0), state
-
-
-class RNNDropout(nn.Module):
-    def __init__(self, p):
-        super(RNNDropout, self).__init__()
-        self.dropout = nn.Dropout(p)
-
-    def forward(self, input_unpacked: Tensor, h_0: Tensor):
-        return self.dropout(input_unpacked), h_0
 
 
 class RNNSequential(nn.Module):
@@ -89,14 +130,6 @@ class RNNSequential(nn.Module):
         return input, h_0
 
 
-class JitRNNDropout(jit.ScriptModule):
-    def __init__(self, p):
-        super(JitRNNDropout, self).__init__()
-        self.dropout = nn.Dropout(p)
-
-    @jit.script_method
-    def forward(self, input_unpacked: Tensor, h_0: Tensor) -> Tuple[Tensor, Tensor]:
-        return self.dropout(input_unpacked), h_0
 
 
 class JitRNNSequential(jit.ScriptModule):

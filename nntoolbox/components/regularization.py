@@ -1,10 +1,10 @@
-from torch import nn, jit, Tensor
-from typing import List, Union, Optional
+from torch import nn
+from typing import List, Union
 import torch.nn.functional as F
 import warnings
 
 
-__all__ = ['DropConnect', 'JitDropConnect']
+__all__ = ['DropConnect']
 
 
 class DropConnect(nn.Module):
