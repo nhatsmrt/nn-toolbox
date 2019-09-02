@@ -62,7 +62,7 @@ class JitRNNLayer(jit.ScriptModule):
         for t in range(len(inputs)):
             state = self.base_cell(inputs[t], state)
             outputs.append(state)
-            if t < len(inputs) - 1 and self.recurrent_drop_p > 0.0:
+            if t < len(inputs) - 1 and self.recurrent_drop_p > 0.0 and self.training:
                 if t == 0:
                     mask = torch.rand(state.shape).bernoulli_(1 - self.recurrent_drop_p).div(1 - self.recurrent_drop_p)
                     mask = mask.to(state.dtype).to(state.device)
@@ -103,7 +103,7 @@ class JitLSTMLayer(jit.ScriptModule):
             outputs.append(output)
             mask = jit.annotate(Tensor, torch.zeros(1))
 
-            if t < len(inputs) - 1 and self.recurrent_drop_p > 0.0:
+            if t < len(inputs) - 1 and self.recurrent_drop_p > 0.0 and self.training:
                 if t == 0:
                     mask = torch.rand(state[0].shape)\
                         .bernoulli_(1 - self.recurrent_drop_p)\
