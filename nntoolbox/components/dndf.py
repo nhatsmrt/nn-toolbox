@@ -10,8 +10,8 @@ __all__ = ['DNDFTree', 'DNDF']
 
 class DNDFTree(nn.Module):
     """
-    Based on Deep Neural Decision Forest, but with the leaf node parameterized for end-to-end training, and the decision
-    trees balanced. Use BFS + DP for fast path computations
+    Based on Deep Neural Decision Forest, but with the leaf node parameterized for end-to-end training,
+    and the decision trees balanced. Use BFS + DP for fast path computations
 
     References:
 
