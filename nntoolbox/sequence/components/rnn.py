@@ -160,8 +160,6 @@ class RNNSequential(nn.Module):
         return input, h_0
 
 
-
-
 class JitRNNSequential(jit.ScriptModule):
     """
     Implement a simple stacked RNN
