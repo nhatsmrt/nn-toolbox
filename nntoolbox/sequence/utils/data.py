@@ -5,10 +5,10 @@ import multiprocessing as mp
 from functools import partial
 
 
-__all__ = ['id_to_text', 'text_to_id']
+__all__ = ['id_to_text', 'text_to_id', 'tokenize_sentence']
 
 
-def id_to_text(sequence, vocab: Vocab):
+def id_to_text(sequence, vocab: Vocab) -> List[str]:
     """
     Convert a sequence of id to corresponding text
 
@@ -19,7 +19,7 @@ def id_to_text(sequence, vocab: Vocab):
     return [vocab.itos[token] for token in sequence]
 
 
-def text_to_id(sequence: List[str], vocab: Vocab):
+def text_to_id(sequence: List[str], vocab: Vocab) -> List[int]:
     """
     Convert a sequence of string to corresponding list of numeric tokens
 
