@@ -24,6 +24,7 @@ This toolbox is mainly for personal use, so as needs arise or if I see a neat pa
 * More testing functionalities (possibly incorporating unit tests, and some standard datasets)
 * More colab training utilities
 * More neural net architectures, especially non-vision ones
+* More optimizers
 * Move some of the weirder stuffs into another repository
 * Fix bugs as they come up
 
