@@ -36,7 +36,7 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">Module</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -44,7 +44,8 @@
     <span class="s1">&#39;load_model&#39;</span><span class="p">,</span> <span class="s1">&#39;get_device&#39;</span><span class="p">,</span> <span class="s1">&#39;get_trainable_parameters&#39;</span><span class="p">,</span>
     <span class="s1">&#39;count_trainable_parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;to_onehot&#39;</span><span class="p">,</span>
     <span class="s1">&#39;to_onehotv2&#39;</span><span class="p">,</span> <span class="s1">&#39;is_nan&#39;</span><span class="p">,</span> <span class="s1">&#39;is_valid&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;get_children&#39;</span><span class="p">,</span> <span class="s1">&#39;get_all_submodules&#39;</span><span class="p">,</span> <span class="s1">&#39;find_index&#39;</span>
+    <span class="s1">&#39;get_children&#39;</span><span class="p">,</span> <span class="s1">&#39;get_all_submodules&#39;</span><span class="p">,</span> <span class="s1">&#39;find_index&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;dropout_mask&#39;</span>
 <span class="p">]</span>
 
 
@@ -189,6 +190,10 @@
 
 <div class="viewcode-block" id="find_index"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.utils.find_index">[docs]</a><span class="k">def</span> <span class="nf">find_index</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">array</span> <span class="o">==</span> <span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="dropout_mask"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.utils.dropout_mask">[docs]</a><span class="k">def</span> <span class="nf">dropout_mask</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">drop_p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">bernoulli_</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">drop_p</span><span class="p">)</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">drop_p</span><span class="p">)</span></div>
 
 </pre></div>
 

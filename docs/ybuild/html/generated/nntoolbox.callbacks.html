@@ -37,6 +37,29 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-nntoolbox.callbacks.bptt">
+<span id="nntoolbox-callbacks-bptt-module"></span><h2>nntoolbox.callbacks.bptt module<a class="headerlink" href="#module-nntoolbox.callbacks.bptt" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.callbacks.bptt.VariableLengthBPTT">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.bptt.</code><code class="sig-name descname">VariableLengthBPTT</code><span class="sig-paren">(</span><em class="sig-param">default_len: int</em>, <em class="sig-param">p: float</em>, <em class="sig-param">std: float</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/bptt.html#VariableLengthBPTT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.bptt.VariableLengthBPTT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<p>Change the truncated backprop through time length and linearly scale the learning rate. (UNTESTED)</p>
+<p class="rubric">References</p>
+<p>Stephen Merity, Nitish Shirish Keskar, Richard Socher. “Regularizing and Optimizing LSTM Language Models.”
+<a class="reference external" href="https://arxiv.org/abs/1708.02182">https://arxiv.org/abs/1708.02182</a></p>
+<dl class="method">
+<dt id="nntoolbox.callbacks.bptt.VariableLengthBPTT.on_epoch_begin">
+<code class="sig-name descname">on_epoch_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/bptt.html#VariableLengthBPTT.on_epoch_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.bptt.VariableLengthBPTT.on_epoch_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.callbacks.bptt.VariableLengthBPTT.on_epoch_end">
+<code class="sig-name descname">on_epoch_end</code><span class="sig-paren">(</span><em class="sig-param">logs: Dict[str, Any]</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/nntoolbox/callbacks/bptt.html#VariableLengthBPTT.on_epoch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.bptt.VariableLengthBPTT.on_epoch_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-nntoolbox.callbacks.bs_scheduler">
 <span id="nntoolbox-callbacks-bs-scheduler-module"></span><h2>nntoolbox.callbacks.bs_scheduler module<a class="headerlink" href="#module-nntoolbox.callbacks.bs_scheduler" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -1087,6 +1110,7 @@ Adapt from fastai course 2 v3 notebook</p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">nntoolbox.callbacks package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.bptt">nntoolbox.callbacks.bptt module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.bs_scheduler">nntoolbox.callbacks.bs_scheduler module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.callbacks">nntoolbox.callbacks.callbacks module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.callbacks.checkpoint">nntoolbox.callbacks.checkpoint module</a></li>

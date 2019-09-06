@@ -228,10 +228,14 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="method">
 <dt id="nntoolbox.sequence.models.lm.LanguageModel.compute_prob">
-<code class="sig-name descname">compute_prob</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel.compute_prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel.compute_prob" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<code class="sig-name descname">compute_prob</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em>, <em class="sig-param">from_ind: int = 2</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel.compute_prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel.compute_prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluating the probability of a sequence from a certain index</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input</strong> – a single sentence. (seq_len, )</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – a single sentence. (seq_len, )</p></li>
+<li><p><strong>from_ind</strong> – the point to start evaluating probability</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>probability of the sentence</p>

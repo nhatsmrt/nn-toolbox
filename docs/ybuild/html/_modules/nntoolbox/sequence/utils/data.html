@@ -38,7 +38,7 @@
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id_to_text&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id_to_text&#39;</span><span class="p">,</span> <span class="s1">&#39;text_to_id&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="id_to_text"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.utils.html#nntoolbox.sequence.utils.data.id_to_text">[docs]</a><span class="k">def</span> <span class="nf">id_to_text</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">vocab</span><span class="p">:</span> <span class="n">Vocab</span><span class="p">):</span>
@@ -49,10 +49,18 @@
 <span class="sd">    :param vocab: vocab object</span>
 <span class="sd">    :return: text (array form)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vocab</span><span class="o">.</span><span class="n">itos</span><span class="p">[</span><span class="n">token</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">ret</span></div>
+    <span class="k">return</span> <span class="p">[</span><span class="n">vocab</span><span class="o">.</span><span class="n">itos</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="text_to_id"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.utils.html#nntoolbox.sequence.utils.data.text_to_id">[docs]</a><span class="k">def</span> <span class="nf">text_to_id</span><span class="p">(</span><span class="n">sequence</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">vocab</span><span class="p">:</span> <span class="n">Vocab</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a sequence of string to corresponding list of numeric tokens</span>
+
+<span class="sd">    :param sequence: list of string</span>
+<span class="sd">    :param vocab: vocab object</span>
+<span class="sd">    :return: list of tokens</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">vocab</span><span class="o">.</span><span class="n">stoi</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">]</span></div>
 
 
 <span class="k">def</span> <span class="nf">tokenize_sentence</span><span class="p">(</span><span class="n">sentence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>

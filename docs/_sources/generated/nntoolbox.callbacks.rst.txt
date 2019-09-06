@@ -4,6 +4,14 @@ nntoolbox.callbacks package
 Submodules
 ----------
 
+nntoolbox.callbacks.bptt module
+-------------------------------
+
+.. automodule:: nntoolbox.callbacks.bptt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.callbacks.bs\_scheduler module
 ----------------------------------------
 

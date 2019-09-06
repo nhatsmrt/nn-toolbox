@@ -34,9 +34,10 @@
 <span></span><span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="k">import</span> <span class="n">dropout_mask</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AdditiveContextEmbedding&#39;</span><span class="p">,</span> <span class="s1">&#39;TiedOutputEmbedding&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AdditiveContextEmbedding&#39;</span><span class="p">,</span> <span class="s1">&#39;TiedOutputEmbedding&#39;</span><span class="p">,</span> <span class="s1">&#39;EmbeddingDropout&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="AdditiveContextEmbedding"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.AdditiveContextEmbedding">[docs]</a><span class="k">class</span> <span class="nc">AdditiveContextEmbedding</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">):</span>
@@ -77,6 +78,43 @@
 <div class="viewcode-block" id="TiedOutputEmbedding.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.TiedOutputEmbedding.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span></div></div>
 
+
+<div class="viewcode-block" id="EmbeddingDropout"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.EmbeddingDropout">[docs]</a><span class="k">class</span> <span class="nc">EmbeddingDropout</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &quot;Zero out&quot; the same word across time step for each batch. E.g:</span>
+
+<span class="sd">    &quot;The cat hates the dog.&quot; -&gt; &quot;- cat hates - dog.&quot;</span>
+
+<span class="sd">    Based on fastai&#39;s notebook implementation (which is slightly slower than as suggested in the paper, but easier</span>
+<span class="sd">    to implement).</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">        FastAI Course 2 V3 Notebook:</span>
+<span class="sd">        https://github.com/fastai/course-v3/blob/master/nbs/dl2/12a_awd_lstm.ipynb</span>
+
+<span class="sd">        Yarin Gal and Zoubin Ghahramani. &quot;A Theoretically Grounded Application of Dropout in Recurrent Neural Networks.&quot;</span>
+<span class="sd">        https://papers.nips.cc/paper/6241-a-theoretically-grounded-application-of-dropout-in-recurrent-neural-networks.pdf</span>
+
+<span class="sd">        Stephen Merity, Nitish Shirish Keskar, Richard Socher. &quot;Regularizing and Optimizing LSTM Language Models.&quot;</span>
+<span class="sd">        https://arxiv.org/abs/1708.02182</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">emb</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">,</span> <span class="n">drop_p</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drop_p</span> <span class="o">=</span> <span class="n">drop_p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emb</span> <span class="o">=</span> <span class="n">emb</span>
+
+<div class="viewcode-block" id="EmbeddingDropout.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.EmbeddingDropout.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">:</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">dropout_mask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_p</span><span class="p">)</span>
+            <span class="n">masked_embed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">weight</span> <span class="o">*</span> <span class="n">mask</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">masked_embed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">weight</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span>
+            <span class="nb">input</span><span class="p">,</span> <span class="n">masked_embed</span><span class="p">,</span> <span class="n">padding_idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">padding_idx</span><span class="p">,</span>
+            <span class="n">max_norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">max_norm</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">norm_type</span><span class="p">,</span>
+            <span class="n">scale_grad_by_freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">scale_grad_by_freq</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">sparse</span>
+        <span class="p">)</span></div></div>
 </pre></div>
 
           </div>
