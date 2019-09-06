@@ -4,7 +4,7 @@ from typing import Sequence, Callable, Optional, Tuple
 
 
 __all__ = [
-    'LambdaLayer', 'ScalingLayer', 'BiasLayer', 'ResidualLinearBlock',
+    'LambdaLayer', 'ModifyByLambda', 'ScalingLayer', 'BiasLayer', 'ResidualLinearBlock',
     'LinearlyAugmentedFF', 'HighwayLayer', 'SquareUnitLinear',
     'QuadraticPolynomialLayer', 'MLP'
 ]
@@ -22,6 +22,16 @@ class LambdaLayer(nn.Module):
 
     def forward(self, input: Tensor) -> Tensor:
         return self.fn(input)
+
+
+class ModifyByLambda(nn.Module):
+    def __init__(self, module: nn.Module, fn: Callable[[Tensor], Tensor]):
+        super().__init__()
+        self.module = module
+        self.fn = fn
+
+    def forward(self, input: Tensor) -> Tensor:
+        return self.fn(self.module(input))
 
 
 class ScalingLayer(LambdaLayer):

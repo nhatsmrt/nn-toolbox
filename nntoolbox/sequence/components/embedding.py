@@ -1,9 +1,10 @@
 from torch import nn, Tensor
 import torch
 import torch.nn.functional as F
+from ...utils import dropout_mask
 
 
-__all__ = ['AdditiveContextEmbedding', 'TiedOutputEmbedding']
+__all__ = ['AdditiveContextEmbedding', 'TiedOutputEmbedding', 'EmbeddingDropout']
 
 
 class AdditiveContextEmbedding(nn.Embedding):
@@ -44,3 +45,40 @@ class TiedOutputEmbedding(nn.Module):
     def forward(self, input: Tensor) -> Tensor:
         return F.linear(input, self.weight, self.bias)
 
+
+class EmbeddingDropout(nn.Module):
+    """
+    "Zero out" the same word across time step for each batch. E.g:
+
+    "The cat hates the dog." -> "- cat hates - dog."
+
+    Based on fastai's notebook implementation (which is slightly slower than as suggested in the paper, but easier
+    to implement).
+
+    References:
+
+        FastAI Course 2 V3 Notebook:
+        https://github.com/fastai/course-v3/blob/master/nbs/dl2/12a_awd_lstm.ipynb
+
+        Yarin Gal and Zoubin Ghahramani. "A Theoretically Grounded Application of Dropout in Recurrent Neural Networks."
+        https://papers.nips.cc/paper/6241-a-theoretically-grounded-application-of-dropout-in-recurrent-neural-networks.pdf
+
+        Stephen Merity, Nitish Shirish Keskar, Richard Socher. "Regularizing and Optimizing LSTM Language Models."
+        https://arxiv.org/abs/1708.02182
+    """
+    def __init__(self, emb: nn.Embedding, drop_p: float=0.5):
+        super().__init__()
+        self.drop_p = drop_p
+        self.emb = emb
+
+    def forward(self, input: Tensor) -> Tensor:
+        if self.training:
+            mask = dropout_mask(self.emb.weight, (self.emb.weight.shape[0], 1), self.drop_p)
+            masked_embed = self.emb.weight * mask
+        else:
+            masked_embed = self.emb.weight
+        return F.embedding(
+            input, masked_embed, padding_idx=self.emb.padding_idx,
+            max_norm=self.emb.max_norm, norm_type=self.emb.norm_type,
+            scale_grad_by_freq=self.emb.scale_grad_by_freq, sparse=self.emb.sparse
+        )

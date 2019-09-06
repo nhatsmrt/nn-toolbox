@@ -3,7 +3,7 @@ import numpy as np
 import copy
 from torch.nn import Module
 from torch import nn, Tensor
-from typing import Optional, List
+from typing import Optional, List, Tuple
 
 
 __all__ = [
@@ -11,7 +11,8 @@ __all__ = [
     'load_model', 'get_device', 'get_trainable_parameters',
     'count_trainable_parameters', 'to_onehot',
     'to_onehotv2', 'is_nan', 'is_valid',
-    'get_children', 'get_all_submodules', 'find_index'
+    'get_children', 'get_all_submodules', 'find_index',
+    'dropout_mask'
 ]
 
 
@@ -156,4 +157,8 @@ def get_all_submodules(module: Module) -> List[Module]:
 
 def find_index(array, value):
     return np.where(array == value)[0][0]
+
+
+def dropout_mask(t: Tensor, size: Tuple[int, ...], drop_p):
+    return t.new(*size).bernoulli_(1 - drop_p).div(1 - drop_p)
 

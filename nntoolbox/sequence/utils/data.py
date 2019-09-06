@@ -5,7 +5,7 @@ import multiprocessing as mp
 from functools import partial
 
 
-__all__ = ['id_to_text']
+__all__ = ['id_to_text', 'text_to_id']
 
 
 def id_to_text(sequence, vocab: Vocab):
@@ -16,10 +16,18 @@ def id_to_text(sequence, vocab: Vocab):
     :param vocab: vocab object
     :return: text (array form)
     """
-    ret = []
-    for token in sequence:
-        ret.append(vocab.itos[token])
-    return ret
+    return [vocab.itos[token] for token in sequence]
+
+
+def text_to_id(sequence: List[str], vocab: Vocab):
+    """
+    Convert a sequence of string to corresponding list of numeric tokens
+
+    :param sequence: list of string
+    :param vocab: vocab object
+    :return: list of tokens
+    """
+    return [vocab.stoi[word] for word in sequence]
 
 
 def tokenize_sentence(sentence: str, model=spacy.load('en')) -> List[str]:

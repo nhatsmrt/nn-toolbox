@@ -13,6 +13,7 @@ class DropConnect(nn.Module):
 
     Reference:
 
+    Li Wan, Matthew Zeiler, Sixin Zhang, Yann Le Cun, Rob Fergus. "Regularization of Neural Networks using DropConnect."
     http://yann.lecun.com/exdb/publis/pdf/wan-icml-13.pdf
     """
 
@@ -45,6 +46,3 @@ class DropConnect(nn.Module):
             # To avoid the warning that comes because the weights aren't flattened.
             warnings.simplefilter("ignore")
             return self.module.forward(*inputs)
-
-
-
