@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Whenever I do a project, I always have to re-implement everything from scratch. At first, this is helpful because it requires me to really learn the concepts and procedures by heart. However, these chores quickly become irritatingly repetitive. So I start to create this repository, to store all the useful pieces of code.
+Whenever I do a project, I always have to re-implement everything from scratch. At first, this is helpful because it requires me to really learn the concepts and procedures by heart. However, these chores quickly become irritatingly repetitive. So I create this repository, to store all the useful pieces of code.
 <br />
 This soon extends to the stuff that I see in papers and want to implement. Finally, as I was implementing some of the more difficult stuff (e.g the callbacks) the awesome fastai course comes out, so I decide to use this opportunity to follow along the lessons, adapting the codes (i.e the notebooks) and the library to suit my existing codebase.
 
@@ -40,6 +40,8 @@ Note that I have released the codes as a package on PyPI, which might be behind 
 ```
 pip install nn-toolbox
 ```
+If you don't use the PyPI installation however, be careful with dependencies. Take a look at the requirements file, which should cover everything needed (except for the optional NVIDIA's Apex, which is only used for mixed precision training).
+<br />
 Also note that I tend to work on my most recent stuffs on the experimental branch, so you should use this branch for the latest updates. 
 <br/>
 Finally, please be aware that this repository is by nature HIGHLY EXPERIMENTAL, so it can be quite volatile. If you encounter a bug, tell me and I'll take a look at it as soon as I have the chance.

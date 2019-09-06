@@ -20,6 +20,14 @@ nntoolbox.sequence.components.cells.multiplicative module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.sequence.components.cells.on module
+---------------------------------------------
+
+.. automodule:: nntoolbox.sequence.components.cells.on
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.sequence.components.cells.zoneout module
 --------------------------------------------------
 

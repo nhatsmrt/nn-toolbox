@@ -20,6 +20,14 @@ nntoolbox.components.components module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.components.dndf module
+--------------------------------
+
+.. automodule:: nntoolbox.components.dndf
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nntoolbox.components.kernel module
 ----------------------------------
 
@@ -32,6 +40,14 @@ nntoolbox.components.maxout module
 ----------------------------------
 
 .. automodule:: nntoolbox.components.maxout
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nntoolbox.components.merge module
+---------------------------------
+
+.. automodule:: nntoolbox.components.merge
    :members:
    :undoc-members:
    :show-inheritance:

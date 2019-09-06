@@ -111,6 +111,26 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="nntoolbox.components.components.ModifyByLambda">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">ModifyByLambda</code><span class="sig-paren">(</span><em class="sig-param">module: torch.nn.modules.module.Module, fn: Callable[torch.Tensor, torch.Tensor]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#ModifyByLambda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.ModifyByLambda" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.components.components.ModifyByLambda.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/components.html#ModifyByLambda.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.ModifyByLambda.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="nntoolbox.components.components.ScalingLayer">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.components.</code><code class="sig-name descname">ScalingLayer</code><span class="sig-paren">(</span><em class="sig-param">scale: float = 0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/components.html#ScalingLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.components.ScalingLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nntoolbox.components.components.LambdaLayer" title="nntoolbox.components.components.LambdaLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.components.components.LambdaLayer</span></code></a></p>
@@ -274,6 +294,44 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-nntoolbox.components.dndf">
+<span id="nntoolbox-components-dndf-module"></span><h2>nntoolbox.components.dndf module<a class="headerlink" href="#module-nntoolbox.components.dndf" title="Permalink to this headline">¶</a></h2>
+<p>Deep Neural Decision Forest</p>
+<dl class="class">
+<dt id="nntoolbox.components.dndf.DNDFTree">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.dndf.</code><code class="sig-name descname">DNDFTree</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">tree_depth: int</em>, <em class="sig-param">output_activation=functools.partial(&lt;class 'torch.nn.modules.activation.Softmax'&gt;</em>, <em class="sig-param">dim=1)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/dndf.html#DNDFTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.dndf.DNDFTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Based on Deep Neural Decision Forest, but with the leaf node parameterized for end-to-end training,
+and the decision trees balanced. Use BFS + DP for fast path computations</p>
+<p class="rubric">References</p>
+<p>Peter Kontschieder, Madalina Fiterau, Antonio Criminisi, Samuel Rota Bulo. “Deep Neural Decision Forests.”
+<a class="reference external" href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Kontschieder_Deep_Neural_Decision_ICCV_2015_paper.pdf">https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Kontschieder_Deep_Neural_Decision_ICCV_2015_paper.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.components.dndf.DNDFTree.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/dndf.html#DNDFTree.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.dndf.DNDFTree.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.components.dndf.DNDF">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.dndf.</code><code class="sig-name descname">DNDF</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">n_trees: int</em>, <em class="sig-param">tree_depth: int</em>, <em class="sig-param">output_activation=functools.partial(&lt;class 'torch.nn.modules.activation.Softmax'&gt;</em>, <em class="sig-param">dim=1)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/dndf.html#DNDF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.dndf.DNDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.components.merge.Mean" title="nntoolbox.components.merge.Mean"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.components.merge.Mean</span></code></a></p>
+<p class="rubric">References</p>
+<p>Peter Kontschieder, Madalina Fiterau, Antonio Criminisi, Samuel Rota Bulo. “Deep Neural Decision Forests.”
+<a class="reference external" href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Kontschieder_Deep_Neural_Decision_ICCV_2015_paper.pdf">https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Kontschieder_Deep_Neural_Decision_ICCV_2015_paper.pdf</a></p>
+</dd></dl>
+
+</div>
 <div class="section" id="module-nntoolbox.components.kernel">
 <span id="nntoolbox-components-kernel-module"></span><h2>nntoolbox.components.kernel module<a class="headerlink" href="#module-nntoolbox.components.kernel" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -320,6 +378,69 @@ registered hooks while the latter silently ignores them.</p>
 <dd class="field-even"><p>(batch_size, out_features)</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-nntoolbox.components.merge">
+<span id="nntoolbox-components-merge-module"></span><h2>nntoolbox.components.merge module<a class="headerlink" href="#module-nntoolbox.components.merge" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.components.merge.Multiply">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.merge.</code><code class="sig-name descname">Multiply</code><span class="sig-paren">(</span><em class="sig-param">modules: List[torch.nn.modules.module.Module]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/merge.html#Multiply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.merge.Multiply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.components.merge.Multiply.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/merge.html#Multiply.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.merge.Multiply.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.components.merge.Mean">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.merge.</code><code class="sig-name descname">Mean</code><span class="sig-paren">(</span><em class="sig-param">modules: List[torch.nn.modules.module.Module]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/merge.html#Mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.merge.Mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.components.merge.Mean.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/merge.html#Mean.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.merge.Mean.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.components.merge.Sum">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.merge.</code><code class="sig-name descname">Sum</code><span class="sig-paren">(</span><em class="sig-param">modules: List[torch.nn.modules.module.Module]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/merge.html#Sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.merge.Sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="nntoolbox.components.merge.Sum.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/components/merge.html#Sum.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.merge.Sum.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -517,7 +638,8 @@ registered hooks while the latter silently ignores them.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Implementation based on fastai’s WeightDropout (from course 2 v3 notebook)</p>
 <p>Reference:</p>
-<p><a class="reference external" href="http://yann.lecun.com/exdb/publis/pdf/wan-icml-13.pdf">http://yann.lecun.com/exdb/publis/pdf/wan-icml-13.pdf</a></p>
+<p>Li Wan, Matthew Zeiler, Sixin Zhang, Yann Le Cun, Rob Fergus. “Regularization of Neural Networks using DropConnect.”
+<a class="reference external" href="http://yann.lecun.com/exdb/publis/pdf/wan-icml-13.pdf">http://yann.lecun.com/exdb/publis/pdf/wan-icml-13.pdf</a></p>
 <dl class="method">
 <dt id="nntoolbox.components.regularization.DropConnect.forward">
 <code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">*inputs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/components/regularization.html#DropConnect.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.regularization.DropConnect.forward" title="Permalink to this definition">¶</a></dt>
@@ -612,8 +734,10 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.activation">nntoolbox.components.activation module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.components">nntoolbox.components.components module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.dndf">nntoolbox.components.dndf module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.kernel">nntoolbox.components.kernel module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.maxout">nntoolbox.components.maxout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.merge">nntoolbox.components.merge module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.mixture">nntoolbox.components.mixture module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.pool">nntoolbox.components.pool module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nntoolbox.components.rbf">nntoolbox.components.rbf module</a></li>

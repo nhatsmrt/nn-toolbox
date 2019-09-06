@@ -37,7 +37,7 @@
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;LambdaLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;ScalingLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;BiasLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;ResidualLinearBlock&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;LambdaLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;ModifyByLambda&#39;</span><span class="p">,</span> <span class="s1">&#39;ScalingLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;BiasLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;ResidualLinearBlock&#39;</span><span class="p">,</span>
     <span class="s1">&#39;LinearlyAugmentedFF&#39;</span><span class="p">,</span> <span class="s1">&#39;HighwayLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;SquareUnitLinear&#39;</span><span class="p">,</span>
     <span class="s1">&#39;QuadraticPolynomialLayer&#39;</span><span class="p">,</span> <span class="s1">&#39;MLP&#39;</span>
 <span class="p">]</span>
@@ -55,6 +55,16 @@
 
 <div class="viewcode-block" id="LambdaLayer.forward"><a class="viewcode-back" href="../../../generated/nntoolbox.components.html#nntoolbox.components.components.LambdaLayer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ModifyByLambda"><a class="viewcode-back" href="../../../generated/nntoolbox.components.html#nntoolbox.components.components.ModifyByLambda">[docs]</a><span class="k">class</span> <span class="nc">ModifyByLambda</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span>
+
+<div class="viewcode-block" id="ModifyByLambda.forward"><a class="viewcode-back" href="../../../generated/nntoolbox.components.html#nntoolbox.components.components.ModifyByLambda.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span></div></div>
 
 
 <div class="viewcode-block" id="ScalingLayer"><a class="viewcode-back" href="../../../generated/nntoolbox.components.html#nntoolbox.components.components.ScalingLayer">[docs]</a><span class="k">class</span> <span class="nc">ScalingLayer</span><span class="p">(</span><span class="n">LambdaLayer</span><span class="p">):</span>

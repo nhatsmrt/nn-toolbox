@@ -42,6 +42,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.highway">nntoolbox.sequence.components.cells.highway module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.multiplicative">nntoolbox.sequence.components.cells.multiplicative module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.on">nntoolbox.sequence.components.cells.on module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells.zoneout">nntoolbox.sequence.components.cells.zoneout module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.components.cells.html#module-nntoolbox.sequence.components.cells">Module contents</a></li>
 </ul>
@@ -314,6 +315,37 @@ registered hooks while the latter silently ignores them.</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="nntoolbox.sequence.components.embedding.EmbeddingDropout">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.embedding.</code><code class="sig-name descname">EmbeddingDropout</code><span class="sig-paren">(</span><em class="sig-param">emb: torch.nn.modules.sparse.Embedding</em>, <em class="sig-param">drop_p: float = 0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/embedding.html#EmbeddingDropout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.embedding.EmbeddingDropout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>“Zero out” the same word across time step for each batch. E.g:</p>
+<p>“The cat hates the dog.” -&gt; “- cat hates - dog.”</p>
+<p>Based on fastai’s notebook implementation (which is slightly slower than as suggested in the paper, but easier
+to implement).</p>
+<p class="rubric">References</p>
+<p>FastAI Course 2 V3 Notebook:
+<a class="reference external" href="https://github.com/fastai/course-v3/blob/master/nbs/dl2/12a_awd_lstm.ipynb">https://github.com/fastai/course-v3/blob/master/nbs/dl2/12a_awd_lstm.ipynb</a></p>
+<p>Yarin Gal and Zoubin Ghahramani. “A Theoretically Grounded Application of Dropout in Recurrent Neural Networks.”
+<a class="reference external" href="https://papers.nips.cc/paper/6241-a-theoretically-grounded-application-of-dropout-in-recurrent-neural-networks.pdf">https://papers.nips.cc/paper/6241-a-theoretically-grounded-application-of-dropout-in-recurrent-neural-networks.pdf</a></p>
+<p>Stephen Merity, Nitish Shirish Keskar, Richard Socher. “Regularizing and Optimizing LSTM Language Models.”
+<a class="reference external" href="https://arxiv.org/abs/1708.02182">https://arxiv.org/abs/1708.02182</a></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.embedding.EmbeddingDropout.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/components/embedding.html#EmbeddingDropout.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.embedding.EmbeddingDropout.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-nntoolbox.sequence.components.hierarchical">
 <span id="nntoolbox-sequence-components-hierarchical-module"></span><h2>nntoolbox.sequence.components.hierarchical module<a class="headerlink" href="#module-nntoolbox.sequence.components.hierarchical" title="Permalink to this headline">¶</a></h2>
@@ -456,26 +488,6 @@ registered hooks while the latter silently ignores them.</p>
 <div class="section" id="module-nntoolbox.sequence.components.rnn">
 <span id="nntoolbox-sequence-components-rnn-module"></span><h2>nntoolbox.sequence.components.rnn module<a class="headerlink" href="#module-nntoolbox.sequence.components.rnn" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="nntoolbox.sequence.components.rnn.JitRNNLayer">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitRNNLayer</code><span class="sig-paren">(</span><em class="sig-param">base_cell: Callable[..., torch.nn.modules.module.Module], *cell_args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitRNNLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitRNNLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
-<p>Implement an RNN layer with jit script module</p>
-<p class="rubric">References</p>
-<p>The PyTorch Team. “Optimizing CUDA Recurrent Neural Networks with TorchScript.”
-<a class="reference external" href="https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/">https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/</a></p>
-</dd></dl>
-
-<dl class="class">
-<dt id="nntoolbox.sequence.components.rnn.JitLSTMLayer">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitLSTMLayer</code><span class="sig-paren">(</span><em class="sig-param">base_cell: Callable[..., torch.nn.modules.module.Module], *cell_args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitLSTMLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitLSTMLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
-<p>Implement an LSTM layer with jit script module</p>
-<p class="rubric">References</p>
-<p>The PyTorch Team. “Optimizing CUDA Recurrent Neural Networks with TorchScript.”
-<a class="reference external" href="https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/">https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/</a></p>
-</dd></dl>
-
-<dl class="class">
 <dt id="nntoolbox.sequence.components.rnn.RNNDropout">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">RNNDropout</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#RNNDropout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.RNNDropout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
@@ -496,6 +508,36 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="nntoolbox.sequence.components.rnn.JitRNNDropout">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitRNNDropout</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitRNNDropout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitRNNDropout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.rnn.JitRNNLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitRNNLayer</code><span class="sig-paren">(</span><em class="sig-param">base_cell: Callable[..., torch.nn.modules.module.Module], *cell_args, inp_drop_p: float = 0.0, recurrent_drop_p: float = 0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitRNNLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitRNNLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+<p>Implement an RNN layer with jit script module</p>
+<p class="rubric">References</p>
+<p>The PyTorch Team. “Optimizing CUDA Recurrent Neural Networks with TorchScript.”
+<a class="reference external" href="https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/">https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/</a></p>
+<p>Yarin Gal, Zoubin Ghahramani. “A Theoretically Grounded Application of Dropout in Recurrent Neural Networks.”
+<a class="reference external" href="https://papers.nips.cc/paper/6241-a-theoretically-grounded-application-of-dropout-in-recurrent-neural-networks">https://papers.nips.cc/paper/6241-a-theoretically-grounded-application-of-dropout-in-recurrent-neural-networks</a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.components.rnn.JitLSTMLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitLSTMLayer</code><span class="sig-paren">(</span><em class="sig-param">base_cell: Callable[..., torch.nn.modules.module.Module], *cell_args, inp_drop_p: float = 0.0, recurrent_drop_p: float = 0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitLSTMLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitLSTMLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
+<p>Implement an LSTM layer with jit script module</p>
+<p class="rubric">References</p>
+<p>The PyTorch Team. “Optimizing CUDA Recurrent Neural Networks with TorchScript.”
+<a class="reference external" href="https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/">https://pytorch.org/blog/optimizing-cuda-rnn-with-torchscript/</a></p>
+<p>Yarin Gal, Zoubin Ghahramani. “A Theoretically Grounded Application of Dropout in Recurrent Neural Networks.”
+<a class="reference external" href="https://papers.nips.cc/paper/6241-a-theoretically-grounded-application-of-dropout-in-recurrent-neural-networks">https://papers.nips.cc/paper/6241-a-theoretically-grounded-application-of-dropout-in-recurrent-neural-networks</a></p>
+</dd></dl>
+
+<dl class="class">
 <dt id="nntoolbox.sequence.components.rnn.RNNSequential">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">RNNSequential</code><span class="sig-paren">(</span><em class="sig-param">*layers</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#RNNSequential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.RNNSequential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
@@ -513,12 +555,6 @@ registered hooks while the latter silently ignores them.</p>
 </div>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="class">
-<dt id="nntoolbox.sequence.components.rnn.JitRNNDropout">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.rnn.</code><code class="sig-name descname">JitRNNDropout</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/components/rnn.html#JitRNNDropout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.rnn.JitRNNDropout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.jit.ScriptModule</span></code></p>
 </dd></dl>
 
 <dl class="class">

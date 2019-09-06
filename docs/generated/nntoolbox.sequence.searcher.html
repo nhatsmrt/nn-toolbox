@@ -34,6 +34,26 @@
             
   <div class="section" id="nntoolbox-sequence-searcher-package">
 <h1>nntoolbox.sequence.searcher package<a class="headerlink" href="#nntoolbox-sequence-searcher-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-nntoolbox.sequence.searcher.beam">
+<span id="nntoolbox-sequence-searcher-beam-module"></span><h2>nntoolbox.sequence.searcher.beam module<a class="headerlink" href="#module-nntoolbox.sequence.searcher.beam" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nntoolbox.sequence.searcher.beam.LMBeamSearcher">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.searcher.beam.</code><code class="sig-name descname">LMBeamSearcher</code><span class="sig-paren">(</span><em class="sig-param">model: nntoolbox.sequence.models.lm.LanguageModel</em>, <em class="sig-param">vocab_size: int</em>, <em class="sig-param">k: int = 5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/searcher/beam.html#LMBeamSearcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.searcher.beam.LMBeamSearcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Using beam search to iteratively add new word to the sentence.</p>
+<p>At each iteration, keep track of top K best sentences.</p>
+<p>(UNTESTED)</p>
+<dl class="method">
+<dt id="nntoolbox.sequence.searcher.beam.LMBeamSearcher.search">
+<code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em>, <em class="sig-param">n_iter: int</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/searcher/beam.html#LMBeamSearcher.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.searcher.beam.LMBeamSearcher.search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-nntoolbox.sequence.searcher">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.sequence.searcher" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -74,6 +94,8 @@
 <li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.learner.html">nntoolbox.sequence.learner package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.models.html">nntoolbox.sequence.models package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">nntoolbox.sequence.searcher package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.searcher.beam">nntoolbox.sequence.searcher.beam module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.searcher">Module contents</a></li>
 </ul>
 </li>
