@@ -30,11 +30,11 @@ class LanguageModel(nn.Module):
         :return: (seq_length, batch_size, vocab_size)
         """
         output, hidden = self.encoder(self.embedding(input), self.hidden) # (seq_length, batch_size, output_dim)
-        # self.hidden = hidden.detach()
-        if isinstance(self.hidden, torch.tensor):
-            self.hidden = hidden.detach()
-        else:
-            self.hidden = (h.detach() for h in hidden)
+        self.hidden = hidden.detach()
+        # if isinstance(self.hidden, Tensor):
+        #     self.hidden = hidden.detach()
+        # else:
+        #     self.hidden = tuple((h.detach() for h in hidden))
         return self.head(output) # (seq_length, batch_size, vocab_size)
 
     def get_encoder(self) -> nn.Module:
