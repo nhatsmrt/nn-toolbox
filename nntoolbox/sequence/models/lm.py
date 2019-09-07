@@ -22,13 +22,18 @@ class LanguageModel(nn.Module):
         self.embedding = embedding
         self.encoder = encoder
         self.head = head
+        self.hidden = None
 
     def forward(self, input: Tensor) -> Tensor:
         """
         :param input: (seq_length, batch_size, input_dim)
         :return: (seq_length, batch_size, vocab_size)
         """
-        output = self.encoder(self.embedding(input))[0] # (seq_length, batch_size, output_dim)
+        output, hidden = self.encoder(self.embedding(input), self.hidden) # (seq_length, batch_size, output_dim)
+        if isinstance(self.hidden, Tensor):
+            self.hidden = hidden.detach()
+        else:
+            self.hidden = (h.detach() for h in hidden)
         return self.head(output) # (seq_length, batch_size, vocab_size)
 
     def get_encoder(self) -> nn.Module:
@@ -99,3 +104,7 @@ class LanguageModel(nn.Module):
             complete_sentence.append(input.cpu().detach().item())
 
         return complete_sentence
+
+    def reset_hidden(self):
+        self.hidden = None
+
