@@ -93,8 +93,8 @@ class LanguageModelLearner:
         loss /= total_data
         logs = dict()
         logs["loss"] = loss
-        logs["outputs"] = torch.cat(all_outputs, dim=1)
-        logs["labels"] = torch.cat(all_labels, dim=0)
+        logs["outputs"] = torch.cat(all_outputs, dim=2)
+        logs["labels"] = torch.cat(all_labels, dim=1)
 
         return self._cb_handler.on_epoch_end(logs)
 
