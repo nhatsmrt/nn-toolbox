@@ -3,6 +3,7 @@ from torch import nn, Tensor
 from typing import Optional
 from ...components import MLP
 import numpy as np
+from ...init import sqrt_uniform_init
 
 
 __all__ = ['CollabFiltering', 'NonLinearCF']
@@ -15,6 +16,7 @@ class CollabFiltering(nn.Module):
         self.users = nn.Embedding(num_embeddings=n_users, embedding_dim=embedding_dim)
         self.products = nn.Embedding(num_embeddings=n_products, embedding_dim=embedding_dim)
         self.embedding_dim = embedding_dim
+        sqrt_uniform_init(self)
 
     def forward(self, inputs: Tensor) -> Tensor:
         """
@@ -43,6 +45,7 @@ class NonLinearCF(nn.Module):
         super().__init__()
         self.users = nn.Embedding(num_embeddings=n_users, embedding_dim=user_dim)
         self.products = nn.Embedding(num_embeddings=n_products, embedding_dim=product_dim)
+        sqrt_uniform_init(self)
         if body is None:
             self.body = MLP(
                 in_features=product_dim + user_dim,
