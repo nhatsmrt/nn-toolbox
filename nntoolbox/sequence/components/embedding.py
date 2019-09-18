@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from ...utils import dropout_mask
 
 
-__all__ = ['AdditiveContextEmbedding', 'TiedOutputEmbedding', 'EmbeddingDropout']
+__all__ = ['AdditiveContextEmbedding', 'TiedOutputEmbedding', 'EmbeddingDropout', 'SinusoidPositionalEncoding']
 
 
 class AdditiveContextEmbedding(nn.Embedding):
@@ -82,3 +82,30 @@ class EmbeddingDropout(nn.Module):
             max_norm=self.emb.max_norm, norm_type=self.emb.norm_type,
             scale_grad_by_freq=self.emb.scale_grad_by_freq, sparse=self.emb.sparse
         )
+
+
+class SinusoidPositionalEncoding(nn.Module):
+    """
+    Sinusoid Positional Encoding for transformers to encode position. (UNTESTED)
+
+    References:
+        Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit,
+        Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin.
+        "Attention Is All You Need." https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf
+    """
+    def forward(self, input: Tensor) -> Tensor:
+        """
+        :param input: (seq_len, batch_size, n_features)
+        :return: same shape
+        """
+        pos_encoding = torch.arange(
+            0, input.shape[0], dtype=input.dtype, device=input.device
+        )[:, None, None, None].repeat((1, input.shape[1], input.shape[2] // 2, 1))
+        dim_encoding = torch.arange(
+            0, input.shape[2], 2, dtype=input.dtype, device=input.device
+        )[None, None, :, None].repeat((input.shape[0], input.shape[1], 1, 1))
+
+        encoding_even = torch.sin(pos_encoding / torch.pow(10000, dim_encoding / input.shape[2]))
+        encoding_odd = torch.cos(pos_encoding / torch.pow(10000, dim_encoding / input.shape[2]))
+        encoding = torch.cat([encoding_even, encoding_odd], dim=-1).view(input.shape[0], input.shape[1], input.shape[2])
+        return input + encoding
