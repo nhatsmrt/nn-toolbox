@@ -86,7 +86,7 @@ class EmbeddingDropout(nn.Module):
 
 class SinusoidPositionalEncoding(nn.Module):
     """
-    Sinusoid Positional Encoding for transformers to encode position. (UNTESTED)
+    Sinusoid Positional Encoding for Transformers. (UNTESTED)
 
     References:
         Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit,
