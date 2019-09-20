@@ -346,6 +346,30 @@ registered hooks while the latter silently ignores them.</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="nntoolbox.sequence.components.embedding.SinusoidPositionalEncoding">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.embedding.</code><code class="sig-name descname">SinusoidPositionalEncoding</code><a class="reference internal" href="../_modules/nntoolbox/sequence/components/embedding.html#SinusoidPositionalEncoding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.embedding.SinusoidPositionalEncoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Sinusoid Positional Encoding for Transformers. (UNTESTED)</p>
+<p class="rubric">References</p>
+<p>Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit,
+Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin.
+“Attention Is All You Need.” <a class="reference external" href="https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf">https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf</a></p>
+<dl class="method">
+<dt id="nntoolbox.sequence.components.embedding.SinusoidPositionalEncoding.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/components/embedding.html#SinusoidPositionalEncoding.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.embedding.SinusoidPositionalEncoding.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – (seq_len, batch_size, n_features)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>same shape</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-nntoolbox.sequence.components.hierarchical">
 <span id="nntoolbox-sequence-components-hierarchical-module"></span><h2>nntoolbox.sequence.components.hierarchical module<a class="headerlink" href="#module-nntoolbox.sequence.components.hierarchical" title="Permalink to this headline">¶</a></h2>
@@ -610,6 +634,16 @@ registered hooks while the latter silently ignores them.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-nntoolbox.sequence.components.transformer">
+<span id="nntoolbox-sequence-components-transformer-module"></span><h2>nntoolbox.sequence.components.transformer module<a class="headerlink" href="#module-nntoolbox.sequence.components.transformer" title="Permalink to this headline">¶</a></h2>
+<p>Some extra components for transformers model</p>
+<dl class="class">
+<dt id="nntoolbox.sequence.components.transformer.ProductKeyMemory">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.components.transformer.</code><code class="sig-name descname">ProductKeyMemory</code><a class="reference internal" href="../_modules/nntoolbox/sequence/components/transformer.html#ProductKeyMemory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.components.transformer.ProductKeyMemory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+</dd></dl>
+
+</div>
 <div class="section" id="module-nntoolbox.sequence.components">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.sequence.components" title="Permalink to this headline">¶</a></h2>
 <p>For RNN, the hierarchy of components should be:</p>
@@ -649,7 +683,6 @@ dimensions. StackedLayer stacks layers on top of each other and sequentially app
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="nntoolbox.sequence.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">nntoolbox.sequence.components package</a><ul>
@@ -665,6 +698,7 @@ dimensions. StackedLayer stacks layers on top of each other and sequentially app
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.components.modifier">nntoolbox.sequence.components.modifier module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.components.pool">nntoolbox.sequence.components.pool module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.components.rnn">nntoolbox.sequence.components.rnn module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.components.transformer">nntoolbox.sequence.components.transformer module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.components">Module contents</a></li>
 </ul>
 </li>

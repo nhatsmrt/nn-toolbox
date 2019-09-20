@@ -4,10 +4,10 @@ nntoolbox.optim package
 Submodules
 ----------
 
-nntoolbox.optim.adamW module
-----------------------------
+nntoolbox.optim.coord\_desc module
+----------------------------------
 
-.. automodule:: nntoolbox.optim.adamW
+.. automodule:: nntoolbox.optim.coord_desc
    :members:
    :undoc-members:
    :show-inheritance:

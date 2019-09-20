@@ -19,7 +19,6 @@ Welcome to nn-toolbox's documentation!
   nntoolbox.metrics
   nntoolbox.models
   nntoolbox.optim
-  nntoolbox.recommendation
   nntoolbox.sequence
   nntoolbox.tabular
   nntoolbox.transforms

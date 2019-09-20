@@ -36,16 +36,13 @@
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">Tensor</span>
 <span class="kn">from</span> <span class="nn">.callbacks</span> <span class="k">import</span> <span class="n">Callback</span>
 <span class="kn">from</span> <span class="nn">..hooks</span> <span class="k">import</span> <span class="n">OutputHook</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">compute_jacobian_v2</span><span class="p">,</span> <span class="n">count_trainable_parameters</span><span class="p">,</span> <span class="n">hessian_diagonal</span>
-<span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="k">import</span> <span class="n">grad</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;WeightRegularization&#39;</span><span class="p">,</span> <span class="s1">&#39;WeightElimination&#39;</span><span class="p">,</span> <span class="s1">&#39;L1WR&#39;</span><span class="p">,</span> <span class="s1">&#39;L2WR&#39;</span><span class="p">,</span>
     <span class="s1">&#39;ActivationRegularization&#39;</span><span class="p">,</span> <span class="s1">&#39;L1AR&#39;</span><span class="p">,</span> <span class="s1">&#39;L2AR&#39;</span><span class="p">,</span> <span class="s1">&#39;StudentTPenaltyAR&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;TemporalActivationRegularization&#39;</span><span class="p">,</span> <span class="s1">&#39;L1TAR&#39;</span><span class="p">,</span> <span class="s1">&#39;L2TAR&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;DoubleBackpropagationCB&#39;</span><span class="p">,</span> <span class="s1">&#39;FlatMinimaSearch&#39;</span>
+    <span class="s1">&#39;TemporalActivationRegularization&#39;</span><span class="p">,</span> <span class="s1">&#39;L1TAR&#39;</span><span class="p">,</span> <span class="s1">&#39;L2TAR&#39;</span>
 <span class="p">]</span>
 
 
@@ -237,133 +234,6 @@
             <span class="n">lambd</span><span class="o">=</span><span class="n">lambd</span><span class="p">,</span>
             <span class="n">loss_name</span><span class="o">=</span><span class="n">loss_name</span>
         <span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="DoubleBackpropagationCB"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.DoubleBackpropagationCB">[docs]</a><span class="k">class</span> <span class="nc">DoubleBackpropagationCB</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Double backpropagation regularizer to penalize slight perturbation in input (as a CB) (UNTESTED)</span>
-
-<span class="sd">    https://www.researchgate.net/profile/Harris_Drucker/publication/5576575_Improving_generalization_performance_using_double_backpropagation/links/540754510cf2c48563b2ab7f.pdf</span>
-
-<span class="sd">    http://yann.lecun.com/exdb/publis/pdf/drucker-lecun-91.pdf</span>
-
-<span class="sd">    http://luizgh.github.io/libraries/2018/06/22/pytorch-doublebackprop/</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;inputs&quot;</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;loss&quot;</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_name</span> <span class="o">=</span> <span class="n">input_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span> <span class="o">=</span> <span class="n">loss_name</span>
-
-<div class="viewcode-block" id="DoubleBackpropagationCB.on_batch_begin"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.DoubleBackpropagationCB.on_batch_begin">[docs]</a>    <span class="k">def</span> <span class="nf">on_batch_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">input_name</span><span class="p">]</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">input_name</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">data</span></div>
-
-<div class="viewcode-block" id="DoubleBackpropagationCB.after_losses"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.DoubleBackpropagationCB.after_losses">[docs]</a>    <span class="k">def</span> <span class="nf">after_losses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">losses</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="n">inp_grad</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span><span class="n">losses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">create_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">losses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">losses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">inp_grad</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">losses</span></div></div>
-
-
-<div class="viewcode-block" id="FlatMinimaSearch"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.FlatMinimaSearch">[docs]</a><span class="k">class</span> <span class="nc">FlatMinimaSearch</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Encourage model to find flat minima, which helps generalization (UNTESTED)</span>
-
-<span class="sd">    References:</span>
-<span class="sd">        Sepp Hochreiter and Jurgen Schmidhuber. &quot;Flat Minima.&quot;</span>
-<span class="sd">        https://www.mitpressjournals.org/doi/abs/10.1162/neco.1997.9.1.1</span>
-
-<span class="sd">        Sepp Hochreiter and Jurgen Schmidhuber. &quot;Feature Extraction through LOCOCODE.&quot;</span>
-<span class="sd">        http://www.bioinf.jku.at/publications/older/2104.pdf</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lambd</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">output_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">lambd</span> <span class="o">&gt;=</span> <span class="mf">0.0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lambd</span> <span class="o">=</span> <span class="n">lambd</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_name</span> <span class="o">=</span> <span class="n">output_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span> <span class="o">=</span> <span class="n">loss_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
-
-<div class="viewcode-block" id="FlatMinimaSearch.on_train_begin"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.FlatMinimaSearch.on_train_begin">[docs]</a>    <span class="k">def</span> <span class="nf">on_train_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_params</span> <span class="o">=</span> <span class="n">count_trainable_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="FlatMinimaSearch.after_outputs"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.FlatMinimaSearch.after_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">after_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_name</span> <span class="ow">in</span> <span class="n">outputs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_name</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">outputs</span></div>
-
-<div class="viewcode-block" id="FlatMinimaSearch.after_losses"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.regularization.FlatMinimaSearch.after_losses">[docs]</a>    <span class="k">def</span> <span class="nf">after_losses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">losses</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span> <span class="ow">in</span> <span class="n">losses</span>
-        <span class="c1"># batch_size = self.output.shape[0]</span>
-        <span class="n">total_loss</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)):</span>
-            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">jacobian</span> <span class="o">=</span> <span class="n">compute_jacobian_v2</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
-
-            <span class="n">sq</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">jacobian</span><span class="p">]</span>
-            <span class="n">abs_jacob</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">jacobian</span><span class="p">]</span>
-            <span class="n">sq_sqrt</span> <span class="o">=</span> <span class="p">[(</span><span class="n">g</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">sq</span><span class="p">]</span>
-
-            <span class="n">first_term</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">sq</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-            <span class="n">second_term</span> <span class="o">=</span> <span class="p">[</span><span class="n">abs_g</span> <span class="o">/</span> <span class="n">sq_sqrt_g</span> <span class="k">for</span> <span class="n">abs_g</span><span class="p">,</span> <span class="n">sq_sqrt_g</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">abs_jacob</span><span class="p">,</span> <span class="n">sq_sqrt</span><span class="p">)]</span>
-            <span class="n">second_term</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">second_term</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_params</span>
-            <span class="n">total_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">first_term</span> <span class="o">+</span> <span class="n">second_term</span><span class="p">)</span>
-
-        <span class="n">total_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">total_loss</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-        <span class="n">losses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_loss</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambd</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="k">return</span> <span class="n">losses</span></div></div>
-
-
-<span class="k">class</span> <span class="nc">CurvatureDrivenSmoothing</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Encourage the model to be smooth (i.e has small curvature) (UNTESTED)</span>
-
-<span class="sd">    References:</span>
-
-<span class="sd">        Chris M. Bishop. &quot;Curvature-Driven Smoothing: A Learning Algorithm for Feedforward Networks.&quot;</span>
-<span class="sd">        https://pdfs.semanticscholar.org/3c39/ddfbd9822230b5375d581bf505ecf6255283.pdf</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lambd</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">input_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">loss_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">lambd</span> <span class="o">&gt;=</span> <span class="mf">0.0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lambd</span> <span class="o">=</span> <span class="n">lambd</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_name</span> <span class="o">=</span> <span class="n">output_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_name</span> <span class="o">=</span> <span class="n">input_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span> <span class="o">=</span> <span class="n">loss_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
-
-    <span class="k">def</span> <span class="nf">on_batch_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">train</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_name</span> <span class="ow">in</span> <span class="n">data</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">input_name</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">data</span>
-
-    <span class="k">def</span> <span class="nf">after_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">train</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_name</span> <span class="ow">in</span> <span class="n">outputs</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_name</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">outputs</span>
-
-    <span class="k">def</span> <span class="nf">after_losses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">losses</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">train</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span> <span class="ow">in</span> <span class="n">losses</span>
-            <span class="n">total_loss</span> <span class="o">=</span> <span class="p">[]</span>
-
-            <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)):</span>
-                <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-                <span class="n">hessian_diag</span> <span class="o">=</span> <span class="n">hessian_diagonal</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-                <span class="n">sos</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">h</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hessian_diag</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="n">total_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">total_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">total_loss</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.5</span>
-            <span class="n">losses</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loss_name</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_loss</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambd</span>
-
-        <span class="k">return</span> <span class="n">losses</span>
-
 </pre></div>
 
           </div>
@@ -393,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.models.html">nntoolbox.models package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
