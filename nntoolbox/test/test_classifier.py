@@ -4,7 +4,6 @@ from torchvision.datasets import ImageFolder, CIFAR10
 from torchvision.transforms import *
 from torch.optim import *
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from nntoolbox.optim import AdamW
 from torch.utils.data import random_split
 # from adabound import AdaBound
 

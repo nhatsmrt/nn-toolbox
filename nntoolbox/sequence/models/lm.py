@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from typing import List
 
 
-__all__ = ['LanguageModel']
+__all__ = ['LanguageModel', 'TransformerLM']
 
 
 class LanguageModel(nn.Module):
@@ -22,13 +22,18 @@ class LanguageModel(nn.Module):
         self.embedding = embedding
         self.encoder = encoder
         self.head = head
+        self.hidden = None
 
     def forward(self, input: Tensor) -> Tensor:
         """
         :param input: (seq_length, batch_size, input_dim)
         :return: (seq_length, batch_size, vocab_size)
         """
-        output = self.encoder(self.embedding(input))[0] # (seq_length, batch_size, output_dim)
+        output, hidden = self.encoder(self.embedding(input), self.hidden) # (seq_length, batch_size, output_dim)
+        if isinstance(hidden, Tensor):
+            self.hidden = hidden.detach()
+        else:
+            self.hidden = tuple((h.detach() for h in hidden))
         return self.head(output) # (seq_length, batch_size, vocab_size)
 
     def get_encoder(self) -> nn.Module:
@@ -99,3 +104,40 @@ class LanguageModel(nn.Module):
             complete_sentence.append(input.cpu().detach().item())
 
         return complete_sentence
+
+    def reset_hidden(self):
+        self.hidden = None
+
+
+class TransformerLM(LanguageModel):
+    def forward(self, input: Tensor) -> Tensor:
+        """
+        :param input: (seq_length, batch_size, input_dim)
+        :return: (seq_length, batch_size, vocab_size)
+        """
+        return self.head(self.encoder(self.embedding(input))) # (seq_length, batch_size, vocab_size)
+
+    @torch.no_grad()
+    def complete(self, input: Tensor, n_token_gen: int=1) -> List[int]:
+        """
+        Complete the sentence
+
+        :param input: a single partial sentence. (seq_len, )
+        :param n_token_gen: number of tokens to generated
+        :return: the complete sentence: (seq_len + n_token_gen, input_dim)
+        """
+        self.embedding.eval()
+        self.encoder.eval()
+        self.head.eval()
+
+        complete_sentence = [token.item() for token in input.view(-1).cpu().detach()]
+        input = input.unsqueeze(1)
+
+        for _ in range(n_token_gen):
+            output = self.encoder(self.embedding(input))
+            score = self.head(output[output.shape[0] - 1:]) # (1, batch_size, vocab_size)
+            input = torch.max(F.softmax(score, dim=-1), -1)[1] # (1, batch_size)
+            complete_sentence.append(input.cpu().detach().item())
+
+        return complete_sentence
+

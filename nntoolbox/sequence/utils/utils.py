@@ -2,14 +2,17 @@ from __future__ import unicode_literals, print_function, division
 import unicodedata
 import numpy as np
 from numpy import ndarray
+import dill
 import torch
 from torch import Tensor, nn
+from torchtext.data import Field
 from typing import Union
 
 
 __all__ = [
     'unicode_to_ascii', 'create_mask', 'create_mask_from_lengths',
-    'get_lengths', 'extract_last', 'load_embedding'
+    'get_lengths', 'extract_last', 'load_embedding',
+    'save_field', 'load_field'
 ]
 
 
@@ -89,3 +92,24 @@ def load_embedding(embedding: nn.Embedding, weight: Tensor):
     :param weight:
     """
     embedding.weight.data.copy_(weight)
+
+
+def save_field(field: Field, savepath: str):
+    """
+    Save the torchtext field object for restoring later
+
+    :param field:
+    :param savepath: end in pkl (a "pickle" file)
+    :return:
+    """
+    dill.dump(field, open(savepath, 'wb'))
+
+
+def load_field(loadpath: str) -> Field:
+    """
+    Load the pickled torchtext field object
+
+    :param loadpath:
+    :return: Field object
+    """
+    return dill.load(open(loadpath, 'rb'))

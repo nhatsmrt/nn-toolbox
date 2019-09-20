@@ -1,1 +1,1 @@
-"""For tabular data"""
+"""For tabular data and recommendation systems"""
