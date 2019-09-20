@@ -37,7 +37,7 @@
 <span class="kn">from</span> <span class="nn">...utils</span> <span class="k">import</span> <span class="n">dropout_mask</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AdditiveContextEmbedding&#39;</span><span class="p">,</span> <span class="s1">&#39;TiedOutputEmbedding&#39;</span><span class="p">,</span> <span class="s1">&#39;EmbeddingDropout&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AdditiveContextEmbedding&#39;</span><span class="p">,</span> <span class="s1">&#39;TiedOutputEmbedding&#39;</span><span class="p">,</span> <span class="s1">&#39;EmbeddingDropout&#39;</span><span class="p">,</span> <span class="s1">&#39;SinusoidPositionalEncoding&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="AdditiveContextEmbedding"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.AdditiveContextEmbedding">[docs]</a><span class="k">class</span> <span class="nc">AdditiveContextEmbedding</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">):</span>
@@ -115,6 +115,34 @@
             <span class="n">max_norm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">max_norm</span><span class="p">,</span> <span class="n">norm_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">norm_type</span><span class="p">,</span>
             <span class="n">scale_grad_by_freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">scale_grad_by_freq</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb</span><span class="o">.</span><span class="n">sparse</span>
         <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SinusoidPositionalEncoding"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.SinusoidPositionalEncoding">[docs]</a><span class="k">class</span> <span class="nc">SinusoidPositionalEncoding</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sinusoid Positional Encoding for Transformers. (UNTESTED)</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">        Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit,</span>
+<span class="sd">        Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin.</span>
+<span class="sd">        &quot;Attention Is All You Need.&quot; https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SinusoidPositionalEncoding.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.components.html#nntoolbox.sequence.components.embedding.SinusoidPositionalEncoding.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param input: (seq_len, batch_size, n_features)</span>
+<span class="sd">        :return: same shape</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pos_encoding</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span>
+        <span class="p">)[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span><span class="o">.</span><span class="n">repeat</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">dim_encoding</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">device</span>
+        <span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span><span class="o">.</span><span class="n">repeat</span><span class="p">((</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">encoding_even</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">pos_encoding</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="n">dim_encoding</span> <span class="o">/</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">encoding_odd</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">pos_encoding</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="n">dim_encoding</span> <span class="o">/</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">encoding</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">encoding_even</span><span class="p">,</span> <span class="n">encoding_odd</span><span class="p">],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">input</span> <span class="o">+</span> <span class="n">encoding</span></div></div>
 </pre></div>
 
           </div>
@@ -144,7 +172,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.models.html">nntoolbox.models package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>

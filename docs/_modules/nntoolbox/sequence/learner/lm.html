@@ -65,6 +65,7 @@
 
         <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epoch</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_epoch_begin</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">reset_hidden</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_iterator</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">learn_one_iter</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
@@ -91,41 +92,44 @@
 
 <div class="viewcode-block" id="LanguageModelLearner.evaluate"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.lm.LanguageModelLearner.evaluate">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">reset_hidden</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-        <span class="n">example</span> <span class="o">=</span> <span class="n">grab_next_batch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_val_iterator</span><span class="p">)</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_begin</span><span class="p">({</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">target</span><span class="p">},</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">text</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_output</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_epoch_end</span><span class="p">({</span>
-            <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">loss</span><span class="p">,</span>
-            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span>
-            <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">target</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
-        <span class="p">})</span></div>
+        <span class="c1"># example = grab_next_batch(self._val_iterator)</span>
+        <span class="c1"># inputs = self._cb_handler.on_batch_begin({&#39;text&#39;: example.text, &#39;target&#39;: example.target}, True)</span>
+        <span class="c1"># text, target = inputs[&#39;text&#39;], inputs[&#39;target&#39;]</span>
+        <span class="c1"># output = self.compute_output(text, False)</span>
+        <span class="c1"># loss = self.compute_loss(output, target, False).cpu().detach().item()</span>
+        <span class="c1"># return self._cb_handler.on_epoch_end({</span>
+        <span class="c1">#     &quot;loss&quot;: loss,</span>
+        <span class="c1">#     &quot;outputs&quot;: output.cpu().detach(),</span>
+        <span class="c1">#     &quot;labels&quot;: target.cpu()</span>
+        <span class="c1"># })</span>
 
 
-        <span class="c1"># all_outputs = []</span>
-        <span class="c1"># all_labels = []</span>
-        <span class="c1"># total_data = 0</span>
-        <span class="c1"># loss = 0</span>
+        <span class="n">all_outputs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">total_data</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># for example in self._val_iterator:</span>
-        <span class="c1">#     inputs = self._cb_handler.on_batch_begin({&#39;text&#39;: example.text, &#39;target&#39;: example.target}, True)</span>
-        <span class="c1">#     text, target = inputs[&#39;text&#39;], inputs[&#39;target&#39;]</span>
-        <span class="c1">#     output = self.compute_output(text, False)</span>
-        <span class="c1">#</span>
-        <span class="c1">#     all_outputs.append(output.cpu().detach())</span>
-        <span class="c1">#     all_labels.append(target.cpu())</span>
-        <span class="c1">#     loss += self.compute_loss(output, target, False).cpu().detach().item() * text.shape[1]</span>
-        <span class="c1">#     total_data += text.shape[1]</span>
-        <span class="c1">#</span>
-        <span class="c1"># loss /= total_data</span>
-        <span class="c1"># logs = dict()</span>
-        <span class="c1"># logs[&quot;loss&quot;] = loss</span>
-        <span class="c1"># logs[&quot;outputs&quot;] = torch.cat(all_outputs, dim=1)</span>
-        <span class="c1"># logs[&quot;labels&quot;] = torch.cat(all_labels, dim=0)</span>
-        <span class="c1">#</span>
-        <span class="c1"># return self._cb_handler.on_epoch_end(logs)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+            <span class="n">example</span> <span class="o">=</span> <span class="n">grab_next_batch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_val_iterator</span><span class="p">)</span>
+            <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_begin</span><span class="p">({</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">target</span><span class="p">},</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">text</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_output</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+            <span class="n">all_outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+            <span class="n">all_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">cpu</span><span class="p">())</span>
+            <span class="n">loss</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">*</span> <span class="n">text</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">total_data</span> <span class="o">+=</span> <span class="n">text</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">loss</span> <span class="o">/=</span> <span class="n">total_data</span>
+        <span class="n">logs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss</span>
+        <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_outputs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_labels</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_epoch_end</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="LanguageModelLearner.compute_output"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.learner.html#nntoolbox.sequence.learner.lm.LanguageModelLearner.compute_output">[docs]</a>    <span class="k">def</span> <span class="nf">compute_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">after_outputs</span><span class="p">({</span><span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span> <span class="n">train</span><span class="p">)[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span></div>
@@ -161,7 +165,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.models.html">nntoolbox.models package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>

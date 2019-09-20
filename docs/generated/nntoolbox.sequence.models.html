@@ -289,6 +289,55 @@ registered hooks while the latter silently ignores them.</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="nntoolbox.sequence.models.lm.LanguageModel.reset_hidden">
+<code class="sig-name descname">reset_hidden</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#LanguageModel.reset_hidden"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.LanguageModel.reset_hidden" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.sequence.models.lm.TransformerLM">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.models.lm.</code><code class="sig-name descname">TransformerLM</code><span class="sig-paren">(</span><em class="sig-param">embedding: torch.nn.modules.sparse.Embedding</em>, <em class="sig-param">encoder: torch.nn.modules.module.Module</em>, <em class="sig-param">head: torch.nn.modules.module.Module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#TransformerLM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.TransformerLM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.sequence.models.lm.LanguageModel" title="nntoolbox.sequence.models.lm.LanguageModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.sequence.models.lm.LanguageModel</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoder</strong> – encoding the hidden states of words up to now</p></li>
+<li><p><strong>head</strong> – compute score for each word given the input</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="nntoolbox.sequence.models.lm.TransformerLM.complete">
+<code class="sig-name descname">complete</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em>, <em class="sig-param">n_token_gen: int = 1</em><span class="sig-paren">)</span> &#x2192; List[int]<a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#TransformerLM.complete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.TransformerLM.complete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Complete the sentence</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – a single partial sentence. (seq_len, )</p></li>
+<li><p><strong>n_token_gen</strong> – number of tokens to generated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the complete sentence: (seq_len + n_token_gen, input_dim)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.sequence.models.lm.TransformerLM.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">input: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/models/lm.html#TransformerLM.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.models.lm.TransformerLM.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – (seq_length, batch_size, input_dim)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(seq_length, batch_size, vocab_size)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -325,7 +374,6 @@ registered hooks while the latter silently ignores them.</p>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="nntoolbox.sequence.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.components.html">nntoolbox.sequence.components package</a></li>

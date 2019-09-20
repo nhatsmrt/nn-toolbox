@@ -35,14 +35,17 @@
 <span class="kn">import</span> <span class="nn">unicodedata</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ndarray</span>
+<span class="kn">import</span> <span class="nn">dill</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torchtext.data</span> <span class="k">import</span> <span class="n">Field</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;unicode_to_ascii&#39;</span><span class="p">,</span> <span class="s1">&#39;create_mask&#39;</span><span class="p">,</span> <span class="s1">&#39;create_mask_from_lengths&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;get_lengths&#39;</span><span class="p">,</span> <span class="s1">&#39;extract_last&#39;</span><span class="p">,</span> <span class="s1">&#39;load_embedding&#39;</span>
+    <span class="s1">&#39;get_lengths&#39;</span><span class="p">,</span> <span class="s1">&#39;extract_last&#39;</span><span class="p">,</span> <span class="s1">&#39;load_embedding&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;save_field&#39;</span><span class="p">,</span> <span class="s1">&#39;load_field&#39;</span>
 <span class="p">]</span>
 
 
@@ -122,6 +125,27 @@
 <span class="sd">    :param weight:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">embedding</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="save_field"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.utils.html#nntoolbox.sequence.utils.utils.save_field">[docs]</a><span class="k">def</span> <span class="nf">save_field</span><span class="p">(</span><span class="n">field</span><span class="p">:</span> <span class="n">Field</span><span class="p">,</span> <span class="n">savepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save the torchtext field object for restoring later</span>
+
+<span class="sd">    :param field:</span>
+<span class="sd">    :param savepath: end in pkl (a &quot;pickle&quot; file)</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dill</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">savepath</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="load_field"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.utils.html#nntoolbox.sequence.utils.utils.load_field">[docs]</a><span class="k">def</span> <span class="nf">load_field</span><span class="p">(</span><span class="n">loadpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Field</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the pickled torchtext field object</span>
+
+<span class="sd">    :param loadpath:</span>
+<span class="sd">    :return: Field object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dill</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">loadpath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span></div>
 </pre></div>
 
           </div>
@@ -151,7 +175,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.models.html">nntoolbox.models package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>

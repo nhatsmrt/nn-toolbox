@@ -67,6 +67,14 @@ nntoolbox.sequence.components.rnn module
    :undoc-members:
    :show-inheritance:
 
+nntoolbox.sequence.components.transformer module
+------------------------------------------------
+
+.. automodule:: nntoolbox.sequence.components.transformer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------

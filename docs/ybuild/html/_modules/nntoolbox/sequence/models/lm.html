@@ -37,7 +37,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LanguageModel&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LanguageModel&#39;</span><span class="p">,</span> <span class="s1">&#39;TransformerLM&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="LanguageModel"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.lm.LanguageModel">[docs]</a><span class="k">class</span> <span class="nc">LanguageModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -55,13 +55,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">embedding</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">encoder</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">head</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="LanguageModel.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.lm.LanguageModel.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param input: (seq_length, batch_size, input_dim)</span>
 <span class="sd">        :return: (seq_length, batch_size, vocab_size)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="nb">input</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># (seq_length, batch_size, output_dim)</span>
+        <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="nb">input</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden</span><span class="p">)</span> <span class="c1"># (seq_length, batch_size, output_dim)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hidden</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hidden</span> <span class="o">=</span> <span class="n">hidden</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hidden</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">h</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hidden</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">output</span><span class="p">)</span> <span class="c1"># (seq_length, batch_size, vocab_size)</span></div>
 
 <div class="viewcode-block" id="LanguageModel.get_encoder"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.lm.LanguageModel.get_encoder">[docs]</a>    <span class="k">def</span> <span class="nf">get_encoder</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
@@ -131,7 +136,44 @@
             <span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># (1, batch_size)</span>
             <span class="n">complete_sentence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
 
+        <span class="k">return</span> <span class="n">complete_sentence</span></div>
+
+<div class="viewcode-block" id="LanguageModel.reset_hidden"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.lm.LanguageModel.reset_hidden">[docs]</a>    <span class="k">def</span> <span class="nf">reset_hidden</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden</span> <span class="o">=</span> <span class="kc">None</span></div></div>
+
+
+<div class="viewcode-block" id="TransformerLM"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.lm.TransformerLM">[docs]</a><span class="k">class</span> <span class="nc">TransformerLM</span><span class="p">(</span><span class="n">LanguageModel</span><span class="p">):</span>
+<div class="viewcode-block" id="TransformerLM.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.lm.TransformerLM.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param input: (seq_length, batch_size, input_dim)</span>
+<span class="sd">        :return: (seq_length, batch_size, vocab_size)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="nb">input</span><span class="p">)))</span> <span class="c1"># (seq_length, batch_size, vocab_size)</span></div>
+
+<div class="viewcode-block" id="TransformerLM.complete"><a class="viewcode-back" href="../../../../generated/nntoolbox.sequence.models.html#nntoolbox.sequence.models.lm.TransformerLM.complete">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">n_token_gen</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Complete the sentence</span>
+
+<span class="sd">        :param input: a single partial sentence. (seq_len, )</span>
+<span class="sd">        :param n_token_gen: number of tokens to generated</span>
+<span class="sd">        :return: the complete sentence: (seq_len + n_token_gen, input_dim)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+        <span class="n">complete_sentence</span> <span class="o">=</span> <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="nb">input</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()]</span>
+        <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_token_gen</span><span class="p">):</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:])</span> <span class="c1"># (1, batch_size, vocab_size)</span>
+            <span class="nb">input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># (1, batch_size)</span>
+            <span class="n">complete_sentence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+
         <span class="k">return</span> <span class="n">complete_sentence</span></div></div>
+
 </pre></div>
 
           </div>
@@ -161,7 +203,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.models.html">nntoolbox.models package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.recommendation.html">nntoolbox.recommendation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>

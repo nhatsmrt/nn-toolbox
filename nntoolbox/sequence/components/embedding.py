@@ -89,6 +89,7 @@ class SinusoidPositionalEncoding(nn.Module):
     Sinusoid Positional Encoding for Transformers. (UNTESTED)
 
     References:
+
         Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit,
         Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin.
         "Attention Is All You Need." https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf
