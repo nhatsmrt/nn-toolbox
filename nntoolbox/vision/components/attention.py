@@ -5,11 +5,11 @@ import torch.nn.functional as F
 import numpy as np
 
 
-__all__ = ['GlobalSelfAttention', 'StandAloneSelfAttention', 'StandAloneMultiheadAttention']
+__all__ = ['SAGANAttention', 'StandAloneSelfAttention', 'StandAloneMultiheadAttention']
 
 
 # UNTESTED
-class GlobalSelfAttention(nn.Module):
+class SAGANAttention(nn.Module):
     """
     Implement SAGAN attention module.
 
@@ -21,7 +21,7 @@ class GlobalSelfAttention(nn.Module):
     def __init__(self, in_channels: int, reduction_ratio: int=8):
         assert in_channels % reduction_ratio == 0
 
-        super(GlobalSelfAttention, self).__init__()
+        super().__init__()
         self.transform = nn.Conv2d(
             in_channels=in_channels,
             out_channels=(in_channels // reduction_ratio) * 3,
@@ -33,18 +33,13 @@ class GlobalSelfAttention(nn.Module):
             out_channels=in_channels,
             kernel_size=1, bias=False
         )
-        self.scale = nn.Parameter(torch.zeros(1))
+        self.scale = nn.Parameter(torch.zeros(1), requires_grad=True)
 
     def forward(self, input: Tensor) -> Tensor:
-        batch_size, in_channels, h, w = input.shape
+        batch_size, _, h, w = input.shape
         transformed = self.transform(input)
-        n_channel_each = transformed.shape[1] // 3
-        key, query, value = (
-            transformed[:, :n_channel_each, :, :],
-            transformed[:, n_channel_each:2 * n_channel_each, :, :],
-            transformed[:, 2 * n_channel_each:, :, :]
-        )
-        # key, query, value = self.key_transform(input), self.query_transform(input), self.value_transform(input)
+        key, query, value = transformed.chunk(3, 1)
+
         attention_scores = key.view((batch_size, -1, h * w)).permute(0, 2, 1).bmm(
             query.view((batch_size, -1, h * w))
         )
