@@ -11,11 +11,16 @@ __all__ = ['GlobalSelfAttention', 'StandAloneSelfAttention', 'StandAloneMultihea
 # UNTESTED
 class GlobalSelfAttention(nn.Module):
     """
-    Implement attention module as described by:
+    Implement SAGAN attention module.
 
-    https://arxiv.org/pdf/1805.08318.pdf
+    References:
+
+        Han Zhang, Ian Goodfellow, Dimitris Metaxas, Augustus Odena. "Self-Attention Generative Adversarial Networks."
+        https://arxiv.org/pdf/1805.08318.pdf
     """
     def __init__(self, in_channels: int, reduction_ratio: int=8):
+        assert in_channels % reduction_ratio == 0
+
         super(GlobalSelfAttention, self).__init__()
         self.transform = nn.Conv2d(
             in_channels=in_channels,
@@ -50,12 +55,14 @@ class GlobalSelfAttention(nn.Module):
         return self.scale * output + input
 
 
-# UNTESTED
 class StandAloneSelfAttention(nn.Conv2d):
     """
-    Implement a single head of self attention:
+    A single head of Stand-Alone Self-Attention for Vision Model
 
-    https://arxiv.org/pdf/1906.05909v1.pdf
+    References:
+
+        Prajit Ramachandran, Niki Parmar, Ashish Vaswani, Irwan Bello, Anselm Levskaya, Jonathon Shlens.
+        "Stand-Alone Self-Attention in Vision Models." https://arxiv.org/pdf/1906.05909.pdf.
     """
     def __init__(
             self, in_channels: int, out_channels: int, kernel_size, stride=1,
@@ -70,9 +77,7 @@ class StandAloneSelfAttention(nn.Conv2d):
         )
         self.weight = None
         self.bias = None
-        self.key_transform = nn.Conv2d(in_channels, out_channels, 1, bias=False)
-        self.query_transform = nn.Conv2d(in_channels, out_channels, 1, bias=False)
-        self.value_transform = nn.Conv2d(in_channels, out_channels, 1, bias=False)
+        self.transform = nn.Conv2d(in_channels, out_channels * 3, 1, bias=False)
         self.softmax = nn.Softmax(dim=2)
         self.rel_h = nn.Embedding(num_embeddings=self.kernel_size[0], embedding_dim=out_channels // 2)
         self.rel_w = nn.Embedding(num_embeddings=self.kernel_size[1], embedding_dim=out_channels // 2)
@@ -90,12 +95,9 @@ class StandAloneSelfAttention(nn.Conv2d):
         else:
             padding = self.padding
 
-        # start = time.time()
-        key, query, value = self.key_transform(input), self.query_transform(input), self.value_transform(input)
-        # end = time.time()
-        # print("Transform time: " + str(end - start))
+        transformed = self.transform(input)
+        key, query, value = transformed.chunk(3, 1)
 
-        # start = time.time()
         key_uf = F.unfold(
             key, kernel_size=self.kernel_size, dilation=self.dilation,
             padding=padding, stride=self.stride
@@ -110,26 +112,13 @@ class StandAloneSelfAttention(nn.Conv2d):
             value, kernel_size=self.kernel_size, dilation=self.dilation,
             padding=padding, stride=self.stride
         ).view(batch_size, self.out_channels, self.kernel_size[0] * self.kernel_size[1], -1)
-        # end = time.time()
-        # print("Unfold time: " + str(end - start))
 
-        # start = time.time()
         rel_embedding = self.get_rel_embedding()[None, :, :, None]
         logits = (key_uf[:, :, None, :] * (query_uf + rel_embedding)).sum(1, keepdim=True)
-        # end = time.time()
-        # print("Find logit time: " + str(end - start))
 
-        # start = time.time()
         attention_weights = self.softmax(logits)
-        # end = time.time()
-        # print("Softmax time: " + str(end - start))
 
-        # start = time.time()
         output = (attention_weights * value_uf).sum(2).view(batch_size, -1, output_h, output_w)
-        # end = time.time()
-        # print("Output time: " + str(end - start))
-        # print()
-
         return output
 
     def compute_output_shape(self, height, width):
@@ -153,10 +142,14 @@ class StandAloneSelfAttention(nn.Conv2d):
         super().to(*args, **kwargs)
 
 
-# UNTESTED
 class StandAloneMultiheadAttention(nn.Module):
     """
-    Implement stand alone multihead attention
+    Stand-Alone Multihead Self-Attention for Vision Model
+
+    References:
+
+        Prajit Ramachandran, Niki Parmar, Ashish Vaswani, Irwan Bello, Anselm Levskaya, Jonathon Shlens.
+        "Stand-Alone Self-Attention in Vision Models." https://arxiv.org/pdf/1906.05909.pdf.
     """
     def __init__(
             self, num_heads: int, in_channels: int, out_channels: int, kernel_size, stride=1,
