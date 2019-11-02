@@ -142,9 +142,12 @@ class CondConv2d(nn.Conv2d):
         convs = [
             nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding, dilation, groups, bias, padding_mode)
             for _ in range(num_experts)
-            ]
+        ]
         self.weight = nn.Parameter(torch.stack([conv.weight for conv in convs], dim=0))
-        self.bias = nn.Parameter(torch.stack([conv.bias for conv in convs], dim=0))
+        if bias:
+            self.bias = nn.Parameter(torch.stack([conv.bias for conv in convs], dim=0))
+        else:
+            self.bias = None
         self.routing_weight_fn = nn.Sequential(GlobalAveragePool(), nn.Linear(in_channels, num_experts), nn.Sigmoid())
         self.num_experts = num_experts
 
