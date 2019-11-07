@@ -30,11 +30,18 @@ class ToDeviceCallback(Callback):
 
 class ToGPipeDeviceCallback(Callback):
     """
-    Set up for training using multiple gpus with GPipe algorithm
+    Set up for training using multiple gpus with GPipe algorithm.
+
     Using kakaobrain's torchgpipe library:
+
     https://torchgpipe.readthedocs.io/en/stable/
-    Reference:
-    https://arxiv.org/pdf/1811.06965.pdf
+
+    References:
+        
+        Yanping Huang, Youlong Cheng, Ankur Bapna, Orhan Firat, Mia Xu Chen, Dehao Chen,
+        HyoukJoong Lee, Jiquan Ngiam, Quoc V. Le, Yonghui Wu, Zhifeng Chen.
+        "GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism."
+        https://arxiv.org/pdf/1811.06965.pdf
     """
     def __init__(self, input_keys, target_keys, partitions: int, sample: Tensor, chunks: int=16):
         self.learner = None

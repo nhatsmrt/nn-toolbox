@@ -105,6 +105,9 @@ class DistillationLearner(SupervisedLearner):
 
         Geoffrey Hinton, Oriol Vinyals, Jeff Dean. "Distilling the Knowledge in a Neural Network."
         https://arxiv.org/abs/1503.02531
+
+        TTIC Distinguished Lecture Series - Geoffrey Hinton.
+        https://www.youtube.com/watch?v=EK61htlw8hY
     """
     def __init__(
             self, train_data: DataLoader, val_data: DataLoader,
