@@ -61,7 +61,7 @@ class SupervisedLearner(Learner):
         labels = data['labels']
 
         self._optimizer.zero_grad()
-        loss = self.compute_loss(inputs, labels)
+        loss = self.compute_loss(inputs, labels, True)
         loss.backward()
         self._optimizer.step()
         if self._device.type == 'cuda':
@@ -83,9 +83,9 @@ class SupervisedLearner(Learner):
             inputs = data['inputs']
             labels = data['labels']
 
-            all_outputs.append(self._model(inputs))
+            all_outputs.append(self.compute_outputs(inputs, False))
             all_labels.append(labels)
-            loss += self.compute_loss(inputs, labels).cpu().item() * len(inputs)
+            loss += self.compute_loss(inputs, labels, False).cpu().item() * len(inputs)
             total_data += len(inputs)
 
         loss /= total_data
@@ -97,8 +97,12 @@ class SupervisedLearner(Learner):
 
         return self._cb_handler.on_epoch_end(logs)
 
-    def compute_loss(self, inputs: Tensor, labels: Tensor) -> Tensor:
-        return self._criterion(self._model(inputs), labels)
+    def compute_outputs(self, inputs: Tensor, train: bool) -> Tensor:
+        return self._cb_handler.after_outputs({"output": self._model(inputs)}, train)["output"]
+
+    def compute_loss(self, inputs: Tensor, labels: Tensor, train: bool) -> Tensor:
+        outputs = self.compute_outputs(inputs, train)
+        return self._cb_handler.after_losses({"loss": self._criterion(outputs, labels)}, train)["loss"]
 
 
 class DistillationLearner(SupervisedLearner):
