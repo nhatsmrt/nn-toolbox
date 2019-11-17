@@ -38,9 +38,12 @@ class SupervisedLearner(Learner):
             load_model(self._model, load_path)
 
         self._cb_handler = CallbackHandler(self, n_epoch, callbacks, metrics, final_metric)
+        self._cb_handler.on_train_begin()
+
         for e in range(n_epoch):
             print("Epoch " + str(e))
             self._model.train()
+            self._cb_handler.on_epoch_begin()
 
             for inputs, labels in self._train_data:
                 self.learn_one_iter(inputs, labels)
