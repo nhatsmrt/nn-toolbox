@@ -56,8 +56,6 @@ class SupervisedLearner(Learner):
         return self._cb_handler.on_train_end()
 
     def learn_one_iter(self, inputs: Tensor, labels: Tensor):
-        inputs = inputs.to(self._device)
-        labels = labels.to(self._device)
         data = self._cb_handler.on_batch_begin({'inputs': inputs, 'labels': labels}, True)
         inputs = data['inputs']
         labels = data['labels']
@@ -81,9 +79,13 @@ class SupervisedLearner(Learner):
         loss = 0
 
         for inputs, labels in self._val_data:
-            all_outputs.append(self._model(inputs.to(self._device)))
+            data = self._cb_handler.on_batch_begin({'inputs': inputs, 'labels': labels}, False)
+            inputs = data['inputs']
+            labels = data['labels']
+
+            all_outputs.append(self._model(inputs))
             all_labels.append(labels)
-            loss += self.compute_loss(inputs.to(self._device), labels.to(self._device)).cpu().item() * len(inputs)
+            loss += self.compute_loss(inputs, labels).cpu().item() * len(inputs)
             total_data += len(inputs)
 
         loss /= total_data
