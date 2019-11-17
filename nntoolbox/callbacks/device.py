@@ -37,7 +37,7 @@ class ToGPipeDeviceCallback(Callback):
     https://torchgpipe.readthedocs.io/en/stable/
 
     References:
-        
+
         Yanping Huang, Youlong Cheng, Ankur Bapna, Orhan Firat, Mia Xu Chen, Dehao Chen,
         HyoukJoong Lee, Jiquan Ngiam, Quoc V. Le, Yonghui Wu, Zhifeng Chen.
         "GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism."
