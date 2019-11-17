@@ -409,10 +409,13 @@
 <dt id="nntoolbox.callbacks.device.ToGPipeDeviceCallback">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.device.</code><code class="sig-name descname">ToGPipeDeviceCallback</code><span class="sig-paren">(</span><em class="sig-param">input_keys</em>, <em class="sig-param">target_keys</em>, <em class="sig-param">partitions: int</em>, <em class="sig-param">sample: torch.Tensor</em>, <em class="sig-param">chunks: int = 16</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/callbacks/device.html#ToGPipeDeviceCallback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.device.ToGPipeDeviceCallback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
-<p>Set up for training using multiple gpus with GPipe algorithm
-Using kakaobrain’s torchgpipe library:
-<a class="reference external" href="https://torchgpipe.readthedocs.io/en/stable/">https://torchgpipe.readthedocs.io/en/stable/</a>
-Reference:
+<p>Set up for training using multiple gpus with GPipe algorithm.</p>
+<p>Using kakaobrain’s torchgpipe library:</p>
+<p><a class="reference external" href="https://torchgpipe.readthedocs.io/en/stable/">https://torchgpipe.readthedocs.io/en/stable/</a></p>
+<p class="rubric">References</p>
+<p>Yanping Huang, Youlong Cheng, Ankur Bapna, Orhan Firat, Mia Xu Chen, Dehao Chen,
+HyoukJoong Lee, Jiquan Ngiam, Quoc V. Le, Yonghui Wu, Zhifeng Chen.
+“GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism.”
 <a class="reference external" href="https://arxiv.org/pdf/1811.06965.pdf">https://arxiv.org/pdf/1811.06965.pdf</a></p>
 <dl class="method">
 <dt id="nntoolbox.callbacks.device.ToGPipeDeviceCallback.on_batch_begin">

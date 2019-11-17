@@ -63,11 +63,18 @@
 
 <div class="viewcode-block" id="ToGPipeDeviceCallback"><a class="viewcode-back" href="../../../generated/nntoolbox.callbacks.html#nntoolbox.callbacks.device.ToGPipeDeviceCallback">[docs]</a><span class="k">class</span> <span class="nc">ToGPipeDeviceCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Set up for training using multiple gpus with GPipe algorithm</span>
+<span class="sd">    Set up for training using multiple gpus with GPipe algorithm.</span>
+
 <span class="sd">    Using kakaobrain&#39;s torchgpipe library:</span>
+
 <span class="sd">    https://torchgpipe.readthedocs.io/en/stable/</span>
-<span class="sd">    Reference:</span>
-<span class="sd">    https://arxiv.org/pdf/1811.06965.pdf</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">        Yanping Huang, Youlong Cheng, Ankur Bapna, Orhan Firat, Mia Xu Chen, Dehao Chen,</span>
+<span class="sd">        HyoukJoong Lee, Jiquan Ngiam, Quoc V. Le, Yonghui Wu, Zhifeng Chen.</span>
+<span class="sd">        &quot;GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism.&quot;</span>
+<span class="sd">        https://arxiv.org/pdf/1811.06965.pdf</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_keys</span><span class="p">,</span> <span class="n">target_keys</span><span class="p">,</span> <span class="n">partitions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">chunks</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">learner</span> <span class="o">=</span> <span class="kc">None</span>

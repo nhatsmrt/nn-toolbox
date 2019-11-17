@@ -9,7 +9,7 @@ from .utils import get_device, load_model
 from typing import Iterable, Dict
 
 
-__all__ = ['Learner']
+__all__ = ['Learner', 'SupervisedLearner', 'DistillationLearner']
 
 
 class Learner:
@@ -21,17 +21,13 @@ class Learner:
         self._model, self._criterion, self._optimizer = model, criterion, optimizer
 
         
-class SupervisedLearner:
+class SupervisedLearner(Learner):
     def __init__(
             self, train_data: DataLoader, val_data: DataLoader,  model: Module, 
-            criterion: Module, optimizer: Optimizer, device = get_device()
+            criterion: Module, optimizer: Optimizer, device=get_device()
     ):
-        self._train_data = train_data
-        self._val_data = val_data
-        self._model = model.to(device)
-        self._device = get_device()
-        self._criterion = criterion
-        self._optimizer = optimizer
+        super().__init__(train_data, val_data, model, criterion, optimizer)
+        self._device = device
 
     def learn(
             self,
@@ -41,7 +37,7 @@ class SupervisedLearner:
         if load_path is not None:
             load_model(self._model, load_path)
 
-        self._cb_handler = CallbackHandler(callbacks, metrics, final_metric)
+        self._cb_handler = CallbackHandler(self, n_epoch, callbacks, metrics, final_metric)
         for e in range(n_epoch):
             print("Epoch " + str(e))
             self._model.train()
@@ -72,7 +68,6 @@ class SupervisedLearner:
             self._cb_handler.on_batch_end({"loss": loss.cpu(), "allocated_memory": mem})
         else:
             self._cb_handler.on_batch_end({"loss": loss})
-        # self._cb_handler.on_batch_end({"loss": loss})
 
     @torch.no_grad()
     def evaluate(self) -> float:
@@ -99,3 +94,34 @@ class SupervisedLearner:
 
     def compute_loss(self, inputs: Tensor, labels: Tensor) -> Tensor:
         return self._criterion(self._model(inputs), labels)
+
+
+class DistillationLearner(SupervisedLearner):
+    """
+    Distilling Knowledge from a big teacher network to a smaller model (UNTESTED)
+
+    References:
+
+        Geoffrey Hinton, Oriol Vinyals, Jeff Dean. "Distilling the Knowledge in a Neural Network."
+        https://arxiv.org/abs/1503.02531
+
+        TTIC Distinguished Lecture Series - Geoffrey Hinton.
+        https://www.youtube.com/watch?v=EK61htlw8hY
+    """
+    def __init__(
+            self, train_data: DataLoader, val_data: DataLoader,
+            model: Module, teacher: Module, criterion: Module, optimizer: Optimizer,
+            temperature: float, teacher_weight: float, hard_label_weight: float, device = get_device()
+    ):
+        assert temperature >= 1.0 and teacher_weight >= 1.0 and hard_label_weight > 1.0
+        super().__init__(train_data, val_data, model, criterion, optimizer, device)
+        self._teacher = teacher.to(device)
+        self.temperature, self.teacher_weight, self.hard_label_weight = temperature, teacher_weight, hard_label_weight
+
+    def compute_loss(self, inputs: Tensor, labels: Tensor) -> Tensor:
+        model_outputs = self._model(inputs)
+        hard_label_loss = self._criterion(model_outputs, labels)
+        teacher_outputs = self._teacher(inputs)
+        soft_label_loss = -(teacher_outputs * torch.log_softmax(model_outputs / self.temperature, dim=1)).sum(1)
+        return hard_label_loss * self.hard_label_weight + self.teacher_weight * soft_label_loss
+

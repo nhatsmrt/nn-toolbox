@@ -8,9 +8,10 @@ from torch.nn import init
 import math
 from typing import Union, Tuple, Optional
 from nntoolbox.vision.utils import compute_output_shape
+from nntoolbox.vision.components import GlobalAveragePool
 
 
-__all__ = ['LocallyConnected2D', 'Subsampling2D']
+__all__ = ['LocallyConnected2D', 'Subsampling2D', 'CondConv2d']
 
 
 class LocallyConnected2D(nn.Module):
@@ -118,3 +119,93 @@ class Subsampling2D(nn.AvgPool2d):
         output = output * self.weight[None, :, None, None]
         if self.bias is not None: output = output + self.bias[None, :, None, None]
         return output
+
+
+class CondConv2d(nn.Conv2d):
+    """
+    Conditionally Parameterized Convolution Layer.
+
+    References:
+
+        Brandon Yang, Gabriel Bender, Quoc V. Le, Jiquan Ngiam.
+        "CondConv: Conditionally Parameterized Convolutions for Efficient Inference."
+        https://arxiv.org/abs/1904.04971
+
+        Pytorch implementation of Conv2d
+    """
+
+    def __init__(
+            self, num_experts: int, in_channels, out_channels, kernel_size, stride=1,
+            padding=0, dilation=1, groups=1, bias=True, padding_mode='zeros'
+    ):
+        super().__init__(in_channels, out_channels, kernel_size, stride, padding, dilation, groups, bias, padding_mode)
+        convs = [
+            nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding, dilation, groups, bias, padding_mode)
+            for _ in range(num_experts)
+        ]
+        self.weight = nn.Parameter(torch.stack([conv.weight for conv in convs], dim=0))
+        if bias:
+            self.bias = nn.Parameter(torch.stack([conv.bias for conv in convs], dim=0))
+        else:
+            self.bias = None
+        self.routing_weight_fn = nn.Sequential(GlobalAveragePool(), nn.Linear(in_channels, num_experts), nn.Sigmoid())
+        self.num_experts = num_experts
+
+    def forward(self, input: Tensor) -> Tensor:
+        if self.train and self.num_experts < 4:
+            return self.branched_forward(input)
+        else:
+            return self.efficient_forward(input)
+
+    def branched_forward(self, input: Tensor) -> Tensor:
+        if self.padding_mode == 'circular':
+            expanded_padding = ((self.padding[1] + 1) // 2, self.padding[1] // 2,
+                                (self.padding[0] + 1) // 2, self.padding[0] // 2)
+
+        routing_weights = self.routing_weight_fn(input).transpose(0, 1)
+        outputs = []
+        for e in range(self.num_experts):
+            weight = self.weight[e]
+            if self.bias is None:
+                bias = self.bias
+            else:
+                bias = self.bias[e]
+
+            if self.padding_mode == 'circular':
+                output = F.conv2d(F.pad(input, expanded_padding, mode='circular'),
+                                  weight, bias, self.stride,
+                                  (0, 0), self.dilation, self.groups)
+            else:
+                output = F.conv2d(input, weight, bias, self.stride,
+                                  self.padding, self.dilation, self.groups)
+
+            outputs.append(output)
+
+        return (torch.stack(outputs, dim=0) * routing_weights[:, :, None, None, None]).sum(0)
+
+    def efficient_forward(self, input: Tensor) -> Tensor:
+        if self.padding_mode == 'circular':
+            expanded_padding = ((self.padding[1] + 1) // 2, self.padding[1] // 2,
+                                (self.padding[0] + 1) // 2, self.padding[0] // 2)
+
+        routing_weights = self.routing_weight_fn(input)
+        outputs = []
+        for i in range(len(input)):
+            weight = (self.weight * routing_weights[i][:, None, None, None, None]).sum(0)
+            if self.bias is None:
+                bias = self.bias
+            else:
+                bias = (self.bias * routing_weights[i][:, None]).sum(0)
+
+            if self.padding_mode == 'circular':
+                output = F.conv2d(F.pad(input[i:i + 1], expanded_padding, mode='circular'),
+                                  weight, bias, self.stride,
+                                  (0, 0), self.dilation, self.groups)
+            else:
+                output = F.conv2d(input[i:i + 1], weight, bias, self.stride,
+                                  self.padding, self.dilation, self.groups)
+
+            outputs.append(output)
+
+        return torch.cat(outputs, dim=0)
+
