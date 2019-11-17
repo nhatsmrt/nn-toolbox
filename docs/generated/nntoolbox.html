@@ -374,6 +374,49 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 </dd></dl>
 
+<dl class="class">
+<dt id="nntoolbox.learner.SupervisedLearner">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.learner.</code><code class="sig-name descname">SupervisedLearner</code><span class="sig-paren">(</span><em class="sig-param">train_data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">val_data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">criterion: torch.nn.modules.module.Module</em>, <em class="sig-param">optimizer: torch.optim.optimizer.Optimizer</em>, <em class="sig-param">device=device(type='cpu')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/learner.html#SupervisedLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.learner.Learner" title="nntoolbox.learner.Learner"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.learner.Learner</span></code></a></p>
+<dl class="method">
+<dt id="nntoolbox.learner.SupervisedLearner.compute_loss">
+<code class="sig-name descname">compute_loss</code><span class="sig-paren">(</span><em class="sig-param">inputs: torch.Tensor</em>, <em class="sig-param">labels: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/learner.html#SupervisedLearner.compute_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner.compute_loss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.learner.SupervisedLearner.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/nntoolbox/learner.html#SupervisedLearner.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.learner.SupervisedLearner.learn">
+<code class="sig-name descname">learn</code><span class="sig-paren">(</span><em class="sig-param">n_epoch: int</em>, <em class="sig-param">callbacks: Iterable[nntoolbox.callbacks.callbacks.Callback] = None</em>, <em class="sig-param">metrics: Dict[str</em>, <em class="sig-param">nntoolbox.metrics.metrics.Metric] = None</em>, <em class="sig-param">final_metric: str = 'accuracy'</em>, <em class="sig-param">load_path=None</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/nntoolbox/learner.html#SupervisedLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner.learn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="nntoolbox.learner.SupervisedLearner.learn_one_iter">
+<code class="sig-name descname">learn_one_iter</code><span class="sig-paren">(</span><em class="sig-param">inputs: torch.Tensor</em>, <em class="sig-param">labels: torch.Tensor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/learner.html#SupervisedLearner.learn_one_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner.learn_one_iter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="nntoolbox.learner.DistillationLearner">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.learner.</code><code class="sig-name descname">DistillationLearner</code><span class="sig-paren">(</span><em class="sig-param">train_data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">val_data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">teacher: torch.nn.modules.module.Module</em>, <em class="sig-param">criterion: torch.nn.modules.module.Module</em>, <em class="sig-param">optimizer: torch.optim.optimizer.Optimizer</em>, <em class="sig-param">temperature: float</em>, <em class="sig-param">teacher_weight: float</em>, <em class="sig-param">hard_label_weight: float</em>, <em class="sig-param">device=device(type='cpu')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/learner.html#DistillationLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.DistillationLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.learner.SupervisedLearner" title="nntoolbox.learner.SupervisedLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.learner.SupervisedLearner</span></code></a></p>
+<p>Distilling Knowledge from a big teacher network to a smaller model (UNTESTED)</p>
+<p class="rubric">References</p>
+<p>Geoffrey Hinton, Oriol Vinyals, Jeff Dean. “Distilling the Knowledge in a Neural Network.”
+<a class="reference external" href="https://arxiv.org/abs/1503.02531">https://arxiv.org/abs/1503.02531</a></p>
+<p>TTIC Distinguished Lecture Series - Geoffrey Hinton.
+<a class="reference external" href="https://www.youtube.com/watch?v=EK61htlw8hY">https://www.youtube.com/watch?v=EK61htlw8hY</a></p>
+<dl class="method">
+<dt id="nntoolbox.learner.DistillationLearner.compute_loss">
+<code class="sig-name descname">compute_loss</code><span class="sig-paren">(</span><em class="sig-param">inputs: torch.Tensor</em>, <em class="sig-param">labels: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/learner.html#DistillationLearner.compute_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.DistillationLearner.compute_loss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-nntoolbox">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox" title="Permalink to this headline">¶</a></h2>
