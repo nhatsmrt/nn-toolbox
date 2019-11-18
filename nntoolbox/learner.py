@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 from .callbacks import Callback, CallbackHandler
 from .metrics import Metric
 from .utils import get_device, load_model
+from .transforms import MixupTransformer
 from typing import Iterable, Dict
 
 
@@ -24,10 +25,13 @@ class Learner:
 class SupervisedLearner(Learner):
     def __init__(
             self, train_data: DataLoader, val_data: DataLoader,  model: Module, 
-            criterion: Module, optimizer: Optimizer, device=get_device()
+            criterion: Module, optimizer: Optimizer, device=get_device(), mixup: bool=False, mixup_alpha: float=0.4
     ):
         super().__init__(train_data, val_data, model, criterion, optimizer)
         self._device = device
+        self._mixup = mixup
+        if mixup:
+            self._mixup_transformer = MixupTransformer(alpha=mixup_alpha)
 
     def learn(
             self,
@@ -59,6 +63,9 @@ class SupervisedLearner(Learner):
         data = self._cb_handler.on_batch_begin({'inputs': inputs, 'labels': labels}, True)
         inputs = data['inputs']
         labels = data['labels']
+
+        if self._mixup:
+            inputs, labels = self._mixup_transformer.transform_data(inputs, labels)
 
         self._optimizer.zero_grad()
         loss = self.compute_loss(inputs, labels, True)
@@ -101,8 +108,16 @@ class SupervisedLearner(Learner):
         return self._cb_handler.after_outputs({"output": self._model(inputs)}, train)["output"]
 
     def compute_loss(self, inputs: Tensor, labels: Tensor, train: bool) -> Tensor:
+        old_criterion = self._criterion
+        if self._mixup:
+            self._criterion = self._mixup_transformer.transform_loss(self._criterion, self._model.training)
         outputs = self.compute_outputs(inputs, train)
-        return self._cb_handler.after_losses({"loss": self._criterion(outputs, labels)}, train)["loss"]
+        ret = self._cb_handler.after_losses({"loss": self._criterion(outputs, labels)}, train)["loss"]
+        self._criterion = old_criterion
+        return ret
+
+        # outputs = self.compute_outputs(inputs, train)
+        # return self._cb_handler.after_losses({"loss": self._criterion(outputs, labels)}, train)["loss"]
 
 
 class DistillationLearner(SupervisedLearner):
