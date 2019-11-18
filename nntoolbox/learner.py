@@ -108,13 +108,13 @@ class SupervisedLearner(Learner):
         return self._cb_handler.after_outputs({"output": self._model(inputs)}, train)["output"]
 
     def compute_loss(self, inputs: Tensor, labels: Tensor, train: bool) -> Tensor:
-        old_criterion = self._criterion
         if self._mixup:
-            self._criterion = self._mixup_transformer.transform_loss(self._criterion, self._model.training)
+            criterion = self._mixup_transformer.transform_loss(self._criterion, self._model.training)
+        else:
+            criterion = self._criterion
         outputs = self.compute_outputs(inputs, train)
-        ret = self._cb_handler.after_losses({"loss": self._criterion(outputs, labels)}, train)["loss"]
-        self._criterion = old_criterion
-        return ret
+
+        return self._cb_handler.after_losses({"loss": criterion(outputs, labels)}, train)["loss"]
 
         # outputs = self.compute_outputs(inputs, train)
         # return self._cb_handler.after_losses({"loss": self._criterion(outputs, labels)}, train)["loss"]
