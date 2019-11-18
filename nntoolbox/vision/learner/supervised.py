@@ -50,39 +50,41 @@ class SupervisedImageLearner(SupervisedLearner):
                 self._cb_handler.on_batch_end({"loss": loss})
             # self._cb_handler.on_batch_end({"loss": loss})
 
-    @torch.no_grad()
-    def evaluate(self) -> float:
-        self._model.eval()
-        all_outputs = []
-        all_labels = []
-        total_data = 0
-        loss = 0
-
-        for images, labels in self._val_data:
-            data = self._cb_handler.on_batch_begin({"inputs": images, "labels": labels}, False)
-            images, labels = data["inputs"], data["labels"]
-
-            all_outputs.append(self._model(images))
-            all_labels.append(labels.cpu())
-            loss += self.compute_loss(images, labels, False).cpu().item() * len(images)
-            total_data += len(images)
-
-        loss /= total_data
-
-        logs = dict()
-        logs["loss"] = loss
-        logs["outputs"] = torch.cat(all_outputs, dim=0)
-        logs["labels"] = torch.cat(all_labels, dim=0)
-
-        return self._cb_handler.on_epoch_end(logs)
+    # @torch.no_grad()
+    # def evaluate(self) -> float:
+    #     self._model.eval()
+    #     all_outputs = []
+    #     all_labels = []
+    #     total_data = 0
+    #     loss = 0
+    #
+    #     for images, labels in self._val_data:
+    #         data = self._cb_handler.on_batch_begin({"inputs": images, "labels": labels}, False)
+    #         images, labels = data["inputs"], data["labels"]
+    #
+    #         all_outputs.append(self._model(images))
+    #         all_labels.append(labels.cpu())
+    #         loss += self.compute_loss(images, labels, False).cpu().item() * len(images)
+    #         total_data += len(images)
+    #
+    #     loss /= total_data
+    #
+    #     logs = dict()
+    #     logs["loss"] = loss
+    #     logs["outputs"] = torch.cat(all_outputs, dim=0)
+    #     logs["labels"] = torch.cat(all_labels, dim=0)
+    #
+    #     return self._cb_handler.on_epoch_end(logs)
 
     def compute_loss(self, images: Tensor, labels: Tensor, train: bool) -> Tensor:
+        old_criterion = self._criterion
         if self._mixup:
-            criterion = self._mixup_transformer.transform_loss(self._criterion, self._model.training)
-        else:
-            criterion = self._criterion
+            self._criterion = self._mixup_transformer.transform_loss(self._criterion, self._model.training)
+        ret = super().compute_loss(images, labels, train)
+        self._criterion = old_criterion
+        return ret
 
-        outputs = self._cb_handler.after_outputs({"output": self._model(images)}, train)
-
-        return criterion(outputs["output"], labels)
+        # outputs = self._cb_handler.after_outputs({"output": self._model(images)}, train)
+        #
+        # return self._cb_handler.after_losses({"loss": criterion(outputs["output"], labels)}, train)
 
