@@ -29,4 +29,4 @@ class ConcatPool(nn.Module):
     def forward(self, input):
         max = torch.max(input, dim=self._pool_dim).values
         avg = torch.mean(input, dim=self._pool_dim)
-        return torch.cat([max, avg], dim=self._concat_dim)
+        return torch.cat([max, avg, input[-1]], dim=self._concat_dim)
