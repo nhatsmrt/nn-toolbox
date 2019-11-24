@@ -116,9 +116,6 @@ class SupervisedLearner(Learner):
 
         return self._cb_handler.after_losses({"loss": criterion(outputs, labels)}, train)["loss"]
 
-        # outputs = self.compute_outputs(inputs, train)
-        # return self._cb_handler.after_losses({"loss": self._criterion(outputs, labels)}, train)["loss"]
-
 
 class DistillationLearner(SupervisedLearner):
     """
