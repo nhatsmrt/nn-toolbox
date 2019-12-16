@@ -144,22 +144,7 @@
 <dl class="class">
 <dt id="nntoolbox.vision.learner.supervised.SupervisedImageLearner">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.learner.supervised.</code><code class="sig-name descname">SupervisedImageLearner</code><span class="sig-paren">(</span><em class="sig-param">train_data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">val_data: torch.utils.data.dataloader.DataLoader</em>, <em class="sig-param">model: torch.nn.modules.module.Module</em>, <em class="sig-param">criterion: torch.nn.modules.module.Module</em>, <em class="sig-param">optimizer: torch.optim.optimizer.Optimizer</em>, <em class="sig-param">mixup: bool = False</em>, <em class="sig-param">mixup_alpha: float = 0.4</em>, <em class="sig-param">device=device(type='cpu')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/learner/supervised.html#SupervisedImageLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.supervised.SupervisedImageLearner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="nntoolbox.html#nntoolbox.learner.Learner" title="nntoolbox.learner.Learner"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.learner.Learner</span></code></a></p>
-<dl class="method">
-<dt id="nntoolbox.vision.learner.supervised.SupervisedImageLearner.compute_loss">
-<code class="sig-name descname">compute_loss</code><span class="sig-paren">(</span><em class="sig-param">images: torch.Tensor</em>, <em class="sig-param">labels: torch.Tensor</em>, <em class="sig-param">train: bool</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/learner/supervised.html#SupervisedImageLearner.compute_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.supervised.SupervisedImageLearner.compute_loss" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="nntoolbox.vision.learner.supervised.SupervisedImageLearner.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/nntoolbox/vision/learner/supervised.html#SupervisedImageLearner.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.supervised.SupervisedImageLearner.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="nntoolbox.vision.learner.supervised.SupervisedImageLearner.learn">
-<code class="sig-name descname">learn</code><span class="sig-paren">(</span><em class="sig-param">n_epoch: int</em>, <em class="sig-param">callbacks: Iterable[nntoolbox.callbacks.callbacks.Callback] = None</em>, <em class="sig-param">metrics: Dict[str</em>, <em class="sig-param">nntoolbox.metrics.metrics.Metric] = None</em>, <em class="sig-param">final_metric: str = 'accuracy'</em>, <em class="sig-param">load_path=None</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/nntoolbox/vision/learner/supervised.html#SupervisedImageLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.supervised.SupervisedImageLearner.learn" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dd><p>Bases: <a class="reference internal" href="nntoolbox.html#nntoolbox.learner.SupervisedLearner" title="nntoolbox.learner.SupervisedLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.learner.SupervisedLearner</span></code></a></p>
 <dl class="method">
 <dt id="nntoolbox.vision.learner.supervised.SupervisedImageLearner.learn_one_iter">
 <code class="sig-name descname">learn_one_iter</code><span class="sig-paren">(</span><em class="sig-param">images: torch.Tensor</em>, <em class="sig-param">labels: torch.Tensor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/learner/supervised.html#SupervisedImageLearner.learn_one_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.learner.supervised.SupervisedImageLearner.learn_one_iter" title="Permalink to this definition">¶</a></dt>

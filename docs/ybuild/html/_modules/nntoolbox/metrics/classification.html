@@ -41,7 +41,7 @@
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">find_index</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;ROCAUCScore&#39;</span><span class="p">,</span> <span class="s1">&#39;MAPAtK&#39;</span><span class="p">,</span> <span class="s1">&#39;Perplexity&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;BinaryAccuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;ROCAUCScore&#39;</span><span class="p">,</span> <span class="s1">&#39;MAPAtK&#39;</span><span class="p">,</span> <span class="s1">&#39;Perplexity&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="Accuracy"><a class="viewcode-back" href="../../../generated/nntoolbox.metrics.html#nntoolbox.metrics.classification.Accuracy">[docs]</a><span class="k">class</span> <span class="nc">Accuracy</span><span class="p">(</span><span class="n">Metric</span><span class="p">):</span>
@@ -51,6 +51,31 @@
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
             <span class="n">predictions</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">predictions</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+        <span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span>
+            <span class="n">y_true</span><span class="o">=</span><span class="n">labels</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span>
+            <span class="n">y_pred</span><span class="o">=</span><span class="n">predictions</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">acc</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_best</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_best</span> <span class="o">=</span> <span class="n">acc</span>
+
+        <span class="k">return</span> <span class="n">acc</span></div>
+
+
+<div class="viewcode-block" id="BinaryAccuracy"><a class="viewcode-back" href="../../../generated/nntoolbox.metrics.html#nntoolbox.metrics.classification.BinaryAccuracy">[docs]</a><span class="k">class</span> <span class="nc">BinaryAccuracy</span><span class="p">(</span><span class="n">Metric</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_best</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+            <span class="n">predictions</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">predictions</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]</span>
 
