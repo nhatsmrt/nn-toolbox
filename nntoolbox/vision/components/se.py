@@ -1,4 +1,3 @@
-from ...utils import copy_model
 from torch import nn
 from .layers import ConvolutionalLayer
 from .pool import GlobalAveragePool
@@ -7,10 +6,13 @@ from .kervolution import KervolutionalLayer
 
 
 class SEBlock(nn.Module):
-    '''
-    Implement squeeze (global information embedding) and excitation (adaptive recalibration) mechanism
-    https://arxiv.org/pdf/1709.01507.pdf
-    '''
+    """
+    Implement squeeze (global information embedding) and excitation (adaptive recalibration) mechanism:
+
+    References:
+        Jie Hu, Li Shen, Samuel Albanie, Gang Sun, Enhua Wu. "Squeeze-and-Excitation Networks."
+        https://arxiv.org/pdf/1709.01507.pdf
+    """
     def __init__(self, in_channels, reduction_ratio=16):
         super(SEBlock, self).__init__()
         # self._res = ResidualBlock()
