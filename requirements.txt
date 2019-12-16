@@ -1,23 +1,23 @@
 torch
 torchvision
 torchaudio
-torchgpipe
-pretrainedmodels
+torchgpipe==0.0.2
+pretrainedmodels==0.7.4
 
 
-imgaug
+imgaug==0.2.6
 scikit-image
 opencv-python
 imageio
 Shapely
 
-torchtext
+torchtext==0.4.0
 nltk
 spacy
 sentencepiece
-pytorch-transformers
+pytorch-transformers==1.0.0
 
-fastai
+fastai==1.0.54
 ax-platform
 
 six
@@ -28,6 +28,6 @@ pandas
 networkx
 librosa
 
-hiddenlayer
+hiddenlayer==0.2
 
 future
