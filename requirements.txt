@@ -26,8 +26,8 @@ scipy
 scikit-learn
 pandas
 networkx
+librosa
 
-tb-nightly
 hiddenlayer
 
 future
