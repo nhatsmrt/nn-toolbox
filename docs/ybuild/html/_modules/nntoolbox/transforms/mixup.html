@@ -38,13 +38,19 @@
 
 
 <div class="viewcode-block" id="MixupTransformer"><a class="viewcode-back" href="../../../generated/nntoolbox.transforms.html#nntoolbox.transforms.mixup.MixupTransformer">[docs]</a><span class="k">class</span> <span class="nc">MixupTransformer</span><span class="p">:</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Implement mixup data augmentation:</span>
+
 <span class="sd">    x = tau x_1 + (1 - tau) x_2</span>
+
 <span class="sd">    y = tau y_1 + (1 - tau) y_2</span>
-<span class="sd">    Reference: https://arxiv.org/pdf/1710.09412.pdf</span>
-<span class="sd">    Based on fastai implementation: https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">        https://arxiv.org/pdf/1710.09412.pdf</span>
+
+<span class="sd">        Based on fastai implementation: https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.4</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="n">alpha</span>
 

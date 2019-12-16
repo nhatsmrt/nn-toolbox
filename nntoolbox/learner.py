@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 from .callbacks import Callback, CallbackHandler
 from .metrics import Metric
 from .utils import get_device, load_model
+from .transforms import MixupTransformer
 from typing import Iterable, Dict
 
 
@@ -24,10 +25,13 @@ class Learner:
 class SupervisedLearner(Learner):
     def __init__(
             self, train_data: DataLoader, val_data: DataLoader,  model: Module, 
-            criterion: Module, optimizer: Optimizer, device=get_device()
+            criterion: Module, optimizer: Optimizer, device=get_device(), mixup: bool=False, mixup_alpha: float=0.4
     ):
         super().__init__(train_data, val_data, model, criterion, optimizer)
         self._device = device
+        self._mixup = mixup
+        if mixup:
+            self._mixup_transformer = MixupTransformer(alpha=mixup_alpha)
 
     def learn(
             self,
@@ -38,9 +42,12 @@ class SupervisedLearner(Learner):
             load_model(self._model, load_path)
 
         self._cb_handler = CallbackHandler(self, n_epoch, callbacks, metrics, final_metric)
+        self._cb_handler.on_train_begin()
+
         for e in range(n_epoch):
             print("Epoch " + str(e))
             self._model.train()
+            self._cb_handler.on_epoch_begin()
 
             for inputs, labels in self._train_data:
                 self.learn_one_iter(inputs, labels)
@@ -53,14 +60,15 @@ class SupervisedLearner(Learner):
         return self._cb_handler.on_train_end()
 
     def learn_one_iter(self, inputs: Tensor, labels: Tensor):
-        inputs = inputs.to(self._device)
-        labels = labels.to(self._device)
         data = self._cb_handler.on_batch_begin({'inputs': inputs, 'labels': labels}, True)
         inputs = data['inputs']
         labels = data['labels']
 
+        if self._mixup:
+            inputs, labels = self._mixup_transformer.transform_data(inputs, labels)
+
         self._optimizer.zero_grad()
-        loss = self.compute_loss(inputs, labels)
+        loss = self.compute_loss(inputs, labels, True)
         loss.backward()
         self._optimizer.step()
         if self._device.type == 'cuda':
@@ -78,9 +86,13 @@ class SupervisedLearner(Learner):
         loss = 0
 
         for inputs, labels in self._val_data:
-            all_outputs.append(self._model(inputs.to(self._device)))
+            data = self._cb_handler.on_batch_begin({'inputs': inputs, 'labels': labels}, False)
+            inputs = data['inputs']
+            labels = data['labels']
+
+            all_outputs.append(self.compute_outputs(inputs, False))
             all_labels.append(labels)
-            loss += self.compute_loss(inputs.to(self._device), labels.to(self._device)).cpu().item() * len(inputs)
+            loss += self.compute_loss(inputs, labels, False).cpu().item() * len(inputs)
             total_data += len(inputs)
 
         loss /= total_data
@@ -92,8 +104,17 @@ class SupervisedLearner(Learner):
 
         return self._cb_handler.on_epoch_end(logs)
 
-    def compute_loss(self, inputs: Tensor, labels: Tensor) -> Tensor:
-        return self._criterion(self._model(inputs), labels)
+    def compute_outputs(self, inputs: Tensor, train: bool) -> Tensor:
+        return self._cb_handler.after_outputs({"output": self._model(inputs)}, train)["output"]
+
+    def compute_loss(self, inputs: Tensor, labels: Tensor, train: bool) -> Tensor:
+        if self._mixup:
+            criterion = self._mixup_transformer.transform_loss(self._criterion, self._model.training)
+        else:
+            criterion = self._criterion
+        outputs = self.compute_outputs(inputs, train)
+
+        return self._cb_handler.after_losses({"loss": criterion(outputs, labels)}, train)["loss"]
 
 
 class DistillationLearner(SupervisedLearner):

@@ -41,10 +41,10 @@
 <span class="kn">from</span> <span class="nn">...callbacks</span> <span class="k">import</span> <span class="n">CallbackHandler</span><span class="p">,</span> <span class="n">Callback</span>
 <span class="kn">from</span> <span class="nn">...metrics</span> <span class="k">import</span> <span class="n">Metric</span>
 <span class="kn">from</span> <span class="nn">...transforms</span> <span class="k">import</span> <span class="n">MixupTransformer</span>
-<span class="kn">from</span> <span class="nn">...learner</span> <span class="k">import</span> <span class="n">Learner</span>
+<span class="kn">from</span> <span class="nn">...learner</span> <span class="k">import</span> <span class="n">SupervisedLearner</span>
 
 
-<div class="viewcode-block" id="SupervisedImageLearner"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.supervised.SupervisedImageLearner">[docs]</a><span class="k">class</span> <span class="nc">SupervisedImageLearner</span><span class="p">(</span><span class="n">Learner</span><span class="p">):</span>
+<div class="viewcode-block" id="SupervisedImageLearner"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.supervised.SupervisedImageLearner">[docs]</a><span class="k">class</span> <span class="nc">SupervisedImageLearner</span><span class="p">(</span><span class="n">SupervisedLearner</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">train_data</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">val_data</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span>
             <span class="n">criterion</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span>
@@ -52,38 +52,9 @@
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SupervisedImageLearner</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">train_data</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="o">=</span><span class="n">val_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-            <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span>
+            <span class="n">criterion</span><span class="o">=</span><span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">mixup</span><span class="o">=</span><span class="n">mixup</span><span class="p">,</span> <span class="n">mixup_alpha</span><span class="o">=</span><span class="n">mixup_alpha</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">device</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mixup</span> <span class="o">=</span> <span class="n">mixup</span>
-        <span class="k">if</span> <span class="n">mixup</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mixup_transformer</span> <span class="o">=</span> <span class="n">MixupTransformer</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">mixup_alpha</span><span class="p">)</span>
-
-<div class="viewcode-block" id="SupervisedImageLearner.learn"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.supervised.SupervisedImageLearner.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">n_epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">callbacks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Callback</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">metrics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Metric</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">final_metric</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">load_path</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">load_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">load_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">load_path</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span> <span class="o">=</span> <span class="n">CallbackHandler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_epoch</span><span class="p">,</span> <span class="n">callbacks</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">final_metric</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_train_begin</span><span class="p">()</span>
-
-        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epoch</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_epoch_begin</span><span class="p">()</span>
-
-            <span class="k">for</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_data</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">learn_one_iter</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
-
-            <span class="n">stop_training</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">stop_training</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Patience exceeded. Training finished.&quot;</span><span class="p">)</span>
-                <span class="k">break</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_train_end</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SupervisedImageLearner.learn_one_iter"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.supervised.SupervisedImageLearner.learn_one_iter">[docs]</a>    <span class="k">def</span> <span class="nf">learn_one_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_begin</span><span class="p">({</span><span class="s1">&#39;inputs&#39;</span><span class="p">:</span> <span class="n">images</span><span class="p">,</span> <span class="s1">&#39;labels&#39;</span><span class="p">:</span> <span class="n">labels</span><span class="p">},</span> <span class="kc">True</span><span class="p">)</span>
@@ -93,7 +64,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mixup</span><span class="p">:</span>
             <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mixup_transformer</span><span class="o">.</span><span class="n">transform_data</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
-        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">after_losses</span><span class="p">({</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="kc">True</span><span class="p">)},</span> <span class="kc">True</span><span class="p">)[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_backward_begin</span><span class="p">():</span>
             <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
@@ -106,44 +77,20 @@
                 <span class="n">mem</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">memory_allocated</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_end</span><span class="p">({</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">loss</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="s2">&quot;allocated_memory&quot;</span><span class="p">:</span> <span class="n">mem</span><span class="p">})</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_end</span><span class="p">({</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">loss</span><span class="p">})</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_end</span><span class="p">({</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">loss</span><span class="p">})</span></div></div>
             <span class="c1"># self._cb_handler.on_batch_end({&quot;loss&quot;: loss})</span>
 
-<div class="viewcode-block" id="SupervisedImageLearner.evaluate"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.supervised.SupervisedImageLearner.evaluate">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-        <span class="n">all_outputs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">all_labels</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">total_data</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">loss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># def compute_loss(self, images: Tensor, labels: Tensor, train: bool) -&gt; Tensor:</span>
+    <span class="c1">#     old_criterion = self._criterion</span>
+    <span class="c1">#     if self._mixup:</span>
+    <span class="c1">#         self._criterion = self._mixup_transformer.transform_loss(self._criterion, self._model.training)</span>
+    <span class="c1">#     ret = super().compute_loss(images, labels, train)</span>
+    <span class="c1">#     self._criterion = old_criterion</span>
+    <span class="c1">#     return ret</span>
 
-        <span class="k">for</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_val_data</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_batch_begin</span><span class="p">({</span><span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="n">images</span><span class="p">,</span> <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">},</span> <span class="kc">False</span><span class="p">)</span>
-            <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;inputs&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
-
-            <span class="n">all_outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">(</span><span class="n">images</span><span class="p">))</span>
-            <span class="n">all_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">cpu</span><span class="p">())</span>
-            <span class="n">loss</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
-            <span class="n">total_data</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
-
-        <span class="n">loss</span> <span class="o">/=</span> <span class="n">total_data</span>
-
-        <span class="n">logs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loss</span>
-        <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_outputs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">all_labels</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">on_epoch_end</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SupervisedImageLearner.compute_loss"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.learner.html#nntoolbox.vision.learner.supervised.SupervisedImageLearner.compute_loss">[docs]</a>    <span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mixup</span><span class="p">:</span>
-            <span class="n">criterion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mixup_transformer</span><span class="o">.</span><span class="n">transform_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_criterion</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">training</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">criterion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_criterion</span>
-
-        <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cb_handler</span><span class="o">.</span><span class="n">after_outputs</span><span class="p">({</span><span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">(</span><span class="n">images</span><span class="p">)},</span> <span class="n">train</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span> <span class="n">labels</span><span class="p">)</span></div></div>
+        <span class="c1"># outputs = self._cb_handler.after_outputs({&quot;output&quot;: self._model(images)}, train)</span>
+        <span class="c1">#</span>
+        <span class="c1"># return self._cb_handler.after_losses({&quot;loss&quot;: criterion(outputs[&quot;output&quot;], labels)}, train)</span>
 
 </pre></div>
 

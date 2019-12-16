@@ -5,13 +5,19 @@ import torch
 
 
 class MixupTransformer:
-    '''
+    """
     Implement mixup data augmentation:
+
     x = tau x_1 + (1 - tau) x_2
+
     y = tau y_1 + (1 - tau) y_2
-    Reference: https://arxiv.org/pdf/1710.09412.pdf
-    Based on fastai implementation: https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py
-    '''
+
+    References:
+
+        https://arxiv.org/pdf/1710.09412.pdf
+
+        Based on fastai implementation: https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py
+    """
     def __init__(self, alpha: float=0.4):
         self._alpha = alpha
 

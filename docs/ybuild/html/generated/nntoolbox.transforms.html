@@ -43,11 +43,12 @@
 <dt id="nntoolbox.transforms.mixup.MixupTransformer">
 <em class="property">class </em><code class="sig-prename descclassname">nntoolbox.transforms.mixup.</code><code class="sig-name descname">MixupTransformer</code><span class="sig-paren">(</span><em class="sig-param">alpha: float = 0.4</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/transforms/mixup.html#MixupTransformer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.transforms.mixup.MixupTransformer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Implement mixup data augmentation:
-x = tau x_1 + (1 - tau) x_2
-y = tau y_1 + (1 - tau) y_2
-Reference: <a class="reference external" href="https://arxiv.org/pdf/1710.09412.pdf">https://arxiv.org/pdf/1710.09412.pdf</a>
-Based on fastai implementation: <a class="reference external" href="https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py">https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py</a></p>
+<p>Implement mixup data augmentation:</p>
+<p>x = tau x_1 + (1 - tau) x_2</p>
+<p>y = tau y_1 + (1 - tau) y_2</p>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://arxiv.org/pdf/1710.09412.pdf">https://arxiv.org/pdf/1710.09412.pdf</a></p>
+<p>Based on fastai implementation: <a class="reference external" href="https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py">https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py</a></p>
 <dl class="method">
 <dt id="nntoolbox.transforms.mixup.MixupTransformer.transform_data">
 <code class="sig-name descname">transform_data</code><span class="sig-paren">(</span><em class="sig-param">images: torch.Tensor</em>, <em class="sig-param">labels: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; Tuple[torch.Tensor, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/transforms/mixup.html#MixupTransformer.transform_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.transforms.mixup.MixupTransformer.transform_data" title="Permalink to this definition">¶</a></dt>

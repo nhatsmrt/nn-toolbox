@@ -40,10 +40,13 @@
 
 
 <div class="viewcode-block" id="SEBlock"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.se.SEBlock">[docs]</a><span class="k">class</span> <span class="nc">SEBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Implement squeeze (global information embedding) and excitation (adaptive recalibration) mechanism</span>
-<span class="sd">    https://arxiv.org/pdf/1709.01507.pdf</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implement squeeze (global information embedding) and excitation (adaptive recalibration) mechanism:</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Jie Hu, Li Shen, Samuel Albanie, Gang Sun, Enhua Wu. &quot;Squeeze-and-Excitation Networks.&quot;</span>
+<span class="sd">        https://arxiv.org/pdf/1709.01507.pdf</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">reduction_ratio</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SEBlock</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="c1"># self._res = ResidualBlock()</span>
