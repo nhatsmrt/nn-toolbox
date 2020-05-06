@@ -2,13 +2,19 @@ import torch
 from torch import nn
 
 
+__all__ = [
+    'spatial_pyramid_pool', 'SpatialPyramidPool', 'GlobalAveragePool',
+    'AdaptiveConcatPool2d'
+]
+
+
 def spatial_pyramid_pool(input, op_sizes, pool_layer=nn.MaxPool2d):
-    '''
+    """
     :param input: (batch_size, C, H, W)
     :param op_sizes:
     :param pool_layer:
     :return:
-    '''
+    """
     ops = []
     batch_size = input.shape[0]
     inp_h = input.shape[2]
@@ -42,4 +48,21 @@ class GlobalAveragePool(nn.Module):
         super(GlobalAveragePool, self).__init__()
     def forward(self, input):
         return torch.mean(torch.mean(input, dim = -1), dim = -1)
+
+
+class AdaptiveConcatPool2d(nn.Module):
+    """
+    Adapt from FastAI's code
+    """
+
+    def __init__(self, output_size):
+        super().__init__()
+        self.max_pool = nn.AdaptiveMaxPool2d(output_size=output_size)
+        self.avg_pool = nn.AdaptiveAvgPool2d(output_size=output_size)
+
+    def forward(self, input: torch.Tensor) -> torch.Tensor:
+        return torch.cat([
+            self.max_pool(input),
+            self.avg_pool(input)
+        ], dim=1)
 

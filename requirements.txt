@@ -12,12 +12,9 @@ imageio
 Shapely
 
 torchtext==0.4.0
-nltk
 spacy
 sentencepiece
-pytorch-transformers==1.0.0
 
-fastai==1.0.54
 ax-platform
 
 six
@@ -26,7 +23,6 @@ scipy
 scikit-learn
 pandas
 networkx
-librosa
 
 hiddenlayer==0.2
 

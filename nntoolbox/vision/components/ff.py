@@ -1,6 +1,5 @@
-import torch
 from torch import nn
-from fastai.layers import AdaptiveConcatPool2d
+from .pool import AdaptiveConcatPool2d
 from .layers import Flatten
 from typing import Sequence
 
@@ -11,7 +10,7 @@ class FeedforwardBlock(nn.Sequential):
             hidden_layer_sizes:Sequence=(512,), activation:nn.Module=nn.ReLU,
             normalization=nn.BatchNorm1d, bn_final:bool=False, drop_p=0.5
     ):
-        layers = [AdaptiveConcatPool2d(sz=pool_output_size), Flatten()]
+        layers = [AdaptiveConcatPool2d(output_size=pool_output_size), Flatten()]
         for i in range(len(hidden_layer_sizes)):
             if i == 0:
                 in_features = in_channels * 2 * pool_output_size * pool_output_size
