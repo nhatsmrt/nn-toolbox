@@ -22,7 +22,6 @@ numpy
 scipy
 scikit-learn
 pandas
-networkx
 
 hiddenlayer==0.2
 
