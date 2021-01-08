@@ -1,29 +1,17 @@
 torch
+tensorboard
 torchvision
-torchaudio
-torchgpipe==0.0.2
-pretrainedmodels==0.7.4
-
 
 imgaug==0.2.6
-scikit-image
 opencv-python
-imageio
-Shapely
 
 torchtext==0.4.0
 spacy
-sentencepiece
-
-ax-platform
 
 six
 numpy
 scipy
 scikit-learn
 pandas
-networkx
-
-hiddenlayer==0.2
 
 future
