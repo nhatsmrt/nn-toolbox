@@ -1,8 +1,6 @@
 torch
 torchvision
 torchaudio
-pretrainedmodels==0.7.4
-
 
 imgaug==0.2.6
 scikit-image
