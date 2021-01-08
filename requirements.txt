@@ -1,6 +1,5 @@
 torch
 torchvision
-torchaudio
 
 imgaug==0.2.6
 scikit-image
