@@ -8,7 +8,6 @@ imgaug==0.2.6
 scikit-image
 opencv-python
 imageio
-Shapely
 
 torchtext==0.4.0
 spacy
