@@ -5,11 +5,11 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    nntoolbox.callbacks
    nntoolbox.components
    nntoolbox.ensembler
-   nntoolbox.graph
    nntoolbox.hooks
    nntoolbox.init
    nntoolbox.losses
@@ -34,7 +34,6 @@ nntoolbox.learner module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

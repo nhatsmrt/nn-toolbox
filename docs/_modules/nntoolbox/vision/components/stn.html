@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.vision.components.stn &#8212; nn-toolbox 0.0.1 documentation</title>
-    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
    
@@ -32,7 +32,7 @@
             
   <h1>Source code for nntoolbox.vision.components.stn</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
 
 
@@ -43,7 +43,7 @@
 <span class="sd">    https://papers.nips.cc/paper/5854-spatial-transformer-networks.pdf</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SpatialTransformerModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">localization</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
             <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
@@ -91,23 +91,21 @@
 
 <h3>Navigation</h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.components.html">nntoolbox.components package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.ensembler.html">nntoolbox.ensembler package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.graph.html">nntoolbox.graph package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.init.html">nntoolbox.init package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.losses.html">nntoolbox.losses package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.models.html">nntoolbox.models package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.visualization.html">nntoolbox.visualization package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.test.html">nntoolbox.test package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.callbacks.html">nntoolbox.callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.components.html">nntoolbox.components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.ensembler.html">nntoolbox.ensembler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.hooks.html">nntoolbox.hooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.init.html">nntoolbox.init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.losses.html">nntoolbox.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.metrics.html">nntoolbox.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.models.html">nntoolbox.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.optim.html">nntoolbox.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.sequence.html">nntoolbox.sequence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.transforms.html">nntoolbox.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.utils.html">nntoolbox.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.vision.html">nntoolbox.vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generated/nntoolbox.visualization.html">nntoolbox.visualization</a></li>
 </ul>
 
 <div class="relations">
@@ -128,7 +126,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -145,7 +143,7 @@
       &copy;2019, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

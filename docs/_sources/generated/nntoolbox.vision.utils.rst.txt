@@ -36,7 +36,6 @@ nntoolbox.vision.utils.utils module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

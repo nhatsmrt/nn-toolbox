@@ -12,7 +12,6 @@ nntoolbox.tabular.components.components module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

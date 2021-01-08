@@ -36,7 +36,6 @@ nntoolbox.sequence.components.cells.zoneout module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

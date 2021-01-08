@@ -1,38 +1,23 @@
-nntoolbox.losses package
-========================
-
-Submodules
-----------
-
-nntoolbox.losses.losses module
-------------------------------
-
-.. automodule:: nntoolbox.losses.losses
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.losses.moe module
----------------------------
-
-.. automodule:: nntoolbox.losses.moe
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.losses.smooth module
-------------------------------
-
-.. automodule:: nntoolbox.losses.smooth
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
+﻿nntoolbox.losses
+================
 
 .. automodule:: nntoolbox.losses
-   :members:
-   :undoc-members:
-   :show-inheritance:
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

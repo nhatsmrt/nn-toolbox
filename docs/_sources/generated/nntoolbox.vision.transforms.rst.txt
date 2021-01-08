@@ -36,7 +36,6 @@ nntoolbox.vision.transforms.transforms module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

@@ -1,21 +1,19 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.sequence.utils package &#8212; nn-toolbox 0.0.1 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="nntoolbox.tabular package" href="nntoolbox.tabular.html" />
-    <link rel="prev" title="nntoolbox.sequence.searcher package" href="nntoolbox.sequence.searcher.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -37,207 +35,17 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-nntoolbox.sequence.utils.data">
-<span id="nntoolbox-sequence-utils-data-module"></span><h2>nntoolbox.sequence.utils.data module<a class="headerlink" href="#module-nntoolbox.sequence.utils.data" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.data.id_to_text">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.data.</code><code class="sig-name descname">id_to_text</code><span class="sig-paren">(</span><em class="sig-param">sequence</em>, <em class="sig-param">vocab: torchtext.vocab.Vocab</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="reference internal" href="../_modules/nntoolbox/sequence/utils/data.html#id_to_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.data.id_to_text" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a sequence of id to corresponding text</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sequence</strong> – </p></li>
-<li><p><strong>vocab</strong> – vocab object</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>text (array form)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.data.text_to_id">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.data.</code><code class="sig-name descname">text_to_id</code><span class="sig-paren">(</span><em class="sig-param">sequence: List[str], vocab: torchtext.vocab.Vocab</em><span class="sig-paren">)</span> &#x2192; List[int]<a class="reference internal" href="../_modules/nntoolbox/sequence/utils/data.html#text_to_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.data.text_to_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a sequence of string to corresponding list of numeric tokens</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sequence</strong> – list of string</p></li>
-<li><p><strong>vocab</strong> – vocab object</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of tokens</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.data.tokenize_sentence">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.data.</code><code class="sig-name descname">tokenize_sentence</code><span class="sig-paren">(</span><em class="sig-param">sentence: str</em>, <em class="sig-param">model=&lt;spacy.lang.en.English object&gt;</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="reference internal" href="../_modules/nntoolbox/sequence/utils/data.html#tokenize_sentence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.data.tokenize_sentence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tokenize a single sentence</p>
-</dd></dl>
-
+<div class="section" id="nntoolbox-sequence-utils-data-module">
+<h2>nntoolbox.sequence.utils.data module<a class="headerlink" href="#nntoolbox-sequence-utils-data-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-nntoolbox.sequence.utils.datasets">
-<span id="nntoolbox-sequence-utils-datasets-module"></span><h2>nntoolbox.sequence.utils.datasets module<a class="headerlink" href="#module-nntoolbox.sequence.utils.datasets" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="nntoolbox.sequence.utils.datasets.Europarl">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.sequence.utils.datasets.</code><code class="sig-name descname">Europarl</code><span class="sig-paren">(</span><em class="sig-param">root: str, exts: Tuple[str, str], fields: Tuple[torchtext.data.field.Field, torchtext.data.field.Field], download: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/utils/datasets.html#Europarl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.datasets.Europarl" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torchtext.datasets.translation.TranslationDataset</span></code></p>
-<p>European Parliament Proceedings Parallel Corpus 1996-2011 (UNTESTED)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>root</strong> – directory containing the europarl-v7 file</p></li>
-<li><p><strong>exts</strong> – extension denoting languages</p></li>
-<li><p><strong>fields</strong> – 2 text fields, one for source and one for target</p></li>
-<li><p><strong>download</strong> – whether to download the data</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="attribute">
-<dt id="nntoolbox.sequence.utils.datasets.Europarl.base_url">
-<code class="sig-name descname">base_url</code><em class="property"> = 'http://www.statmt.org/europarl/v7/'</em><a class="headerlink" href="#nntoolbox.sequence.utils.datasets.Europarl.base_url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="nntoolbox-sequence-utils-datasets-module">
+<h2>nntoolbox.sequence.utils.datasets module<a class="headerlink" href="#nntoolbox-sequence-utils-datasets-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-nntoolbox.sequence.utils.utils">
-<span id="nntoolbox-sequence-utils-utils-module"></span><h2>nntoolbox.sequence.utils.utils module<a class="headerlink" href="#module-nntoolbox.sequence.utils.utils" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.utils.unicode_to_ascii">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">unicode_to_ascii</code><span class="sig-paren">(</span><em class="sig-param">s: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/utils/utils.html#unicode_to_ascii"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.unicode_to_ascii" title="Permalink to this definition">¶</a></dt>
-<dd><p>Turn a Unicode string to plain ASCII</p>
-<p>From: <a class="reference external" href="https://stackoverflow.com/a/518232/2809427">https://stackoverflow.com/a/518232/2809427</a></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>s</strong> – string (in unicode)</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>ASCII form of string</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.utils.create_mask">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">create_mask</code><span class="sig-paren">(</span><em class="sig-param">inputs</em>, <em class="sig-param">pad_token</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/utils/utils.html#create_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.create_mask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a binary mask to indicate whether a token is pad or not</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>inputs</strong> – (seq_len, batch_size)</p></li>
-<li><p><strong>pad_token</strong> – token for padding</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>mask: (seq_len, batch_size)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.utils.create_mask_from_lengths">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">create_mask_from_lengths</code><span class="sig-paren">(</span><em class="sig-param">inputs: torch.Tensor</em>, <em class="sig-param">lengths: torch.Tensor</em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/sequence/utils/utils.html#create_mask_from_lengths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.create_mask_from_lengths" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a binary mask to indicate whether a token is pad or not</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>inputs</strong> – (seq_len, batch_size)</p></li>
-<li><p><strong>lengths</strong> – lengths of each sequence. (batch size)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>mask: (seq_len, batch_size)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.utils.get_lengths">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">get_lengths</code><span class="sig-paren">(</span><em class="sig-param">mask: Union[numpy.ndarray, torch.Tensor], return_tensor: bool = False</em><span class="sig-paren">)</span> &#x2192; Union[numpy.ndarray, torch.Tensor]<a class="reference internal" href="../_modules/nntoolbox/sequence/utils/utils.html#get_lengths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.get_lengths" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a 1D array indicating the length of each sequence in batch</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>mask</strong> – binary mask indicating whether an element is pad token (seq_len, batch_size)</p></li>
-<li><p><strong>return_tensor</strong> – whether to return as a pytorch tensor</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>lengths (n_batch)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.utils.extract_last">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">extract_last</code><span class="sig-paren">(</span><em class="sig-param">sequences: torch.Tensor</em>, <em class="sig-param">sequence_lengths: torch.Tensor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/utils/utils.html#extract_last"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.extract_last" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract the last token of each padded sequence, given its length</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sequences</strong> – (seq_length, batch_size, n_features)</p></li>
-<li><p><strong>sequence_lengths</strong> – (batch_size)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(batch_size, n_features)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.utils.load_embedding">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">load_embedding</code><span class="sig-paren">(</span><em class="sig-param">embedding: torch.nn.modules.sparse.Embedding</em>, <em class="sig-param">weight: torch.Tensor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/utils/utils.html#load_embedding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.load_embedding" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copy weight into embedding layer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>embedding</strong> – </p></li>
-<li><p><strong>weight</strong> – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.utils.save_field">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">save_field</code><span class="sig-paren">(</span><em class="sig-param">field: torchtext.data.field.Field</em>, <em class="sig-param">savepath: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/sequence/utils/utils.html#save_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.save_field" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the torchtext field object for restoring later</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>field</strong> – </p></li>
-<li><p><strong>savepath</strong> – end in pkl (a “pickle” file)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="nntoolbox.sequence.utils.utils.load_field">
-<code class="sig-prename descclassname">nntoolbox.sequence.utils.utils.</code><code class="sig-name descname">load_field</code><span class="sig-paren">(</span><em class="sig-param">loadpath: str</em><span class="sig-paren">)</span> &#x2192; torchtext.data.field.Field<a class="reference internal" href="../_modules/nntoolbox/sequence/utils/utils.html#load_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.sequence.utils.utils.load_field" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load the pickled torchtext field object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>loadpath</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Field object</p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="section" id="nntoolbox-sequence-utils-utils-module">
+<h2>nntoolbox.sequence.utils.utils module<a class="headerlink" href="#nntoolbox-sequence-utils-utils-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-nntoolbox.sequence.utils">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.sequence.utils" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -258,52 +66,28 @@
 
 
 <h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.ensembler.html">nntoolbox.ensembler package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.graph.html">nntoolbox.graph package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence package</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="nntoolbox.sequence.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.components.html">nntoolbox.sequence.components package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.learner.html">nntoolbox.sequence.learner package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.models.html">nntoolbox.sequence.models package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nntoolbox.sequence.searcher.html">nntoolbox.sequence.searcher package</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">nntoolbox.sequence.utils package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.utils.data">nntoolbox.sequence.utils.data module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.utils.datasets">nntoolbox.sequence.utils.datasets module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.utils.utils">nntoolbox.sequence.utils.utils module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-nntoolbox.sequence.utils">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="nntoolbox.sequence.html#module-nntoolbox.sequence">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.visualization.html">nntoolbox.visualization package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nntoolbox.test.html">nntoolbox.test package</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.ensembler.html">nntoolbox.ensembler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.visualization.html">nntoolbox.visualization</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="nntoolbox.sequence.html">nntoolbox.sequence package</a><ul>
-      <li>Previous: <a href="nntoolbox.sequence.searcher.html" title="previous chapter">nntoolbox.sequence.searcher package</a></li>
-      <li>Next: <a href="nntoolbox.tabular.html" title="next chapter">nntoolbox.tabular package</a></li>
-  </ul></li>
   </ul></li>
 </ul>
 </div>
@@ -316,7 +100,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -333,7 +117,7 @@
       &copy;2019, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -12,7 +12,6 @@ nntoolbox.vision.models.classifier module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

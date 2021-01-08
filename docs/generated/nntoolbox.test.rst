@@ -36,7 +36,6 @@ nntoolbox.test.test\_optim module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

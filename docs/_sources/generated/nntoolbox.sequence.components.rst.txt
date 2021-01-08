@@ -5,6 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
    nntoolbox.sequence.components.cells
 
@@ -74,7 +75,6 @@ nntoolbox.sequence.components.transformer module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

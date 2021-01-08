@@ -156,14 +156,6 @@ nntoolbox.vision.components.structured module
    :undoc-members:
    :show-inheritance:
 
-nntoolbox.vision.components.unet module
----------------------------------------
-
-.. automodule:: nntoolbox.vision.components.unet
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 nntoolbox.vision.components.upsample module
 -------------------------------------------
 
@@ -171,7 +163,6 @@ nntoolbox.vision.components.upsample module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

@@ -28,7 +28,6 @@ nntoolbox.sequence.models.lm module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

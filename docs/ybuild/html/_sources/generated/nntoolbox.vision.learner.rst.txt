@@ -28,7 +28,6 @@ nntoolbox.vision.learner.supervised module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

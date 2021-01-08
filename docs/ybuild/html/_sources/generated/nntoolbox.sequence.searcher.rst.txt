@@ -12,7 +12,6 @@ nntoolbox.sequence.searcher.beam module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

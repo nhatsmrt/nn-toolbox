@@ -28,7 +28,6 @@ nntoolbox.sequence.learner.seq2seq module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

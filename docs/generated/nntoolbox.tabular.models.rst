@@ -12,7 +12,6 @@ nntoolbox.tabular.models.collab module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 
