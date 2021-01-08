@@ -19,6 +19,4 @@ scipy
 scikit-learn
 pandas
 
-hiddenlayer==0.2
-
 future
