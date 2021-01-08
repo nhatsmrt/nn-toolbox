@@ -1,4 +1,5 @@
 torch
+tensorboard
 torchvision
 
 imgaug==0.2.6
