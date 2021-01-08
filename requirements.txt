@@ -1,7 +1,6 @@
 torch
 torchvision
 torchaudio
-torchgpipe==0.0.2
 pretrainedmodels==0.7.4
 
 
