@@ -1,12 +1,12 @@
 # Minimal makefile for Sphinx documentation
 #
 
-# You can set these variables from the command line.
-SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = nn-toolbox
-SOURCEDIR     = .
-BUILDDIR      = ybuild
+# You can set these variables from the command line, and also
+# from the environment for the first two.
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= sphinx-build
+SOURCEDIR     = source
+BUILDDIR      = build
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -20,7 +20,8 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 github:
-	@rm -rf generated/
-	@sphinx-apidoc -o generated/ ../nntoolbox/ -f -e
+	@rm -rf build/
+	@sphinx-apidoc -o source/ ../nntoolbox -d 4 -feM
+	@make clean
 	@make html
-	@cp -a ybuild/html/. ../docs
+	@cp -a build/html/. ../docs

@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.vision.components.layers module &#8212; nn-toolbox 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nntoolbox.vision.components.layers">
+<span id="nntoolbox-vision-components-layers-module"></span><h1>nntoolbox.vision.components.layers module<a class="headerlink" href="#module-nntoolbox.vision.components.layers" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.vision.components.layers.BiasLayer2D">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">BiasLayer2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">out_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">init</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.BiasLayer2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Add a trainable bias vector to input:</p>
+<p>y = x + bias</p>
+<dl class="py method">
+<dt id="nntoolbox.vision.components.layers.BiasLayer2D.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.vision.components.layers.BiasLayer2D.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.BiasLayer2D.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.layers.BiasLayer2D.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.layers.ConvolutionalLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">ConvolutionalLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">kernel_size=3</em>, <em class="sig-param">stride=1</em>, <em class="sig-param">padding=0</em>, <em class="sig-param">bias=False</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">normalization=&lt;class 'torch.nn.modules.batchnorm.BatchNorm2d'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.ConvolutionalLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
+<p>Simple convolutional layer: input -&gt; conv2d -&gt; activation -&gt; norm 2d</p>
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.ConvolutionalLayer.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.layers.ConvolutionalLayer.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">CoordConv2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span></em>, <em class="sig-param"><span class="n">out_channels</span></em>, <em class="sig-param"><span class="n">kernel_size</span></em>, <em class="sig-param"><span class="n">stride</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">dilation</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">groups</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">bias</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">padding_mode</span><span class="o">=</span><span class="default_value">'zeros'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.conv.Conv2d</span></code></p>
+<p>Implement CoordConv
+<a class="reference external" href="https://arxiv.org/pdf/1807.03247.pdf">https://arxiv.org/pdf/1807.03247.pdf</a></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.augment_input">
+<em class="property">static </em><code class="sig-name descname">augment_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.augment_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add two coordinate channels to input
+:param input: (N, C, H, W)
+:return: (N, C + 2, H, W)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.bias">
+<code class="sig-name descname">bias</code><em class="property">: Optional<span class="p">[</span>torch.Tensor<span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.bias" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.dilation">
+<code class="sig-name descname">dilation</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.dilation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.groups">
+<code class="sig-name descname">groups</code><em class="property">: int</em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.kernel_size">
+<code class="sig-name descname">kernel_size</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.kernel_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.out_channels">
+<code class="sig-name descname">out_channels</code><em class="property">: int</em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.out_channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.output_padding">
+<code class="sig-name descname">output_padding</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.output_padding" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.padding">
+<code class="sig-name descname">padding</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.padding" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.padding_mode">
+<code class="sig-name descname">padding_mode</code><em class="property">: str</em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.padding_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.stride">
+<code class="sig-name descname">stride</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.stride" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.transposed">
+<code class="sig-name descname">transposed</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.transposed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConv2D.weight">
+<code class="sig-name descname">weight</code><em class="property">: torch.Tensor</em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConv2D.weight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.layers.CoordConvolutionalLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">CoordConvolutionalLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">kernel_size=3</em>, <em class="sig-param">stride=1</em>, <em class="sig-param">padding=0</em>, <em class="sig-param">bias=False</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConvolutionalLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
+<p>Simple convolutional layer: input -&gt; conv2d -&gt; activation -&gt; batch norm 2d</p>
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.CoordConvolutionalLayer.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.layers.CoordConvolutionalLayer.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.layers.Flatten">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">Flatten</code><a class="headerlink" href="#nntoolbox.vision.components.layers.Flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.components.layers.Flatten.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.Flatten.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.Flatten.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.layers.Flatten.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.layers.HighwayConvolutionalLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">HighwayConvolutionalLayer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span></em>, <em class="sig-param"><span class="n">main</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.HighwayConvolutionalLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="nntoolbox.components.components.html#nntoolbox.components.components.HighwayLayer" title="nntoolbox.components.components.HighwayLayer"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.components.components.HighwayLayer</span></code></a></p>
+<p>Highway layer (for images):</p>
+<p>y = T(x) * H(x) + (1 - T(x)) * x</p>
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.HighwayConvolutionalLayer.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.layers.HighwayConvolutionalLayer.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.layers.InputNormalization">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">InputNormalization</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mean</span></em>, <em class="sig-param"><span class="n">std</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.InputNormalization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Normalize input before feed into a network
+Adapt from <a class="reference external" href="https://pytorch.org/tutorials/advanced/neural_style_tutorial.html">https://pytorch.org/tutorials/advanced/neural_style_tutorial.html</a></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.components.layers.InputNormalization.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.InputNormalization.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.InputNormalization.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.layers.InputNormalization.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.layers.Reshape">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.layers.</code><code class="sig-name descname">Reshape</code><a class="headerlink" href="#nntoolbox.vision.components.layers.Reshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.components.layers.Reshape.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">new_shape</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.layers.Reshape.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.layers.Reshape.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.layers.Reshape.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nntoolbox.vision.components.layers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

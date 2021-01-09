@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.optim.utils module &#8212; nn-toolbox 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nntoolbox.optim.utils">
+<span id="nntoolbox-optim-utils-module"></span><h1>nntoolbox.optim.utils module<a class="headerlink" href="#module-nntoolbox.optim.utils" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="nntoolbox.optim.utils.change_lr">
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">change_lr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optim</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">lrs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.optim.utils.change_lr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the learning rate of an optimizer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>optim</strong> – optimizer</p></li>
+<li><p><strong>lrs</strong> – target learning rate</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.optim.utils.get_lr">
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">get_lr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optim</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>float<span class="p">]</span><a class="headerlink" href="#nntoolbox.optim.utils.get_lr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.optim.utils.load_optimizer">
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">load_optimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.optim.utils.load_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load optimizer state for resuming training</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>optimizer</strong> – </p></li>
+<li><p><strong>path</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.optim.utils.plot_schedule">
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">plot_schedule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">schedule_fn</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>float<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">iterations</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">30</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.optim.utils.plot_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the learning rate schedule function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schedule_fn</strong> – a function that returns a learning rate given an iteration</p></li>
+<li><p><strong>iterations</strong> – maximum number of iterations (or epochs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.optim.utils.save_optimizer">
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">save_optimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.optim.utils.save_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save optimizer state for resuming training</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>optimizer</strong> – </p></li>
+<li><p><strong>path</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nntoolbox.optim.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

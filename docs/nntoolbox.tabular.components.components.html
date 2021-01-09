@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.tabular.components.components module &#8212; nn-toolbox 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nntoolbox.tabular.components.components">
+<span id="nntoolbox-tabular-components-components-module"></span><h1>nntoolbox.tabular.components.components module<a class="headerlink" href="#module-nntoolbox.tabular.components.components" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.tabular.components.components.CrossLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.tabular.components.components.</code><code class="sig-name descname">CrossLayer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_hidden</span></em>, <em class="sig-param"><span class="n">bias</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">return_first</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.tabular.components.components.CrossLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Implement a (residual) crossing layer for Deep and Cross Net (DCN):</p>
+<p>x_{l+1} = x_0 x^T_l w + b + x_l</p>
+<p>Based on: <a class="reference external" href="https://arxiv.org/pdf/1708.05123.pdf">https://arxiv.org/pdf/1708.05123.pdf</a></p>
+<dl class="py method">
+<dt id="nntoolbox.tabular.components.components.CrossLayer.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.tabular.components.components.CrossLayer.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inputs</strong> – a tuple: first element is the orinal features, second element is the output of last layer</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.tabular.components.components.CrossLayer.reset_parameters">
+<code class="sig-name descname">reset_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.tabular.components.components.CrossLayer.reset_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the parameters of the model</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.tabular.components.components.CrossLayer.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.tabular.components.components.CrossLayer.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nntoolbox.tabular.components.components.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

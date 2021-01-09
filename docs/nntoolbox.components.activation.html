@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.components.activation module &#8212; nn-toolbox 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nntoolbox.components.activation">
+<span id="nntoolbox-components-activation-module"></span><h1>nntoolbox.components.activation module<a class="headerlink" href="#module-nntoolbox.components.activation" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.components.activation.LWTA">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.activation.</code><code class="sig-name descname">LWTA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">block_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.components.activation.LWTA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Local Winner-Take-All Layer</p>
+<p>For every k consecutive units, keep only the one with highest activations and zero-out the rest.</p>
+<dl class="simple">
+<dt>References:</dt><dd><p>Rupesh Kumar Srivastava, Jonathan Masci, Sohrob Kazerounian, Faustino Gomez, Jürgen Schmidhuber.
+“Compete to Compute.” <a class="reference external" href="https://papers.nips.cc/paper/5059-compete-to-compute.pdf">https://papers.nips.cc/paper/5059-compete-to-compute.pdf</a></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="nntoolbox.components.activation.LWTA.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.components.activation.LWTA.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.activation.LWTA.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.activation.LWTA.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.components.activation.ZeroCenterRelu">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.activation.</code><code class="sig-name descname">ZeroCenterRelu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.components.activation.ZeroCenterRelu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.activation.ReLU</span></code></p>
+<p>As described by Jeremy of FastAI</p>
+<dl class="py method">
+<dt id="nntoolbox.components.activation.ZeroCenterRelu.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.components.activation.ZeroCenterRelu.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.activation.ZeroCenterRelu.inplace">
+<code class="sig-name descname">inplace</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.activation.ZeroCenterRelu.inplace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/nntoolbox.components.activation.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
