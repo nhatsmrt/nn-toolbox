@@ -9,7 +9,7 @@ class PinballLoss(nn.Module):
     """
     Pinball loss for quantile regression:
 
-        L_tau(y_true, y_pred) = max(y_true - y_pred)
+        L_tau(y_true, y_pred) = max(tau * (y_true - y_pred), (tau - 1) * (y_true - y_pred))
 
     References:
 
