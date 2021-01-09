@@ -37,7 +37,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 
-<div class="viewcode-block" id="PretrainedModel"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.pretrain.PretrainedModel">[docs]</a><span class="k">class</span> <span class="nc">PretrainedModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
+<div class="viewcode-block" id="PretrainedModel"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.pretrain.html#nntoolbox.vision.components.pretrain.PretrainedModel">[docs]</a><span class="k">class</span> <span class="nc">PretrainedModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    based on https://github.com/chenyuntc/pytorch-book/blob/master/chapter8-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB(Neural%20Style)/PackedVGG.py</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -59,7 +59,7 @@
             <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="FeatureExtractor"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.pretrain.FeatureExtractor">[docs]</a><span class="k">class</span> <span class="nc">FeatureExtractor</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureExtractor"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.pretrain.html#nntoolbox.vision.components.pretrain.FeatureExtractor">[docs]</a><span class="k">class</span> <span class="nc">FeatureExtractor</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    based on https://github.com/chenyuntc/pytorch-book/blob/master/chapter8-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB(Neural%20Style)/PackedVGG.py</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -91,7 +91,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_features</span><span class="p">[:</span><span class="n">last_layer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_features</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_features</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FeatureExtractor.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.pretrain.FeatureExtractor.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureExtractor.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.pretrain.html#nntoolbox.vision.components.pretrain.FeatureExtractor.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalization</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
         <span class="n">op</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -117,7 +117,7 @@
         <span class="k">return</span> <span class="n">op</span></div></div>
 
 
-<div class="viewcode-block" id="FeatureExtractorSequential"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.pretrain.FeatureExtractorSequential">[docs]</a><span class="k">class</span> <span class="nc">FeatureExtractorSequential</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureExtractorSequential"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.pretrain.html#nntoolbox.vision.components.pretrain.FeatureExtractorSequential">[docs]</a><span class="k">class</span> <span class="nc">FeatureExtractorSequential</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    based on https://github.com/chenyuntc/pytorch-book/blob/master/chapter8-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB(Neural%20Style)/PackedVGG.py</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -143,7 +143,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_features</span><span class="p">[:</span><span class="n">last_layer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FeatureExtractorSequential</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="n">normalization</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_features</span><span class="p">))</span>
 
-<div class="viewcode-block" id="FeatureExtractorSequential.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.pretrain.FeatureExtractorSequential.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureExtractorSequential.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.pretrain.html#nntoolbox.vision.components.pretrain.FeatureExtractorSequential.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modules</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">](</span><span class="nb">input</span><span class="p">)</span>
         <span class="n">op</span> <span class="o">=</span> <span class="p">[]</span>
 

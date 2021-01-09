@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.utils.gradient &#8212; nn-toolbox 0.0.1 documentation</title>
-    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -33,10 +33,10 @@
   <h1>Source code for nntoolbox.utils.gradient</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="k">import</span> <span class="n">Module</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="k">import</span> <span class="n">Tensor</span>
-<span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="k">import</span> <span class="n">grad</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">torch.nn</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
+<span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="kn">import</span> <span class="n">grad</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -46,7 +46,7 @@
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="compute_gradient"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.gradient.compute_gradient">[docs]</a><span class="k">def</span> <span class="nf">compute_gradient</span><span class="p">(</span><span class="n">output</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]:</span>
+<div class="viewcode-block" id="compute_gradient"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.gradient.html#nntoolbox.utils.gradient.compute_gradient">[docs]</a><span class="k">def</span> <span class="nf">compute_gradient</span><span class="p">(</span><span class="n">output</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Comput gradient of the output of a model</span>
 
@@ -62,7 +62,7 @@
     <span class="k">return</span> <span class="n">ret</span></div>
 
 
-<div class="viewcode-block" id="compute_jacobian"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.gradient.compute_jacobian">[docs]</a><span class="k">def</span> <span class="nf">compute_jacobian</span><span class="p">(</span>
+<div class="viewcode-block" id="compute_jacobian"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.gradient.html#nntoolbox.utils.gradient.compute_jacobian">[docs]</a><span class="k">def</span> <span class="nf">compute_jacobian</span><span class="p">(</span>
         <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">is_batch</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">requires_grad</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -88,7 +88,7 @@
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">output_shape</span> <span class="o">+</span> <span class="n">input_shape</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="compute_jacobian_v2"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.gradient.compute_jacobian_v2">[docs]</a><span class="k">def</span> <span class="nf">compute_jacobian_v2</span><span class="p">(</span>
+<div class="viewcode-block" id="compute_jacobian_v2"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.gradient.html#nntoolbox.utils.gradient.compute_jacobian_v2">[docs]</a><span class="k">def</span> <span class="nf">compute_jacobian_v2</span><span class="p">(</span>
         <span class="n">output</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]],</span> <span class="n">requires_grad</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -107,17 +107,17 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">compute_jacobian_v2</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">requires_grad</span><span class="p">)</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="nb">input</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="update_gradient"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.gradient.update_gradient">[docs]</a><span class="k">def</span> <span class="nf">update_gradient</span><span class="p">(</span><span class="n">gradients</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="update_gradient"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.gradient.html#nntoolbox.utils.gradient.update_gradient">[docs]</a><span class="k">def</span> <span class="nf">update_gradient</span><span class="p">(</span><span class="n">gradients</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Module</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()):</span>
         <span class="n">parameter</span><span class="o">.</span><span class="n">grad</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">gradient</span><span class="p">)</span> <span class="c1"># Reset gradient accumulation</span></div>
 
 
-<div class="viewcode-block" id="accumulate_gradient"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.gradient.accumulate_gradient">[docs]</a><span class="k">def</span> <span class="nf">accumulate_gradient</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="accumulate_gradient"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.gradient.html#nntoolbox.utils.gradient.accumulate_gradient">[docs]</a><span class="k">def</span> <span class="nf">accumulate_gradient</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()):</span>
         <span class="n">parameter</span><span class="o">.</span><span class="n">grad</span> <span class="o">+=</span> <span class="n">fn</span><span class="p">(</span><span class="n">gradient</span><span class="p">)</span> <span class="c1"># Reset gradient accumulation</span></div>
 
 
-<div class="viewcode-block" id="compute_gradient_norm"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.gradient.compute_gradient_norm">[docs]</a><span class="k">def</span> <span class="nf">compute_gradient_norm</span><span class="p">(</span><span class="n">output</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_gradient_norm"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.gradient.html#nntoolbox.utils.gradient.compute_gradient_norm">[docs]</a><span class="k">def</span> <span class="nf">compute_gradient_norm</span><span class="p">(</span><span class="n">output</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the norm of the gradient of an output (e.g a loss) with respect to a model parameters</span>
 
@@ -135,7 +135,7 @@
     <span class="k">return</span> <span class="n">ret</span></div>
 
 
-<div class="viewcode-block" id="hessian_diagonal"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.gradient.hessian_diagonal">[docs]</a><span class="k">def</span> <span class="nf">hessian_diagonal</span><span class="p">(</span>
+<div class="viewcode-block" id="hessian_diagonal"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.gradient.html#nntoolbox.utils.gradient.hessian_diagonal">[docs]</a><span class="k">def</span> <span class="nf">hessian_diagonal</span><span class="p">(</span>
         <span class="n">output</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span> <span class="n">requires_grad</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -165,7 +165,7 @@
         <span class="k">return</span> <span class="n">hess_diags</span></div>
 
 
-<div class="viewcode-block" id="gather_flat_grad"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.html#nntoolbox.utils.gradient.gather_flat_grad">[docs]</a><span class="k">def</span> <span class="nf">gather_flat_grad</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+<div class="viewcode-block" id="gather_flat_grad"><a class="viewcode-back" href="../../../generated/nntoolbox.utils.gradient.html#nntoolbox.utils.gradient.gather_flat_grad">[docs]</a><span class="k">def</span> <span class="nf">gather_flat_grad</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gather gradient of all the parameters and flatten into a vector. Adapted from pytorch&#39;s L-BFGS implementation.</span>
 
@@ -201,23 +201,21 @@
 
 <h3>Navigation</h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.callbacks.html">nntoolbox.callbacks package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.components.html">nntoolbox.components package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.ensembler.html">nntoolbox.ensembler package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.graph.html">nntoolbox.graph package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.hooks.html">nntoolbox.hooks package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.init.html">nntoolbox.init package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.losses.html">nntoolbox.losses package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.metrics.html">nntoolbox.metrics package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.models.html">nntoolbox.models package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.optim.html">nntoolbox.optim package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.sequence.html">nntoolbox.sequence package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.transforms.html">nntoolbox.transforms package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.utils.html">nntoolbox.utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.vision.html">nntoolbox.vision package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.visualization.html">nntoolbox.visualization package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.test.html">nntoolbox.test package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.callbacks.html">nntoolbox.callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.components.html">nntoolbox.components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.ensembler.html">nntoolbox.ensembler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.hooks.html">nntoolbox.hooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.init.html">nntoolbox.init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.losses.html">nntoolbox.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.metrics.html">nntoolbox.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.models.html">nntoolbox.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.optim.html">nntoolbox.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.sequence.html">nntoolbox.sequence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.transforms.html">nntoolbox.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.utils.html">nntoolbox.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.vision.html">nntoolbox.vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../generated/nntoolbox.visualization.html">nntoolbox.visualization</a></li>
 </ul>
 
 <div class="relations">
@@ -238,7 +236,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -255,7 +253,7 @@
       &copy;2019, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

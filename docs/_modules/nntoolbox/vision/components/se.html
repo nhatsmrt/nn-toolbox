@@ -38,7 +38,7 @@
 <span class="kn">from</span> <span class="nn">.kervolution</span> <span class="kn">import</span> <span class="n">KervolutionalLayer</span>
 
 
-<div class="viewcode-block" id="SEBlock"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.se.SEBlock">[docs]</a><span class="k">class</span> <span class="nc">SEBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="SEBlock"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.se.html#nntoolbox.vision.components.se.SEBlock">[docs]</a><span class="k">class</span> <span class="nc">SEBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Implement squeeze (global information embedding) and excitation (adaptive recalibration) mechanism:</span>
 
@@ -57,7 +57,7 @@
             <span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">()</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="SEBlock.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.se.SEBlock.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+<div class="viewcode-block" id="SEBlock.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.se.html#nntoolbox.vision.components.se.SEBlock.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
         <span class="n">channel_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_squeeze_excitation</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">channel_weights</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">input</span></div></div>
 
@@ -71,7 +71,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_se</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_main</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span> <span class="o">+</span> <span class="nb">input</span>
 
 
-<div class="viewcode-block" id="SEResidualBlock"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.se.SEResidualBlock">[docs]</a><span class="k">class</span> <span class="nc">SEResidualBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
+<div class="viewcode-block" id="SEResidualBlock"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.se.html#nntoolbox.vision.components.se.SEResidualBlock">[docs]</a><span class="k">class</span> <span class="nc">SEResidualBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">reduction_ratio</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SEResidualBlock</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_module</span><span class="p">(</span>
@@ -83,7 +83,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="SEResidualBlockPreActivation"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.se.SEResidualBlockPreActivation">[docs]</a><span class="k">class</span> <span class="nc">SEResidualBlockPreActivation</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
+<div class="viewcode-block" id="SEResidualBlockPreActivation"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.se.html#nntoolbox.vision.components.se.SEResidualBlockPreActivation">[docs]</a><span class="k">class</span> <span class="nc">SEResidualBlockPreActivation</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">reduction_ratio</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SEResidualBlockPreActivation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">branches</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
@@ -105,7 +105,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="SEResidualBlockPreActivationKer"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.se.SEResidualBlockPreActivationKer">[docs]</a><span class="k">class</span> <span class="nc">SEResidualBlockPreActivationKer</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
+<div class="viewcode-block" id="SEResidualBlockPreActivationKer"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.se.html#nntoolbox.vision.components.se.SEResidualBlockPreActivationKer">[docs]</a><span class="k">class</span> <span class="nc">SEResidualBlockPreActivationKer</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">reduction_ratio</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SEResidualBlockPreActivationKer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">branches</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>

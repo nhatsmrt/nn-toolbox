@@ -1,6 +1,11 @@
 nntoolbox package
 =================
 
+.. automodule:: nntoolbox
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -27,18 +32,7 @@ Subpackages
 Submodules
 ----------
 
-nntoolbox.learner module
-------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: nntoolbox.learner
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: nntoolbox
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   nntoolbox.learner

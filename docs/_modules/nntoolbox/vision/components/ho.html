@@ -39,7 +39,7 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;QuadraticPolynomialConv2D&#39;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="QuadraticPolynomialConv2D"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.ho.QuadraticPolynomialConv2D">[docs]</a><span class="k">class</span> <span class="nc">QuadraticPolynomialConv2D</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="QuadraticPolynomialConv2D"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.ho.html#nntoolbox.vision.components.ho.QuadraticPolynomialConv2D">[docs]</a><span class="k">class</span> <span class="nc">QuadraticPolynomialConv2D</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    h(x) = sum_k(A_k * x)^2 + b * x + c</span>
 
@@ -66,7 +66,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sqrt</span> <span class="o">=</span> <span class="n">sqrt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
 
-<div class="viewcode-block" id="QuadraticPolynomialConv2D.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.ho.QuadraticPolynomialConv2D.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+<div class="viewcode-block" id="QuadraticPolynomialConv2D.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.ho.html#nntoolbox.vision.components.ho.QuadraticPolynomialConv2D.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="n">linear_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
         <span class="n">quadratic_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">quadratic_features</span> <span class="o">=</span> <span class="n">quadratic_features</span><span class="o">.</span><span class="n">view</span><span class="p">(</span>

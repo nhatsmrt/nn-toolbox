@@ -1,45 +1,18 @@
 nntoolbox.vision.losses package
 ===============================
 
-Submodules
-----------
-
-nntoolbox.vision.losses.discriminative module
----------------------------------------------
-
-.. automodule:: nntoolbox.vision.losses.discriminative
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.losses.metrics module
---------------------------------------
-
-.. automodule:: nntoolbox.vision.losses.metrics
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.losses.robust module
--------------------------------------
-
-.. automodule:: nntoolbox.vision.losses.robust
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.losses.style module
-------------------------------------
-
-.. automodule:: nntoolbox.vision.losses.style
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
 .. automodule:: nntoolbox.vision.losses
    :members:
    :undoc-members:
    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   nntoolbox.vision.losses.discriminative
+   nntoolbox.vision.losses.metrics
+   nntoolbox.vision.losses.robust
+   nntoolbox.vision.losses.style

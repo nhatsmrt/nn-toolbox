@@ -1,45 +1,18 @@
 nntoolbox.vision.utils package
 ==============================
 
-Submodules
-----------
-
-nntoolbox.vision.utils.data module
-----------------------------------
-
-.. automodule:: nntoolbox.vision.utils.data
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.utils.dataset module
--------------------------------------
-
-.. automodule:: nntoolbox.vision.utils.dataset
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.utils.selector module
---------------------------------------
-
-.. automodule:: nntoolbox.vision.utils.selector
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.utils.utils module
------------------------------------
-
-.. automodule:: nntoolbox.vision.utils.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
 .. automodule:: nntoolbox.vision.utils
    :members:
    :undoc-members:
    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   nntoolbox.vision.utils.data
+   nntoolbox.vision.utils.dataset
+   nntoolbox.vision.utils.selector
+   nntoolbox.vision.utils.utils

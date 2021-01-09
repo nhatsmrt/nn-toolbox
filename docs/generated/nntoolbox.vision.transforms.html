@@ -30,136 +30,18 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-vision-transforms-package">
-<h1>nntoolbox.vision.transforms package<a class="headerlink" href="#nntoolbox-vision-transforms-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.vision.transforms">
+<span id="nntoolbox-vision-transforms-package"></span><h1>nntoolbox.vision.transforms package<a class="headerlink" href="#module-nntoolbox.vision.transforms" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.transforms.batch.html">nntoolbox.vision.transforms.batch module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.transforms.imgaug.html">nntoolbox.vision.transforms.imgaug module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.transforms.scale.html">nntoolbox.vision.transforms.scale module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.transforms.transforms.html">nntoolbox.vision.transforms.transforms module</a></li>
+</ul>
 </div>
-<div class="section" id="module-nntoolbox.vision.transforms.batch">
-<span id="nntoolbox-vision-transforms-batch-module"></span><h2>nntoolbox.vision.transforms.batch module<a class="headerlink" href="#module-nntoolbox.vision.transforms.batch" title="Permalink to this headline">¶</a></h2>
-<p>Transform input by batch</p>
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.batch.BatchCompose">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.batch.</code><code class="sig-name descname">BatchCompose</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transforms</span><span class="p">:</span> <span class="n">List</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/batch.html#BatchCompose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.batch.BatchCompose" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.batch.BatchHorizontalFlip">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.batch.</code><code class="sig-name descname">BatchHorizontalFlip</code><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/batch.html#BatchHorizontalFlip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.batch.BatchHorizontalFlip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.transforms.batch.BatchLambdaTransform" title="nntoolbox.vision.transforms.batch.BatchLambdaTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.transforms.batch.BatchLambdaTransform</span></code></a></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.batch.BatchLambdaTransform">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.batch.</code><code class="sig-name descname">BatchLambdaTransform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fn</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>torch.Tensor<span class="p">]</span><span class="p">, </span>torch.Tensor<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/batch.html#BatchLambdaTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.batch.BatchLambdaTransform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.batch.BatchRotation180">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.batch.</code><code class="sig-name descname">BatchRotation180</code><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/batch.html#BatchRotation180"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.batch.BatchRotation180" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.transforms.batch.BatchLambdaTransform" title="nntoolbox.vision.transforms.batch.BatchLambdaTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.transforms.batch.BatchLambdaTransform</span></code></a></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.batch.BatchRotation270">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.batch.</code><code class="sig-name descname">BatchRotation270</code><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/batch.html#BatchRotation270"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.batch.BatchRotation270" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.transforms.batch.BatchLambdaTransform" title="nntoolbox.vision.transforms.batch.BatchLambdaTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.transforms.batch.BatchLambdaTransform</span></code></a></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.batch.BatchRotation90">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.batch.</code><code class="sig-name descname">BatchRotation90</code><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/batch.html#BatchRotation90"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.batch.BatchRotation90" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.transforms.batch.BatchLambdaTransform" title="nntoolbox.vision.transforms.batch.BatchLambdaTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.transforms.batch.BatchLambdaTransform</span></code></a></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.batch.BatchVerticalFlip">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.batch.</code><code class="sig-name descname">BatchVerticalFlip</code><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/batch.html#BatchVerticalFlip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.batch.BatchVerticalFlip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.transforms.batch.BatchLambdaTransform" title="nntoolbox.vision.transforms.batch.BatchLambdaTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.transforms.batch.BatchLambdaTransform</span></code></a></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.batch.Identity">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.batch.</code><code class="sig-name descname">Identity</code><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/batch.html#Identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.batch.Identity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-nntoolbox.vision.transforms.imgaug">
-<span id="nntoolbox-vision-transforms-imgaug-module"></span><h2>nntoolbox.vision.transforms.imgaug module<a class="headerlink" href="#module-nntoolbox.vision.transforms.imgaug" title="Permalink to this headline">¶</a></h2>
-<p>Wrapper for imgaug transformation</p>
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.imgaug.ImgAugTransform">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.imgaug.</code><code class="sig-name descname">ImgAugTransform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transform</span><span class="p">:</span> <span class="n">imgaug.augmenters.meta.Augmenter</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/imgaug.html#ImgAugTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.imgaug.ImgAugTransform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A thin wrapper around img aug transform</p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.imgaug.NumpyToTensor">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.imgaug.</code><code class="sig-name descname">NumpyToTensor</code><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/imgaug.html#NumpyToTensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.imgaug.NumpyToTensor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A simple class to transform a (batch) of numpy images to tensor</p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.imgaug.ToFloat">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.imgaug.</code><code class="sig-name descname">ToFloat</code><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/imgaug.html#ToFloat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.imgaug.ToFloat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A simple transform to convert image(s) from uint8 to float</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-nntoolbox.vision.transforms.scale">
-<span id="nntoolbox-vision-transforms-scale-module"></span><h2>nntoolbox.vision.transforms.scale module<a class="headerlink" href="#module-nntoolbox.vision.transforms.scale" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.scale.RandomRescale">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.scale.</code><code class="sig-name descname">RandomRescale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>Tuple<span class="p">[</span>float<span class="p">, </span>float<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(0.5, 1.0)</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/scale.html#RandomRescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.scale.RandomRescale" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Randomly downscale an image, then resize it back to original scale</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-nntoolbox.vision.transforms.transforms">
-<span id="nntoolbox-vision-transforms-transforms-module"></span><h2>nntoolbox.vision.transforms.transforms module<a class="headerlink" href="#module-nntoolbox.vision.transforms.transforms" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.transforms.Cutout">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.transforms.</code><code class="sig-name descname">Cutout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_holes</span></em>, <em class="sig-param"><span class="n">length</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/transforms.html#Cutout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.transforms.Cutout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p><a class="reference external" href="https://arxiv.org/pdf/1708.04552.pdf">https://arxiv.org/pdf/1708.04552.pdf</a></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.transforms.transforms.ElasticDeformation">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.transforms.transforms.</code><code class="sig-name descname">ElasticDeformation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">sigma</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/transforms/transforms.html#ElasticDeformation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.transforms.ElasticDeformation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Apply elastic deformation on a PIL image (H x W x C)
-Adapt from <a class="reference external" href="https://gist.github.com/oeway/2e3b989e0343f0884388ed7ed82eb3b0">https://gist.github.com/oeway/2e3b989e0343f0884388ed7ed82eb3b0</a>
-Paper: <a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.10.5032&amp;rep=rep1&amp;type=pdf">http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.10.5032&amp;rep=rep1&amp;type=pdf</a></p>
-<dl class="py method">
-<dt id="nntoolbox.vision.transforms.transforms.ElasticDeformation.elastic_deform">
-<em class="property">static </em><code class="sig-name descname">elastic_deform</code><span class="sig-paren">(</span><em class="sig-param">image: &lt;module 'PIL.Image' from '/Users/nhat/Documents/Projects/nn-toolbox/venv/lib/python3.8/site-packages/PIL/Image.py'&gt;</em>, <em class="sig-param">alpha=1000</em>, <em class="sig-param">sigma=30</em>, <em class="sig-param">spline_order=1</em>, <em class="sig-param">mode='nearest'</em><span class="sig-paren">)</span> &#x2192; &lt;module ‘PIL.Image’ from ‘/Users/nhat/Documents/Projects/nn-toolbox/venv/lib/python3.8/site-packages/PIL/Image.py’&gt;<a class="reference internal" href="../_modules/nntoolbox/vision/transforms/transforms.html#ElasticDeformation.elastic_deform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.transforms.transforms.ElasticDeformation.elastic_deform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Elastic deformation of image as described in <span id="id1">[Simard2003]</span>.
-.. [Simard2003] Simard, Steinkraus and Platt, “Best Practices for</p>
-<blockquote>
-<div><p>Convolutional Neural Networks applied to Visual Document Analysis”, in
-Proc. of the International Conference on Document Analysis and
-Recognition, 2003.
-:param image: The image to be deformed
-:param alpha:  scaling factor that controls the intensity of the deformation
-:param sigma: the std of gaussian filters. Smaller sigma implies more random deformation field
-:param spline_order
-:param mode: interpolation mode</p>
-</div></blockquote>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-nntoolbox.vision.transforms">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.vision.transforms" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

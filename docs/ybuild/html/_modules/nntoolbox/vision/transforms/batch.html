@@ -54,7 +54,7 @@
 <span class="n">rot270deg</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">rotimg</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="BatchCompose"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.batch.BatchCompose">[docs]</a><span class="k">class</span> <span class="nc">BatchCompose</span><span class="p">:</span>
+<div class="viewcode-block" id="BatchCompose"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.batch.html#nntoolbox.vision.transforms.batch.BatchCompose">[docs]</a><span class="k">class</span> <span class="nc">BatchCompose</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transforms</span><span class="p">:</span> <span class="n">List</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="n">transforms</span>
 
@@ -63,34 +63,34 @@
         <span class="k">return</span> <span class="nb">input</span></div>
 
 
-<div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.batch.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">:</span>
+<div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.batch.html#nntoolbox.vision.transforms.batch.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span> <span class="k">return</span> <span class="nb">input</span></div>
 
 
-<div class="viewcode-block" id="BatchLambdaTransform"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.batch.BatchLambdaTransform">[docs]</a><span class="k">class</span> <span class="nc">BatchLambdaTransform</span><span class="p">:</span>
+<div class="viewcode-block" id="BatchLambdaTransform"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.batch.html#nntoolbox.vision.transforms.batch.BatchLambdaTransform">[docs]</a><span class="k">class</span> <span class="nc">BatchLambdaTransform</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BatchHorizontalFlip"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.batch.BatchHorizontalFlip">[docs]</a><span class="k">class</span> <span class="nc">BatchHorizontalFlip</span><span class="p">(</span><span class="n">BatchLambdaTransform</span><span class="p">):</span>
+<div class="viewcode-block" id="BatchHorizontalFlip"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.batch.html#nntoolbox.vision.transforms.batch.BatchHorizontalFlip">[docs]</a><span class="k">class</span> <span class="nc">BatchHorizontalFlip</span><span class="p">(</span><span class="n">BatchLambdaTransform</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">super</span><span class="p">(</span><span class="n">BatchHorizontalFlip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">hflip</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BatchVerticalFlip"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.batch.BatchVerticalFlip">[docs]</a><span class="k">class</span> <span class="nc">BatchVerticalFlip</span><span class="p">(</span><span class="n">BatchLambdaTransform</span><span class="p">):</span>
+<div class="viewcode-block" id="BatchVerticalFlip"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.batch.html#nntoolbox.vision.transforms.batch.BatchVerticalFlip">[docs]</a><span class="k">class</span> <span class="nc">BatchVerticalFlip</span><span class="p">(</span><span class="n">BatchLambdaTransform</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">super</span><span class="p">(</span><span class="n">BatchVerticalFlip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">vflip</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BatchRotation90"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.batch.BatchRotation90">[docs]</a><span class="k">class</span> <span class="nc">BatchRotation90</span><span class="p">(</span><span class="n">BatchLambdaTransform</span><span class="p">):</span>
+<div class="viewcode-block" id="BatchRotation90"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.batch.html#nntoolbox.vision.transforms.batch.BatchRotation90">[docs]</a><span class="k">class</span> <span class="nc">BatchRotation90</span><span class="p">(</span><span class="n">BatchLambdaTransform</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">super</span><span class="p">(</span><span class="n">BatchRotation90</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rot90deg</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BatchRotation180"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.batch.BatchRotation180">[docs]</a><span class="k">class</span> <span class="nc">BatchRotation180</span><span class="p">(</span><span class="n">BatchLambdaTransform</span><span class="p">):</span>
+<div class="viewcode-block" id="BatchRotation180"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.batch.html#nntoolbox.vision.transforms.batch.BatchRotation180">[docs]</a><span class="k">class</span> <span class="nc">BatchRotation180</span><span class="p">(</span><span class="n">BatchLambdaTransform</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">super</span><span class="p">(</span><span class="n">BatchRotation180</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rot180deg</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BatchRotation270"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.batch.BatchRotation270">[docs]</a><span class="k">class</span> <span class="nc">BatchRotation270</span><span class="p">(</span><span class="n">BatchLambdaTransform</span><span class="p">):</span>
+<div class="viewcode-block" id="BatchRotation270"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.batch.html#nntoolbox.vision.transforms.batch.BatchRotation270">[docs]</a><span class="k">class</span> <span class="nc">BatchRotation270</span><span class="p">(</span><span class="n">BatchLambdaTransform</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">super</span><span class="p">(</span><span class="n">BatchRotation270</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rot270deg</span><span class="p">)</span></div>
 </pre></div>
 

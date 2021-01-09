@@ -30,97 +30,15 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-tabular-models-package">
-<h1>nntoolbox.tabular.models package<a class="headerlink" href="#nntoolbox-tabular-models-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.tabular.models">
+<span id="nntoolbox-tabular-models-package"></span><h1>nntoolbox.tabular.models package<a class="headerlink" href="#module-nntoolbox.tabular.models" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-nntoolbox.tabular.models.collab">
-<span id="nntoolbox-tabular-models-collab-module"></span><h2>nntoolbox.tabular.models.collab module<a class="headerlink" href="#module-nntoolbox.tabular.models.collab" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="nntoolbox.tabular.models.collab.CollabFiltering">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.tabular.models.collab.</code><code class="sig-name descname">CollabFiltering</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_users</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">n_products</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">embedding_dim</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/tabular/models/collab.html#CollabFiltering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.tabular.models.collab.CollabFiltering" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>A simple collaborative model</p>
-<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
-<dl class="py method">
-<dt id="nntoolbox.tabular.models.collab.CollabFiltering.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/tabular/models/collab.html#CollabFiltering.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.tabular.models.collab.CollabFiltering.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inputs</strong> – the pair of user-product of shape (batch_size, 2)</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(batch_size, 1)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.tabular.models.collab.CollabFiltering.get_score">
-<code class="sig-name descname">get_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">users</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">products</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/tabular/models/collab.html#CollabFiltering.get_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.tabular.models.collab.CollabFiltering.get_score" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the score of corresponding pairs of users-products</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>users</strong> – (batch_size, )</p></li>
-<li><p><strong>products</strong> – (batch_size, )</p></li>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.models.collab.html">nntoolbox.tabular.models.collab module</a></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.tabular.models.collab.CollabFiltering.training">
-<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.tabular.models.collab.CollabFiltering.training" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.tabular.models.collab.NonLinearCF">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.tabular.models.collab.</code><code class="sig-name descname">NonLinearCF</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_users</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">n_products</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">user_dim</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">product_dim</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">body</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>torch.nn.modules.module.Module<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/tabular/models/collab.html#NonLinearCF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.tabular.models.collab.NonLinearCF" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>A non-linear collaborative model. If no body model is provided, default to a one-hidden layer net</p>
-<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
-<dl class="py method">
-<dt id="nntoolbox.tabular.models.collab.NonLinearCF.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/tabular/models/collab.html#NonLinearCF.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.tabular.models.collab.NonLinearCF.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the score of corresponding pairs of products and users</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inputs</strong> – the pair of user-product of shape (batch_size, 2)</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(batch_size, 1)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.tabular.models.collab.NonLinearCF.get_score">
-<code class="sig-name descname">get_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">users</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">products</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/tabular/models/collab.html#NonLinearCF.get_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.tabular.models.collab.NonLinearCF.get_score" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the score of corresponding pairs of users-products</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>users</strong> – (batch_size, )</p></li>
-<li><p><strong>products</strong> – (batch_size, )</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.tabular.models.collab.NonLinearCF.training">
-<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.tabular.models.collab.NonLinearCF.training" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
-<div class="section" id="module-nntoolbox.tabular.models">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.tabular.models" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

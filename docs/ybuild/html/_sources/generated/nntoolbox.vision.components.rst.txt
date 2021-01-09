@@ -1,173 +1,34 @@
 nntoolbox.vision.components package
 ===================================
 
-Submodules
-----------
-
-nntoolbox.vision.components.activation module
----------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.activation
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.attention module
---------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.attention
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.dense module
-----------------------------------------
-
-.. automodule:: nntoolbox.vision.components.dense
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.ff module
--------------------------------------
-
-.. automodule:: nntoolbox.vision.components.ff
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.ho module
--------------------------------------
-
-.. automodule:: nntoolbox.vision.components.ho
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.inception module
---------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.inception
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.kervolution module
-----------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.kervolution
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.layers module
------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.layers
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.local module
-----------------------------------------
-
-.. automodule:: nntoolbox.vision.components.local
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.nap module
---------------------------------------
-
-.. automodule:: nntoolbox.vision.components.nap
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.normalization module
-------------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.normalization
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.pool module
----------------------------------------
-
-.. automodule:: nntoolbox.vision.components.pool
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.pretrain module
--------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.pretrain
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.regularization module
--------------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.regularization
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.res module
---------------------------------------
-
-.. automodule:: nntoolbox.vision.components.res
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.se module
--------------------------------------
-
-.. automodule:: nntoolbox.vision.components.se
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.shunting module
--------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.shunting
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.stn module
---------------------------------------
-
-.. automodule:: nntoolbox.vision.components.stn
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.structured module
----------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.structured
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-nntoolbox.vision.components.upsample module
--------------------------------------------
-
-.. automodule:: nntoolbox.vision.components.upsample
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
 .. automodule:: nntoolbox.vision.components
    :members:
    :undoc-members:
    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   nntoolbox.vision.components.activation
+   nntoolbox.vision.components.attention
+   nntoolbox.vision.components.dense
+   nntoolbox.vision.components.ff
+   nntoolbox.vision.components.ho
+   nntoolbox.vision.components.inception
+   nntoolbox.vision.components.kervolution
+   nntoolbox.vision.components.layers
+   nntoolbox.vision.components.local
+   nntoolbox.vision.components.nap
+   nntoolbox.vision.components.normalization
+   nntoolbox.vision.components.pool
+   nntoolbox.vision.components.pretrain
+   nntoolbox.vision.components.regularization
+   nntoolbox.vision.components.res
+   nntoolbox.vision.components.se
+   nntoolbox.vision.components.shunting
+   nntoolbox.vision.components.stn
+   nntoolbox.vision.components.structured
+   nntoolbox.vision.components.upsample

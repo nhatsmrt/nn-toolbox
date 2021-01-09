@@ -38,7 +38,7 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 
 
-<div class="viewcode-block" id="ResNeXtBlock"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.res.ResNeXtBlock">[docs]</a><span class="k">class</span> <span class="nc">ResNeXtBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="ResNeXtBlock"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.ResNeXtBlock">[docs]</a><span class="k">class</span> <span class="nc">ResNeXtBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Implement a resnext block:</span>
 
@@ -53,7 +53,7 @@
         <span class="k">if</span> <span class="n">use_shake_shake</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_shake_shake</span> <span class="o">=</span> <span class="n">ShakeShake</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ResNeXtBlock.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.res.ResNeXtBlock.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+<div class="viewcode-block" id="ResNeXtBlock.forward"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.ResNeXtBlock.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
         <span class="n">branches_outputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">branches</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="nb">input</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cardinality</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_shake_shake</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">input</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shake_shake</span><span class="p">(</span><span class="n">branches_outputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">)</span>
@@ -80,7 +80,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_main</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="o">+</span> <span class="nb">input</span>
 
 
-<div class="viewcode-block" id="ResidualBlock"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.res.ResidualBlock">[docs]</a><span class="k">class</span> <span class="nc">ResidualBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
+<div class="viewcode-block" id="ResidualBlock"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.ResidualBlock">[docs]</a><span class="k">class</span> <span class="nc">ResidualBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ResidualBlock</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_module</span><span class="p">(</span>
@@ -92,7 +92,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ResidualBlockPreActivation"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.res.ResidualBlockPreActivation">[docs]</a><span class="k">class</span> <span class="nc">ResidualBlockPreActivation</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
+<div class="viewcode-block" id="ResidualBlockPreActivation"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.ResidualBlockPreActivation">[docs]</a><span class="k">class</span> <span class="nc">ResidualBlockPreActivation</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ResidualBlockPreActivation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">branches</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
@@ -113,7 +113,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BottleneckPreActivation"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.res.BottleneckPreActivation">[docs]</a><span class="k">class</span> <span class="nc">BottleneckPreActivation</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
+<div class="viewcode-block" id="BottleneckPreActivation"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.BottleneckPreActivation">[docs]</a><span class="k">class</span> <span class="nc">BottleneckPreActivation</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BottleneckPreActivation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">branches</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
@@ -138,7 +138,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ResidualBlockPreActivationKer"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.html#nntoolbox.vision.components.res.ResidualBlockPreActivationKer">[docs]</a><span class="k">class</span> <span class="nc">ResidualBlockPreActivationKer</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
+<div class="viewcode-block" id="ResidualBlockPreActivationKer"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.ResidualBlockPreActivationKer">[docs]</a><span class="k">class</span> <span class="nc">ResidualBlockPreActivationKer</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ResidualBlockPreActivationKer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">branches</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>

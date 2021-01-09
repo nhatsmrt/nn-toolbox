@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.vision.losses.metrics module &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nntoolbox.vision.losses.metrics">
+<span id="nntoolbox-vision-losses-metrics-module"></span><h1>nntoolbox.vision.losses.metrics module<a class="headerlink" href="#module-nntoolbox.vision.losses.metrics" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.vision.losses.metrics.AngularLoss">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.losses.metrics.</code><code class="sig-name descname">AngularLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">45</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#AngularLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.AngularLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Based on <a class="reference external" href="https://github.com/leeesangwon/PyTorch-Image-Retrieval/blob/public/losses.py">https://github.com/leeesangwon/PyTorch-Image-Retrieval/blob/public/losses.py</a></p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="py method">
+<dt id="nntoolbox.vision.losses.metrics.AngularLoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#AngularLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.AngularLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.losses.metrics.AngularLoss.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.losses.metrics.AngularLoss.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.losses.metrics.ContrastiveLoss">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.losses.metrics.</code><code class="sig-name descname">ContrastiveLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">margin</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#ContrastiveLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.ContrastiveLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Contrastive loss function.</p>
+<p>Based on:</p>
+<p><a class="reference external" href="https://github.com/delijati/pytorch-siamese/blob/master/contrastive.py#L20">https://github.com/delijati/pytorch-siamese/blob/master/contrastive.py#L20</a></p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="py method">
+<dt id="nntoolbox.vision.losses.metrics.ContrastiveLoss.check_type_forward">
+<code class="sig-name descname">check_type_forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_types</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#ContrastiveLoss.check_type_forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.ContrastiveLoss.check_type_forward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.vision.losses.metrics.ContrastiveLoss.dist">
+<code class="sig-name descname">dist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x_0</span></em>, <em class="sig-param"><span class="n">x_1</span></em>, <em class="sig-param"><span class="n">eps</span><span class="o">=</span><span class="default_value">1e-08</span></em>, <em class="sig-param"><span class="n">squared</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#ContrastiveLoss.dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.ContrastiveLoss.dist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.vision.losses.metrics.ContrastiveLoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span><span class="p">…</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#ContrastiveLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.ContrastiveLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.losses.metrics.ContrastiveLoss.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.losses.metrics.ContrastiveLoss.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.losses.metrics.NPairAngular">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.losses.metrics.</code><code class="sig-name descname">NPairAngular</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">45</span></em>, <em class="sig-param"><span class="n">reg_lambda</span><span class="o">=</span><span class="default_value">0.002</span></em>, <em class="sig-param"><span class="n">angular_lambda</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#NPairAngular"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.NPairAngular" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Combining N-Pair loss and Angular loss</p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="py method">
+<dt id="nntoolbox.vision.losses.metrics.NPairAngular.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#NPairAngular.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.NPairAngular.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.losses.metrics.NPairAngular.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.losses.metrics.NPairAngular.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.losses.metrics.NPairLoss">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.losses.metrics.</code><code class="sig-name descname">NPairLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reg_lambda</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.002</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#NPairLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.NPairLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="py method">
+<dt id="nntoolbox.vision.losses.metrics.NPairLoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#NPairLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.NPairLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.losses.metrics.NPairLoss.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.losses.metrics.NPairLoss.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.losses.metrics.TripletMarginLossV2">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.losses.metrics.</code><code class="sig-name descname">TripletMarginLossV2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">margin</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">2.0</span></em>, <em class="sig-param"><span class="n">eps</span><span class="o">=</span><span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">swap</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">size_average</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">reduce</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">reduction</span><span class="o">=</span><span class="default_value">'mean'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#TripletMarginLossV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.TripletMarginLossV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.loss.TripletMarginLoss</span></code></p>
+<p>A quick wrapper for margin loss</p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="py attribute">
+<dt id="nntoolbox.vision.losses.metrics.TripletMarginLossV2.eps">
+<code class="sig-name descname">eps</code><em class="property">: float</em><a class="headerlink" href="#nntoolbox.vision.losses.metrics.TripletMarginLossV2.eps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.vision.losses.metrics.TripletMarginLossV2.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#TripletMarginLossV2.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.TripletMarginLossV2.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.losses.metrics.TripletMarginLossV2.margin">
+<code class="sig-name descname">margin</code><em class="property">: float</em><a class="headerlink" href="#nntoolbox.vision.losses.metrics.TripletMarginLossV2.margin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.losses.metrics.TripletMarginLossV2.p">
+<code class="sig-name descname">p</code><em class="property">: float</em><a class="headerlink" href="#nntoolbox.vision.losses.metrics.TripletMarginLossV2.p" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.losses.metrics.TripletMarginLossV2.swap">
+<code class="sig-name descname">swap</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.losses.metrics.TripletMarginLossV2.swap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.losses.metrics.TripletSoftMarginLoss">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.losses.metrics.</code><code class="sig-name descname">TripletSoftMarginLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">2.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#TripletSoftMarginLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.TripletSoftMarginLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="py method">
+<dt id="nntoolbox.vision.losses.metrics.TripletSoftMarginLoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#TripletSoftMarginLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.TripletSoftMarginLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.losses.metrics.TripletSoftMarginLoss.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.losses.metrics.TripletSoftMarginLoss.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.losses.metrics.VerificationLoss">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.losses.metrics.</code><code class="sig-name descname">VerificationLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embedding_dim</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#VerificationLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.VerificationLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Verify if two embeddings belong to the same class</p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+<dl class="py method">
+<dt id="nntoolbox.vision.losses.metrics.VerificationLoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span><span class="p">…</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#VerificationLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.VerificationLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.vision.losses.metrics.VerificationLoss.get_verifier">
+<code class="sig-name descname">get_verifier</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/losses/metrics.html#VerificationLoss.get_verifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.metrics.VerificationLoss.get_verifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.losses.metrics.VerificationLoss.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.losses.metrics.VerificationLoss.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.ensembler.html">nntoolbox.ensembler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.visualization.html">nntoolbox.visualization</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/generated/nntoolbox.vision.losses.metrics.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

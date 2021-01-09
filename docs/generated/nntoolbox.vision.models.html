@@ -30,90 +30,15 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-vision-models-package">
-<h1>nntoolbox.vision.models package<a class="headerlink" href="#nntoolbox-vision-models-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.vision.models">
+<span id="nntoolbox-vision-models-package"></span><h1>nntoolbox.vision.models package<a class="headerlink" href="#module-nntoolbox.vision.models" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-nntoolbox.vision.models.classifier">
-<span id="nntoolbox-vision-models-classifier-module"></span><h2>nntoolbox.vision.models.classifier module<a class="headerlink" href="#module-nntoolbox.vision.models.classifier" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="nntoolbox.vision.models.classifier.EnsembleImageClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.models.classifier.</code><code class="sig-name descname">EnsembleImageClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">models</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#nntoolbox.vision.models.classifier.ImageClassifier" title="nntoolbox.vision.models.classifier.ImageClassifier">nntoolbox.vision.models.classifier.ImageClassifier</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">model_weights</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#EnsembleImageClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.EnsembleImageClassifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.models.ensemble.Ensemble</span></code>, <a class="reference internal" href="#nntoolbox.vision.models.classifier.ImageClassifier" title="nntoolbox.vision.models.classifier.ImageClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.models.classifier.ImageClassifier</span></code></a></p>
-<dl class="py method">
-<dt id="nntoolbox.vision.models.classifier.EnsembleImageClassifier.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">images</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">return_probs</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">tries</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#EnsembleImageClassifier.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.EnsembleImageClassifier.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the classes or class probabilities of a batch of images</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>images</strong> – images to be predicted</p></li>
-<li><p><strong>return_probs</strong> – whether to return prob or classes</p></li>
-<li><p><strong>tries</strong> – number of tries for augmentation</p></li>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.models.classifier.html">nntoolbox.vision.models.classifier module</a></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.models.classifier.ImageClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.models.classifier.</code><code class="sig-name descname">ImageClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">tta_transform</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tta_beta</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.4</span></em>, <em class="sig-param"><span class="n">device</span><span class="o">=</span><span class="default_value">device(type='cpu')</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#ImageClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.ImageClassifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Abstraction for an image classifier. Support user defined test time augmentation</p>
-<dl class="py method">
-<dt id="nntoolbox.vision.models.classifier.ImageClassifier.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_loader</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">tries</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#ImageClassifier.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.ImageClassifier.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.vision.models.classifier.ImageClassifier.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">images</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">return_probs</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">tries</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#ImageClassifier.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.ImageClassifier.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the classes or class probabilities of a batch of images</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>images</strong> – images to be predicted</p></li>
-<li><p><strong>return_probs</strong> – whether to return prob or classes</p></li>
-<li><p><strong>tries</strong> – number of tries for augmentation</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.models.classifier.KNNClassifier">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.models.classifier.</code><code class="sig-name descname">KNNClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">database</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">n_neighbors</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em>, <em class="sig-param"><span class="n">tta_transform</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tta_beta</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.4</span></em>, <em class="sig-param"><span class="n">weights</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'distance'</span></em>, <em class="sig-param"><span class="n">device</span><span class="o">=</span><span class="default_value">device(type='cpu')</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#KNNClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.KNNClassifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt id="nntoolbox.vision.models.classifier.KNNClassifier.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_loader</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>nntoolbox.metrics.metrics.Metric<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">top</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em>, <em class="sig-param"><span class="n">tries</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>float<span class="p">]</span><a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#KNNClassifier.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.KNNClassifier.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.vision.models.classifier.KNNClassifier.predict">
-<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">images</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">top</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em>, <em class="sig-param"><span class="n">tries</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>numpy.ndarray<span class="p">, </span>Tuple<span class="p">[</span>numpy.ndarray<span class="p">]</span><span class="p">]</span><a class="reference internal" href="../_modules/nntoolbox/vision/models/classifier.html#KNNClassifier.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.models.classifier.KNNClassifier.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the classes or class probabilities of a batch of images
-:param images: images to be predicted
-:param tries: number of tries for augmentation
-:return:</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
-<div class="section" id="module-nntoolbox.vision.models">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nntoolbox.vision.models" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

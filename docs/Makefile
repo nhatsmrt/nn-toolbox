@@ -21,6 +21,6 @@ help:
 
 github:
 	@rm -rf generated/
-	@sphinx-apidoc -o generated/ ../nntoolbox/ -f
+	@sphinx-apidoc -o generated/ ../nntoolbox/ -f -e
 	@make html
 	@cp -a ybuild/html/. ../docs

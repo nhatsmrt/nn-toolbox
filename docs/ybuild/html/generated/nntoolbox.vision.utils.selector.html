@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.vision.utils.selector module &#8212; nn-toolbox 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-nntoolbox.vision.utils.selector">
+<span id="nntoolbox-vision-utils-selector-module"></span><h1>nntoolbox.vision.utils.selector module<a class="headerlink" href="#module-nntoolbox.vision.utils.selector" title="Permalink to this headline">¶</a></h1>
+<p>Selecting pairs, triplets, npairs, etc. from a batch of data</p>
+<dl class="py class">
+<dt id="nntoolbox.vision.utils.selector.AllPairSelector">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.selector.</code><code class="sig-name descname">AllPairSelector</code><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#AllPairSelector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.AllPairSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.utils.selector.PairSelector" title="nntoolbox.vision.utils.selector.PairSelector"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.utils.selector.PairSelector</span></code></a></p>
+<p>Select all pair from the batch</p>
+<dl class="py method">
+<dt id="nntoolbox.vision.utils.selector.AllPairSelector.get_pairs">
+<code class="sig-name descname">get_pairs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>numpy.ndarray<span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#AllPairSelector.get_pairs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.AllPairSelector.get_pairs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.utils.selector.AllTripletSelector">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.selector.</code><code class="sig-name descname">AllTripletSelector</code><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#AllTripletSelector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.AllTripletSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.utils.selector.TripletSelector" title="nntoolbox.vision.utils.selector.TripletSelector"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.utils.selector.TripletSelector</span></code></a></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.utils.selector.AllTripletSelector.get_triplets">
+<code class="sig-name descname">get_triplets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#AllTripletSelector.get_triplets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.AllTripletSelector.get_triplets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.utils.selector.BatchHardTripletSelector">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.selector.</code><code class="sig-name descname">BatchHardTripletSelector</code><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#BatchHardTripletSelector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.BatchHardTripletSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.utils.selector.TripletSelector" title="nntoolbox.vision.utils.selector.TripletSelector"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.utils.selector.TripletSelector</span></code></a></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.utils.selector.BatchHardTripletSelector.get_triplets">
+<code class="sig-name descname">get_triplets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#BatchHardTripletSelector.get_triplets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.BatchHardTripletSelector.get_triplets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.utils.selector.HardTripletSelector">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.selector.</code><code class="sig-name descname">HardTripletSelector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">margin</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">n_neg_per_ap</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'semi-hard'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#HardTripletSelector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.HardTripletSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.utils.selector.TripletSelector" title="nntoolbox.vision.utils.selector.TripletSelector"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.utils.selector.TripletSelector</span></code></a></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.utils.selector.HardTripletSelector.get_triplets">
+<code class="sig-name descname">get_triplets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#HardTripletSelector.get_triplets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.HardTripletSelector.get_triplets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.utils.selector.PairSelector">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.selector.</code><code class="sig-name descname">PairSelector</code><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#PairSelector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.PairSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.utils.selector.Selector" title="nntoolbox.vision.utils.selector.Selector"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.utils.selector.Selector</span></code></a></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.utils.selector.PairSelector.get_pairs">
+<code class="sig-name descname">get_pairs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>numpy.ndarray<span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#PairSelector.get_pairs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.PairSelector.get_pairs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.vision.utils.selector.PairSelector.select">
+<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#PairSelector.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.PairSelector.select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.utils.selector.Selector">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.selector.</code><code class="sig-name descname">Selector</code><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#Selector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.Selector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstract class for selector</p>
+<dl class="py method">
+<dt id="nntoolbox.vision.utils.selector.Selector.select">
+<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embedings</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span><span class="p">…</span><span class="p">]</span><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#Selector.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.Selector.select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.utils.selector.TripletSelector">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.utils.selector.</code><code class="sig-name descname">TripletSelector</code><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#TripletSelector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.TripletSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.utils.selector.Selector" title="nntoolbox.vision.utils.selector.Selector"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.utils.selector.Selector</span></code></a></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.utils.selector.TripletSelector.get_triplets">
+<code class="sig-name descname">get_triplets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#TripletSelector.get_triplets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.TripletSelector.get_triplets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.vision.utils.selector.TripletSelector.select">
+<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="../_modules/nntoolbox/vision/utils/selector.html#TripletSelector.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.selector.TripletSelector.select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.callbacks.html">nntoolbox.callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.components.html">nntoolbox.components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.ensembler.html">nntoolbox.ensembler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.hooks.html">nntoolbox.hooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.init.html">nntoolbox.init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.losses.html">nntoolbox.losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.metrics.html">nntoolbox.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.models.html">nntoolbox.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.optim.html">nntoolbox.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.sequence.html">nntoolbox.sequence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.tabular.html">nntoolbox.tabular</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.transforms.html">nntoolbox.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.utils.html">nntoolbox.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.vision.html">nntoolbox.vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nntoolbox.visualization.html">nntoolbox.visualization</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/generated/nntoolbox.vision.utils.selector.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

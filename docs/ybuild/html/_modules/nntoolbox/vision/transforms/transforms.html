@@ -41,7 +41,7 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ElasticDeformation&#39;</span><span class="p">,</span> <span class="s1">&#39;Cutout&#39;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="ElasticDeformation"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.transforms.ElasticDeformation">[docs]</a><span class="k">class</span> <span class="nc">ElasticDeformation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ElasticDeformation"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.transforms.html#nntoolbox.vision.transforms.transforms.ElasticDeformation">[docs]</a><span class="k">class</span> <span class="nc">ElasticDeformation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Apply elastic deformation on a PIL image (H x W x C)</span>
 <span class="sd">    Adapt from https://gist.github.com/oeway/2e3b989e0343f0884388ed7ed82eb3b0</span>
@@ -63,7 +63,7 @@
             <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span>
         <span class="k">return</span> <span class="n">ElasticDeformation</span><span class="o">.</span><span class="n">elastic_deform</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ElasticDeformation.elastic_deform"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.transforms.ElasticDeformation.elastic_deform">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ElasticDeformation.elastic_deform"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.transforms.html#nntoolbox.vision.transforms.transforms.ElasticDeformation.elastic_deform">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">elastic_deform</span><span class="p">(</span><span class="n">image</span><span class="p">:</span><span class="n">Image</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">spline_order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Elastic deformation of image as described in [Simard2003]_.</span>
 <span class="sd">        .. [Simard2003] Simard, Steinkraus and Platt, &quot;Best Practices for</span>
@@ -94,7 +94,7 @@
         <span class="k">return</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Cutout"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.html#nntoolbox.vision.transforms.transforms.Cutout">[docs]</a><span class="k">class</span> <span class="nc">Cutout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Cutout"><a class="viewcode-back" href="../../../../generated/nntoolbox.vision.transforms.transforms.html#nntoolbox.vision.transforms.transforms.Cutout">[docs]</a><span class="k">class</span> <span class="nc">Cutout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    https://arxiv.org/pdf/1708.04552.pdf</span>
 <span class="sd">    &#39;&#39;&#39;</span>
