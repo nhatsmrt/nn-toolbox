@@ -35,7 +35,7 @@
 <p>Some utility functions for transfer learning</p>
 <dl class="py function">
 <dt id="nntoolbox.utils.transfer.cut_model">
-<code class="sig-prename descclassname">nntoolbox.utils.transfer.</code><code class="sig-name descname">cut_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.container.Sequential, sep: Callable[[...], torch.nn.modules.module.Module] = &lt;class 'torch.nn.modules.pooling.AdaptiveAvgPool2d'&gt;</em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.nn.modules.container.Sequential<span class="p">, </span>torch.nn.modules.container.Sequential<span class="p">]</span><a class="headerlink" href="#nntoolbox.utils.transfer.cut_model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">nntoolbox.utils.transfer.</code><code class="sig-name descname">cut_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.container.Sequential, sep: Callable[[...], torch.nn.modules.module.Module] = &lt;class 'torch.nn.modules.pooling.AdaptiveAvgPool2d'&gt;</em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.nn.modules.container.Sequential<span class="p">, </span>torch.nn.modules.container.Sequential<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/utils/transfer.html#cut_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.transfer.cut_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cut a non-sequential model at the first instance of layer type</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -52,7 +52,7 @@
 
 <dl class="py function">
 <dt id="nntoolbox.utils.transfer.cut_sequential_model">
-<code class="sig-prename descclassname">nntoolbox.utils.transfer.</code><code class="sig-name descname">cut_sequential_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.container.Sequential, sep: Callable[[...], torch.nn.modules.module.Module] = &lt;class 'torch.nn.modules.pooling.AdaptiveAvgPool2d'&gt;</em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.nn.modules.container.Sequential<span class="p">, </span>torch.nn.modules.container.Sequential<span class="p">]</span><a class="headerlink" href="#nntoolbox.utils.transfer.cut_sequential_model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">nntoolbox.utils.transfer.</code><code class="sig-name descname">cut_sequential_model</code><span class="sig-paren">(</span><em class="sig-param">model: torch.nn.modules.container.Sequential, sep: Callable[[...], torch.nn.modules.module.Module] = &lt;class 'torch.nn.modules.pooling.AdaptiveAvgPool2d'&gt;</em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.nn.modules.container.Sequential<span class="p">, </span>torch.nn.modules.container.Sequential<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/utils/transfer.html#cut_sequential_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.transfer.cut_sequential_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cut a sequential model at the first instance of layer type</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

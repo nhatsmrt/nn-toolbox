@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.vision.utils.utils &#8212; nn-toolbox 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nntoolbox.vision.utils.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">torchvision.transforms</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">from</span> <span class="nn">cv2</span> <span class="kn">import</span> <span class="n">imread</span><span class="p">,</span> <span class="n">cvtColor</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ndarray</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;gram_matrix&#39;</span><span class="p">,</span> <span class="s1">&#39;is_image&#39;</span><span class="p">,</span> <span class="s1">&#39;pil_to_tensor&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;tensor_to_pil&#39;</span><span class="p">,</span> <span class="s1">&#39;tensor_to_np&#39;</span><span class="p">,</span> <span class="s1">&#39;cv2_read_image&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;compute_output_shape&#39;</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="gram_matrix"><a class="viewcode-back" href="../../../../nntoolbox.vision.utils.utils.html#nntoolbox.vision.utils.utils.gram_matrix">[docs]</a><span class="k">def</span> <span class="nf">gram_matrix</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">@</span> <span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="n">h</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_image"><a class="viewcode-back" href="../../../../nntoolbox.vision.utils.utils.html#nntoolbox.vision.utils.utils.is_image">[docs]</a><span class="k">def</span> <span class="nf">is_image</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if filename has valid extension</span>
+
+<span class="sd">    :param filename:</span>
+<span class="sd">    :return: boolean indicating whether filename is a valid image filename</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.jpg&quot;</span><span class="p">)</span> \
+           <span class="ow">or</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.png&quot;</span><span class="p">)</span> \
+           <span class="ow">or</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.jpeg&quot;</span><span class="p">)</span> \
+           <span class="ow">or</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.gif&quot;</span><span class="p">)</span> \
+           <span class="ow">or</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.bmp&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pil_to_tensor"><a class="viewcode-back" href="../../../../nntoolbox.vision.utils.utils.html#nntoolbox.vision.utils.utils.pil_to_tensor">[docs]</a><span class="k">def</span> <span class="nf">pil_to_tensor</span><span class="p">(</span><span class="n">pil</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">tensor</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">pil</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">tensor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tensor</span></div>
+
+
+<div class="viewcode-block" id="tensor_to_pil"><a class="viewcode-back" href="../../../../nntoolbox.vision.utils.utils.html#nntoolbox.vision.utils.utils.tensor_to_pil">[docs]</a><span class="k">def</span> <span class="nf">tensor_to_pil</span><span class="p">(</span><span class="n">tensor</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">to_pil_image</span><span class="p">(</span><span class="n">tensor</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">to_pil_image</span><span class="p">(</span><span class="n">tensor</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="tensor_to_np"><a class="viewcode-back" href="../../../../nntoolbox.vision.utils.utils.html#nntoolbox.vision.utils.utils.tensor_to_np">[docs]</a><span class="k">def</span> <span class="nf">tensor_to_np</span><span class="p">(</span><span class="n">tensor</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Convert the tensor image to numpy format&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tensor</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tensor</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="cv2_read_image"><a class="viewcode-back" href="../../../../nntoolbox.vision.utils.utils.html#nntoolbox.vision.utils.utils.cv2_read_image">[docs]</a><span class="k">def</span> <span class="nf">cv2_read_image</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">to_float</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">flag</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_COLOR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read an image using cv2 and convert to RGB</span>
+
+<span class="sd">    :param image_path:</span>
+<span class="sd">    :param to_float: whether to convert image to float dats type:</span>
+<span class="sd">    :param flag: indicate mode for cv2 read image</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">is_image</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">to_float</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">img</span> <span class="o">/</span> <span class="mi">255</span>
+    <span class="k">return</span> <span class="n">img</span></div>
+
+
+<div class="viewcode-block" id="compute_output_shape"><a class="viewcode-back" href="../../../../nntoolbox.vision.utils.utils.html#nntoolbox.vision.utils.utils.compute_output_shape">[docs]</a><span class="k">def</span> <span class="nf">compute_output_shape</span><span class="p">(</span><span class="n">inp_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">padding</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dilation</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stride</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">inp_dim</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span> <span class="o">-</span> <span class="n">dilation</span> <span class="o">*</span> <span class="p">(</span><span class="n">kernel_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">stride</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span></div>
+
+
+<span class="c1"># def is_color(image, batch: bool=True) -&gt; bool:</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Check if image(s) is colored properly (i.e has 4 channels)</span>
+<span class="c1">#     :param image:</span>
+<span class="c1">#     :param batch:</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     if batch:</span>
+<span class="c1">#         return len(image.shape) == 4 and</span>
+<span class="c1">#     return len(image.shape) == 3 if</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

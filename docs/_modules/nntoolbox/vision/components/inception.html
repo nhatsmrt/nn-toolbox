@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.vision.components.inception &#8212; nn-toolbox 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nntoolbox.vision.components.inception</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+
+<div class="viewcode-block" id="FactoredConvolutionalLayer"><a class="viewcode-back" href="../../../../nntoolbox.vision.components.inception.html#nntoolbox.vision.components.inception.FactoredConvolutionalLayer">[docs]</a><span class="k">class</span> <span class="nc">FactoredConvolutionalLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Factor a k x k convolution into 1 x k and k x 1 inception style</span>
+
+<span class="sd">    Help reduce memory footprint</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dilation</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">,</span>
+            <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel_size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span> <span class="n">kernel_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">kernel_size</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stride</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span> <span class="n">stride</span> <span class="o">=</span> <span class="p">(</span><span class="n">stride</span><span class="p">,</span> <span class="n">stride</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span> <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="n">padding</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dilation</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span> <span class="n">dilation</span> <span class="o">=</span> <span class="p">(</span><span class="n">dilation</span><span class="p">,</span> <span class="n">dilation</span><span class="p">)</span>
+
+        <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+                <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">kernel_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">stride</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">padding</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="n">dilation</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dilation</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span>
+                <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+                <span class="n">padding_mode</span><span class="o">=</span><span class="n">padding_mode</span>
+            <span class="p">),</span>
+            <span class="n">activation</span><span class="p">(),</span>
+            <span class="n">normalization</span><span class="p">(</span><span class="n">num_features</span><span class="o">=</span><span class="n">out_channels</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+                <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="n">kernel_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="n">stride</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="n">padding</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="n">dilation</span><span class="o">=</span><span class="p">(</span><span class="n">dilation</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span>
+                <span class="n">bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+                <span class="n">padding_mode</span><span class="o">=</span><span class="n">padding_mode</span>
+            <span class="p">),</span>
+            <span class="n">activation</span><span class="p">(),</span>
+            <span class="n">normalization</span><span class="p">(</span><span class="n">num_features</span><span class="o">=</span><span class="n">out_channels</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FactoredConvolutionalLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">layers</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -34,7 +34,7 @@
 <span id="nntoolbox-vision-components-attention-module"></span><h1>nntoolbox.vision.components.attention module<a class="headerlink" href="#module-nntoolbox.vision.components.attention" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="nntoolbox.vision.components.attention.SAGANAttention">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.attention.</code><code class="sig-name descname">SAGANAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">reduction_ratio</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">8</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.attention.SAGANAttention" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.attention.</code><code class="sig-name descname">SAGANAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">reduction_ratio</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">8</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#SAGANAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.SAGANAttention" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Implement SAGAN attention module.</p>
 <p>References:</p>
@@ -44,7 +44,7 @@
 </div></blockquote>
 <dl class="py method">
 <dt id="nntoolbox.vision.components.attention.SAGANAttention.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.vision.components.attention.SAGANAttention.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#SAGANAttention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.SAGANAttention.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -65,7 +65,7 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py class">
 <dt id="nntoolbox.vision.components.attention.StandAloneMultiheadAttention">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.attention.</code><code class="sig-name descname">StandAloneMultiheadAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_heads</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">out_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">kernel_size</span></em>, <em class="sig-param"><span class="n">stride</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">dilation</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">padding_mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'zeros'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneMultiheadAttention" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.attention.</code><code class="sig-name descname">StandAloneMultiheadAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_heads</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">out_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">kernel_size</span></em>, <em class="sig-param"><span class="n">stride</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">dilation</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">padding_mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'zeros'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneMultiheadAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneMultiheadAttention" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Stand-Alone Multihead Self-Attention for Vision Model</p>
 <p>References:</p>
@@ -75,7 +75,7 @@ registered hooks while the latter silently ignores them.</p>
 </div></blockquote>
 <dl class="py method">
 <dt id="nntoolbox.vision.components.attention.StandAloneMultiheadAttention.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneMultiheadAttention.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneMultiheadAttention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneMultiheadAttention.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -96,7 +96,7 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py class">
 <dt id="nntoolbox.vision.components.attention.StandAloneSelfAttention">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.attention.</code><code class="sig-name descname">StandAloneSelfAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">out_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">kernel_size</span></em>, <em class="sig-param"><span class="n">stride</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">dilation</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">padding_mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'zeros'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.attention.</code><code class="sig-name descname">StandAloneSelfAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">out_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">kernel_size</span></em>, <em class="sig-param"><span class="n">stride</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">dilation</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">padding_mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'zeros'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.conv.Conv2d</span></code></p>
 <p>A single head of Stand-Alone Self-Attention for Vision Model</p>
 <p>References:</p>
@@ -111,7 +111,7 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py method">
 <dt id="nntoolbox.vision.components.attention.StandAloneSelfAttention.compute_output_shape">
-<code class="sig-name descname">compute_output_shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">height</span></em>, <em class="sig-param"><span class="n">width</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention.compute_output_shape" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_output_shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">height</span></em>, <em class="sig-param"><span class="n">width</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention.compute_output_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention.compute_output_shape" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -121,7 +121,7 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py method">
 <dt id="nntoolbox.vision.components.attention.StandAloneSelfAttention.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -135,7 +135,7 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py method">
 <dt id="nntoolbox.vision.components.attention.StandAloneSelfAttention.get_rel_embedding">
-<code class="sig-name descname">get_rel_embedding</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention.get_rel_embedding" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_rel_embedding</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention.get_rel_embedding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention.get_rel_embedding" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -175,27 +175,27 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py method">
 <dt id="nntoolbox.vision.components.attention.StandAloneSelfAttention.to">
-<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention.to" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention.to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.attention.StandAloneSelfAttention.to" title="Permalink to this definition">¶</a></dt>
 <dd><p>Moves and/or casts the parameters and buffers.</p>
 <p>This can be called as</p>
 <dl class="py function">
 <dt id="id0">
-<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">device</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">non_blocking</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">device</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">non_blocking</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention.to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="id1">
-<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dtype</span></em>, <em class="sig-param"><span class="n">non_blocking</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dtype</span></em>, <em class="sig-param"><span class="n">non_blocking</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention.to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="id2">
-<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">non_blocking</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">non_blocking</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention.to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="id3">
-<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">memory_format</span><span class="o">=</span><span class="default_value">torch.channels_last</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">memory_format</span><span class="o">=</span><span class="default_value">torch.channels_last</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/attention.html#StandAloneSelfAttention.to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Its signature is similar to <code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.Tensor.to()</span></code>, but only accepts

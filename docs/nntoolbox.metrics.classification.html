@@ -34,30 +34,30 @@
 <span id="nntoolbox-metrics-classification-module"></span><h1>nntoolbox.metrics.classification module<a class="headerlink" href="#module-nntoolbox.metrics.classification" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="nntoolbox.metrics.classification.Accuracy">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.metrics.classification.</code><code class="sig-name descname">Accuracy</code><a class="headerlink" href="#nntoolbox.metrics.classification.Accuracy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.metrics.classification.</code><code class="sig-name descname">Accuracy</code><a class="reference internal" href="_modules/nntoolbox/metrics/classification.html#Accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.metrics.classification.Accuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="nntoolbox.metrics.metrics.html#nntoolbox.metrics.metrics.Metric" title="nntoolbox.metrics.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.metrics.metrics.Metric</span></code></a></p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="nntoolbox.metrics.classification.BinaryAccuracy">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.metrics.classification.</code><code class="sig-name descname">BinaryAccuracy</code><a class="headerlink" href="#nntoolbox.metrics.classification.BinaryAccuracy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.metrics.classification.</code><code class="sig-name descname">BinaryAccuracy</code><a class="reference internal" href="_modules/nntoolbox/metrics/classification.html#BinaryAccuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.metrics.classification.BinaryAccuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="nntoolbox.metrics.metrics.html#nntoolbox.metrics.metrics.Metric" title="nntoolbox.metrics.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.metrics.metrics.Metric</span></code></a></p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="nntoolbox.metrics.classification.MAPAtK">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.metrics.classification.</code><code class="sig-name descname">MAPAtK</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">k</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.metrics.classification.MAPAtK" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.metrics.classification.</code><code class="sig-name descname">MAPAtK</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">k</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/metrics/classification.html#MAPAtK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.metrics.classification.MAPAtK" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="nntoolbox.metrics.metrics.html#nntoolbox.metrics.metrics.Metric" title="nntoolbox.metrics.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.metrics.metrics.Metric</span></code></a></p>
 <dl class="py method">
 <dt id="nntoolbox.metrics.classification.MAPAtK.map_at_k">
-<code class="sig-name descname">map_at_k</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">best</span></em>, <em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#nntoolbox.metrics.classification.MAPAtK.map_at_k" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">map_at_k</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">best</span></em>, <em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/nntoolbox/metrics/classification.html#MAPAtK.map_at_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.metrics.classification.MAPAtK.map_at_k" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="nntoolbox.metrics.classification.Perplexity">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.metrics.classification.</code><code class="sig-name descname">Perplexity</code><a class="headerlink" href="#nntoolbox.metrics.classification.Perplexity" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.metrics.classification.</code><code class="sig-name descname">Perplexity</code><a class="reference internal" href="_modules/nntoolbox/metrics/classification.html#Perplexity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.metrics.classification.Perplexity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="nntoolbox.metrics.metrics.html#nntoolbox.metrics.metrics.Metric" title="nntoolbox.metrics.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.metrics.metrics.Metric</span></code></a></p>
 <p>Perplexity metric to evaluate a language model:</p>
 <p>perplexity(language_model, sentence) = exp(-log language_model(sentence))</p>
@@ -65,7 +65,7 @@
 
 <dl class="py class">
 <dt id="nntoolbox.metrics.classification.ROCAUCScore">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.metrics.classification.</code><code class="sig-name descname">ROCAUCScore</code><a class="headerlink" href="#nntoolbox.metrics.classification.ROCAUCScore" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.metrics.classification.</code><code class="sig-name descname">ROCAUCScore</code><a class="reference internal" href="_modules/nntoolbox/metrics/classification.html#ROCAUCScore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.metrics.classification.ROCAUCScore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="nntoolbox.metrics.metrics.html#nntoolbox.metrics.metrics.Metric" title="nntoolbox.metrics.metrics.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.metrics.metrics.Metric</span></code></a></p>
 </dd></dl>
 

@@ -34,7 +34,7 @@
 <span id="nntoolbox-vision-components-regularization-module"></span><h1>nntoolbox.vision.components.regularization module<a class="headerlink" href="#module-nntoolbox.vision.components.regularization" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="nntoolbox.vision.components.regularization.ShakeShake">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.regularization.</code><code class="sig-name descname">ShakeShake</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keep</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'shake'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.regularization.ShakeShake" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.regularization.</code><code class="sig-name descname">ShakeShake</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keep</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'shake'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/regularization.html#ShakeShake"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.regularization.ShakeShake" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Implement shake-shake regularizer:</p>
 <p>y = x + sum_i alpha_i branch_i</p>
@@ -44,7 +44,7 @@
 <p>Based on <a class="reference external" href="https://arxiv.org/abs/1705.07485">https://arxiv.org/abs/1705.07485</a></p>
 <dl class="py method">
 <dt id="nntoolbox.vision.components.regularization.ShakeShake.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">branches</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">training</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.vision.components.regularization.ShakeShake.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">branches</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">training</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/regularization.html#ShakeShake.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.regularization.ShakeShake.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">

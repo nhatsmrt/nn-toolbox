@@ -34,7 +34,7 @@
 <span id="nntoolbox-optim-utils-module"></span><h1>nntoolbox.optim.utils module<a class="headerlink" href="#module-nntoolbox.optim.utils" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="nntoolbox.optim.utils.change_lr">
-<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">change_lr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optim</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">lrs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.optim.utils.change_lr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">change_lr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optim</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">lrs</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>float<span class="p">, </span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/utils.html#change_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.utils.change_lr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the learning rate of an optimizer</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -48,12 +48,12 @@
 
 <dl class="py function">
 <dt id="nntoolbox.optim.utils.get_lr">
-<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">get_lr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optim</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>float<span class="p">]</span><a class="headerlink" href="#nntoolbox.optim.utils.get_lr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">get_lr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optim</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>float<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/optim/utils.html#get_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.utils.get_lr" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="nntoolbox.optim.utils.load_optimizer">
-<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">load_optimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.optim.utils.load_optimizer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">load_optimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/utils.html#load_optimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.utils.load_optimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load optimizer state for resuming training</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -67,7 +67,7 @@
 
 <dl class="py function">
 <dt id="nntoolbox.optim.utils.plot_schedule">
-<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">plot_schedule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">schedule_fn</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>float<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">iterations</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">30</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.optim.utils.plot_schedule" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">plot_schedule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">schedule_fn</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>float<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">iterations</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">30</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/utils.html#plot_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.utils.plot_schedule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the learning rate schedule function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -84,7 +84,7 @@
 
 <dl class="py function">
 <dt id="nntoolbox.optim.utils.save_optimizer">
-<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">save_optimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.optim.utils.save_optimizer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">nntoolbox.optim.utils.</code><code class="sig-name descname">save_optimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/utils.html#save_optimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.utils.save_optimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save optimizer state for resuming training</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

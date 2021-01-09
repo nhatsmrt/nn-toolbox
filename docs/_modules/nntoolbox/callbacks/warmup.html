@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.callbacks.warmup &#8212; nn-toolbox 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nntoolbox.callbacks.warmup</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Learning rate warmup (UNTESTED)&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">.callbacks</span> <span class="kn">import</span> <span class="n">Callback</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LRWarmup&#39;</span><span class="p">,</span> <span class="s1">&#39;ConstantLRWarmup&#39;</span><span class="p">,</span> <span class="s1">&#39;GradualLRWarmup&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="LRWarmup"><a class="viewcode-back" href="../../../nntoolbox.callbacks.warmup.html#nntoolbox.callbacks.warmup.LRWarmup">[docs]</a><span class="k">class</span> <span class="nc">LRWarmup</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Start training with a small learning rate</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">        Priya Goyal et al. &quot;Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour.&quot;</span>
+<span class="sd">        https://arxiv.org/abs/1706.02677</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">timescale</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;iter&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="mi">99</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timescale</span> <span class="o">=</span> <span class="n">timescale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="LRWarmup.on_batch_begin"><a class="viewcode-back" href="../../../nntoolbox.callbacks.warmup.html#nntoolbox.callbacks.warmup.LRWarmup.on_batch_begin">[docs]</a>    <span class="k">def</span> <span class="nf">on_batch_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">],</span> <span class="n">train</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timescale</span> <span class="o">==</span> <span class="s2">&quot;iter&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_lr</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LRWarmup.on_epoch_begin"><a class="viewcode-back" href="../../../nntoolbox.callbacks.warmup.html#nntoolbox.callbacks.warmup.LRWarmup.on_epoch_begin">[docs]</a>    <span class="k">def</span> <span class="nf">on_epoch_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timescale</span> <span class="o">==</span> <span class="s2">&quot;epoch&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_lr</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="LRWarmup.update_lr"><a class="viewcode-back" href="../../../nntoolbox.callbacks.warmup.html#nntoolbox.callbacks.warmup.LRWarmup.update_lr">[docs]</a>    <span class="k">def</span> <span class="nf">update_lr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">param_group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">_optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
+            <span class="n">param_group</span><span class="p">[</span><span class="s1">&#39;lr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_lr</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cur</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="LRWarmup.get_lr"><a class="viewcode-back" href="../../../nntoolbox.callbacks.warmup.html#nntoolbox.callbacks.warmup.LRWarmup.get_lr">[docs]</a>    <span class="k">def</span> <span class="nf">get_lr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span> <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="ConstantLRWarmup"><a class="viewcode-back" href="../../../nntoolbox.callbacks.warmup.html#nntoolbox.callbacks.warmup.ConstantLRWarmup">[docs]</a><span class="k">class</span> <span class="nc">ConstantLRWarmup</span><span class="p">(</span><span class="n">LRWarmup</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Keeping the learning rate at a small value for several iterations/epochs&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_lr</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">timescale</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;iter&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">timescale</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_lr</span> <span class="o">=</span> <span class="n">min_lr</span>
+
+<div class="viewcode-block" id="ConstantLRWarmup.get_lr"><a class="viewcode-back" href="../../../nntoolbox.callbacks.warmup.html#nntoolbox.callbacks.warmup.ConstantLRWarmup.get_lr">[docs]</a>    <span class="k">def</span> <span class="nf">get_lr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_lr</span></div></div>
+
+
+<div class="viewcode-block" id="GradualLRWarmup"><a class="viewcode-back" href="../../../nntoolbox.callbacks.warmup.html#nntoolbox.callbacks.warmup.GradualLRWarmup">[docs]</a><span class="k">class</span> <span class="nc">GradualLRWarmup</span><span class="p">(</span><span class="n">LRWarmup</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Gradually increase the learning rate from a small value for several iterations/epochs&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_lr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">max_lr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">timescale</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;iter&quot;</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">min_lr</span> <span class="o">&lt;</span> <span class="n">max_lr</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">timescale</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_lr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_lr</span> <span class="o">=</span> <span class="n">min_lr</span><span class="p">,</span> <span class="n">max_lr</span>
+
+<div class="viewcode-block" id="GradualLRWarmup.get_lr"><a class="viewcode-back" href="../../../nntoolbox.callbacks.warmup.html#nntoolbox.callbacks.warmup.GradualLRWarmup.get_lr">[docs]</a>    <span class="k">def</span> <span class="nf">get_lr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_lr</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_lr</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_lr</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cur</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

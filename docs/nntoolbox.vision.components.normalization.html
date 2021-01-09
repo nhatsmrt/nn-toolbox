@@ -34,12 +34,12 @@
 <span id="nntoolbox-vision-components-normalization-module"></span><h1>nntoolbox.vision.components.normalization module<a class="headerlink" href="#module-nntoolbox.vision.components.normalization" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="nntoolbox.vision.components.normalization.AdaIN">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">AdaIN</code><a class="headerlink" href="#nntoolbox.vision.components.normalization.AdaIN" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">AdaIN</code><a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#AdaIN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.AdaIN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Implement adaptive instance normalization layer</p>
 <dl class="py method">
 <dt id="nntoolbox.vision.components.normalization.AdaIN.compute_mean_std">
-<em class="property">static </em><code class="sig-name descname">compute_mean_std</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">images</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="headerlink" href="#nntoolbox.vision.components.normalization.AdaIN.compute_mean_std" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">compute_mean_std</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">images</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#AdaIN.compute_mean_std"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.AdaIN.compute_mean_std" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>images</strong> – (n_img, C, H, W)</p>
@@ -52,7 +52,7 @@
 
 <dl class="py method">
 <dt id="nntoolbox.vision.components.normalization.AdaIN.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.vision.components.normalization.AdaIN.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#AdaIN.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.AdaIN.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -66,7 +66,7 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py method">
 <dt id="nntoolbox.vision.components.normalization.AdaIN.set_style">
-<code class="sig-name descname">set_style</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.normalization.AdaIN.set_style" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_style</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">style</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#AdaIN.set_style"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.AdaIN.set_style" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -78,7 +78,7 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py class">
 <dt id="nntoolbox.vision.components.normalization.BatchRenorm2D">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">BatchRenorm2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">r_max</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">d_max</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">eps</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">momentum</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.normalization.BatchRenorm2D" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">BatchRenorm2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">r_max</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">d_max</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">eps</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1e-06</span></em>, <em class="sig-param"><span class="n">momentum</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#BatchRenorm2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.BatchRenorm2D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Modified from batch norm implementation in FastAI course 2 v3’s notebook. Works better for smaller batches
 (UNTESTED)</p>
@@ -90,7 +90,7 @@ registered hooks while the latter silently ignores them.</p>
 </div></blockquote>
 <dl class="py method">
 <dt id="nntoolbox.vision.components.normalization.BatchRenorm2D.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.vision.components.normalization.BatchRenorm2D.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#BatchRenorm2D.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.BatchRenorm2D.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -109,18 +109,18 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py method">
 <dt id="nntoolbox.vision.components.normalization.BatchRenorm2D.update_stats">
-<code class="sig-name descname">update_stats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="headerlink" href="#nntoolbox.vision.components.normalization.BatchRenorm2D.update_stats" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_stats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#BatchRenorm2D.update_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.BatchRenorm2D.update_stats" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="nntoolbox.vision.components.normalization.L2NormalizationLayer">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">L2NormalizationLayer</code><a class="headerlink" href="#nntoolbox.vision.components.normalization.L2NormalizationLayer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">L2NormalizationLayer</code><a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#L2NormalizationLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.L2NormalizationLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <dl class="py method">
 <dt id="nntoolbox.vision.components.normalization.L2NormalizationLayer.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.normalization.L2NormalizationLayer.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#L2NormalizationLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.L2NormalizationLayer.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -141,7 +141,7 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py class">
 <dt id="nntoolbox.vision.components.normalization.SelfStabilizer">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">SelfStabilizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steepness</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">4.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.vision.components.normalization.SelfStabilizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.normalization.</code><code class="sig-name descname">SelfStabilizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steepness</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">4.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#SelfStabilizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.SelfStabilizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Self stabilize layer, based on:
 <a class="reference external" href="https://www.cntk.ai/pythondocs/cntk.layers.blocks.html">https://www.cntk.ai/pythondocs/cntk.layers.blocks.html</a>
@@ -150,7 +150,7 @@ registered hooks while the latter silently ignores them.</p>
 <a class="reference external" href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/SelfLR.pdf">https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/SelfLR.pdf</a></p>
 <dl class="py method">
 <dt id="nntoolbox.vision.components.normalization.SelfStabilizer.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.vision.components.normalization.SelfStabilizer.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/normalization.html#SelfStabilizer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.normalization.SelfStabilizer.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">

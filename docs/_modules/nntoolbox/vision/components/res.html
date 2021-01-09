@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.vision.components.res &#8212; nn-toolbox 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nntoolbox.vision.components.res</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.vision.components.layers</span> <span class="kn">import</span> <span class="n">ConvolutionalLayer</span>
+<span class="kn">from</span> <span class="nn">nntoolbox.vision.components.regularization</span> <span class="kn">import</span> <span class="n">ShakeShake</span>
+<span class="kn">from</span> <span class="nn">.kervolution</span> <span class="kn">import</span> <span class="n">KervolutionalLayer</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+
+<div class="viewcode-block" id="ResNeXtBlock"><a class="viewcode-back" href="../../../../nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.ResNeXtBlock">[docs]</a><span class="k">class</span> <span class="nc">ResNeXtBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implement a resnext block:</span>
+
+<span class="sd">    y = x + sum_i branch_i</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branches</span><span class="p">,</span> <span class="n">use_shake_shake</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_use_shake_shake</span> <span class="o">=</span> <span class="n">use_shake_shake</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">branches</span> <span class="o">=</span> <span class="n">branches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cardinality</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">branches</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">use_shake_shake</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_shake_shake</span> <span class="o">=</span> <span class="n">ShakeShake</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ResNeXtBlock.forward"><a class="viewcode-back" href="../../../../nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.ResNeXtBlock.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="n">branches_outputs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">branches</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="nb">input</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cardinality</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_shake_shake</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">input</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shake_shake</span><span class="p">(</span><span class="n">branches_outputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">input</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">branches_outputs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">_ResidualBlockNoBN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Residual Block without the final Batch Normalization layer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_ResidualBlockNoBN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_main</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">ConvolutionalLayer</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+                <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">LeakyReLU</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_main</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span> <span class="o">+</span> <span class="nb">input</span>
+
+
+<div class="viewcode-block" id="ResidualBlock"><a class="viewcode-back" href="../../../../nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.ResidualBlock">[docs]</a><span class="k">class</span> <span class="nc">ResidualBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ResidualBlock</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_module</span><span class="p">(</span>
+            <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                <span class="n">_ResidualBlockNoBN</span><span class="p">(</span><span class="n">in_channels</span><span class="p">),</span>
+                <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ResidualBlockPreActivation"><a class="viewcode-back" href="../../../../nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.ResidualBlockPreActivation">[docs]</a><span class="k">class</span> <span class="nc">ResidualBlockPreActivation</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ResidualBlockPreActivation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">branches</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                        <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+                            <span class="n">in_channels</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                        <span class="p">),</span>
+                        <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+                            <span class="n">in_channels</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">use_shake_shake</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BottleneckPreActivation"><a class="viewcode-back" href="../../../../nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.BottleneckPreActivation">[docs]</a><span class="k">class</span> <span class="nc">BottleneckPreActivation</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BottleneckPreActivation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">branches</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                        <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+                            <span class="n">in_channels</span><span class="p">,</span> <span class="n">in_channels</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                        <span class="p">),</span>
+                        <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+                            <span class="n">in_channels</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span> <span class="n">in_channels</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                        <span class="p">),</span>
+                        <span class="n">ConvolutionalLayer</span><span class="p">(</span>
+                            <span class="n">in_channels</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">use_shake_shake</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ResidualBlockPreActivationKer"><a class="viewcode-back" href="../../../../nntoolbox.vision.components.res.html#nntoolbox.vision.components.res.ResidualBlockPreActivationKer">[docs]</a><span class="k">class</span> <span class="nc">ResidualBlockPreActivationKer</span><span class="p">(</span><span class="n">ResNeXtBlock</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ResidualBlockPreActivationKer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">branches</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                        <span class="n">KervolutionalLayer</span><span class="p">(</span>
+                            <span class="n">in_channels</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                        <span class="p">),</span>
+                        <span class="n">KervolutionalLayer</span><span class="p">(</span>
+                            <span class="n">in_channels</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">activation</span><span class="o">=</span><span class="n">activation</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">use_shake_shake</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span></div>
+
+
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

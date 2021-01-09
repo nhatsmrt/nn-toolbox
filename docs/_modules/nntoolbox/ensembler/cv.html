@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nntoolbox.ensembler.cv &#8212; nn-toolbox 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nntoolbox.ensembler.cv</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Subset</span><span class="p">,</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">load_model</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CVEnsembler&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="CVEnsembler"><a class="viewcode-back" href="../../../nntoolbox.ensembler.cv.html#nntoolbox.ensembler.cv.CVEnsembler">[docs]</a><span class="k">class</span> <span class="nc">CVEnsembler</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an ensemble of identical models, each trained on a separate (k - 1) folds of the data</span>
+<span class="sd">    and validated on the remaining fold.</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">        Anders Krogh and Jesper Vedelsby. &quot;Neural Network Ensembles, Cross Validation, and Active Learning.&quot;</span>
+<span class="sd">        https://papers.nips.cc/paper/1001-neural-network-ensembles-cross-validation-and-active-learning.pdf</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_model</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">model_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">],</span>
+            <span class="n">learn_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param data: The full dataset</span>
+<span class="sd">        :param n_model: number of models to generated for the ensemble</span>
+<span class="sd">        :param model_fn: a function that returns a model</span>
+<span class="sd">        :param learn_fn: a function that takes in a train dataset, a val dataset, a model and a save path</span>
+<span class="sd">        and save the learned model at save path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_fn</span> <span class="o">=</span> <span class="n">model_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_model</span> <span class="o">=</span> <span class="n">n_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learn_fn</span> <span class="o">=</span> <span class="n">learn_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+
+<div class="viewcode-block" id="CVEnsembler.learn"><a class="viewcode-back" href="../../../nntoolbox.ensembler.cv.html#nntoolbox.ensembler.cv.CVEnsembler.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">model_ind</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">val_idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)))):</span>
+            <span class="n">save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;model_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">model_ind</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.pt&quot;</span>
+            <span class="n">train_data</span> <span class="o">=</span> <span class="n">Subset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">train_idx</span><span class="p">)</span>
+            <span class="n">val_data</span> <span class="o">=</span> <span class="n">Subset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">val_idx</span><span class="p">)</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_fn</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">learn_fn</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+            <span class="n">model_ind</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="CVEnsembler.get_models"><a class="viewcode-back" href="../../../nntoolbox.ensembler.cv.html#nntoolbox.ensembler.cv.CVEnsembler.get_models">[docs]</a>    <span class="k">def</span> <span class="nf">get_models</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]:</span>
+        <span class="n">models</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_model</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_fn</span><span class="p">()</span>
+            <span class="n">load_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;model_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.pt&quot;</span>
+            <span class="n">load_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">load_path</span><span class="p">)</span>
+            <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">models</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">nn-toolbox</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nhat Pham.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

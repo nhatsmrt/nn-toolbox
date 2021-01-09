@@ -34,28 +34,28 @@
 <span id="nntoolbox-callbacks-nan-module"></span><h1>nntoolbox.callbacks.nan module<a class="headerlink" href="#module-nntoolbox.callbacks.nan" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="nntoolbox.callbacks.nan.NaNWarner">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.nan.</code><code class="sig-name descname">NaNWarner</code><a class="headerlink" href="#nntoolbox.callbacks.nan.NaNWarner" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.nan.</code><code class="sig-name descname">NaNWarner</code><a class="reference internal" href="_modules/nntoolbox/callbacks/nan.html#NaNWarner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.nan.NaNWarner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="nntoolbox.callbacks.callbacks.html#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
 <dl class="py method">
 <dt id="nntoolbox.callbacks.nan.NaNWarner.on_batch_end">
-<code class="sig-name descname">on_batch_end</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logs</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.callbacks.nan.NaNWarner.on_batch_end" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">on_batch_end</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logs</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/nan.html#NaNWarner.on_batch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.nan.NaNWarner.on_batch_end" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="nntoolbox.callbacks.nan.SkipNaN">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.nan.</code><code class="sig-name descname">SkipNaN</code><a class="headerlink" href="#nntoolbox.callbacks.nan.SkipNaN" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.nan.</code><code class="sig-name descname">SkipNaN</code><a class="reference internal" href="_modules/nntoolbox/callbacks/nan.html#SkipNaN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.nan.SkipNaN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="nntoolbox.callbacks.callbacks.html#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
 <p>Skip when loss or output is nan (UNTESTED)</p>
 <dl class="py method">
 <dt id="nntoolbox.callbacks.nan.SkipNaN.after_losses">
-<code class="sig-name descname">after_losses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">losses</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">train</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#nntoolbox.callbacks.nan.SkipNaN.after_losses" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">after_losses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">losses</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">train</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/nntoolbox/callbacks/nan.html#SkipNaN.after_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.nan.SkipNaN.after_losses" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="nntoolbox.callbacks.nan.SkipNaN.after_outputs">
-<code class="sig-name descname">after_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">outputs</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">train</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#nntoolbox.callbacks.nan.SkipNaN.after_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">after_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">outputs</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">train</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/nntoolbox/callbacks/nan.html#SkipNaN.after_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.nan.SkipNaN.after_outputs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -34,7 +34,7 @@
 <span id="nntoolbox-components-activation-module"></span><h1>nntoolbox.components.activation module<a class="headerlink" href="#module-nntoolbox.components.activation" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="nntoolbox.components.activation.LWTA">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.activation.</code><code class="sig-name descname">LWTA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">block_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.components.activation.LWTA" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.activation.</code><code class="sig-name descname">LWTA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">block_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/activation.html#LWTA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.activation.LWTA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Local Winner-Take-All Layer</p>
 <p>For every k consecutive units, keep only the one with highest activations and zero-out the rest.</p>
@@ -45,7 +45,7 @@
 </dl>
 <dl class="py method">
 <dt id="nntoolbox.components.activation.LWTA.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.components.activation.LWTA.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/components/activation.html#LWTA.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.activation.LWTA.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -66,12 +66,12 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py class">
 <dt id="nntoolbox.components.activation.ZeroCenterRelu">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.activation.</code><code class="sig-name descname">ZeroCenterRelu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.components.activation.ZeroCenterRelu" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.activation.</code><code class="sig-name descname">ZeroCenterRelu</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/activation.html#ZeroCenterRelu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.activation.ZeroCenterRelu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.activation.ReLU</span></code></p>
 <p>As described by Jeremy of FastAI</p>
 <dl class="py method">
 <dt id="nntoolbox.components.activation.ZeroCenterRelu.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.components.activation.ZeroCenterRelu.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/components/activation.html#ZeroCenterRelu.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.activation.ZeroCenterRelu.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">

@@ -34,7 +34,7 @@
 <span id="nntoolbox-losses-moe-module"></span><h1>nntoolbox.losses.moe module<a class="headerlink" href="#module-nntoolbox.losses.moe" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="nntoolbox.losses.moe.CompetitiveMOELoss">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.losses.moe.</code><code class="sig-name descname">CompetitiveMOELoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">base_loss</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span> <span class="o">=</span> <span class="default_value">MSELoss()</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.losses.moe.CompetitiveMOELoss" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.losses.moe.</code><code class="sig-name descname">CompetitiveMOELoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">base_loss</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span> <span class="o">=</span> <span class="default_value">MSELoss()</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/losses/moe.html#CompetitiveMOELoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.moe.CompetitiveMOELoss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Encourage expert specialization:</p>
 <p>loss(expert_op, expert_weight, target) = sum_e weight_e * base_loss(op_e, target)</p>
@@ -42,7 +42,7 @@
 <p><a class="reference external" href="https://www.cs.toronto.edu/~hinton/absps/jjnh91.pdf">https://www.cs.toronto.edu/~hinton/absps/jjnh91.pdf</a></p>
 <dl class="py method">
 <dt id="nntoolbox.losses.moe.CompetitiveMOELoss.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">experts</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.losses.moe.CompetitiveMOELoss.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">experts</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/losses/moe.html#CompetitiveMOELoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.moe.CompetitiveMOELoss.forward" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

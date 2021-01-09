@@ -34,7 +34,7 @@
 <span id="nntoolbox-losses-smooth-module"></span><h1>nntoolbox.losses.smooth module<a class="headerlink" href="#module-nntoolbox.losses.smooth" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="nntoolbox.losses.smooth.SmoothedCrossEntropy">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.losses.smooth.</code><code class="sig-name descname">SmoothedCrossEntropy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>torch.Tensor<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">reduction</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">eps</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.losses.smooth.SmoothedCrossEntropy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.losses.smooth.</code><code class="sig-name descname">SmoothedCrossEntropy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>torch.Tensor<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">reduction</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">eps</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/losses/smooth.html#SmoothedCrossEntropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.smooth.SmoothedCrossEntropy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
 <p>Drop-in replacement for cross entropy loss with label smoothing:</p>
 <p>loss(y_hat, y) = -sum_c p_c * log y_hat_c</p>
@@ -44,7 +44,7 @@
 <p>Note that deprecated arguments of CrossEntropyLoss are not included</p>
 <dl class="py method">
 <dt id="nntoolbox.losses.smooth.SmoothedCrossEntropy.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.losses.smooth.SmoothedCrossEntropy.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/losses/smooth.html#SmoothedCrossEntropy.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.smooth.SmoothedCrossEntropy.forward" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -60,7 +60,7 @@
 
 <dl class="py method">
 <dt id="nntoolbox.losses.smooth.SmoothedCrossEntropy.smooth_label">
-<code class="sig-name descname">smooth_label</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">n_class</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="headerlink" href="#nntoolbox.losses.smooth.SmoothedCrossEntropy.smooth_label" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">smooth_label</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">n_class</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/losses/smooth.html#SmoothedCrossEntropy.smooth_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.smooth.SmoothedCrossEntropy.smooth_label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Smooth the label</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

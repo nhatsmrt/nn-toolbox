@@ -35,31 +35,31 @@
 <p>Learning rate warmup (UNTESTED)</p>
 <dl class="py class">
 <dt id="nntoolbox.callbacks.warmup.ConstantLRWarmup">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.warmup.</code><code class="sig-name descname">ConstantLRWarmup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">min_lr</span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">timescale</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'iter'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.callbacks.warmup.ConstantLRWarmup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.warmup.</code><code class="sig-name descname">ConstantLRWarmup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">min_lr</span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">timescale</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'iter'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/warmup.html#ConstantLRWarmup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.warmup.ConstantLRWarmup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.warmup.LRWarmup" title="nntoolbox.callbacks.warmup.LRWarmup"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.warmup.LRWarmup</span></code></a></p>
 <p>Keeping the learning rate at a small value for several iterations/epochs</p>
 <dl class="py method">
 <dt id="nntoolbox.callbacks.warmup.ConstantLRWarmup.get_lr">
-<code class="sig-name descname">get_lr</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#nntoolbox.callbacks.warmup.ConstantLRWarmup.get_lr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_lr</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/nntoolbox/callbacks/warmup.html#ConstantLRWarmup.get_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.warmup.ConstantLRWarmup.get_lr" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="nntoolbox.callbacks.warmup.GradualLRWarmup">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.warmup.</code><code class="sig-name descname">GradualLRWarmup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">min_lr</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">max_lr</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">timescale</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'iter'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.callbacks.warmup.GradualLRWarmup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.warmup.</code><code class="sig-name descname">GradualLRWarmup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">min_lr</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">max_lr</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">timescale</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'iter'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/warmup.html#GradualLRWarmup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.warmup.GradualLRWarmup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nntoolbox.callbacks.warmup.LRWarmup" title="nntoolbox.callbacks.warmup.LRWarmup"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.warmup.LRWarmup</span></code></a></p>
 <p>Gradually increase the learning rate from a small value for several iterations/epochs</p>
 <dl class="py method">
 <dt id="nntoolbox.callbacks.warmup.GradualLRWarmup.get_lr">
-<code class="sig-name descname">get_lr</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#nntoolbox.callbacks.warmup.GradualLRWarmup.get_lr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_lr</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/nntoolbox/callbacks/warmup.html#GradualLRWarmup.get_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.warmup.GradualLRWarmup.get_lr" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="nntoolbox.callbacks.warmup.LRWarmup">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.warmup.</code><code class="sig-name descname">LRWarmup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">timescale</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'iter'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.callbacks.warmup.LRWarmup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.warmup.</code><code class="sig-name descname">LRWarmup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">timescale</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'iter'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/warmup.html#LRWarmup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.warmup.LRWarmup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="nntoolbox.callbacks.callbacks.html#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
 <p>Start training with a small learning rate</p>
 <p>References:</p>
@@ -69,22 +69,22 @@
 </div></blockquote>
 <dl class="py method">
 <dt id="nntoolbox.callbacks.warmup.LRWarmup.get_lr">
-<code class="sig-name descname">get_lr</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#nntoolbox.callbacks.warmup.LRWarmup.get_lr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_lr</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/nntoolbox/callbacks/warmup.html#LRWarmup.get_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.warmup.LRWarmup.get_lr" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="nntoolbox.callbacks.warmup.LRWarmup.on_batch_begin">
-<code class="sig-name descname">on_batch_begin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">train</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="headerlink" href="#nntoolbox.callbacks.warmup.LRWarmup.on_batch_begin" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">on_batch_begin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">train</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/callbacks/warmup.html#LRWarmup.on_batch_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.warmup.LRWarmup.on_batch_begin" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="nntoolbox.callbacks.warmup.LRWarmup.on_epoch_begin">
-<code class="sig-name descname">on_epoch_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.callbacks.warmup.LRWarmup.on_epoch_begin" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">on_epoch_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/warmup.html#LRWarmup.on_epoch_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.warmup.LRWarmup.on_epoch_begin" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="nntoolbox.callbacks.warmup.LRWarmup.update_lr">
-<code class="sig-name descname">update_lr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nntoolbox.callbacks.warmup.LRWarmup.update_lr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_lr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/warmup.html#LRWarmup.update_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.warmup.LRWarmup.update_lr" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
