@@ -1,0 +1,4 @@
+ twine
+ sphinx
+ pytest
+-e .
