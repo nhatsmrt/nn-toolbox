@@ -1,9 +1,9 @@
 import torch
-from torch import nn, Tensor
+from torch import nn, Tensor, cos
 from ..utils import to_onehotv2
 
 
-__all__ = ['ZeroCenterRelu', 'LWTA']
+__all__ = ['ZeroCenterRelu', 'LWTA', 'Snake']
 
 
 class ZeroCenterRelu(nn.ReLU):
@@ -36,3 +36,23 @@ class LWTA(nn.Module):
         input = input.view(-1, input.shape[1] // self.block_size, self.block_size)
         mask = to_onehotv2(torch.max(input, -1)[1], self.block_size).to(input.dtype).to(input.device)
         return (input * mask).view(-1, input.shape[1] * input.shape[2])
+
+
+class Snake(nn.Module):
+    """
+    Snake activation function for learning periodic function:
+
+    snake_a(x) = x + 1 / freq * sin^2(freq * x) = x + (1 - cos(2 * freq * x)) / (2 * freq)
+
+    References:
+
+        Liu Ziyin, Tilman Hartwig, Masahito Ueda. "Neural Networks Fail to Learn Periodic Functions and How to Fix It."
+        https://arxiv.org/pdf/2006.08195.pdf
+    """
+    def __init__(self, freq: float=1.0, freq_trainable: bool=False):
+        super().__init__()
+        assert freq > 0.0
+        self.freq = nn.parameter.Parameter(torch.zeros((1)) + freq, requires_grad=freq_trainable)
+
+    def forward(self, input: Tensor) -> Tensor:
+        return input + (1.0 - cos(2 * self.freq * input)) / (2 * self.freq)
