@@ -34,7 +34,7 @@ try:
     from functools import partial
 
 
-    __all__ += ['tokenize_sentence']
+    __all__ += ['tokenize_sentence', 'tokenize_sentences']
 
 
 
