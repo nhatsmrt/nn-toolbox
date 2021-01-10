@@ -7,6 +7,7 @@ opencv-python
 
 torchtext==0.4.0
 spacy
+dill
 
 six
 numpy
