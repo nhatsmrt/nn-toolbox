@@ -56,4 +56,4 @@ try:
 
         return [tokenize_sentence(sentence, model) for sentence in sentences]
 except ImportError:
-    warn("spacy is not installed so certain methods in nntoolbox.sequence.utils.data will not be usable")
+    warn("spacy is not installed so tokenizing methods in nntoolbox.sequence.utils.data will not be available.")
