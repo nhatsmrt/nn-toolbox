@@ -21,7 +21,7 @@ class TestSnake:
             optimizer.step()
 
 
-        test_inputs = (torch.rand((1000, 1)) - 0.5) / 0.5 * pi + 100
+        test_inputs = (torch.rand((1000, 1)) - 0.5) / 0.5 * pi + 3.14
         test_targets = torch.sin(test_inputs)
 
         assert abs(loss_fn(model(test_inputs), test_targets)) < 1e-3
