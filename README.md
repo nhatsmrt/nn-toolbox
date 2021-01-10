@@ -1,4 +1,4 @@
-# A Keras-Like Toolbox for Common Deep Learning Procedures in PyTorch.
+# A Higher-Level Framework for Deep Learning in PyTorch.
 
 ## Introduction
 
