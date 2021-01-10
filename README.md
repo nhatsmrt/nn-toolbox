@@ -1,4 +1,4 @@
-# A Toolbox for Common Deep Learning Procedures.
+# A Keras-Like Toolbox for Common Deep Learning Procedures in PyTorch.
 
 ## Introduction
 
@@ -31,28 +31,27 @@ This toolbox is mainly for personal use, so as needs arise or if I see a neat pa
 I also plan to use this toolbox for more personal projects (see the "Some Examples" section).
 
 ## How do I use the codes?
-
-To use the codes here, simply clone this repository and add it to your favourite project. Then do a simple import call, and have fun deep learning!
-<br />
-Alternatively, you can just select a piece of code that you need and copy it to your project. No need to ask for permission (unless it's something that's not originally mine either, such as the codes adapted from fastai library courses). However, do be aware that the one function might requires another function from another directory to work.
-<br />
-Note that I have released the codes as a package on PyPI, which might be behind from the master and experimental branches of this repository:
+To install this package:
 ```
 pip install nn-toolbox
 ```
-If you don't use the PyPI installation however, be careful with dependencies. Take a look at the requirements file, which should cover everything needed (except for the optional NVIDIA's Apex, which is only used for mixed precision training).
-<br />
-Also note that I tend to work on my most recent stuffs on the experimental branch, so you should use this branch for the latest updates. 
+Also note that I tend to work on my most recent stuffs on the experimental branch, so you should use this branch for the latest updates.
 <br/>
 Finally, please be aware that this repository is by nature HIGHLY EXPERIMENTAL, so it can be quite volatile. If you encounter a bug, tell me and I'll take a look at it as soon as I have the chance.
 ## Some Examples:
+
+For quickstart, take a look at the `classification_template.py` script.
 
 I am currently doing some projects with this toolbox. Some of them are still work in progress, but you can visit my [implementation](https://github.com/nhatsmrt/torch-styletransfer) of arbitrary style transfer for some example usage, or look at some [tests](https://github.com/nhatsmrt/nn-toolbox/tree/experimental/nntoolbox/test).
 
 Other examples include (might be work in progress):
 
 * An image super-resolution system: [GitHub Repository](https://github.com/nhatsmrt/superres)
+* A simple baseline (MLP) for ogb-arxiv task: [Notebook](https://colab.research.google.com/drive/15fPSGUzZI0BFIXgKdGNgyLDABd0je0JX?usp=sharing)
 * Several application-specific toolboxes (reinforcement learning, generative models, etc.) (NOT YET RELEASED)
+
+## Contributing
+Install the developing dependencies in `requirements-dev.txt`, then hack away and send me a PR!
 
 ## Documentation
 
