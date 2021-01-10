@@ -8,7 +8,6 @@ from torch.optim import Adam, Optimizer
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from IPython.core.display import display # for display on notebook
 from torch.nn import Module, MSELoss
 from torch import Tensor
 
@@ -89,6 +88,8 @@ class StyleTransferLearner:
             self.print_losses(content_loss, style_loss, total_variation_loss)
 
             if draw:
+                from IPython.core.display import display  # for display on notebook
+
                 random_ind = np.random.choice(len(sample))
                 output = tensor_to_pil(self._model(sample[random_ind:random_ind+1].to(self._device)).cpu().detach())
                 display(tensor_to_pil(sample[random_ind:random_ind+1].cpu()))
