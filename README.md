@@ -47,7 +47,7 @@ I am currently doing some projects with this toolbox. Some of them are still wor
 Other examples include (might be work in progress):
 
 * An image super-resolution system: [GitHub Repository](https://github.com/nhatsmrt/superres)
-* A simple baseline (MLP) for ogb-arxiv task: [Notebook](https://colab.research.google.com/drive/15fPSGUzZI0BFIXgKdGNgyLDABd0je0JX?usp=sharing)
+* A simple baseline (MLP) for ogbn-arxiv task: [Notebook](https://colab.research.google.com/drive/15fPSGUzZI0BFIXgKdGNgyLDABd0je0JX?usp=sharing)
 * Several application-specific toolboxes (reinforcement learning, generative models, etc.) (NOT YET RELEASED)
 
 ## Contributing
