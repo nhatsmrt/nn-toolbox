@@ -1,6 +1,6 @@
 import torchvision
 from torch.nn import *
-from torchvision.datasets import ImageFolder, CIFAR10
+from torchvision.datasets import CIFAR10
 from torchvision.transforms import *
 from torch.optim import *
 from torch.optim.lr_scheduler import CosineAnnealingLR
@@ -8,19 +8,11 @@ from torch.utils.data import random_split
 
 from nntoolbox.vision.components import *
 from nntoolbox.vision.learner import SupervisedImageLearner
-from nntoolbox.utils import load_model, LRFinder, get_first_batch, get_device
+from nntoolbox.utils import load_model, get_device
 from nntoolbox.callbacks import *
 from nntoolbox.metrics import Accuracy, Loss
-from nntoolbox.vision.transforms import Cutout
-from nntoolbox.vision.models import ImageClassifier, EnsembleImageClassifier
+from nntoolbox.vision.models import ImageClassifier
 from nntoolbox.losses import SmoothedCrossEntropy
-from nntoolbox.init import lsuv_init
-from nntoolbox.optim import LARS, LAMB
-
-from functools import partial
-import math
-
-from sklearn.metrics import accuracy_score
 
 torch.backends.cudnn.benchmark=True
 
