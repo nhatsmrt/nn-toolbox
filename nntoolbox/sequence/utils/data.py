@@ -30,12 +30,12 @@ def text_to_id(sequence: List[str], vocab: Vocab) -> List[int]:
     return [vocab.stoi[word] for word in sequence]
 
 
-def tokenize_sentence(sentence: str, model=spacy.load('en')) -> List[str]:
+def tokenize_sentence(sentence: str, model) -> List[str]:
     """Tokenize a single sentence"""
     return model.tokenizer(sentence)
 
 
-def tokenize_fn(ind: int, sentences: List[str], model=spacy.load('en')):
+def tokenize_fn(ind: int, sentences: List[str], model):
   tokenized = tokenize_sentence(sentences[ind], model)
   return tokenized
 
