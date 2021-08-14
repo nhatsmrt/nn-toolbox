@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.optim.coord_desc module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,54 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-optim-coord-desc-module">
-<h1>nntoolbox.optim.coord_desc module<a class="headerlink" href="#nntoolbox-optim-coord-desc-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.optim.coord_desc">
+<span id="nntoolbox-optim-coord-desc-module"></span><h1>nntoolbox.optim.coord_desc module<a class="headerlink" href="#module-nntoolbox.optim.coord_desc" title="Permalink to this headline">¶</a></h1>
+<p>Coordinate Descent Optimizer</p>
+<dl class="py class">
+<dt id="nntoolbox.optim.coord_desc.CoordDescOptimizer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.optim.coord_desc.</code><code class="sig-name descname">CoordDescOptimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizers</span><span class="p">:</span> <span class="n">List<span class="p">[</span>torch.optim.optimizer.Optimizer<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/coord_desc.html#CoordDescOptimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.coord_desc.CoordDescOptimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.optimizer.Optimizer</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.optim.coord_desc.CoordDescOptimizer.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">closure</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/coord_desc.html#CoordDescOptimizer.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.coord_desc.CoordDescOptimizer.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a single optimization step (parameter update).</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><dl class="simple">
+<dt>closure (callable): A closure that reevaluates the model and</dt><dd><p>returns the loss. Optional for most optimizers.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unless otherwise specified, this function should not modify the
+<code class="docutils literal notranslate"><span class="pre">.grad</span></code> field of the parameters.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.optim.coord_desc.CoordDescOptimizer.zero_grad">
+<code class="sig-name descname">zero_grad</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/coord_desc.html#CoordDescOptimizer.zero_grad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.coord_desc.CoordDescOptimizer.zero_grad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the gradients of all optimized <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.Tensor</span></code> s to zero.</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><dl class="simple">
+<dt>set_to_none (bool): instead of setting to zero, set the grads to None.</dt><dd><p>This is will in general have lower memory footprint, and can modestly improve performance.
+However, it changes certain behaviors. For example:
+1. When the user tries to access a gradient and perform manual ops on it,
+a None attribute or a Tensor full of 0s will behave differently.
+2. If the user requests <code class="docutils literal notranslate"><span class="pre">zero_grad(set_to_none=True)</span></code> followed by a backward pass, <code class="docutils literal notranslate"><span class="pre">.grad</span></code>s
+are guaranteed to be None for params that did not receive a gradient.
+3. <code class="docutils literal notranslate"><span class="pre">torch.optim</span></code> optimizers have a different behavior if the gradient is 0 or None
+(in one case it does the step with a gradient of 0 and in the other it skips
+the step altogether).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +131,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

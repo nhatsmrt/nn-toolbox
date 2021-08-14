@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.components.shunting module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,54 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-components-shunting-module">
-<h1>nntoolbox.components.shunting module<a class="headerlink" href="#nntoolbox-components-shunting-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.components.shunting">
+<span id="nntoolbox-components-shunting-module"></span><h1>nntoolbox.components.shunting module<a class="headerlink" href="#module-nntoolbox.components.shunting" title="Permalink to this headline">¶</a></h1>
+<p>Shunting Inhibition Modules</p>
+<dl class="py class">
+<dt id="nntoolbox.components.shunting.GeneralizedShuntingMLP">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.shunting.</code><code class="sig-name descname">GeneralizedShuntingMLP</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">out_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">num_activation</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span> <span class="o">=</span> <span class="default_value">Identity()</span></em>, <em class="sig-param"><span class="n">denom_activation</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span> <span class="o">=</span> <span class="default_value">ReLU()</span></em>, <em class="sig-param"><span class="n">bound_denom</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">bound</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/shunting.html#GeneralizedShuntingMLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.shunting.GeneralizedShuntingMLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.components.shunting.GeneralizedShuntingModule" title="nntoolbox.components.shunting.GeneralizedShuntingModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.components.shunting.GeneralizedShuntingModule</span></code></a></p>
+<dl class="py attribute">
+<dt id="nntoolbox.components.shunting.GeneralizedShuntingMLP.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.shunting.GeneralizedShuntingMLP.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.components.shunting.GeneralizedShuntingModule">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.shunting.</code><code class="sig-name descname">GeneralizedShuntingModule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">denom</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">bound_denom</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">bound</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/shunting.html#GeneralizedShuntingModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.shunting.GeneralizedShuntingModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Implement a module that exhibits the shunting inhibition mechanism:</p>
+<p>y = f(x) / (a + g(x))</p>
+<p>Difference from original implementation: clamping denominator.</p>
+<p>References:</p>
+<blockquote>
+<div><p>Ganesh Arulampalam, Abdesselam Bouzerdoum.
+“A generalized feedforward neural network architecture for classification and regression.”
+<a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0893608003001163">https://www.sciencedirect.com/science/article/pii/S0893608003001163</a></p>
+</div></blockquote>
+<dl class="py method">
+<dt id="nntoolbox.components.shunting.GeneralizedShuntingModule.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/components/shunting.html#GeneralizedShuntingModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.shunting.GeneralizedShuntingModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.shunting.GeneralizedShuntingModule.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.shunting.GeneralizedShuntingModule.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +131,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

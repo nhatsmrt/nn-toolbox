@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.callbacks.mixup module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,86 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-callbacks-mixup-module">
-<h1>nntoolbox.callbacks.mixup module<a class="headerlink" href="#nntoolbox-callbacks-mixup-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.callbacks.mixup">
+<span id="nntoolbox-callbacks-mixup-module"></span><h1>nntoolbox.callbacks.mixup module<a class="headerlink" href="#module-nntoolbox.callbacks.mixup" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupCallback">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.mixup.</code><code class="sig-name descname">ManifoldMixupCallback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">learner</span></em>, <em class="sig-param"><span class="n">modules</span><span class="p">:</span> <span class="n">Sequence<span class="p">[</span><a class="reference internal" href="#nntoolbox.callbacks.mixup.ManifoldMixupModule" title="nntoolbox.callbacks.mixup.ManifoldMixupModule">nntoolbox.callbacks.mixup.ManifoldMixupModule</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">alpha</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">2.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupCallback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="nntoolbox.callbacks.callbacks.html#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<p>Implement manifold mixup regularization as a callback. Each iteration, pick a random layer and transform its output
+and label:
+x = tau x_1 + (1 - tau) x_2
+y = tau y_1 + (1 - tau) y_2
+Reference: <a class="reference external" href="https://arxiv.org/pdf/1806.05236.pdf">https://arxiv.org/pdf/1806.05236.pdf</a>
+Based on fastai implementation: <a class="reference external" href="https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py">https://github.com/fastai/fastai/blob/master/fastai/callbacks/mixup.py</a></p>
+<dl class="py method">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupCallback.deregister">
+<code class="sig-name descname">deregister</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupCallback.deregister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupCallback.deregister" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupCallback.get_lambd">
+<code class="sig-name descname">get_lambd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">batch_size</span></em>, <em class="sig-param"><span class="n">device</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupCallback.get_lambd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupCallback.get_lambd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupCallback.on_batch_begin">
+<code class="sig-name descname">on_batch_begin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">train</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupCallback.on_batch_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupCallback.on_batch_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupCallback.on_batch_end">
+<code class="sig-name descname">on_batch_end</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logs</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupCallback.on_batch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupCallback.on_batch_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupCallback.on_train_end">
+<code class="sig-name descname">on_train_end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupCallback.on_train_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupCallback.on_train_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupCallback.transform_input">
+<code class="sig-name descname">transform_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupCallback.transform_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupCallback.transform_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupCallback.transform_labels">
+<code class="sig-name descname">transform_labels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupCallback.transform_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupCallback.transform_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupCallback.transform_loss">
+<code class="sig-name descname">transform_loss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">criterion</span></em>, <em class="sig-param"><span class="n">train</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupCallback.transform_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupCallback.transform_loss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupModule">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.mixup.</code><code class="sig-name descname">ManifoldMixupModule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">base_module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Wrapper module to apply manifold mixup</p>
+<dl class="py method">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupModule.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/mixup.html#ManifoldMixupModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.callbacks.mixup.ManifoldMixupModule.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.callbacks.mixup.ManifoldMixupModule.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +163,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

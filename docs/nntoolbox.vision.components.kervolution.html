@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.vision.components.kervolution module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,177 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-vision-components-kervolution-module">
-<h1>nntoolbox.vision.components.kervolution module<a class="headerlink" href="#nntoolbox-vision-components-kervolution-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.vision.components.kervolution">
+<span id="nntoolbox-vision-components-kervolution-module"></span><h1>nntoolbox.vision.components.kervolution module<a class="headerlink" href="#module-nntoolbox.vision.components.kervolution" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.vision.components.kervolution.GaussianKernel">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.kervolution.</code><code class="sig-name descname">GaussianKernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bandwidth</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">trainable</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/kervolution.html#GaussianKernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.kervolution.GaussianKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.components.kervolution.GaussianKernel.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/kervolution.html#GaussianKernel.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.kervolution.GaussianKernel.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – (batch_size, patch_size, n_patches)</p></li>
+<li><p><strong>weight</strong> – (out_channels, in_channels, kernel_height, kernel_width)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.GaussianKernel.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.GaussianKernel.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.kervolution.</code><code class="sig-name descname">Kervolution2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span></em>, <em class="sig-param"><span class="n">out_channels</span></em>, <em class="sig-param"><span class="n">kernel</span></em>, <em class="sig-param"><span class="n">kernel_size</span></em>, <em class="sig-param"><span class="n">stride</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">dilation</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">bias</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">padding_mode</span><span class="o">=</span><span class="default_value">'zeros'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/kervolution.html#Kervolution2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.conv.Conv2d</span></code></p>
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.bias">
+<code class="sig-name descname">bias</code><em class="property">: Optional<span class="p">[</span>torch.Tensor<span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.bias" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.compute_output_shape">
+<code class="sig-name descname">compute_output_shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">height</span></em>, <em class="sig-param"><span class="n">width</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/kervolution.html#Kervolution2D.compute_output_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.compute_output_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.dilation">
+<code class="sig-name descname">dilation</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.dilation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/kervolution.html#Kervolution2D.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.groups">
+<code class="sig-name descname">groups</code><em class="property">: int</em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.kernel_size">
+<code class="sig-name descname">kernel_size</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.kernel_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.out_channels">
+<code class="sig-name descname">out_channels</code><em class="property">: int</em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.out_channels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.output_padding">
+<code class="sig-name descname">output_padding</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.output_padding" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.padding">
+<code class="sig-name descname">padding</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.padding" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.padding_mode">
+<code class="sig-name descname">padding_mode</code><em class="property">: str</em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.padding_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.stride">
+<code class="sig-name descname">stride</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.stride" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.transposed">
+<code class="sig-name descname">transposed</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.transposed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.Kervolution2D.weight">
+<code class="sig-name descname">weight</code><em class="property">: torch.Tensor</em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.Kervolution2D.weight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.kervolution.KervolutionalLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.kervolution.</code><code class="sig-name descname">KervolutionalLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">kernel</em>, <em class="sig-param">kernel_size=3</em>, <em class="sig-param">stride=1</em>, <em class="sig-param">padding=0</em>, <em class="sig-param">bias=False</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">normalization=&lt;class 'torch.nn.modules.batchnorm.BatchNorm2d'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/kervolution.html#KervolutionalLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.kervolution.KervolutionalLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
+<p>Simple convolutional layer: input -&gt; conv2d -&gt; activation -&gt; norm 2d</p>
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.KervolutionalLayer.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.KervolutionalLayer.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.kervolution.LinearKernel">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.kervolution.</code><code class="sig-name descname">LinearKernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cp</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">trainable</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/kervolution.html#LinearKernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.kervolution.LinearKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.components.kervolution.LinearKernel.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/kervolution.html#LinearKernel.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.kervolution.LinearKernel.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.LinearKernel.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.LinearKernel.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.kervolution.PolynomialKernel">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.kervolution.</code><code class="sig-name descname">PolynomialKernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dp</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">3</span></em>, <em class="sig-param"><span class="n">cp</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">2.0</span></em>, <em class="sig-param"><span class="n">trainable</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/kervolution.html#PolynomialKernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.kervolution.PolynomialKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.components.kervolution.LinearKernel" title="nntoolbox.vision.components.kervolution.LinearKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.components.kervolution.LinearKernel</span></code></a></p>
+<dl class="py method">
+<dt id="nntoolbox.vision.components.kervolution.PolynomialKernel.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">weight</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/kervolution.html#PolynomialKernel.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.kervolution.PolynomialKernel.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.kervolution.PolynomialKernel.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.kervolution.PolynomialKernel.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +254,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

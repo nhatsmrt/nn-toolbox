@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.components.kernel module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,30 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-components-kernel-module">
-<h1>nntoolbox.components.kernel module<a class="headerlink" href="#nntoolbox-components-kernel-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.components.kernel">
+<span id="nntoolbox-components-kernel-module"></span><h1>nntoolbox.components.kernel module<a class="headerlink" href="#module-nntoolbox.components.kernel" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.components.kernel.DistKernel">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.kernel.</code><code class="sig-name descname">DistKernel</code><a class="reference internal" href="_modules/nntoolbox/components/kernel.html#DistKernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.kernel.DistKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="py attribute">
+<dt id="nntoolbox.components.kernel.DistKernel.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.kernel.DistKernel.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.components.kernel.GaussianDistKernel">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.kernel.</code><code class="sig-name descname">GaussianDistKernel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_beta</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">trainable_beta</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/kernel.html#GaussianDistKernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.kernel.GaussianDistKernel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.components.kernel.DistKernel" title="nntoolbox.components.kernel.DistKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.components.kernel.DistKernel</span></code></a></p>
+<dl class="py attribute">
+<dt id="nntoolbox.components.kernel.GaussianDistKernel.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.kernel.GaussianDistKernel.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +107,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

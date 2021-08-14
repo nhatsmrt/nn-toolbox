@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.utils.sampler module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,54 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-utils-sampler-module">
-<h1>nntoolbox.utils.sampler module<a class="headerlink" href="#nntoolbox-utils-sampler-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.utils.sampler">
+<span id="nntoolbox-utils-sampler-module"></span><h1>nntoolbox.utils.sampler module<a class="headerlink" href="#module-nntoolbox.utils.sampler" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.utils.sampler.BatchSampler">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.sampler.</code><code class="sig-name descname">BatchSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sampler</span><span class="p">:</span> <span class="n">torch.utils.data.sampler.Sampler<span class="p">[</span>int<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">drop_last</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/torch/utils/data/sampler.html#BatchSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.sampler.BatchSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.sampler.Sampler</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</p>
+<p>Wraps another sampler to yield a mini-batch of indices.</p>
+<dl>
+<dt>Args:</dt><dd><p>sampler (Sampler or Iterable): Base sampler. Can be any iterable object
+batch_size (int): Size of mini-batch.
+drop_last (bool): If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the sampler will drop the last batch if</p>
+<blockquote>
+<div><p>its size would be less than <code class="docutils literal notranslate"><span class="pre">batch_size</span></code></p>
+</div></blockquote>
+</dd>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">BatchSampler</span><span class="p">(</span><span class="n">SequentialSampler</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">drop_last</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="go">[[0, 1, 2], [3, 4, 5], [6, 7, 8], [9]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">BatchSampler</span><span class="p">(</span><span class="n">SequentialSampler</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">drop_last</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="go">[[0, 1, 2], [3, 4, 5], [6, 7, 8]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.utils.sampler.BatchStratifiedSampler">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.sampler.</code><code class="sig-name descname">BatchStratifiedSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_source</span><span class="p">:</span> <span class="n">torch.utils.data.dataset.Dataset</span></em>, <em class="sig-param"><span class="n">n_sample_per_class</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">n_class_per_batch</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">drop_last</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/utils/sampler.html#BatchStratifiedSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.sampler.BatchStratifiedSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.sampler.Sampler</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</p>
+<p>Ensure that each class in the batch has the same number of examples</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.utils.sampler.MultiRandomSampler">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.sampler.</code><code class="sig-name descname">MultiRandomSampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_source</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">replacement</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/utils/sampler.html#MultiRandomSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.sampler.MultiRandomSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.utils.data.sampler.T_co</span></code>]</p>
+<p>Samples elements randomly to form multiple batches</p>
+<dl>
+<dt>Arguments:</dt><dd><p>data_source (Dataset): dataset to sample from
+replacement (bool): samples are drawn with replacement if <code class="docutils literal notranslate"><span class="pre">True</span></code>, default=``False``
+num_samples (int): number of samples to draw, default=`len(dataset)`. This argument</p>
+<blockquote>
+<div><p>is supposed to be specified only when <cite>replacement</cite> is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +131,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

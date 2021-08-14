@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.components.self_normalizing module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,21 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-components-self-normalizing-module">
-<h1>nntoolbox.components.self_normalizing module<a class="headerlink" href="#nntoolbox-components-self-normalizing-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.components.self_normalizing">
+<span id="nntoolbox-components-self-normalizing-module"></span><h1>nntoolbox.components.self_normalizing module<a class="headerlink" href="#module-nntoolbox.components.self_normalizing" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.components.self_normalizing.SelfNormalizingMLP">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.self_normalizing.</code><code class="sig-name descname">SelfNormalizingMLP</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">out_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">hidden_layer_sizes</span><span class="p">:</span> <span class="n">Sequence<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">(512)</span></em>, <em class="sig-param"><span class="n">drop_ps</span><span class="o">=</span><span class="default_value">(0.5, 0.5)</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/self_normalizing.html#SelfNormalizingMLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.self_normalizing.SelfNormalizingMLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
+<p>Implement Self-Normalizing Neural Networks:
+<a class="reference external" href="https://papers.nips.cc/paper/6698-self-normalizing-neural-networks.pdf">https://papers.nips.cc/paper/6698-self-normalizing-neural-networks.pdf</a></p>
+<dl class="py attribute">
+<dt id="nntoolbox.components.self_normalizing.SelfNormalizingMLP.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.self_normalizing.SelfNormalizingMLP.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +98,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

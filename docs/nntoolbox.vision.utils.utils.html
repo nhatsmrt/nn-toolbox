@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.vision.utils.utils module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,66 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-vision-utils-utils-module">
-<h1>nntoolbox.vision.utils.utils module<a class="headerlink" href="#nntoolbox-vision-utils-utils-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.vision.utils.utils">
+<span id="nntoolbox-vision-utils-utils-module"></span><h1>nntoolbox.vision.utils.utils module<a class="headerlink" href="#module-nntoolbox.vision.utils.utils" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="nntoolbox.vision.utils.utils.compute_output_shape">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">compute_output_shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inp_dim</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">padding</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">kernel_size</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">dilation</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">stride</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#compute_output_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.compute_output_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.vision.utils.utils.cv2_read_image">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">cv2_read_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_path</span></em>, <em class="sig-param"><span class="n">to_float</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">flag</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#cv2_read_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.cv2_read_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an image using cv2 and convert to RGB</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image_path</strong> – </p></li>
+<li><p><strong>to_float</strong> – whether to convert image to float dats type:</p></li>
+<li><p><strong>flag</strong> – indicate mode for cv2 read image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.vision.utils.utils.gram_matrix">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">gram_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#gram_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.gram_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.vision.utils.utils.is_image">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">is_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#is_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.is_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if filename has valid extension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>boolean indicating whether filename is a valid image filename</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.vision.utils.utils.pil_to_tensor">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">pil_to_tensor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pil</span></em>, <em class="sig-param"><span class="n">device</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#pil_to_tensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.pil_to_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.vision.utils.utils.tensor_to_np">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">tensor_to_np</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#tensor_to_np"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.tensor_to_np" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the tensor image to numpy format</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.vision.utils.utils.tensor_to_pil">
+<code class="sig-prename descclassname">nntoolbox.vision.utils.utils.</code><code class="sig-name descname">tensor_to_pil</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/utils/utils.html#tensor_to_pil"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.utils.utils.tensor_to_pil" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 
 
@@ -86,7 +143,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

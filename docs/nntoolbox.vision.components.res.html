@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.vision.components.res module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,79 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-vision-components-res-module">
-<h1>nntoolbox.vision.components.res module<a class="headerlink" href="#nntoolbox-vision-components-res-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.vision.components.res">
+<span id="nntoolbox-vision-components-res-module"></span><h1>nntoolbox.vision.components.res module<a class="headerlink" href="#module-nntoolbox.vision.components.res" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.vision.components.res.BottleneckPreActivation">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.res.</code><code class="sig-name descname">BottleneckPreActivation</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">normalization=&lt;class 'torch.nn.modules.batchnorm.BatchNorm2d'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/res.html#BottleneckPreActivation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.res.BottleneckPreActivation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.components.res.ResNeXtBlock" title="nntoolbox.vision.components.res.ResNeXtBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.components.res.ResNeXtBlock</span></code></a></p>
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.res.BottleneckPreActivation.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.res.BottleneckPreActivation.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.res.ResNeXtBlock">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.res.</code><code class="sig-name descname">ResNeXtBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">branches</span></em>, <em class="sig-param"><span class="n">use_shake_shake</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/res.html#ResNeXtBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.res.ResNeXtBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Implement a resnext block:</p>
+<p>y = x + sum_i branch_i</p>
+<dl class="py method">
+<dt id="nntoolbox.vision.components.res.ResNeXtBlock.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/res.html#ResNeXtBlock.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.res.ResNeXtBlock.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.res.ResNeXtBlock.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.res.ResNeXtBlock.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.res.ResidualBlock">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.res.</code><code class="sig-name descname">ResidualBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/res.html#ResidualBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.res.ResidualBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.container.Sequential</span></code></p>
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.res.ResidualBlock.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.res.ResidualBlock.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.res.ResidualBlockPreActivation">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.res.</code><code class="sig-name descname">ResidualBlockPreActivation</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">normalization=&lt;class 'torch.nn.modules.batchnorm.BatchNorm2d'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/res.html#ResidualBlockPreActivation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.res.ResidualBlockPreActivation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.components.res.ResNeXtBlock" title="nntoolbox.vision.components.res.ResNeXtBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.components.res.ResNeXtBlock</span></code></a></p>
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.res.ResidualBlockPreActivation.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.res.ResidualBlockPreActivation.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.vision.components.res.ResidualBlockPreActivationKer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.res.</code><code class="sig-name descname">ResidualBlockPreActivationKer</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">kernel</em>, <em class="sig-param">activation=&lt;class 'torch.nn.modules.activation.ReLU'&gt;</em>, <em class="sig-param">normalization=&lt;class 'torch.nn.modules.batchnorm.BatchNorm2d'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/res.html#ResidualBlockPreActivationKer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.res.ResidualBlockPreActivationKer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.components.res.ResNeXtBlock" title="nntoolbox.vision.components.res.ResNeXtBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.components.res.ResNeXtBlock</span></code></a></p>
+<dl class="py attribute">
+<dt id="nntoolbox.vision.components.res.ResidualBlockPreActivationKer.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.res.ResidualBlockPreActivationKer.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +156,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

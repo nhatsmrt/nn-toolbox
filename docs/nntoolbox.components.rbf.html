@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.components.rbf module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,72 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-components-rbf-module">
-<h1>nntoolbox.components.rbf module<a class="headerlink" href="#nntoolbox-components-rbf-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.components.rbf">
+<span id="nntoolbox-components-rbf-module"></span><h1>nntoolbox.components.rbf module<a class="headerlink" href="#module-nntoolbox.components.rbf" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.components.rbf.RBFLayer">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.rbf.</code><code class="sig-name descname">RBFLayer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">out_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">trainable_centers</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">normalized</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="nntoolbox.components.kernel.html#nntoolbox.components.kernel.DistKernel" title="nntoolbox.components.kernel.DistKernel">nntoolbox.components.kernel.DistKernel</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initial_centers</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>torch.Tensor<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/rbf.html#RBFLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.linear.Linear</span></code></p>
+<p>RBF Layer (used for output or as the hidden layer for RBF network)</p>
+<p>References:</p>
+<p>Lecun et al. “Gradient-Based Learning Applied to Document Recognition.”
+<a class="reference external" href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf">http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf</a></p>
+<dl class="py method">
+<dt id="nntoolbox.components.rbf.RBFLayer.centroids_initialize">
+<code class="sig-name descname">centroids_initialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/rbf.html#RBFLayer.centroids_initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer.centroids_initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Re-)initialize the centers based on nearest centroids algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> – </p></li>
+<li><p><strong>labels</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.components.rbf.RBFLayer.cluster_initialize">
+<code class="sig-name descname">cluster_initialize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/rbf.html#RBFLayer.cluster_initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer.cluster_initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Re-)initialize the centers based on k-mean clustering on the input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.components.rbf.RBFLayer.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/components/rbf.html#RBFLayer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.rbf.RBFLayer.in_features">
+<code class="sig-name descname">in_features</code><em class="property">: int</em><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer.in_features" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.rbf.RBFLayer.out_features">
+<code class="sig-name descname">out_features</code><em class="property">: int</em><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer.out_features" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.rbf.RBFLayer.weight">
+<code class="sig-name descname">weight</code><em class="property">: torch.Tensor</em><a class="headerlink" href="#nntoolbox.components.rbf.RBFLayer.weight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +149,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.callbacks.device module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,24 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-callbacks-device-module">
-<h1>nntoolbox.callbacks.device module<a class="headerlink" href="#nntoolbox-callbacks-device-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.callbacks.device">
+<span id="nntoolbox-callbacks-device-module"></span><h1>nntoolbox.callbacks.device module<a class="headerlink" href="#module-nntoolbox.callbacks.device" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.callbacks.device.ToDeviceCallback">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.device.</code><code class="sig-name descname">ToDeviceCallback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">device</span><span class="o">=</span><span class="default_value">device(type='cpu')</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/device.html#ToDeviceCallback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.device.ToDeviceCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="nntoolbox.callbacks.callbacks.html#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
+<dl class="py method">
+<dt id="nntoolbox.callbacks.device.ToDeviceCallback.on_batch_begin">
+<code class="sig-name descname">on_batch_begin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>torch.Tensor<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">train</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/callbacks/device.html#ToDeviceCallback.on_batch_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.device.ToDeviceCallback.on_batch_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="nntoolbox.callbacks.device.ToDeviceCallback.on_train_begin">
+<code class="sig-name descname">on_train_begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/device.html#ToDeviceCallback.on_train_begin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.device.ToDeviceCallback.on_train_begin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +101,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

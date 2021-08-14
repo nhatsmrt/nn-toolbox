@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.components.maxout module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,40 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-components-maxout-module">
-<h1>nntoolbox.components.maxout module<a class="headerlink" href="#nntoolbox-components-maxout-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.components.maxout">
+<span id="nntoolbox-components-maxout-module"></span><h1>nntoolbox.components.maxout module<a class="headerlink" href="#module-nntoolbox.components.maxout" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.components.maxout.MaxoutLinear">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.maxout.</code><code class="sig-name descname">MaxoutLinear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">out_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">nb_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/maxout.html#MaxoutLinear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.maxout.MaxoutLinear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>A linear maxout layer:</p>
+<blockquote>
+<div><p>output_i = max_{j = 1,…,k} (w_1 input + b_1, w_2 input + b_2,…, w_k input + b_k)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>References:</dt><dd><p>Ian J. Goodfellow et al. “Maxout Networks.” <a class="reference external" href="https://arxiv.org/pdf/1302.4389.pdf">https://arxiv.org/pdf/1302.4389.pdf</a></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="nntoolbox.components.maxout.MaxoutLinear.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/components/maxout.html#MaxoutLinear.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.maxout.MaxoutLinear.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – (batch_size, in_features)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(batch_size, out_features)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.maxout.MaxoutLinear.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.maxout.MaxoutLinear.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +117,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

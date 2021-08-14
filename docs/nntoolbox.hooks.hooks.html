@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.hooks.hooks module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,32 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-hooks-hooks-module">
-<h1>nntoolbox.hooks.hooks module<a class="headerlink" href="#nntoolbox-hooks-hooks-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.hooks.hooks">
+<span id="nntoolbox-hooks-hooks-module"></span><h1>nntoolbox.hooks.hooks module<a class="headerlink" href="#module-nntoolbox.hooks.hooks" title="Permalink to this headline">¶</a></h1>
+<p>Implement abstraction for hooks
+Adopt from FastAI:</p>
+<dl class="py class">
+<dt id="nntoolbox.hooks.hooks.Hook">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.hooks.hooks.</code><code class="sig-name descname">Hook</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">hook_func</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><a class="reference internal" href="#nntoolbox.hooks.hooks.Hook" title="nntoolbox.hooks.hooks.Hook">nntoolbox.hooks.hooks.Hook</a><span class="p">, </span>torch.nn.modules.module.Module<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">forward</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/hooks/hooks.html#Hook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.hooks.hooks.Hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.hooks.hooks.Hook.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/hooks/hooks.html#Hook.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.hooks.hooks.Hook.remove" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.hooks.hooks.Hooks">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.hooks.hooks.</code><code class="sig-name descname">Hooks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ms</span><span class="p">:</span> <span class="n">List<span class="p">[</span>torch.nn.modules.module.Module<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">hook_fn</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><a class="reference internal" href="#nntoolbox.hooks.hooks.Hook" title="nntoolbox.hooks.hooks.Hook">nntoolbox.hooks.hooks.Hook</a><span class="p">, </span>torch.nn.modules.module.Module<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">forward</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/hooks/hooks.html#Hooks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.hooks.hooks.Hooks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.hooks.hooks.Hooks.remove">
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/hooks/hooks.html#Hooks.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.hooks.hooks.Hooks.remove" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +109,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.components.dndf module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,57 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-components-dndf-module">
-<h1>nntoolbox.components.dndf module<a class="headerlink" href="#nntoolbox-components-dndf-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.components.dndf">
+<span id="nntoolbox-components-dndf-module"></span><h1>nntoolbox.components.dndf module<a class="headerlink" href="#module-nntoolbox.components.dndf" title="Permalink to this headline">¶</a></h1>
+<p>Deep Neural Decision Forest</p>
+<dl class="py class">
+<dt id="nntoolbox.components.dndf.DNDF">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.dndf.</code><code class="sig-name descname">DNDF</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">n_trees: int</em>, <em class="sig-param">tree_depth: int</em>, <em class="sig-param">output_activation=functools.partial(&lt;class 'torch.nn.modules.activation.Softmax'&gt;</em>, <em class="sig-param">dim=1)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/dndf.html#DNDF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.dndf.DNDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="nntoolbox.components.merge.html#nntoolbox.components.merge.Mean" title="nntoolbox.components.merge.Mean"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.components.merge.Mean</span></code></a></p>
+<p>References:</p>
+<blockquote>
+<div><p>Peter Kontschieder, Madalina Fiterau, Antonio Criminisi, Samuel Rota Bulo. “Deep Neural Decision Forests.”
+<a class="reference external" href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Kontschieder_Deep_Neural_Decision_ICCV_2015_paper.pdf">https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Kontschieder_Deep_Neural_Decision_ICCV_2015_paper.pdf</a></p>
+</div></blockquote>
+<dl class="py attribute">
+<dt id="nntoolbox.components.dndf.DNDF.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.dndf.DNDF.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.components.dndf.DNDFTree">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.dndf.</code><code class="sig-name descname">DNDFTree</code><span class="sig-paren">(</span><em class="sig-param">in_features: int</em>, <em class="sig-param">out_features: int</em>, <em class="sig-param">tree_depth: int</em>, <em class="sig-param">output_activation=functools.partial(&lt;class 'torch.nn.modules.activation.Softmax'&gt;</em>, <em class="sig-param">dim=1)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/dndf.html#DNDFTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.dndf.DNDFTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Based on Deep Neural Decision Forest, but with the leaf node parameterized for end-to-end training,
+and the decision trees balanced. Use BFS + DP for fast path computations</p>
+<p>References:</p>
+<blockquote>
+<div><p>Peter Kontschieder, Madalina Fiterau, Antonio Criminisi, Samuel Rota Bulo. “Deep Neural Decision Forests.”
+<a class="reference external" href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Kontschieder_Deep_Neural_Decision_ICCV_2015_paper.pdf">https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Kontschieder_Deep_Neural_Decision_ICCV_2015_paper.pdf</a></p>
+</div></blockquote>
+<dl class="py method">
+<dt id="nntoolbox.components.dndf.DNDFTree.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/components/dndf.html#DNDFTree.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.dndf.DNDFTree.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.dndf.DNDFTree.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.dndf.DNDFTree.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +134,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

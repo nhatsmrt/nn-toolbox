@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.losses.losses module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,83 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-losses-losses-module">
-<h1>nntoolbox.losses.losses module<a class="headerlink" href="#nntoolbox-losses-losses-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.losses.losses">
+<span id="nntoolbox-losses-losses-module"></span><h1>nntoolbox.losses.losses module<a class="headerlink" href="#module-nntoolbox.losses.losses" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="nntoolbox.losses.losses.CombinedLoss">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.losses.losses.</code><code class="sig-name descname">CombinedLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">losses</span><span class="p">:</span> <span class="n">List<span class="p">[</span>torch.nn.modules.module.Module<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">weights</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>float<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/losses/losses.html#CombinedLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.losses.CombinedLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.losses.losses.CombinedLoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/losses/losses.html#CombinedLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.losses.CombinedLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.losses.losses.CombinedLoss.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.losses.losses.CombinedLoss.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.losses.losses.LogSigmoidLoss">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.losses.losses.</code><code class="sig-name descname">LogSigmoidLoss</code><a class="reference internal" href="_modules/nntoolbox/losses/losses.html#LogSigmoidLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.losses.LogSigmoidLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.losses.losses.LogSigmoidLoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/losses/losses.html#LogSigmoidLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.losses.LogSigmoidLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.losses.losses.LogSigmoidLoss.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.losses.losses.LogSigmoidLoss.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.losses.losses.RMSELoss">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.losses.losses.</code><code class="sig-name descname">RMSELoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reduction</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">eps</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1e-08</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/losses/losses.html#RMSELoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.losses.RMSELoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.loss.MSELoss</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.losses.losses.RMSELoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/losses/losses.html#RMSELoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.losses.losses.RMSELoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.losses.losses.RMSELoss.reduction">
+<code class="sig-name descname">reduction</code><em class="property">: str</em><a class="headerlink" href="#nntoolbox.losses.losses.RMSELoss.reduction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +160,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

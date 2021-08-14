@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.components.mixture module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,75 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-components-mixture-module">
-<h1>nntoolbox.components.mixture module<a class="headerlink" href="#nntoolbox-components-mixture-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.components.mixture">
+<span id="nntoolbox-components-mixture-module"></span><h1>nntoolbox.components.mixture module<a class="headerlink" href="#module-nntoolbox.components.mixture" title="Permalink to this headline">¶</a></h1>
+<p>Implement mixture of probability distribution layers</p>
+<dl class="py class">
+<dt id="nntoolbox.components.mixture.MixtureOfExpert">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.mixture.</code><code class="sig-name descname">MixtureOfExpert</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">experts</span><span class="p">:</span> <span class="n">List<span class="p">[</span>torch.nn.modules.module.Module<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">gate</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">return_mixture</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/mixture.html#MixtureOfExpert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfExpert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="py method">
+<dt id="nntoolbox.components.mixture.MixtureOfExpert.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/components/mixture.html#MixtureOfExpert.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfExpert.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>if return_mixture, return the mixture of expert output; else return both expert score and expert output</p>
+</dd>
+</dl>
+<p>(with the n_expert channel coming last)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.mixture.MixtureOfExpert.training">
+<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfExpert.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="nntoolbox.components.mixture.MixtureOfGaussian">
+<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.components.mixture.</code><code class="sig-name descname">MixtureOfGaussian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">out_features</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">n_dist</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/components/mixture.html#MixtureOfGaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfGaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.linear.Linear</span></code></p>
+<p>A layer that generates means, stds and mixing coefficients of a mixture of gaussian distributions.</p>
+<p>Used as the final layer of a mixture of (Gaussian) density network.</p>
+<p>Only support isotropic covariances for the components.</p>
+<p>References:</p>
+<blockquote>
+<div><p>Christopher Bishop. “Pattern Recognition and Machine Learning”</p>
+</div></blockquote>
+<dl class="py method">
+<dt id="nntoolbox.components.mixture.MixtureOfGaussian.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/components/mixture.html#MixtureOfGaussian.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfGaussian.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>means, stds and mixing coefficients</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.mixture.MixtureOfGaussian.in_features">
+<code class="sig-name descname">in_features</code><em class="property">: int</em><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfGaussian.in_features" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.mixture.MixtureOfGaussian.out_features">
+<code class="sig-name descname">out_features</code><em class="property">: int</em><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfGaussian.out_features" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="nntoolbox.components.mixture.MixtureOfGaussian.weight">
+<code class="sig-name descname">weight</code><em class="property">: torch.Tensor</em><a class="headerlink" href="#nntoolbox.components.mixture.MixtureOfGaussian.weight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +152,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

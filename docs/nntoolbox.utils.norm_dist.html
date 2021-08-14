@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.utils.norm_dist module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -31,8 +30,45 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="nntoolbox-utils-norm-dist-module">
-<h1>nntoolbox.utils.norm_dist module<a class="headerlink" href="#nntoolbox-utils-norm-dist-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-nntoolbox.utils.norm_dist">
+<span id="nntoolbox-utils-norm-dist-module"></span><h1>nntoolbox.utils.norm_dist module<a class="headerlink" href="#module-nntoolbox.utils.norm_dist" title="Permalink to this headline">¶</a></h1>
+<p>Utility functions involving computing norms and distances</p>
+<dl class="py function">
+<dt id="nntoolbox.utils.norm_dist.compute_squared_norm">
+<code class="sig-prename descclassname">nntoolbox.utils.norm_dist.</code><code class="sig-name descname">compute_squared_norm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/utils/norm_dist.html#compute_squared_norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.norm_dist.compute_squared_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the squared norm of each row of A</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>A</strong> – (M, D)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>squared norm (M, 1)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.utils.norm_dist.emb_pairwise_dist">
+<code class="sig-prename descclassname">nntoolbox.utils.norm_dist.</code><code class="sig-name descname">emb_pairwise_dist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">embeddings</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">squared</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">eps</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1e-16</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/utils/norm_dist.html#emb_pairwise_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.norm_dist.emb_pairwise_dist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="nntoolbox.utils.norm_dist.pairwise_dist">
+<code class="sig-prename descclassname">nntoolbox.utils.norm_dist.</code><code class="sig-name descname">pairwise_dist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">A</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">B</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/utils/norm_dist.html#pairwise_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.norm_dist.pairwise_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute pairwise distance from each row vector of A to row vector of B</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – (N, D)</p></li>
+<li><p><strong>B</strong> – (M, D)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(M, N)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -86,7 +122,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
