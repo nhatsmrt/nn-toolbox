@@ -6,12 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.init.lsuv module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -30,22 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-nntoolbox.init.lsuv">
-<span id="nntoolbox-init-lsuv-module"></span><h1>nntoolbox.init.lsuv module<a class="headerlink" href="#module-nntoolbox.init.lsuv" title="Permalink to this headline">¶</a></h1>
-<p>Implement LSUV initialization from “ALL YOU NEED IS A GOOD INIT”
-<a class="reference external" href="https://arxiv.org/pdf/1511.06422.pdf">https://arxiv.org/pdf/1511.06422.pdf</a>
-Adopt from fastai</p>
-<dl class="py function">
-<dt id="nntoolbox.init.lsuv.lsuv_init">
-<code class="sig-prename descclassname">nntoolbox.init.lsuv.</code><code class="sig-name descname">lsuv_init</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">tol</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">Tmax</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">100</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/init/lsuv.html#lsuv_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.init.lsuv.lsuv_init" title="Permalink to this definition">¶</a></dt>
-<dd><p>LSUV initialization
-:param module:
-:param input:
-:param tol: maximum tolerance
-:param Tmax: maximum iterations to attempt to demean and normalize weight
-:return: final mean and std of each layer’s output</p>
-</dd></dl>
-
+  <div class="section" id="nntoolbox-init-lsuv-module">
+<h1>nntoolbox.init.lsuv module<a class="headerlink" href="#nntoolbox-init-lsuv-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -99,7 +86,7 @@ Adopt from fastai</p>
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

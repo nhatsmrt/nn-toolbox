@@ -6,12 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.callbacks.bs_scheduler module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -30,24 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-nntoolbox.callbacks.bs_scheduler">
-<span id="nntoolbox-callbacks-bs-scheduler-module"></span><h1>nntoolbox.callbacks.bs_scheduler module<a class="headerlink" href="#module-nntoolbox.callbacks.bs_scheduler" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="nntoolbox.callbacks.bs_scheduler.BatchSizeScheduler">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.callbacks.bs_scheduler.</code><code class="sig-name descname">BatchSizeScheduler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_data</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">bs_schedule_fn</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>int<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">timescale</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'iter'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/bs_scheduler.html#BatchSizeScheduler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.bs_scheduler.BatchSizeScheduler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="nntoolbox.callbacks.callbacks.html#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.callbacks.callbacks.Callback</span></code></a></p>
-<dl class="py method">
-<dt id="nntoolbox.callbacks.bs_scheduler.BatchSizeScheduler.on_batch_end">
-<code class="sig-name descname">on_batch_end</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logs</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/callbacks/bs_scheduler.html#BatchSizeScheduler.on_batch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.bs_scheduler.BatchSizeScheduler.on_batch_end" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.callbacks.bs_scheduler.BatchSizeScheduler.on_epoch_end">
-<code class="sig-name descname">on_epoch_end</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logs</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/nntoolbox/callbacks/bs_scheduler.html#BatchSizeScheduler.on_epoch_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.callbacks.bs_scheduler.BatchSizeScheduler.on_epoch_end" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="nntoolbox-callbacks-bs-scheduler-module">
+<h1>nntoolbox.callbacks.bs_scheduler module<a class="headerlink" href="#nntoolbox-callbacks-bs-scheduler-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -101,7 +86,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

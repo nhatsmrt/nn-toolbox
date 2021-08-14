@@ -6,12 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.optim.lr_scheduler module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -30,32 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-nntoolbox.optim.lr_scheduler">
-<span id="nntoolbox-optim-lr-scheduler-module"></span><h1>nntoolbox.optim.lr_scheduler module<a class="headerlink" href="#module-nntoolbox.optim.lr_scheduler" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="nntoolbox.optim.lr_scheduler.CyclicalTriangularLR">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.optim.lr_scheduler.</code><code class="sig-name descname">CyclicalTriangularLR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">min_lr</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">max_lr</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">cycle_length</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">inc_fraction</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/lr_scheduler.html#CyclicalTriangularLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.lr_scheduler.CyclicalTriangularLR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.optim.lr_scheduler.FunctionalLR" title="nntoolbox.optim.lr_scheduler.FunctionalLR"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.optim.lr_scheduler.FunctionalLR</span></code></a></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.optim.lr_scheduler.FunctionalLR">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.optim.lr_scheduler.</code><code class="sig-name descname">FunctionalLR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">schedule_fn</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>float<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">last_epoch</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/lr_scheduler.html#FunctionalLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.lr_scheduler.FunctionalLR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.optim.lr_scheduler.LambdaLR</span></code></p>
-<p>Calculate learning rate based on a function</p>
-<dl class="py method">
-<dt id="nntoolbox.optim.lr_scheduler.FunctionalLR.get_lr">
-<code class="sig-name descname">get_lr</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>float<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/optim/lr_scheduler.html#FunctionalLR.get_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.lr_scheduler.FunctionalLR.get_lr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.optim.lr_scheduler.TriangularLR">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.optim.lr_scheduler.</code><code class="sig-name descname">TriangularLR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">min_lr</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">max_lr</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">cycle_length</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">inc_fraction</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/optim/lr_scheduler.html#TriangularLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.optim.lr_scheduler.TriangularLR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.optim.lr_scheduler.FunctionalLR" title="nntoolbox.optim.lr_scheduler.FunctionalLR"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.optim.lr_scheduler.FunctionalLR</span></code></a></p>
-</dd></dl>
-
+  <div class="section" id="nntoolbox-optim-lr-scheduler-module">
+<h1>nntoolbox.optim.lr_scheduler module<a class="headerlink" href="#nntoolbox-optim-lr-scheduler-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -109,7 +86,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

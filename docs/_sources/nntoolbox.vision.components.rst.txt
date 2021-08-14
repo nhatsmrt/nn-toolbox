@@ -12,7 +12,6 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   nntoolbox.vision.components.activation
    nntoolbox.vision.components.attention
    nntoolbox.vision.components.dense
    nntoolbox.vision.components.ff

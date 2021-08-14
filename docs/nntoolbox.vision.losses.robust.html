@@ -6,12 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.vision.losses.robust module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -30,91 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-nntoolbox.vision.losses.robust">
-<span id="nntoolbox-vision-losses-robust-module"></span><h1>nntoolbox.vision.losses.robust module<a class="headerlink" href="#module-nntoolbox.vision.losses.robust" title="Permalink to this headline">¶</a></h1>
-<p>More robust loss functions (UNTESTED)</p>
-<dl class="py class">
-<dt id="nntoolbox.vision.losses.robust.CharbonnierLoss">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.losses.robust.</code><code class="sig-name descname">CharbonnierLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eps</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/losses/robust.html#CharbonnierLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.robust.CharbonnierLoss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.vision.losses.robust.GeneralizedCharbonnierLoss" title="nntoolbox.vision.losses.robust.GeneralizedCharbonnierLoss"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.vision.losses.robust.GeneralizedCharbonnierLoss</span></code></a></p>
-<p>Charbonnier Loss Function:</p>
-<p>l(input, target) = sqrt((input - target)^2 + eps^2)</p>
-<p>References:</p>
-<blockquote>
-<div><p>Wei-Sheng Lai et al. “Fast and Accurate Image Super-Resolution with Deep Laplacian Pyramid Networks.”
-<a class="reference external" href="https://arxiv.org/pdf/1710.01992.pdf">https://arxiv.org/pdf/1710.01992.pdf</a></p>
-</div></blockquote>
-<dl class="py attribute">
-<dt id="nntoolbox.vision.losses.robust.CharbonnierLoss.training">
-<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.losses.robust.CharbonnierLoss.training" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.losses.robust.CharbonnierLossV2">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.losses.robust.</code><code class="sig-name descname">CharbonnierLossV2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eps</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/losses/robust.html#CharbonnierLossV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.robust.CharbonnierLossV2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Charbonnier Loss Function:</p>
-<p>l(input, target) = sqrt((input - target)^2 + eps^2)</p>
-<p>References:</p>
-<blockquote>
-<div><p>Wei-Sheng Lai et al. “Fast and Accurate Image Super-Resolution with Deep Laplacian Pyramid Networks.”
-<a class="reference external" href="https://arxiv.org/pdf/1710.01992.pdf">https://arxiv.org/pdf/1710.01992.pdf</a></p>
-</div></blockquote>
-<dl class="py method">
-<dt id="nntoolbox.vision.losses.robust.CharbonnierLossV2.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/losses/robust.html#CharbonnierLossV2.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.robust.CharbonnierLossV2.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.losses.robust.CharbonnierLossV2.training">
-<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.losses.robust.CharbonnierLossV2.training" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.losses.robust.GeneralizedCharbonnierLoss">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.losses.robust.</code><code class="sig-name descname">GeneralizedCharbonnierLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alpha</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">eps</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1e-06</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/losses/robust.html#GeneralizedCharbonnierLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.robust.GeneralizedCharbonnierLoss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Generalized Charbonnier Loss Function:</p>
-<p>l(input, target) = (input - target)^2 + eps^2) ^ (alpha / 2)</p>
-<p>References:</p>
-<blockquote>
-<div><p>Deqing Sun et al. “Secrets of Optical Flow Estimation and Their Principles.”
-<a class="reference external" href="http://cs.brown.edu/~dqsun/pubs/cvpr_2010_flow.pdf">http://cs.brown.edu/~dqsun/pubs/cvpr_2010_flow.pdf</a></p>
-</div></blockquote>
-<dl class="py method">
-<dt id="nntoolbox.vision.losses.robust.GeneralizedCharbonnierLoss.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/losses/robust.html#GeneralizedCharbonnierLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.losses.robust.GeneralizedCharbonnierLoss.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.losses.robust.GeneralizedCharbonnierLoss.training">
-<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.losses.robust.GeneralizedCharbonnierLoss.training" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="nntoolbox-vision-losses-robust-module">
+<h1>nntoolbox.vision.losses.robust module<a class="headerlink" href="#nntoolbox-vision-losses-robust-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -168,7 +86,7 @@ registered hooks while the latter silently ignores them.</p>
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

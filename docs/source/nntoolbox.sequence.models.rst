@@ -14,4 +14,3 @@ Submodules
 
    nntoolbox.sequence.models.decoder
    nntoolbox.sequence.models.encoder
-   nntoolbox.sequence.models.lm

@@ -6,12 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.vision.components.local module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -30,196 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-nntoolbox.vision.components.local">
-<span id="nntoolbox-vision-components-local-module"></span><h1>nntoolbox.vision.components.local module<a class="headerlink" href="#module-nntoolbox.vision.components.local" title="Permalink to this headline">¶</a></h1>
-<p>Locally Connected Layer and Subsampling layer for 2D input</p>
-<dl class="py class">
-<dt id="nntoolbox.vision.components.local.CondConv2d">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.local.</code><code class="sig-name descname">CondConv2d</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_experts</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">in_channels</span></em>, <em class="sig-param"><span class="n">out_channels</span></em>, <em class="sig-param"><span class="n">kernel_size</span></em>, <em class="sig-param"><span class="n">stride</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">dilation</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">groups</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">bias</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">padding_mode</span><span class="o">=</span><span class="default_value">'zeros'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/local.html#CondConv2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.conv.Conv2d</span></code></p>
-<p>Conditionally Parameterized Convolution Layer.</p>
-<p>References:</p>
-<blockquote>
-<div><p>Brandon Yang, Gabriel Bender, Quoc V. Le, Jiquan Ngiam.
-“CondConv: Conditionally Parameterized Convolutions for Efficient Inference.”
-<a class="reference external" href="https://arxiv.org/abs/1904.04971">https://arxiv.org/abs/1904.04971</a></p>
-<p>Pytorch implementation of Conv2d</p>
-</div></blockquote>
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.bias">
-<code class="sig-name descname">bias</code><em class="property">: Optional<span class="p">[</span>torch.Tensor<span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.bias" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.vision.components.local.CondConv2d.branched_forward">
-<code class="sig-name descname">branched_forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/local.html#CondConv2d.branched_forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.branched_forward" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.dilation">
-<code class="sig-name descname">dilation</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.dilation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.vision.components.local.CondConv2d.efficient_forward">
-<code class="sig-name descname">efficient_forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/local.html#CondConv2d.efficient_forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.efficient_forward" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.vision.components.local.CondConv2d.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/local.html#CondConv2d.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.groups">
-<code class="sig-name descname">groups</code><em class="property">: int</em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.groups" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.kernel_size">
-<code class="sig-name descname">kernel_size</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.kernel_size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.out_channels">
-<code class="sig-name descname">out_channels</code><em class="property">: int</em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.out_channels" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.output_padding">
-<code class="sig-name descname">output_padding</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.output_padding" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.padding">
-<code class="sig-name descname">padding</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.padding" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.padding_mode">
-<code class="sig-name descname">padding_mode</code><em class="property">: str</em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.padding_mode" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.stride">
-<code class="sig-name descname">stride</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.stride" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.transposed">
-<code class="sig-name descname">transposed</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.transposed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.CondConv2d.weight">
-<code class="sig-name descname">weight</code><em class="property">: torch.Tensor</em><a class="headerlink" href="#nntoolbox.vision.components.local.CondConv2d.weight" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.components.local.LocallyConnected2D">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.local.</code><code class="sig-name descname">LocallyConnected2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">out_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">in_h</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">in_w</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">kernel_size</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">stride</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">dilation</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">groups</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">padding_mode</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'zeros'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/local.html#LocallyConnected2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.LocallyConnected2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Works similarly to Conv2d, but does not share weight. Much more memory intensive, and slower
-(due to suboptimal native pytorch implementation) (UNTESTED)</p>
-<p>Example usages:</p>
-<blockquote>
-<div><p>Yaniv Taigman et al. “DeepFace: Closing the Gap to Human-Level Performance in Face Verification”
-<a class="reference external" href="https://www.cs.toronto.edu/~ranzato/publications/taigman_cvpr14.pdf">https://www.cs.toronto.edu/~ranzato/publications/taigman_cvpr14.pdf</a></p>
-</div></blockquote>
-<dl class="py method">
-<dt id="nntoolbox.vision.components.local.LocallyConnected2D.compute_output_shape">
-<code class="sig-name descname">compute_output_shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">height</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">width</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/vision/components/local.html#LocallyConnected2D.compute_output_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.LocallyConnected2D.compute_output_shape" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.vision.components.local.LocallyConnected2D.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/local.html#LocallyConnected2D.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.LocallyConnected2D.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.vision.components.local.LocallyConnected2D.reset_parameters">
-<code class="sig-name descname">reset_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/local.html#LocallyConnected2D.reset_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.LocallyConnected2D.reset_parameters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.LocallyConnected2D.training">
-<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.local.LocallyConnected2D.training" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.vision.components.local.Subsampling2D">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.local.</code><code class="sig-name descname">Subsampling2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">kernel_size</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">2</span></em>, <em class="sig-param"><span class="n">stride</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">2</span></em>, <em class="sig-param"><span class="n">padding</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">trainable</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">ceil_mode</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">count_include_pad</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/local.html#Subsampling2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.Subsampling2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.pooling.AvgPool2d</span></code></p>
-<p>For each feature map of input, subsample one patch at the time, sum the values
-and then perform a linear transformation. Use in LeNet. (UNTESTED)</p>
-<p>References:</p>
-<blockquote>
-<div><p>Yann Lecun et al. “Gradient-Based Learning Applied to Document Recognition.”
-<a class="reference external" href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf">http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf</a></p>
-</div></blockquote>
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.Subsampling2D.ceil_mode">
-<code class="sig-name descname">ceil_mode</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.local.Subsampling2D.ceil_mode" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.Subsampling2D.count_include_pad">
-<code class="sig-name descname">count_include_pad</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.local.Subsampling2D.count_include_pad" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.vision.components.local.Subsampling2D.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/vision/components/local.html#Subsampling2D.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.local.Subsampling2D.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.Subsampling2D.kernel_size">
-<code class="sig-name descname">kernel_size</code><em class="property">: Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.local.Subsampling2D.kernel_size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.Subsampling2D.padding">
-<code class="sig-name descname">padding</code><em class="property">: Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.local.Subsampling2D.padding" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.local.Subsampling2D.stride">
-<code class="sig-name descname">stride</code><em class="property">: Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#nntoolbox.vision.components.local.Subsampling2D.stride" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="nntoolbox-vision-components-local-module">
+<h1>nntoolbox.vision.components.local module<a class="headerlink" href="#nntoolbox-vision-components-local-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -273,7 +86,7 @@ registered hooks while the latter silently ignores them.</p>
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

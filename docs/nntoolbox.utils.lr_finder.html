@@ -6,12 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.utils.lr_finder module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -30,39 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-nntoolbox.utils.lr_finder">
-<span id="nntoolbox-utils-lr-finder-module"></span><h1>nntoolbox.utils.lr_finder module<a class="headerlink" href="#module-nntoolbox.utils.lr_finder" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="nntoolbox.utils.lr_finder.LRFinder">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.utils.lr_finder.</code><code class="sig-name descname">LRFinder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">train_data</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">criterion</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><span class="p">…</span><span class="p">]</span><span class="p">, </span>torch.optim.optimizer.Optimizer<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">device</span><span class="p">:</span> <span class="n">torch.device</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/utils/lr_finder.html#LRFinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.lr_finder.LRFinder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Leslie Smith’s learning rate range finder.</p>
-<p>Adapt from <a class="reference external" href="https://sgugger.github.io/how-do-you-find-a-good-learning-rate.html">https://sgugger.github.io/how-do-you-find-a-good-learning-rate.html</a></p>
-<p><a class="reference external" href="https://arxiv.org/pdf/1506.01186.pdf">https://arxiv.org/pdf/1506.01186.pdf</a></p>
-<dl class="py method">
-<dt id="nntoolbox.utils.lr_finder.LRFinder.find_lr">
-<code class="sig-name descname">find_lr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lr0</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1e-07</span></em>, <em class="sig-param"><span class="n">lr_final</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">10.0</span></em>, <em class="sig-param"><span class="n">warmup</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">15</span></em>, <em class="sig-param"><span class="n">beta</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.67</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">display</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>Callback<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>float<span class="p">, </span>float<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/utils/lr_finder.html#LRFinder.find_lr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.utils.lr_finder.LRFinder.find_lr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start from a very low initial learning rate, then gradually increases it up to a big lr until loss blows up</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>lr0</strong> – intitial learning rate</p></li>
-<li><p><strong>lr_final</strong> – final (max) learning rate</p></li>
-<li><p><strong>warmup</strong> – how many iterations to warmup</p></li>
-<li><p><strong>beta</strong> – smoothing coefficient for loss</p></li>
-<li><p><strong>verbose</strong> – whether to print out the progress</p></li>
-<li><p><strong>display</strong> – whether to graph</p></li>
-<li><p><strong>callbacks</strong> – an optional list of callbacks to process input</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a base_lr and the best lr (base_lr = best_lr / 4)</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="nntoolbox-utils-lr-finder-module">
+<h1>nntoolbox.utils.lr_finder module<a class="headerlink" href="#nntoolbox-utils-lr-finder-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -116,7 +86,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

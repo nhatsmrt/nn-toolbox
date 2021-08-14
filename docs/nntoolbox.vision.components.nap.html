@@ -6,12 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.vision.components.nap module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -30,54 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-nntoolbox.vision.components.nap">
-<span id="nntoolbox-vision-components-nap-module"></span><h1>nntoolbox.vision.components.nap module<a class="headerlink" href="#module-nntoolbox.vision.components.nap" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="nntoolbox.vision.components.nap.NeuralAbstractionPyramid">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.vision.components.nap.</code><code class="sig-name descname">NeuralAbstractionPyramid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lateral_connections</span><span class="p">:</span> <span class="n">List<span class="p">[</span>torch.nn.modules.module.Module<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">forward_connections</span><span class="p">:</span> <span class="n">List<span class="p">[</span>torch.nn.modules.module.Module<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">backward_connections</span><span class="p">:</span> <span class="n">List<span class="p">[</span>torch.nn.modules.module.Module<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">activation_function</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">normalization</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/vision/components/nap.html#NeuralAbstractionPyramid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.nap.NeuralAbstractionPyramid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
-<p>Neural Abstraction Pyramid Module. Sharing weights both spatially and temporally:</p>
-<p>a^t_l = norm(activation(f_l(a^{t - 1}_l) + g_l(a^{t - 1}_{l - 1}) + h_l(a^{t - l}_{l + 1})))</p>
-<p>If f_l, g_l and h_l are repeated for all layers, then we can also share weights across depth dimension.</p>
-<p>(UNTESTED)</p>
-<p>References:</p>
-<blockquote>
-<div><p>Sven Behnke and Ralil Rojas. “Neural Abstraction Pyramid: A hierarchical image understanding architecture.”
-<a class="reference external" href="http://page.mi.fu-berlin.de/rojas/1998/pyramid.pdf">http://page.mi.fu-berlin.de/rojas/1998/pyramid.pdf</a></p>
-<p>Sven Behnke. “Hierarchical Neural Networks for Image Interpretation.”
-<a class="reference external" href="https://www.ais.uni-bonn.de/books/LNCS2766.pdf">https://www.ais.uni-bonn.de/books/LNCS2766.pdf</a></p>
-<p>Sven Behnke. “Face Localization and Tracking in the Neural Abstraction Pyramid.”
-<a class="reference external" href="https://www.ais.uni-bonn.de/behnke/papers/nca04.pdf">https://www.ais.uni-bonn.de/behnke/papers/nca04.pdf</a></p>
-</div></blockquote>
-<dl class="py method">
-<dt id="nntoolbox.vision.components.nap.NeuralAbstractionPyramid.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">return_all_states</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>List<span class="p">[</span>torch.Tensor<span class="p">]</span><span class="p">, </span>Tuple<span class="p">[</span>List<span class="p">[</span>torch.Tensor<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>List<span class="p">[</span>torch.Tensor<span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/vision/components/nap.html#NeuralAbstractionPyramid.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.nap.NeuralAbstractionPyramid.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input</strong> – </p></li>
-<li><p><strong>return_all_states</strong> – whether to return output of all timesteps</p></li>
-<li><p><strong>duration</strong> – number of timesteps to process data</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the output of last time steps and outputs of all time steps</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.vision.components.nap.NeuralAbstractionPyramid.get_initial_states">
-<code class="sig-name descname">get_initial_states</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/nntoolbox/vision/components/nap.html#NeuralAbstractionPyramid.get_initial_states"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.vision.components.nap.NeuralAbstractionPyramid.get_initial_states" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="nntoolbox.vision.components.nap.NeuralAbstractionPyramid.training">
-<code class="sig-name descname">training</code><em class="property">: bool</em><a class="headerlink" href="#nntoolbox.vision.components.nap.NeuralAbstractionPyramid.training" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="nntoolbox-vision-components-nap-module">
+<h1>nntoolbox.vision.components.nap module<a class="headerlink" href="#nntoolbox-vision-components-nap-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -131,7 +86,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

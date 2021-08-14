@@ -6,12 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nntoolbox.learner module &#8212; nn-toolbox 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -30,64 +31,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-nntoolbox.learner">
-<span id="nntoolbox-learner-module"></span><h1>nntoolbox.learner module<a class="headerlink" href="#module-nntoolbox.learner" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="nntoolbox.learner.DistillationLearner">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.learner.</code><code class="sig-name descname">DistillationLearner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_data</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">val_data</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">teacher</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">criterion</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">temperature</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">teacher_weight</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">hard_label_weight</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">device</span><span class="o">=</span><span class="default_value">device(type='cpu')</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/learner.html#DistillationLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.DistillationLearner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.learner.SupervisedLearner" title="nntoolbox.learner.SupervisedLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.learner.SupervisedLearner</span></code></a></p>
-<p>Distilling Knowledge from a big teacher network to a smaller model (UNTESTED)</p>
-<p>References:</p>
-<blockquote>
-<div><p>Geoffrey Hinton, Oriol Vinyals, Jeff Dean. “Distilling the Knowledge in a Neural Network.”
-<a class="reference external" href="https://arxiv.org/abs/1503.02531">https://arxiv.org/abs/1503.02531</a></p>
-<p>TTIC Distinguished Lecture Series - Geoffrey Hinton.
-<a class="reference external" href="https://www.youtube.com/watch?v=EK61htlw8hY">https://www.youtube.com/watch?v=EK61htlw8hY</a></p>
-</div></blockquote>
-<dl class="py method">
-<dt id="nntoolbox.learner.DistillationLearner.compute_loss">
-<code class="sig-name descname">compute_loss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/learner.html#DistillationLearner.compute_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.DistillationLearner.compute_loss" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.learner.Learner">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.learner.</code><code class="sig-name descname">Learner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_data</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">val_data</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">criterion</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/learner.html#Learner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.Learner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-</dd></dl>
-
-<dl class="py class">
-<dt id="nntoolbox.learner.SupervisedLearner">
-<em class="property">class </em><code class="sig-prename descclassname">nntoolbox.learner.</code><code class="sig-name descname">SupervisedLearner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_data</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">val_data</span><span class="p">:</span> <span class="n">torch.utils.data.dataloader.DataLoader</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">criterion</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">optimizer</span><span class="p">:</span> <span class="n">torch.optim.optimizer.Optimizer</span></em>, <em class="sig-param"><span class="n">device</span><span class="o">=</span><span class="default_value">device(type='cpu')</span></em>, <em class="sig-param"><span class="n">mixup</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">mixup_alpha</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.4</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/learner.html#SupervisedLearner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nntoolbox.learner.Learner" title="nntoolbox.learner.Learner"><code class="xref py py-class docutils literal notranslate"><span class="pre">nntoolbox.learner.Learner</span></code></a></p>
-<dl class="py method">
-<dt id="nntoolbox.learner.SupervisedLearner.compute_loss">
-<code class="sig-name descname">compute_loss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">train</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/learner.html#SupervisedLearner.compute_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner.compute_loss" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.learner.SupervisedLearner.compute_outputs">
-<code class="sig-name descname">compute_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">train</span><span class="p">:</span> <span class="n">bool</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/nntoolbox/learner.html#SupervisedLearner.compute_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner.compute_outputs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.learner.SupervisedLearner.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/nntoolbox/learner.html#SupervisedLearner.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.learner.SupervisedLearner.learn">
-<code class="sig-name descname">learn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_epoch</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Iterable<span class="p">[</span><a class="reference internal" href="nntoolbox.callbacks.callbacks.html#nntoolbox.callbacks.callbacks.Callback" title="nntoolbox.callbacks.callbacks.Callback">nntoolbox.callbacks.callbacks.Callback</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span><a class="reference internal" href="nntoolbox.metrics.metrics.html#nntoolbox.metrics.metrics.Metric" title="nntoolbox.metrics.metrics.Metric">nntoolbox.metrics.metrics.Metric</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">final_metric</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'accuracy'</span></em>, <em class="sig-param"><span class="n">load_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/nntoolbox/learner.html#SupervisedLearner.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner.learn" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="nntoolbox.learner.SupervisedLearner.learn_one_iter">
-<code class="sig-name descname">learn_one_iter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">labels</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nntoolbox/learner.html#SupervisedLearner.learn_one_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nntoolbox.learner.SupervisedLearner.learn_one_iter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="nntoolbox-learner-module">
+<h1>nntoolbox.learner module<a class="headerlink" href="#nntoolbox-learner-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -141,7 +86,7 @@
       &copy;2021, Nhat Pham.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
