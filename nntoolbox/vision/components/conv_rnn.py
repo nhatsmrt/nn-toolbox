@@ -7,7 +7,13 @@ __all__ = ['ConvLSTM2dCell']
 
 class ConvLSTM2dCell(nn.Module):
     """
-    For efficiency reason, assumes that hidden state's spatial dimension is the same as that of input. 'same' padding will be enforced.
+    Analogous to LSTM cell, but replaces the linear transformation in the gates' definition with a convolutional layer.
+    For simplicity and efficiency reason, assumes that hidden state's spatial dimension is the same as that of input;
+    'same' padding will be enforced.
+
+    References:
+    Xingjian Shi et al., "Convolutional LSTM Network: A Machine Learning Approach for Precipitation Nowcasting."
+    https://arxiv.org/abs/1506.04214
     """
     def __init__(self, in_channels: int, hidden_channels: int, **kwargs):
         super().__init__()
