@@ -10,7 +10,7 @@ with open('requirements.txt', 'r') as req_file:
 
 setuptools.setup(
     name="nn-toolbox",
-    version="0.1.3",
+    version="0.1.4",
     author="Nhat Pham",
     author_email="nphamcs@gmail.com",
     description="A toolbox for common deep learning procedures",
