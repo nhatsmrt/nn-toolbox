@@ -6,7 +6,6 @@ from torch import float32, long, Tensor
 import pandas as pd
 from typing import Optional, List, Iterable, Union
 from torch.utils.data import DataLoader
-from torchtext.data import Iterator
 
 
 __all__ = ['SupervisedDataset', 'get_first_batch', 'grab_next_batch']
@@ -65,6 +64,6 @@ def get_first_batch(data: DataLoader, callbacks: Optional[Iterable['Callback']]=
         return data["inputs"] if callbacks is None else data["inputs"], data["labels"]
 
 
-def grab_next_batch(data: Union[DataLoader, Iterator]):
+def grab_next_batch(data: DataLoader):
     """Grab the next batch from dataloader"""
     return next(iter(data))
