@@ -14,3 +14,4 @@ from .local import *
 from .nap import *
 from .shunting import *
 from .ho import *
+from .conv_rnn import *
